@@ -1,0 +1,38 @@
+//////////////////////////////////////////////////////////////
+CLIPJUMP                                                     /
+v 0.1                                                        /
+Basic Release                                                /
+Avi Aryan                                                    /
+//////////////////////////////////////////////////////////////
+Settings.ini Help
+//////////////////////////////////////////////////////////////
+
+Settings.ini stores settings for the ClipJump Program.
+
+It has 4 Parameters ---
+
+ ===  Minimum_No_Of_Clips_to_be_Active ====
+It is the minimum no of clipboards that you want simultaneously 
+to be active.
+If you want 20,specify 20
+If you want Unlimited, leave it blank. (Not Recommended)
+
+ ===  Threshold  ======
+Threshold is the extra number of clipboard that will be active 
+other than your minimum limit..
+Dont set it to be 0,zero can cause memory slow - down.
+Most recommended value is 10.
+
+ === Show_Copy_Message ===
+This value determines whether you want to get the 
+"Transfered to ClipJump" message or not while copy/cut 
+operations.
+1 = enabled (default)
+0 = disabled
+
+ ==== Quality_of_Thumbnail_Previews ===
+The quality of Thumbnail previews you want to have.
+Thumbnail preview's qulaity if set high can cause slow
+response from the program.Also this can cause more space
+consumption by the Cache Folder.
+So, it is recommended to let it be 20
