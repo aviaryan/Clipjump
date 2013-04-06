@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////
 CLIPJUMP                                                     /
-v 0.5                                                        /
+v 1.0                                                        /
 Basic Release                                                /
 Avi Aryan                                                    /
 //////////////////////////////////////////////////////////////
@@ -18,23 +18,17 @@ After you run ClipJump, a message should come showing Dll
 register of Gflax completed. OK that!
 A icon of ClipJump in SystemTray will come .
 
-Try copying either by Ctrl+C or by Copy or PrintScreen,
-
-You will notice a Tip, [Transfered to ClipJump]  when you copy something.
+Try copying either by Ctrl+C or by Copy or PrintScreen, You will notice a Tip, to Clipjump when you copy something.
 This will mean that the copy has been succeeded.
 
-Now, press Ctrl+V, you will see a tip containing the file
-or text to be copied.[This is Paste Mode] If an Image has 
-been copied, a Window showing your image will pop-up.
-Release Ctrl+V to paste.
+Now, press Ctrl+V, you will see a tip containing the file or text to be copied.is Paste Mode.
+If an Image has been copied, a Window showing your image will pop-up. Release Ctrl to paste.
 
-To move through Multiple ClipBoards,press V again. Release to
-Paste.Use C to move backwards.
+To move through Multiple ClipBoards?,hold Ctrl and press V. Release to Paste.Use C to move backwards.
 
 To Cancel Copy,press X while in Paste mode. Release Ctrl to confirm.
 
-To Delete All Clips,press X twice in Paste Mode, then release Control
-to confirm.
+To Delete All Clips,press X twice in Paste Mode, then release Control to confirm.
 
 (No Delete Individual Clip supported as it can unnecessarily cause slow-down.
 Cache of clipboards actually dont take much size on disk.
@@ -49,11 +43,6 @@ Just dont touch the CACHE folder (by deafult it is hidden). DONT
 
 When Running ClipJump, make sure all other clipboard managemenet utilities,
 if you have are closed.
-
-Dont remove Gflax.dll from the Directory of the Program.
-
-If you face problems with Image Preview , re-register Gflax.dll
-from the tray menu in the System Tray.
 
 ================================================================
 Web

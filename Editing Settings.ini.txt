@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////
 CLIPJUMP                                                     /
-v 0.5                                                        /
+v 1.0                                                        /
 Basic Release                                                /
 Avi Aryan                                                    /
 //////////////////////////////////////////////////////////////
@@ -42,3 +42,5 @@ Should ClipJump keep all the saved clipboards after each Application
 restart or simply Windows restart if you run it at Start up.
 1 = Yes (Clipboards kept)
 0 = No
+
+=================END=================================================

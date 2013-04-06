@@ -1,7 +1,7 @@
 ﻿/*
 
-	ClipJump --- A Multiple Clipboard Manager
-	v 0.5
+	ClipJump --- The Multiple Clipboard Manager
+	v 1.0
     Copyright (C) 2013  Avi Aryan
 
     This program is free software: you can redistribute it and/or modify
@@ -16,13 +16,13 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
+
     Contact  ---  
 
     Web    -   www.avi-win-tips.blogspot.com
     Email  -   aviaryanap@gmail.com
 */
-#Persistent
+
 SetWorkingDir, %A_ScriptDir%
 SetBatchLines,-1
 #SingleInstance, force
@@ -72,7 +72,7 @@ IfNotExist,cache/Clips/%a_index%.avc
 }
 }
 progname = ClipJump
-version = 0.5
+version = 1.0
 Author = Avi Aryan
 updatefile = http://avis-sublime-4-autohotkey.googlecode.com/files/clipjumpversion.txt
 productpage = http://avi-win-tips.blogspot.com/p/clipjump.html
@@ -88,7 +88,6 @@ Menu,Tray,Add,ReadMe,rdme
 Menu,Tray,Add,Run At Start Up,strtup
 Menu,Tray,Add,Check for Updates,updt
 Menu,Tray,Add
-Menu,Tray,Add,Re-Register GFlax,flxreg
 Menu,Tray,Add,Quit,qt
 Menu,Tray,Default,%progname%
 
@@ -102,18 +101,11 @@ FileSetAttrib,+H,%a_scriptdir%\cache
 
 pid := Getscriptpid(A_ScriptName)
 
-IfNotExist, %a_windir%/system32/gflax.dll
-{
-FileCopy,gflax.dll,%a_windir%/system32/gflax.dll
-RunWait, regsvr32 gflax.dll
-}
-
-gfx := ComObjCreate("GflAx.GflAx")
 scrnhgt := A_ScreenHeight / 2.5
 scrnwdt := A_ScreenWidth / 2
 
 Emptymem(pid)
-OnExit,qt
+
 caller := true
 return
 ;End Of Auto-Execute============================================
@@ -142,7 +134,14 @@ ifequal,clipboard
 }
 else
 {
-	StringLeft,halfclip,Clipboard, 200
+	length := strlen(Clipboard)
+	IfGreater,length,200
+	{
+		StringLeft,halfclip,Clipboard, 200
+		halfclip := halfclip . "                      >>>>  .............More"
+	}
+	else
+		halfclip := Clipboard
 	ToolTip, Clip %realclipno% of %cursave%`n%halfclip%
 	settimer,ctrlcheck,50
 }
@@ -168,18 +167,12 @@ If (clipboard != "" or tempclipall != "")
 {
 If errlvl = 1
 {
-	FileRead,oldclip,*c cache/clips/%cursave%.avc
-	If oldclip <> %tempclipall%
-	{
-		cursave+=1
-		fileappend,%ClipboardAll%,cache/clips/%cursave%.avc
-		Tooltip, %CopyMessage%
-		tempsave := cursave
-		IfEqual,cursave,%totalclips%
-			gosub,compacter
-	}
-	else
-		Tooltip,Same Selection
+	cursave+=1
+	fileappend,%ClipboardAll%,cache/clips/%cursave%.avc
+	Tooltip, %CopyMessage%
+	tempsave := cursave
+	IfEqual,cursave,%totalclips%
+		gosub,compacter
 	Clipboard := 
 }
 If errlvl = 2
@@ -194,7 +187,6 @@ If errlvl = 2
 	Clipboard := 
 }
 tempclipall = 
-oldclip = 
 sleep, 500
 Tooltip
 }
@@ -269,9 +261,10 @@ return
 compacter:
 emptymem(pid)
 loop, %threshold%
+{
 	FileDelete,%A_ScriptDir%\cache\clips\%a_index%.avc
-loop, %threshold%
 	FileDelete,%A_ScriptDir%\cache\thumbs\%a_index%.jpg
+}
 loop, %maxclips%
 {
 	avcnumber := a_index + threshold
@@ -298,37 +291,37 @@ Convert(0, A_ScriptDir . "\cache\thumbs\" . cursave . ".jpg", quality)
 return
 
 showpreview:
-gfx.LoadThumbnail(a_scriptdir . "\cache\thumbs\" . tempsave ".jpg",0,0)
-widthofthumb := gfx.width()
-heightofthumb := gfx.height()
+GDIPToken := Gdip_Startup()
+pBM := Gdip_CreateBitmapFromFile( A_ScriptDir . "\cache\thumbs\" . tempsave . ".jpg" )
+widthofthumb := Gdip_GetImageWidth( pBM )
+heightofthumb := Gdip_GetImageHeight( pBM )  
+Gdip_DisposeImage( pBM )                                         
+Gdip_Shutdown( GDIPToken )
+
 IfGreater,heightofthumb,%scrnhgt%
-	displayh := scrnhgt
+	displayh := heightofthumb / 2
 else
 	displayh := heightofthumb
 IfGreater,widthofthumb,%scrnwdt%
-	displayw := scrnwdt
+	displayw := widthofthumb / 2
 else
 	displayw := widthofthumb
+
 GuiControl,,imagepreview,*w%displayw% *h%displayh% cache\thumbs\%tempsave%.jpg
 MouseGetPos,ax,ay
-ay+=30
+ay := ay + (scrnhgt / 9)
 Gui, Show, x%ax% y%ay% h%displayh% w%displayw%
 return
 
-flxreg:
-FileCopy,gflax.dll,%a_windir%/system32/gflax.dll
-RunWait, regsvr32 gflax.dll
-return
 ;***************Extras**********************************************************************
 qt:
-ObjRelease(gfx)
 ExitApp
 return
 rdme:
 Run, readme.txt
 return
 main:
-MsgBox, 64, %progname% v%version%, %progname% v%version%`n`nBy Avi Aryan`nThanks to Sean for his Image Capture Function`n`nSee Readme.txt for more details.
+MsgBox, 64, %progname% v%version%, %progname% v%version%`nBy Avi Aryan`n`nSee Readme.txt for more details.
 IfMsgBox OK
 	run, iexplore.exe "www.avi-win-tips.blogspot.com"
 return
@@ -371,3 +364,4 @@ EmptyMem(PID="")
     DllCall("CloseHandle", "Int", h)
 }
 #Include, imagelib.ahk
+#include, gdiplus.ahk

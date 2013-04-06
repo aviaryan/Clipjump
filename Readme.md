@@ -1,5 +1,5 @@
 [Clipjump][http://avi-win-tips.blogspot.com/p/clipjump.html]
-v 0.5
+v 1.0
 Basic Release
 Avi Aryan
 

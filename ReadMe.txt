@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////
 CLIPJUMP                                                     /
-v 0.5                                                        /
+v 1.0                                                        /
 Basic Release                                                /
 Avi Aryan                                                    /
 //////////////////////////////////////////////////////////////
@@ -24,6 +24,18 @@ Configurable - You can change settings by editing Settings.ini.
 THANKS |
 =======
 >Sean for his Screen Capture Function.
+>Tic (Tariq Potter) for GDI+ Library.
+>Ken for pointing out bugs.
+
+============================
+CHANGES (from first release)|
+============================
+•Fixed a Reliabilty Issue - Thanks Ken
+•Better Clipboard Image preview now.
+•Lower MeMory Usage Now.
+•Fixed Sudden Crash Issue.
+•Even Better Clipboard Image preview now.
+•Removed Gflax.dll
 
 ================================================================
 See Installation and Usage for more details!
