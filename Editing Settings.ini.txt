@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////
 CLIPJUMP                                                     /
-v 1.0                                                        /
-Basic Release                                                /
+v 2.0                                                        /
+Advanced Release                                             /
 Avi Aryan                                                    /
 //////////////////////////////////////////////////////////////
 Settings.ini Help
@@ -14,7 +14,7 @@ It has 5 Parameters ---
  ===  Minimum_No_Of_Clips_to_be_Active ====
 It is the minimum no of clipboards that you want simultaneously 
 to be active.
-If you want 20,specify 20
+IF YOU WANT 20, SPECIFY 20.
 If you want Unlimited, leave it blank. (Not Recommended)
 
  ===  Threshold  ======

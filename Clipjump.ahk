@@ -1,8 +1,13 @@
 ﻿/*
 
 	ClipJump --- The Multiple Clipboard Manager
-	v 1.0
+	v 2.0
     Copyright (C) 2013  Avi Aryan
+	
+	############## IMPORTANT ##################
+	Use only with AutoHotkey_L-32 bit ANSI version.
+	
+	###########################################
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -71,15 +76,37 @@ IfNotExist,cache/Clips/%a_index%.avc
 	break
 }
 }
+
+;*********Program Vars**********************************************************
+
 progname = ClipJump
-version = 1.0
+version = 2.0
 Author = Avi Aryan
 updatefile = http://avis-sublime-4-autohotkey.googlecode.com/files/clipjumpversion.txt
 productpage = http://avi-win-tips.blogspot.com/p/clipjump.html
 
+;*******GUIS****************************************************
 Gui +LastFound +AlwaysOnTop -Caption +ToolWindow
 gui, add, picture,x0 y0 w400 h300 vimagepreview,
 
+Gui, 2:Font, S18 CRed, Verdana
+Gui, 2:Add, Text, x2 y0 w550 h40 +Center gupdt, ClipJump v%version%
+Gui, 2:Font, S14 CBlue, Verdana
+Gui, 2:Add, Text, x2 y40 w550 h30 +Center gblog, Avi Aryan
+Gui, 2:Font, S16 CBlack, Verdana
+Gui, 2:Font, S14 CBlack, Verdana
+Gui, 2:Add, Text, x2 y70 w550 h30 +Center, A Magical Clipboard Manager
+Gui, 2:Font, S14 CBlack, Verdana
+Gui, 2:Font, S14 CRed, Verdana
+Gui, 2:Add, Text, x2 y120 w100 h30 , Thanks
+Gui, 2:Font, S12 CBlue Bold, Verdana
+Gui, 2:Add, Text, x2 y150 w550 h90 , Sean for his Screen Capture Function.`nTic (Tariq Potter) for GDI+ Library.`nKen for pointing out bugs.
+Gui, 2:Font, S14 CBlack Bold, Verdana
+Gui, 2:Add, Text, x2 y260 w300 h30 ginstallationopen, Click to see How to Use
+Gui, 2:Add, Text, x2 y290 w300 h30 grdme, Readme
+Gui, 2:Font, S14 CBlack, Verdana
+Gui, 2:Add, Text, x-8 y330 w560 h24 +Center, Copyright (C) 2013
+;******************************************************************
 Menu,Tray,NoStandard
 Menu,Tray,Add,%progname%,main
 Menu,Tray,Tip,ClipJump by Avi Aryan
@@ -87,6 +114,8 @@ Menu,Tray,Add
 Menu,Tray,Add,ReadMe,rdme
 Menu,Tray,Add,Run At Start Up,strtup
 Menu,Tray,Add,Check for Updates,updt
+Menu,Tray,Add
+Menu,Tray,Add,See Online Help,hlp
 Menu,Tray,Add
 Menu,Tray,Add,Quit,qt
 Menu,Tray,Default,%progname%
@@ -97,6 +126,7 @@ IfExist,%a_startup%/ClipJump.lnk
 FileCreateDir,cache
 FileCreateDir,cache/clips
 FileCreateDir,cache/thumbs
+FileCreateDir,cache/fixate
 FileSetAttrib,+H,%a_scriptdir%\cache
 
 pid := Getscriptpid(A_ScriptName)
@@ -106,11 +136,13 @@ scrnwdt := A_ScreenWidth / 2
 
 Emptymem(pid)
 
+global caller
 caller := true
+Hotkey,$^v,Paste,On
 return
 ;End Of Auto-Execute============================================
 
-$^v::
+paste:
 gui, hide
 caller := false
 IfNotExist,cache/clips/%tempsave%.avc
@@ -124,11 +156,15 @@ else
 {
 Hotkey,^c,MoveBack,On
 Hotkey,^x,Cancel,On
+Hotkey,^Space,Fixate,On
+Hotkey,^S,Ssuspnd,On
+
 fileread,Clipboard,*c %A_ScriptDir%/cache/clips/%tempsave%.avc
+gosub, fixcheck
 realclipno := cursave - tempsave + 1
 ifequal,clipboard
 {
-	Tooltip, Clip %realclipno% of %cursave%
+	Tooltip, Clip %realclipno% of %cursave% %fixstatus%
 	gosub, showpreview
 	settimer,ctrlcheck,50
 }
@@ -142,7 +178,7 @@ else
 	}
 	else
 		halfclip := Clipboard
-	ToolTip, Clip %realclipno% of %cursave%`n%halfclip%
+	ToolTip, Clip %realclipno% of %cursave% %fixstatus%`n%halfclip%
 	settimer,ctrlcheck,50
 }
 realactive := tempsave
@@ -168,23 +204,21 @@ If (clipboard != "" or tempclipall != "")
 If errlvl = 1
 {
 	cursave+=1
-	fileappend,%ClipboardAll%,cache/clips/%cursave%.avc
+	gosub, clipsaver
 	Tooltip, %CopyMessage%
 	tempsave := cursave
 	IfEqual,cursave,%totalclips%
 		gosub,compacter
-	Clipboard := 
 }
 If errlvl = 2
 {
 	cursave+=1
-	fileappend,%clipboardall%,cache/clips/%cursave%.avc
 	Tooltip, %CopyMessage%
 	tempsave := cursave
 	gosub, thumbgenerator
+	gosub, clipsaver
 	IfEqual,cursave,%totalclips%
 		gosub, compacter
-	Clipboard := 
 }
 tempclipall = 
 sleep, 500
@@ -199,17 +233,18 @@ IfEqual,realactive,%cursave%
 	tempsave := 1
 realactive := tempsave
 fileread,Clipboard,*c %A_ScriptDir%/cache/clips/%tempsave%.avc
+gosub, fixcheck
 realclipno := cursave - tempsave + 1
 ifequal,clipboard
 {
-	Tooltip, Clip %realclipno% of %cursave%`n
+	Tooltip, Clip %realclipno% of %cursave% %fixstatus%`n
 	gosub, showpreview
 	settimer,ctrlcheck,50
 }
 else
 {
 	StringLeft,halfclip,Clipboard,200
-	ToolTip, Clip %realclipno% of %cursave%`n%halfclip%
+	ToolTip, Clip %realclipno% of %cursave% %fixstatus%`n%halfclip%
 	settimer,ctrlcheck,50
 }
 return
@@ -218,8 +253,18 @@ Cancel:
 gui, hide
 ToolTip, Cancel Paste Operation`nRelease Control to Confirm
 ctrlref = cancel
+
+Hotkey,^Space,fixate,Off
+Hotkey,^S,Ssuspnd,Off
 Hotkey,^x,Cancel,Off
-Hotkey,^x,DeleteAll,On
+Hotkey,^x,Delete,On
+return
+
+Delete:
+ToolTip, Delete the current clip`nRelease Control to Confirm`nPress X Again to Delete All Clips.
+ctrlref = delete
+Hotkey,^x,Delete,Off
+Hotkey,^x,DeleTEall,On
 return
 
 Deleteall:
@@ -227,6 +272,54 @@ Tooltip, Delete all Clips`nRelease Control to Confirm`nPress X Again to Cancel
 ctrlref = deleteall
 Hotkey,^x,DeleteAll,Off
 Hotkey,^x,Cancel,On
+return
+
+Fixate:
+IfExist,cache\fixate\%realactive%.fxt
+{
+	fixstatus := ""
+	FileDelete,%A_ScriptDir%\cache\fixate\%realactive%.fxt
+}
+else
+{
+	fixstatus := "[FIXED]"
+	FileAppend,,%A_ScriptDir%\cache\fixate\%realactive%.fxt
+}
+IfEqual,clipboard
+	Tooltip, Clip %realclipno% of %cursave% %fixstatus%`n
+else
+	ToolTip, Clip %realclipno% of %cursave% %fixstatus%`n%halfclip%
+return
+
+clipsaver:
+fileappend,%ClipboardAll%,cache/clips/%cursave%.avc
+loop,%cursave%
+{
+tempno := cursave - a_index + 1
+IfExist,cache\fixate\%tempno%.fxt
+{
+	t_tempno := tempno + 1
+	FileMove,cache\clips\%t_tempno%.avc,cache\clips\%t_tempno%_a.avc
+	FileMove,cache\clips\%tempno%.avc,cache\clips\%t_tempno%.avc
+	FileMove,cache\clips\%t_tempno%_a.avc,cache\clips\%tempno%.avc
+	IfExist,cache\thumbs\%tempno%.jpg
+	{
+		FileMove,cache\thumbs\%t_tempno%.jpg,cache\thumbs\%t_tempno%_a.jpg
+		FileMove,cache\thumbs\%tempno%.jpg,cache\thumbs\%t_tempno%.jpg
+		FileMove,cache\thumbs\%t_tempno%_a.jpg,cache\thumbs\%tempno%.jpg
+	}
+	FileMove,cache\fixate\%tempno%.fxt,cache\fixate\%t_tempno%.fxt
+}
+}
+t_tempno =
+tempno = 
+return
+
+fixcheck:
+IfExist,cache\fixate\%tempsave%.fxt
+	fixstatus := "[FIXED]"
+else
+	fixstatus := ""
 return
 
 ctrlcheck:
@@ -238,24 +331,47 @@ IfEqual,ctrlref,cancel
 	ToolTip, Cancelled
 	else IfEqual,ctrlref,deleteall
 	{
-		Tooltip,Deleted
+		Tooltip,Everything Deleted
 		gosub, cleardata
 	}
-	else
-	{
-		Tooltip, Pasting...
-		send, ^v
-	}
+	else IfEqual,ctrlref,delete
+		{
+			Tooltip,Deleted
+			gosub, clearclip
+		}
+		else
+		{
+			Tooltip, Pasting...
+			send, ^v
+		}
 SetTimer,ctrlcheck,Off
 caller := true
 ctrlref = 
 tempsave := cursave
 sleep, 700
 Tooltip
+Hotkey,^S,Ssuspnd,Off
 Hotkey,^c,MoveBack,Off
 Hotkey,^x,Cancel,Off
-Clipboard := 
+Hotkey,^Space,Fixate,Off
+Hotkey,^x,Deleteall,Off
+Hotkey,^x,Delete,Off
 }
+return
+
+Ssuspnd:
+SetTimer,ctrlcheck,Off
+ctrlref = 
+tempsave := cursave
+Hotkey,^c,MoveBack,Off
+Hotkey,^x,Cancel,Off
+Hotkey,^Space,Fixate,Off
+Hotkey,^x,Deleteall,Off
+Hotkey,^x,Delete,Off
+Hotkey,^S,Ssuspnd,Off
+caller := false
+addtowinclip(realactive, "has Clip " . realclipno)
+caller := true
 return
 
 compacter:
@@ -264,12 +380,14 @@ loop, %threshold%
 {
 	FileDelete,%A_ScriptDir%\cache\clips\%a_index%.avc
 	FileDelete,%A_ScriptDir%\cache\thumbs\%a_index%.jpg
+	FileDelete,%A_ScriptDir%\cache\fixate\%a_index%.fxt
 }
 loop, %maxclips%
 {
 	avcnumber := a_index + threshold
 	FileMove,%a_scriptdir%/cache/clips/%avcnumber%.avc,%A_ScriptDir%/cache/clips/%a_index%.avc
 	filemove,%a_scriptdir%/cache/thumbs/%avcnumber%.jpg,%a_scriptdir%/cache/thumbs/%a_index%.jpg
+	filemove,%a_scriptdir%/cache/fixate/%avcnumber%.fxt,%a_scriptdir%/cache/fixate/%a_index%.fxt
 }
 cursave := maxclips
 tempsave := cursave
@@ -277,12 +395,33 @@ return
 
 cleardata:
 emptymem(pid)
-FileSetAttrib,-R,cache\thumbs
-FileSetAttrib,-R,cache\clips
 FileDelete,cache\clips\*.avc
 FileDelete,cache\thumbs\*.jpg
+FileDelete,cache\fixate\*.fxt
 cursave = 0
-Hotkey,^x,Deleteall,Off
+return
+
+clearclip:
+FileDelete,cache\clips\%realactive%.avc
+FileDelete,cache\thumbs\%realactive%.jpg
+FileDelete,cache\fixate\%realactive%.fxt
+gosub, renamecorrect
+cursave-=1
+return
+
+renamecorrect:
+looptime := cursave - realactive
+If (looptime != 0)
+{
+loop,%looptime%
+{
+	newname := realactive
+	realactive+=1
+	FileMove,cache/clips/%realactive%.avc,cache/clips/%newname%.avc
+	FileMove,cache/thumbs/%realactive%.jpg,cache/thumbs/%newname%.jpg
+	FileMove,cache/fixate/%realactive%.fxt,cache/fixate/%newname%.fxt
+}
+}
 return
 
 thumbgenerator:
@@ -313,18 +452,27 @@ ay := ay + (scrnhgt / 9)
 Gui, Show, x%ax% y%ay% h%displayh% w%displayw%
 return
 
-;***************Extras**********************************************************************
+;***************Extra Functions and Labels**********************************************************************
 qt:
 ExitApp
-return
+
 rdme:
 Run, readme.txt
 return
-main:
-MsgBox, 64, %progname% v%version%, %progname% v%version%`nBy Avi Aryan`n`nSee Readme.txt for more details.
-IfMsgBox OK
-	run, iexplore.exe "www.avi-win-tips.blogspot.com"
+
+hlp:
+Run, iexplore.exe "http://avi-win-tips.blogspot.com/2013/04/clipjump-online-guide.html"
 return
+
+main:
+Gui, 2:Show, x416 y126 h354 w557, Clipjump v%version%
+return
+
+2GuiClose:
+gui, 2:hide
+run, iexplore.exe "www.avi-win-tips.blogspot.com"
+return
+
 strtup:
 Menu,Tray,Togglecheck,Run At Start Up
 IfExist, %a_startup%/ClipJump.lnk
@@ -332,6 +480,7 @@ IfExist, %a_startup%/ClipJump.lnk
 else
 	FileCreateShortcut,%A_ScriptDir%/ClipJump.exe,%A_Startup%/ClipJump.lnk
 return
+
 updt:
 URLDownloadToFile,%updatefile%,%a_scriptdir%/cache/latestversion.txt
 FileRead,latestversion,%a_scriptdir%/cache/latestversion.txt
@@ -344,6 +493,25 @@ IfMsgBox OK
 else
 	MsgBox, 64, ClipJump, No Updates Available
 return
+
+installationopen:
+rUN, Installation And Usage.txt
+return
+
+blog:
+run, iexplore.exe "www.avi-win-tips.blogspot.com"
+return
+
+;******FUNCTIONS*************************************************
+
+addtowinclip(lastentry, extratip)
+{
+ToolTip, Windows Clipboard %extratip%
+IfNotEqual,cursave,0
+	fileread,Clipboard,*c %A_ScriptDir%/cache/clips/%lastentry%.avc
+sleep, 1000
+ToolTip
+}
 
 GetScriptPID(ScriptName)
 {

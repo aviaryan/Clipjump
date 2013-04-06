@@ -1,4 +1,5 @@
-﻿CaptureScreen(aRect = 0, bCursor = False, sFile = "", nQuality = "")
+﻿;Sean's Screen Capture Function
+CaptureScreen(aRect = 0, bCursor = False, sFile = "", nQuality = "")
 {
 	If	!aRect
 	{
