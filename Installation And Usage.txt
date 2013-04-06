@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////
 CLIPJUMP                                                     /
-v 0.1                                                        /
+v 0.5                                                        /
 Basic Release                                                /
 Avi Aryan                                                    /
 //////////////////////////////////////////////////////////////
@@ -14,7 +14,10 @@ Run ClipJump.exe
 ===============================================================
 USAGE
 ===============================================================
-After you run ClipJump, an icon in System Tray would pop up.
+After you run ClipJump, a message should come showing Dll
+register of Gflax completed. OK that!
+A icon of ClipJump in SystemTray will come .
+
 Try copying either by Ctrl+C or by Copy or PrintScreen,
 
 You will notice a Tip, [Transfered to ClipJump]  when you copy something.
@@ -35,14 +38,22 @@ to confirm.
 
 (No Delete Individual Clip supported as it can unnecessarily cause slow-down.
 Cache of clipboards actually dont take much size on disk.
-A future version may have the faeture.)
+A future version may have the feature.)
 
-\\\\\\\\\\\\\\\\\\\\\\\
-DONTS == \\\\\\\\\\\\\\
-///////////////////////
-Just dont touch the CACHE folder. DONT
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+NOTES AND TROUBLESHOOTING == \\\\\\\\\\\\\\
+///////////////////////////////////////////
+
+Just dont touch the CACHE folder (by deafult it is hidden). DONT
+
 When Running ClipJump, make sure all other clipboard managemenet utilities,
 if you have are closed.
+
+Dont remove Gflax.dll from the Directory of the Program.
+
+If you face problems with Image Preview , re-register Gflax.dll
+from the tray menu in the System Tray.
 
 ================================================================
 Web
