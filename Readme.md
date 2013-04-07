@@ -4,7 +4,8 @@ v 2.2
 Advanced Release  
 Avi Aryan  
 
-[Download zip cum .exe](http://clipjump.googlecode.com/files/Clipjump%20v2.2.7z)
+[Download zip cum .exe](http://clipjump.googlecode.com/files/Clipjump%20v2.2.7z)  
+[See online Tutorial](http://avi-win-tips.blogspot.com/2013/04/clipjump-online-guide.html)  
 
 Allows you to simultaneously use multiple clipboards like never before.
 Everything that is transfered to your clipboard will get automatically

@@ -143,6 +143,14 @@ return
 paste:
 gui, hide
 caller := false
+if (in_back)
+{
+in_back := false
+If (tempsave == 1)
+	tempsave := cursave
+else
+	tempsave-=1
+}
 IfNotExist,cache/clips/%tempsave%.avc
 {
 	Tooltip, No Clip Exists
@@ -157,11 +165,6 @@ Hotkey,^x,Cancel,On
 Hotkey,^Space,Fixate,On
 Hotkey,^S,Ssuspnd,On
 
-if (in_back)
-{
-in_back := false
-tempsave-=1
-}
 fileread,Clipboard,*c %A_ScriptDir%/cache/clips/%tempsave%.avc
 gosub, fixcheck
 realclipno := cursave - tempsave + 1
@@ -375,6 +378,7 @@ Hotkey,^Space,Fixate,Off
 Hotkey,^x,Deleteall,Off
 Hotkey,^x,Delete,Off
 Hotkey,^S,Ssuspnd,Off
+in_back := false
 caller := false
 addtowinclip(realactive, "has Clip " . realclipno)
 caller := true
