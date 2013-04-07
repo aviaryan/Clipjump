@@ -1,13 +1,11 @@
 //////////////////////////////////////////////////////////////
 CLIPJUMP                                                     /
-v 2.0                                                        /
+v 2.2                                                        /
 Advanced Release                                             /
 Avi Aryan                                                    /
 //////////////////////////////////////////////////////////////
-USE ONLY WITH AHK_L ANSI 32-BIT
-//////////////////////////////////////////////////////////////
 
-A Mega Clipboard Manager
+A Magical Clipboard Manager
 
 Allows you to simultaneously use multiple clipboards like never before.
 Everything that is transfered to your clipboard will get automatically
@@ -40,12 +38,8 @@ THANKS |
 ============================
 CHANGES (in this release)  |
 ============================
-•Clipjump is now Open-Source.
-•Added the Great FIXATE Option, A Super-booster for the Coding community.
-•Added Delete Clip Option - Delete selected Clipboards on the fly
-•Added Selective Windows Clipboard Option
-•[Older Version Users] Now one X to Cancel, two X to Delete and three to DeleteAll
-•Now even more lighter on disk.
+•Lower Memory Usage
+•Fixed a Minor Clipboard Cycle Bug
 
 ================================================================
 See Installation and Usage for more details!
@@ -56,6 +50,4 @@ See Installation and Usage for more details!
 ================================================================
 Web
 ================================================================
-Site -- http://avi-win-tips.blogspot.com/p/clipjump.html
-
-G.Code -- http://code.google.com/p/clipjump/
+http://avi-win-tips.blogspot.com/p/clipjump.html

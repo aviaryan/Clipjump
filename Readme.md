@@ -1,7 +1,10 @@
-[Clipjump](http://avi-win-tips.blogspot.com/p/clipjump.html)
-v 2.0
-Advanced Release
-Avi Aryan
+[Clipjump](http://avi-win-tips.blogspot.com/p/clipjump.html)  
+A Magical Clipboard Manager  
+v 2.2  
+Advanced Release  
+Avi Aryan  
+
+[Download zip cum .exe](http://clipjump.googlecode.com/files/Clipjump%20v2.2.7z)
 
 Allows you to simultaneously use multiple clipboards like never before.
 Everything that is transfered to your clipboard will get automatically
@@ -23,7 +26,5 @@ FEATURES
  * Configurable - You can change settings by editing Settings.ini
  * Portable - Carry where you go
 
-
-[Download .exe](http://clipjump.googlecode.com/files/Clipjump%202.0.7z)
-[See Readme.txt](readme.txt)
-[See Installtion instructions](Installation And Usage.txt)
+[See Readme.txt](readme.txt)  
+[See Installation instructions](Installation And Usage.txt)

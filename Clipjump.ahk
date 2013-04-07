@@ -1,7 +1,7 @@
 ﻿/*
 
 	ClipJump --- The Multiple Clipboard Manager
-	v 2.0
+	v 2.2
     Copyright (C) 2013  Avi Aryan
 	
 	############## IMPORTANT ##################
@@ -80,7 +80,7 @@ IfNotExist,cache/Clips/%a_index%.avc
 ;*********Program Vars**********************************************************
 
 progname = ClipJump
-version = 2.0
+version = 2.2
 Author = Avi Aryan
 updatefile = http://avis-sublime-4-autohotkey.googlecode.com/files/clipjumpversion.txt
 productpage = http://avi-win-tips.blogspot.com/p/clipjump.html
@@ -129,16 +129,14 @@ FileCreateDir,cache/thumbs
 FileCreateDir,cache/fixate
 FileSetAttrib,+H,%a_scriptdir%\cache
 
-pid := Getscriptpid(A_ScriptName)
-
 scrnhgt := A_ScreenHeight / 2.5
 scrnwdt := A_ScreenWidth / 2
 
-Emptymem(pid)
-
 global caller
 caller := true
+in_back := false
 Hotkey,$^v,Paste,On
+EmptyMem()
 return
 ;End Of Auto-Execute============================================
 
@@ -159,6 +157,11 @@ Hotkey,^x,Cancel,On
 Hotkey,^Space,Fixate,On
 Hotkey,^S,Ssuspnd,On
 
+if (in_back)
+{
+in_back := false
+tempsave-=1
+}
 fileread,Clipboard,*c %A_ScriptDir%/cache/clips/%tempsave%.avc
 gosub, fixcheck
 realclipno := cursave - tempsave + 1
@@ -228,6 +231,7 @@ return
 
 MoveBack:
 gui, hide
+in_back := true
 tempsave := realactive + 1
 IfEqual,realactive,%cursave%
 	tempsave := 1
@@ -346,6 +350,7 @@ IfEqual,ctrlref,cancel
 		}
 SetTimer,ctrlcheck,Off
 caller := true
+in_back := false
 ctrlref = 
 tempsave := cursave
 sleep, 700
@@ -356,6 +361,7 @@ Hotkey,^x,Cancel,Off
 Hotkey,^Space,Fixate,Off
 Hotkey,^x,Deleteall,Off
 Hotkey,^x,Delete,Off
+EmptyMem()
 }
 return
 
@@ -375,7 +381,6 @@ caller := true
 return
 
 compacter:
-emptymem(pid)
 loop, %threshold%
 {
 	FileDelete,%A_ScriptDir%\cache\clips\%a_index%.avc
@@ -394,7 +399,6 @@ tempsave := cursave
 return
 
 cleardata:
-emptymem(pid)
 FileDelete,cache\clips\*.avc
 FileDelete,cache\thumbs\*.jpg
 FileDelete,cache\fixate\*.fxt
@@ -512,24 +516,9 @@ IfNotEqual,cursave,0
 sleep, 1000
 ToolTip
 }
-
-GetScriptPID(ScriptName)
+EmptyMem()
 {
-   DHW := A_DetectHiddenWindows
-   TMM := A_TitleMatchMode
-   DetectHiddenWindows, On
-   SetTitleMatchMode, 2
-   WinGet, PID, PID, \%ScriptName% - ahk_class AutoHotkey
-   DetectHiddenWindows, %DHW%
-   SetTitleMatchMode, %TMM%
-   Return PID
-}
-EmptyMem(PID="")
-{
-    pid:=(pid="") ? DllCall("GetCurrentProcessId") : pid
-    h:=DllCall("OpenProcess", "UInt", 0x001F0FFF, "Int", 0, "Int", pid)
-    DllCall("SetProcessWorkingSetSize", "UInt", h, "Int", -1, "Int", -1)
-    DllCall("CloseHandle", "Int", h)
+return, dllcall("psapi.dll\EmptyWorkingSet", "UInt", -1)
 }
 #Include, imagelib.ahk
 #include, gdiplus.ahk

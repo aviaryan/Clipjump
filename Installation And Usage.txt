@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////
 CLIPJUMP                                                     /
-v 2.0                                                        /
+v 2.2                                                        /
 Advanced Release                                             /
 Avi Aryan                                                    /
 //////////////////////////////////////////////////////////////
@@ -111,6 +111,7 @@ V - Move forward through Multiple Clipboards (from 1 to 2 , 2 to 3)
 C - Move backwards through Multiple Clipboards (from 3 to 2 , 2 to 1)
 S - Add current Clip to Windows Clipboard [Selective Windows Clipboard Option]
 X - Toggle between, Cancel,Delete,Delete All MODE
+Space - Fix/un-fix a clipboard at its position.
 
 *****************************************
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
