@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////
 CLIPJUMP                                                     /
-v 2.2                                                        /
+v 3.0                                                        /
 Advanced Release                                             /
 Avi Aryan                                                    /
 //////////////////////////////////////////////////////////////
@@ -24,6 +24,8 @@ FEATURES |
 •Add selective Data to Windows Clipboard if needed.
 •Can have as much simultaneous clipboards as possible. (Depends on Disk Space).
 •Very fast Clipboard Switching.
+•Copy Current Folder path to Clipboard
+•Copy selected files path(s) to Clipboard
 •Idiot-Proof! - Captures Clipboard entries from everywhere, whether it be an external program or PrintScreen Captures.
 •Configurable - You can change settings by editing Settings.ini
 •Portable - Carry where you go
@@ -33,13 +35,16 @@ THANKS |
 =======
 >Sean for his Screen Capture Function.
 >Tic (Tariq Potter) for GDI+ Library.
->Ken for pointing out bugs.
+>Ken and Luke for pointing out bugs.
 
 ============================
 CHANGES (in this release)  |
 ============================
-•Lower Memory Usage
-•Fixed a Minor Clipboard Cycle Bug
+•Added Copy File Path Option
+•Added Copy Folder Path Option
+•Added option to automatically remove ending linefeeds.
+•Fixed a MS-Excel Super-Bug.
+•Now Clipjump rememembers your last Clipboard visit and reopens it when you hit Ctrl + V.
 
 ================================================================
 See Installation and Usage for more details!

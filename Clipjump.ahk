@@ -1,7 +1,7 @@
 ﻿/*
 
 	ClipJump --- The Multiple Clipboard Manager
-	v 2.2
+	v 3.0
     Copyright (C) 2013  Avi Aryan
 	
 	############## IMPORTANT ##################
@@ -30,6 +30,7 @@
 
 SetWorkingDir, %A_ScriptDir%
 SetBatchLines,-1
+SetKeyDelay, -1
 #SingleInstance, force
 
 Clipboard = 
@@ -40,12 +41,22 @@ IniWrite,10,settings.ini,Main,Threshold
 IniWrite,1,settings.ini,Main,Show_Copy_Message
 IniWrite,20,settings.ini,Main,Quality_of_Thumbnail_Previews
 IniWrite,1,settings.ini,Main,Keep_Session
+IniWrite,1,settings.ini,Main,Remove_Ending_Linefeeds
+Iniwrite,200,settings.ini,System,Wait_Key
 }
 IniRead,maxclips,settings.ini,Main,Minimum_No_Of_Clips_to_be_Active
 IniRead,threshold,settings.ini,Main,Threshold
 IniRead,ismessage,settings.ini,Main,Show_Copy_Message
 IniRead,quality,settings.ini,Main,Quality_of_Thumbnail_Previews
 IniRead,keepsession,settings.ini,Main,Keep_Session
+IniRead,R_lf,settings.ini,Main,Remove_Ending_Linefeeds
+Iniread,generalsleep,settings.ini,System,Wait_Key
+
+if (R_lf == "ERROR")
+{
+	IniWrite,1,settings.ini,Main,Remove_Ending_Linefeeds
+	Iniwrite,200,settings.ini,System,Wait_Key
+}
 
 IfEqual,maxclips
 	maxclips = 9999999
@@ -61,6 +72,16 @@ If quality is not Integer
 	quality = 20
 if keepsession is not integer
 	keepsession = 1
+if (R_lf == 0)
+	R_lf := false
+else
+	R_lf := true
+
+if generalsleep is not Integer
+	generalsleep := 200
+
+IfLess,generalsleep,200
+	generalsleep := 200
 
 IfEqual,keepsession,0
 	gosub, cleardata
@@ -80,7 +101,7 @@ IfNotExist,cache/Clips/%a_index%.avc
 ;*********Program Vars**********************************************************
 
 progname = ClipJump
-version = 2.2
+version = 3.0
 Author = Avi Aryan
 updatefile = http://avis-sublime-4-autohotkey.googlecode.com/files/clipjumpversion.txt
 productpage = http://avi-win-tips.blogspot.com/p/clipjump.html
@@ -100,7 +121,7 @@ Gui, 2:Font, S14 CBlack, Verdana
 Gui, 2:Font, S14 CRed, Verdana
 Gui, 2:Add, Text, x2 y120 w100 h30 , Thanks
 Gui, 2:Font, S12 CBlue Bold, Verdana
-Gui, 2:Add, Text, x2 y150 w550 h90 , Sean for his Screen Capture Function.`nTic (Tariq Potter) for GDI+ Library.`nKen for pointing out bugs.
+Gui, 2:Add, Text, x2 y150 w550 h90 , Sean for his Screen Capture Function.`nTic (Tariq Potter) for GDI+ Library.`nKen and Luke for pointing out bugs.
 Gui, 2:Font, S14 CBlack Bold, Verdana
 Gui, 2:Add, Text, x2 y260 w300 h30 ginstallationopen, Click to see How to Use
 Gui, 2:Add, Text, x2 y290 w300 h30 grdme, Readme
@@ -132,10 +153,11 @@ FileSetAttrib,+H,%a_scriptdir%\cache
 scrnhgt := A_ScreenHeight / 2.5
 scrnwdt := A_ScreenWidth / 2
 
-global caller
 caller := true
 in_back := false
 Hotkey,$^v,Paste,On
+Hotkey,^!c,CopyFile,On
+Hotkey,^!x,CopyFolder,On
 EmptyMem()
 return
 ;End Of Auto-Execute============================================
@@ -260,7 +282,6 @@ Cancel:
 gui, hide
 ToolTip, Cancel Paste Operation`nRelease Control to Confirm
 ctrlref = cancel
-
 Hotkey,^Space,fixate,Off
 Hotkey,^S,Ssuspnd,Off
 Hotkey,^x,Cancel,Off
@@ -335,7 +356,10 @@ if ctrlstate=u
 {
 gui, hide
 IfEqual,ctrlref,cancel
+{
 	ToolTip, Cancelled
+	tempsave := cursave
+}
 	else IfEqual,ctrlref,deleteall
 	{
 		Tooltip,Everything Deleted
@@ -348,14 +372,80 @@ IfEqual,ctrlref,cancel
 		}
 		else
 		{
+			caller := false
 			Tooltip, Pasting...
-			send, ^v
+			if (R_lf)
+			{
+			if (Substr(Clipboard,-1) == "`r`n")
+			{
+			IfWinActive, ahk_class XLMAIN
+				SendInput, %Clipboard%{Up 2}
+			else
+			{
+				CopyMessage = 
+				StringTrimRight,Clipboard,clipboard,2
+				Send, ^v
+				sleep, %generalsleep%
+				Loop
+					IfExist,cache\clips\%cursave%.avc
+						break
+				CopyMessage = Transfered to ClipJump
+			}
+			}
+			else
+			{
+			IfWinActive, ahk_class XLMAIN
+			{
+				IF (Substr(Clipboard,-11) == "   --[PATH][")
+				{
+					StringTrimRight,tempclip,Clipboard,12
+					SendInput {RAW} %tempclip%
+				}
+				else
+					SendInput %clipboard%
+			}
+			else
+			{
+				IF (Substr(Clipboard,-11) == "   --[PATH][")
+				{
+					StringTrimRight,tempclip,Clipboard,12
+					SendInput {RAW} %tempclip%
+				}
+				else
+					Send, ^v
+			}
+			}
+			}
+			else
+			{
+			IfWinActive, ahk_class XLMAIN
+			{
+				IF (Substr(Clipboard,-11) == "   --[PATH][")
+				{
+					StringTrimRight,tempclip,Clipboard,12
+					SendInput {RAW} %tempclip%
+				}
+				else
+					SendInput %clipboard%
+			}
+			else
+			{
+				IF (Substr(Clipboard,-11) == "   --[PATH][")
+				{
+					StringTrimRight,tempclip,Clipboard,12
+					SendInput {RAW} %tempclip%
+				}
+				else
+					Send, ^v
+			}
+			}
+			tempsave := realactive
 		}
 SetTimer,ctrlcheck,Off
 caller := true
 in_back := false
+tempclip = 
 ctrlref = 
-tempsave := cursave
 sleep, 700
 Tooltip
 Hotkey,^S,Ssuspnd,Off
@@ -371,7 +461,7 @@ return
 Ssuspnd:
 SetTimer,ctrlcheck,Off
 ctrlref = 
-tempsave := cursave
+tempsave := realactive
 Hotkey,^c,MoveBack,Off
 Hotkey,^x,Cancel,Off
 Hotkey,^Space,Fixate,Off
@@ -406,13 +496,17 @@ cleardata:
 FileDelete,cache\clips\*.avc
 FileDelete,cache\thumbs\*.jpg
 FileDelete,cache\fixate\*.fxt
-cursave = 0
+cursave := 0
+tempsave := 0
 return
 
 clearclip:
 FileDelete,cache\clips\%realactive%.avc
 FileDelete,cache\thumbs\%realactive%.jpg
 FileDelete,cache\fixate\%realactive%.fxt
+tempsave := realactive - 1
+if (tempsave == 0)
+	tempsave := 1
 gosub, renamecorrect
 cursave-=1
 return
@@ -458,6 +552,26 @@ GuiControl,,imagepreview,*w%displayw% *h%displayh% cache\thumbs\%tempsave%.jpg
 MouseGetPos,ax,ay
 ay := ay + (scrnhgt / 9)
 Gui, Show, x%ax% y%ay% h%displayh% w%displayw%
+return
+
+;****************COPY FILE/FOLDER******************************************************************************
+
+copyfile:
+CopyMessage = File Path(s) copied to Clipjump
+selectedfile := GetFile()
+IfNotEqual,selectedfile
+	Clipboard := selectedfile . "   --[PATH]["
+sleep, %generalsleep%
+CopyMessage = Transfered to Clipjump
+return
+
+copyfolder:
+CopyMessage = Active Folder Path copied to Clipjump
+openedfolder := GetFolder()
+IfNotEqual,openedfolder
+	Clipboard := openedfolder . "   --[PATH]["
+sleep, %generalsleep%
+Copymessage = Transfered to Clipjump
 return
 
 ;***************Extra Functions and Labels**********************************************************************
@@ -517,12 +631,52 @@ addtowinclip(lastentry, extratip)
 ToolTip, Windows Clipboard %extratip%
 IfNotEqual,cursave,0
 	fileread,Clipboard,*c %A_ScriptDir%/cache/clips/%lastentry%.avc
+
+IF (Substr(Clipboard,-11) == "   --[PATH][")
+	StringTrimRight,Clipboard,Clipboard,12
 sleep, 1000
 ToolTip
 }
 EmptyMem()
 {
 return, dllcall("psapi.dll\EmptyWorkingSet", "UInt", -1)
+}
+
+GetFile(hwnd="")
+{
+	hwnd := hwnd ? hwnd : WinExist("A")
+	WinGetClass class, ahk_id %hwnd%
+	if (class="CabinetWClass" or class="ExploreWClass" or class="Progman")
+		for window in ComObjCreate("Shell.Application").Windows
+			if (window.hwnd==hwnd)
+    sel := window.Document.SelectedItems
+	for item in sel
+	ToReturn .= item.path "`n"
+	return Trim(ToReturn,"`n")
+}
+
+GetFolder()
+{
+WinGetClass,var,A
+If var in CabinetWClass,ExplorerWClass,Progman
+{
+IfEqual,var,Progman
+	v := A_Desktop
+else
+{
+winGetText,Fullpath,A
+loop,parse,Fullpath,`r`n
+{
+IfInString,A_LoopField,:\
+{
+StringGetPos,pos,A_Loopfield,:\,L
+Stringtrimleft,v,A_loopfield,(pos - 1)
+break
+}
+}
+}
+return, v
+}
 }
 #Include, imagelib.ahk
 #include, gdiplus.ahk

@@ -1,10 +1,10 @@
 [Clipjump](http://avi-win-tips.blogspot.com/p/clipjump.html)  
 A Magical Clipboard Manager  
-v 2.2  
+v 3.0  
 Advanced Release  
 Avi Aryan  
 
-[Download zip cum .exe](http://clipjump.googlecode.com/files/Clipjump%20v2.2.7z)  
+[Download zip cum .exe](http://clipjump.googlecode.com/files/Clipjumplatest.7z)  
 [See online Tutorial](http://avi-win-tips.blogspot.com/2013/04/clipjump-online-guide.html)  
 
 Allows you to simultaneously use multiple clipboards like never before.
@@ -22,6 +22,8 @@ FEATURES
  * FIX Clipboards at certain positions. (See FIXATE in Installation Instructions below)
  * Add selective Data to Windows Clipboard if needed.
  * Can have as much simultaneous clipboards as possible. (Depends on Disk Space).
+ * Copy Current Folder path to Clipboard (Ctrl+Alt+X) 
+ * Copy selected files path(s) to Clipboard (Ctrl+Alt+C)
  * Very fast Clipboard Switching.
  * Idiot-Proof! - Captures Clipboard entries from everywhere, whether it be an external program or PrintScreen Captures.
  * Configurable - You can change settings by editing Settings.ini

@@ -1,11 +1,12 @@
 //////////////////////////////////////////////////////////////
 CLIPJUMP                                                     /
-v 2.2                                                        /
+v 3.0                                                        /
 Advanced Release                                             /
 Avi Aryan                                                    /
 //////////////////////////////////////////////////////////////
 
 <<<<< BETTER SEE THE FILE IN FULL-SCREEN >>>>>>>
+<<<<< MAKE SURE YOU SEE NOTES AND TROUBLESHOOTING >>>>>
 
 //////////////////////////////////////////////////////////////
 INSTALLATION                                                 /
@@ -82,6 +83,13 @@ NOTE ===
 The DeleteAll option will delete FIXED Clips.
 ========
 
+Copying Paths to Clipjump
+
+- Pressing the shortcut Ctrl+Alt+C will copy path(s) of selected files in Windows
+Explorer.
+- Pressing the shortcut Ctrl+Alt+X will copy path of current opened folder in Windows
+Explorer.
+
 --------------------------------------------------------
 
 Selective Windows Clipboard
@@ -113,6 +121,9 @@ S - Add current Clip to Windows Clipboard [Selective Windows Clipboard Option]
 X - Toggle between, Cancel,Delete,Delete All MODE
 Space - Fix/un-fix a clipboard at its position.
 
+Ctrl+Alt+X - Copy opened Folder Path
+Ctrl+Alt+C - Copy File Path
+
 *****************************************
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -120,8 +131,14 @@ Space - Fix/un-fix a clipboard at its position.
 NOTES AND TROUBLESHOOTING == \\\\\\\\\\\\\\
 ///////////////////////////////////////////
 
-Just dont touch the CACHE folder (by deafult it is hidden). DONT
+•Short-press Ctrl+C when copying something manually using Clipjump.
+ When holding Ctrl and C for a long time while copying, you can cause problems.
+ 
+•In MS Excel, please follow the above point seriously.Just a short press.
+ In Excel, Transfered to ClipJump tip can take some time to appear after pressing
+ Ctrl + C. That's an Excel problem and not a bug.
 
+Just dont touch the CACHE folder (by deafult it is hidden). DONT
 When Running ClipJump, make sure all other clipboard managemenet utilities,if you have are closed.
 
 ================================================================

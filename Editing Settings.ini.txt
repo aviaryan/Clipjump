@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////
 CLIPJUMP                                                     /
-v 2.2                                                        /
+v 3.0                                                        /
 Advanced Release                                             /
 Avi Aryan                                                    /
 //////////////////////////////////////////////////////////////
@@ -9,7 +9,7 @@ Settings.ini Help
 
 Settings.ini stores settings for the ClipJump Program.
 
-It has 5 Parameters ---
+It has 7 Parameters ---
 
  ===  Minimum_No_Of_Clips_to_be_Active ====
 It is the minimum no of clipboards that you want simultaneously 
@@ -42,5 +42,18 @@ Should ClipJump keep all the saved clipboards after each Application
 restart or simply Windows restart if you run it at Start up.
 1 = Yes (Clipboards kept)
 0 = No
+
+ === Remove_Ending_Linefeeds ====
+Remove Linefeeds from end of Clips . These linefeeds if not removed can 
+cause an Extra ENTER to be stimulated while pasting Clips in Text-Holders.
+1 = Yes		(Recommended)
+0 = No
+
+ === Wait_Key ====
+This is a Clipjump behaviour parameter. If you face Duplicate entries while
+pasting data from Multiple Clipboards , increase this entry.
+Default = 200
+
+[It is not recommended to edit this entry, If you have problems contact the Author].
 
 =================END=================================================
