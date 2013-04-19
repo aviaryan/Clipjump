@@ -30,4 +30,3 @@ FEATURES
  * Portable - Carry where you go
 
 [See Readme.txt](readme.txt)  
-[See Installation instructions](Installation And Usage.txt)
