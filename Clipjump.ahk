@@ -313,17 +313,19 @@ Hotkey,^x,Cancel,On
 return
 
 NativeCopy:
+Critical
+Hotkey,$^c,NativeCopy,Off
 Hotkey,$^c,Blocker,On
 Send, ^c
-Hotkey,$^c,NativeCopy,Off
 setTimer,CtrlforCopy,50
 gosub, CtrlforCopy
 return
 
 NativeCut:
+Critical
+Hotkey,$^x,NativeCut,Off
 Hotkey,$^x,Blocker,On
 Send, ^x
-Hotkey,$^x,NativeCut,Off
 setTimer,CtrlforCopy,50
 gosub, CtrlforCopy
 return
@@ -393,6 +395,7 @@ ctrlcheck:
 GetKeyState,ctrlstate,ctrl
 if ctrlstate=u
 {
+caller := false
 gui, hide
 IfEqual,ctrlref,cancel
 {
@@ -411,7 +414,7 @@ IfEqual,ctrlref,cancel
 		}
 		else
 		{
-			caller := false
+			;caller := false
 			Tooltip, Pasting...
 			if (R_lf)
 			{
