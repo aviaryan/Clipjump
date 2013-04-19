@@ -313,23 +313,32 @@ Hotkey,^x,Cancel,On
 return
 
 NativeCopy:
+Hotkey,$^c,Blocker,On
 Send, ^c
 Hotkey,$^c,NativeCopy,Off
-Hotkey,^c,Blocker,On
+setTimer,CtrlforCopy,50
+gosub, CtrlforCopy
 return
 
 NativeCut:
+Hotkey,$^x,Blocker,On
 Send, ^x
 Hotkey,$^x,NativeCut,Off
-Hotkey,^x,Blocker,On
+setTimer,CtrlforCopy,50
+gosub, CtrlforCopy
+return
+
+CtrlForCopy:
+GetKeyState,Ctrlstate,ctrl
+if ctrlstate = u
+{
+Hotkey,$^c,NativeCopy,on
+Hotkey,$^x,NativeCut,on
+setTimer,CtrlforCopy,Off
+}
 return
 
 Blocker:
-While (GetKeyState("Control","P"))
-{
-}
-Hotkey,$^c,NativeCopy,on
-Hotkey,$^x,NativeCut,on
 return
 
 Fixate:
