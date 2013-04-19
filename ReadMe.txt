@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////
 CLIPJUMP                                                     /
-v 3.0                                                        /
+v 4.0                                                        /
 Advanced Release                                             /
 Avi Aryan                                                    /
 //////////////////////////////////////////////////////////////
@@ -40,11 +40,9 @@ THANKS |
 ============================
 CHANGES (in this release)  |
 ============================
-•Added Copy File Path Option
-•Added Copy Folder Path Option
-•Added option to automatically remove ending linefeeds.
-•Fixed a MS-Excel Super-Bug.
-•Now Clipjump rememembers your last Clipboard visit and reopens it when you hit Ctrl + V.
+•Eliminated Duplicate Entries Bug Chances
+•Enhanced Error and Bug Handling while pasting
+•Added Help Files and custom icon.
 
 ================================================================
 See Installation and Usage for more details!

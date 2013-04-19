@@ -1,12 +1,11 @@
 ﻿/*
-
 	ClipJump --- The Multiple Clipboard Manager
-	v 3.0
+	v 4.0
     Copyright (C) 2013  Avi Aryan
-	
+
 	############## IMPORTANT ##################
 	Use only with AutoHotkey_L-32 bit ANSI version.
-	
+	Please Share this stuff as much as you can.
 	###########################################
 
     This program is free software: you can redistribute it and/or modify
@@ -33,6 +32,15 @@ SetBatchLines,-1
 SetKeyDelay, -1
 #SingleInstance, force
 
+;*********Program Vars**********************************************************
+
+progname = ClipJump
+version = 4.0
+Author = Avi Aryan
+updatefile = http://avis-sublime-4-autohotkey.googlecode.com/files/clipjumpversion.txt
+productpage = http://avi-win-tips.blogspot.com/p/clipjump.html
+
+;*******************************************************************************
 Clipboard = 
 IfNotExist,settings.ini
 {
@@ -43,7 +51,11 @@ IniWrite,20,settings.ini,Main,Quality_of_Thumbnail_Previews
 IniWrite,1,settings.ini,Main,Keep_Session
 IniWrite,1,settings.ini,Main,Remove_Ending_Linefeeds
 Iniwrite,200,settings.ini,System,Wait_Key
+Iniwrite,%version%,settings.ini,System,Version
+
+FileCreateShortcut,%A_ScriptFullPath%,%A_Startup%/ClipJump.lnk
 }
+
 IniRead,maxclips,settings.ini,Main,Minimum_No_Of_Clips_to_be_Active
 IniRead,threshold,settings.ini,Main,Threshold
 IniRead,ismessage,settings.ini,Main,Show_Copy_Message
@@ -51,12 +63,10 @@ IniRead,quality,settings.ini,Main,Quality_of_Thumbnail_Previews
 IniRead,keepsession,settings.ini,Main,Keep_Session
 IniRead,R_lf,settings.ini,Main,Remove_Ending_Linefeeds
 Iniread,generalsleep,settings.ini,System,Wait_Key
+Iniread,version_ini,settings.ini,System,Version
 
-if (R_lf == "ERROR")
-{
-	IniWrite,1,settings.ini,Main,Remove_Ending_Linefeeds
-	Iniwrite,200,settings.ini,System,Wait_Key
-}
+if (version_ini == "ERROR")
+	IniWrite,%version%,settings.ini,System,Version
 
 IfEqual,maxclips
 	maxclips = 9999999
@@ -98,19 +108,11 @@ IfNotExist,cache/Clips/%a_index%.avc
 }
 }
 
-;*********Program Vars**********************************************************
-
-progname = ClipJump
-version = 3.0
-Author = Avi Aryan
-updatefile = http://avis-sublime-4-autohotkey.googlecode.com/files/clipjumpversion.txt
-productpage = http://avi-win-tips.blogspot.com/p/clipjump.html
-
 ;*******GUIS****************************************************
 Gui +LastFound +AlwaysOnTop -Caption +ToolWindow
 gui, add, picture,x0 y0 w400 h300 vimagepreview,
 
-Gui, 2:Font, S18 CRed, Verdana
+Gui, 2:Font, S18 CRed, Consolas
 Gui, 2:Add, Text, x2 y0 w550 h40 +Center gupdt, ClipJump v%version%
 Gui, 2:Font, S14 CBlue, Verdana
 Gui, 2:Add, Text, x2 y40 w550 h30 +Center gblog, Avi Aryan
@@ -120,17 +122,18 @@ Gui, 2:Add, Text, x2 y70 w550 h30 +Center, A Magical Clipboard Manager
 Gui, 2:Font, S14 CBlack, Verdana
 Gui, 2:Font, S14 CRed, Verdana
 Gui, 2:Add, Text, x2 y120 w100 h30 , Thanks
-Gui, 2:Font, S12 CBlue Bold, Verdana
+Gui, 2:Font, S14 CBlue Bold,Consolas
 Gui, 2:Add, Text, x2 y150 w550 h90 , Sean for his Screen Capture Function.`nTic (Tariq Potter) for GDI+ Library.`nKen and Luke for pointing out bugs.
 Gui, 2:Font, S14 CBlack Bold, Verdana
-Gui, 2:Add, Text, x2 y260 w300 h30 ginstallationopen, Click to see How to Use
-Gui, 2:Add, Text, x2 y290 w300 h30 grdme, Readme
+Gui, 2:Add, Text, x2 y260 w300 h30 ginstallationopen, Open Offline Help
+Gui, 2:Add, Text, x2 y290 w300 h30 grdme, Open Readme
 Gui, 2:Font, S14 CBlack, Verdana
 Gui, 2:Add, Text, x-8 y330 w560 h24 +Center, Copyright (C) 2013
 ;******************************************************************
 Menu,Tray,NoStandard
 Menu,Tray,Add,%progname%,main
 Menu,Tray,Tip,ClipJump by Avi Aryan
+Menu,Tray,Icon,iconx.ico
 Menu,Tray,Add
 Menu,Tray,Add,ReadMe,rdme
 Menu,Tray,Add,Run At Start Up,strtup
@@ -142,7 +145,11 @@ Menu,Tray,Add,Quit,qt
 Menu,Tray,Default,%progname%
 
 IfExist,%a_startup%/ClipJump.lnk
-	Menu,Tray,Check,Run At Start Up
+{
+FileDelete,%a_startup%/ClipJump.lnk
+FileCreateShortcut,%A_ScriptFullPath%,%A_Startup%/ClipJump.lnk
+Menu,Tray,Check,Run At Start Up
+}
 
 FileCreateDir,cache
 FileCreateDir,cache/clips
@@ -155,7 +162,10 @@ scrnwdt := A_ScreenWidth / 2
 
 caller := true
 in_back := false
+
 Hotkey,$^v,Paste,On
+Hotkey,$^c,NativeCopy,On
+Hotkey,$^x,NativeCut,On
 Hotkey,^!c,CopyFile,On
 Hotkey,^!x,CopyFolder,On
 EmptyMem()
@@ -302,6 +312,26 @@ Hotkey,^x,DeleteAll,Off
 Hotkey,^x,Cancel,On
 return
 
+NativeCopy:
+Send, ^c
+Hotkey,$^c,NativeCopy,Off
+Hotkey,^c,Blocker,On
+return
+
+NativeCut:
+Send, ^x
+Hotkey,$^x,NativeCut,Off
+Hotkey,^x,Blocker,On
+return
+
+Blocker:
+While (GetKeyState("Control","P"))
+{
+}
+Hotkey,$^c,NativeCopy,on
+Hotkey,$^x,NativeCut,on
+return
+
 Fixate:
 IfExist,cache\fixate\%realactive%.fxt
 {
@@ -378,10 +408,6 @@ IfEqual,ctrlref,cancel
 			{
 			if (Substr(Clipboard,-1) == "`r`n")
 			{
-			IfWinActive, ahk_class XLMAIN
-				SendInput, %Clipboard%{Up 2}
-			else
-			{
 				CopyMessage = 
 				StringTrimRight,Clipboard,clipboard,2
 				Send, ^v
@@ -391,53 +417,42 @@ IfEqual,ctrlref,cancel
 						break
 				CopyMessage = Transfered to ClipJump
 			}
-			}
 			else
 			{
-			IfWinActive, ahk_class XLMAIN
-			{
-				IF (Substr(Clipboard,-11) == "   --[PATH][")
+				If (Substr(Clipboard,-11) == "   --[PATH][")
 				{
 					StringTrimRight,tempclip,Clipboard,12
 					SendInput {RAW} %tempclip%
 				}
 				else
-					SendInput %clipboard%
-			}
-			else
-			{
-				IF (Substr(Clipboard,-11) == "   --[PATH][")
 				{
-					StringTrimRight,tempclip,Clipboard,12
-					SendInput {RAW} %tempclip%
+				CopyMessage = 
+				Send, ^v
+				sleep, %generalsleep%
+				Loop
+					IfExist,cache\clips\%cursave%.avc
+						break
+				CopyMessage = Transfered to ClipJump
 				}
-				else
-					Send, ^v
-			}
 			}
 			}
 			else
 			{
-			IfWinActive, ahk_class XLMAIN
-			{
-				IF (Substr(Clipboard,-11) == "   --[PATH][")
+			If (Substr(Clipboard,-11) == "   --[PATH][")
 				{
-					StringTrimRight,tempclip,Clipboard,12
-					SendInput {RAW} %tempclip%
+				StringTrimRight,tempclip,Clipboard,12
+				SendInput {RAW} %tempclip%
 				}
 				else
-					SendInput %clipboard%
-			}
-			else
-			{
-				IF (Substr(Clipboard,-11) == "   --[PATH][")
 				{
-					StringTrimRight,tempclip,Clipboard,12
-					SendInput {RAW} %tempclip%
+				CopyMessage = 
+				Send, ^v
+				sleep, %generalsleep%
+				Loop
+					IfExist,cache\clips\%cursave%.avc
+						break
+				CopyMessage = Transfered to ClipJump
 				}
-				else
-					Send, ^v
-			}
 			}
 			tempsave := realactive
 		}
@@ -454,6 +469,10 @@ Hotkey,^x,Cancel,Off
 Hotkey,^Space,Fixate,Off
 Hotkey,^x,Deleteall,Off
 Hotkey,^x,Delete,Off
+;;
+Hotkey,$^c,NativeCopy,On
+Hotkey,$^x,NativeCut,On
+;;
 EmptyMem()
 }
 return
@@ -468,6 +487,10 @@ Hotkey,^Space,Fixate,Off
 Hotkey,^x,Deleteall,Off
 Hotkey,^x,Delete,Off
 Hotkey,^S,Ssuspnd,Off
+;;
+Hotkey,$^c,NativeCopy,On
+Hotkey,$^x,NativeCut,On
+;;
 in_back := false
 caller := false
 addtowinclip(realactive, "has Clip " . realclipno)
@@ -583,7 +606,10 @@ Run, readme.txt
 return
 
 hlp:
-Run, iexplore.exe "http://avi-win-tips.blogspot.com/2013/04/clipjump-online-guide.html"
+IfExist, %a_programfiles%/Internet Explorer/iexplore.exe
+	Run, iexplore.exe "http://avi-win-tips.blogspot.com/2013/04/clipjump-online-guide.html"
+else
+	Run, http://avi-win-tips.blogspot.com/2013/04/clipjump-online-guide.html
 return
 
 main:
@@ -592,7 +618,7 @@ return
 
 2GuiClose:
 gui, 2:hide
-run, iexplore.exe "www.avi-win-tips.blogspot.com"
+EmptyMem()
 return
 
 strtup:
@@ -600,7 +626,7 @@ Menu,Tray,Togglecheck,Run At Start Up
 IfExist, %a_startup%/ClipJump.lnk
 	FileDelete,%a_startup%/ClipJump.lnk
 else
-	FileCreateShortcut,%A_ScriptDir%/ClipJump.exe,%A_Startup%/ClipJump.lnk
+	FileCreateShortcut,%A_ScriptFullPath%,%A_Startup%/ClipJump.lnk
 return
 
 updt:
@@ -610,18 +636,26 @@ IfGreater,latestversion,%version%
 {
 MsgBox, 48, Update Avaiable, Your Version = %version%         `nCurrent Version = %latestversion%       `n`nGo to Website
 IfMsgBox OK
-	run, iexplore.exe "%productpage%"
+{
+	IfExist, %a_programfiles%/Internet Explorer/iexplore.exe
+		run, iexplore.exe "%productpage%"
+	else
+		run, %productpage%
+}
 }
 else
 	MsgBox, 64, ClipJump, No Updates Available
 return
 
 installationopen:
-rUN, Installation And Usage.txt
+run, %a_scriptdir%/help files/clipjump_offline_help.html
 return
 
 blog:
-run, iexplore.exe "www.avi-win-tips.blogspot.com"
+IfExist, %a_programfiles%/Internet Explorer/iexplore.exe
+	run, iexplore.exe "www.avi-win-tips.blogspot.com"
+else
+	run, http://www.avi-win-tips.blogspot.com
 return
 
 ;******FUNCTIONS*************************************************

@@ -1,6 +1,6 @@
 [Clipjump](http://avi-win-tips.blogspot.com/p/clipjump.html)  
 A Magical Clipboard Manager  
-v 3.0  
+v 4.0  
 Advanced Release  
 Avi Aryan  
 
