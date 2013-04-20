@@ -1,6 +1,6 @@
 ﻿/*
 	ClipJump --- The Multiple Clipboard Manager
-	v 4.3
+	v 4.5
     Copyright (C) 2013  Avi Aryan
 
 	############## IMPORTANT ##################
@@ -25,17 +25,19 @@
 
     Web    -   www.avi-win-tips.blogspot.com
     Email  -   aviaryanap@gmail.com
+	Facebook  -   /avi.aryan.ap
 */
 
 SetWorkingDir, %A_ScriptDir%
 SetBatchLines,-1
 SetKeyDelay, -1
 #SingleInstance, force
+CoordMode,Mouse
 
 ;*********Program Vars**********************************************************
 
 progname = ClipJump
-version = 4.3
+version = 4.5
 Author = Avi Aryan
 updatefile = https://dl.dropboxusercontent.com/u/116215806/Products/Clipjump/clipjumpversion.txt
 productpage = http://avi-win-tips.blogspot.com/p/clipjump.html
@@ -241,12 +243,16 @@ If (clipboard != "" or tempclipall != "")
 {
 If errlvl = 1
 {
+	IfNotEqual,Clipboard,%lastclip%
+	{
 	cursave+=1
 	gosub, clipsaver
+	LastClip := Clipboard
 	Tooltip, %CopyMessage%
 	tempsave := cursave
 	IfEqual,cursave,%totalclips%
 		gosub,compacter
+	}
 }
 If errlvl = 2
 {
@@ -261,6 +267,8 @@ If errlvl = 2
 tempclipall = 
 sleep, 500
 Tooltip
+
+EmptyMem()
 }
 return
 
@@ -414,7 +422,6 @@ IfEqual,ctrlref,cancel
 		}
 		else
 		{
-			;caller := false
 			Tooltip, Pasting...
 			if (R_lf)
 			{
@@ -586,7 +593,7 @@ else
 
 GuiControl,,imagepreview,*w%displayw% *h%displayh% cache\thumbs\%tempsave%.jpg
 MouseGetPos,ax,ay
-ay := ay + (scrnhgt / 9)
+ay := ay + (scrnhgt / 8)
 Gui, Show, x%ax% y%ay% h%displayh% w%displayw%
 return
 

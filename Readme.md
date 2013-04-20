@@ -1,16 +1,17 @@
 [Clipjump](http://avi-win-tips.blogspot.com/p/clipjump.html)  
 A Magical Clipboard Manager  
-v 4.3  
-Advanced Release  
+v 4.5  
+Ultimate Release  
 Avi Aryan  
 
 [Download zip cum .exe](https://dl.dropboxusercontent.com/u/116215806/Products/Clipjump/clipjump.7z)   
 [See online Tutorial](http://avi-win-tips.blogspot.com/2013/04/clipjump-online-guide.html)  
 
-Allows you to simultaneously use multiple clipboards like never before.
-Everything that is transfered to your clipboard will get automatically
-get transfered to Multiple-ClipBoard.
-The Best Clipboard Manager
+Allows you to simultaneously use multiple clipboards like never before.  
+Everything that is transfered to your clipboard will get automatically  
+get transfered to Multiple-ClipBoard.  
+It's fast, it's easy, it's Magical.  
+The Best Clipboard Manager  
 
 FEATURES
 

@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////
 CLIPJUMP                                                     /
-v 4.0                                                        /
-Advanced Release                                             /
+v 4.5                                                        /
+Ultimate Release                                             /
 Avi Aryan                                                    /
 //////////////////////////////////////////////////////////////
 
@@ -10,6 +10,7 @@ A Magical Clipboard Manager
 Allows you to simultaneously use multiple clipboards like never before.
 Everything that is transfered to your clipboard will get automatically
 get transfered to Multiple-ClipBoard.
+It's fast , it's easy, it's magic.
 
 =========
 FEATURES |
@@ -40,9 +41,9 @@ THANKS |
 ============================
 CHANGES (in this release)  |
 ============================
-•Eliminated Duplicate Entries Bug Chances
-•Enhanced Error and Bug Handling while pasting
-•Added Help Files and custom icon.
+•Bugs with certain applications such as HtmlPad,Internet Explorer Fixed and the algorithm has been globalised to include other apps which have the same tendency.
+•Now, Clipjump should not store duplicate clipboard entries when the user sends them one after another.
+•Lower Overall Memory Consumption
 
 ================================================================
 See Installation and Usage for more details!
