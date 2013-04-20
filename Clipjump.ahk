@@ -1,6 +1,6 @@
 ﻿/*
 	ClipJump --- The Multiple Clipboard Manager
-	v 4.0
+	v 4.3
     Copyright (C) 2013  Avi Aryan
 
 	############## IMPORTANT ##################
@@ -35,9 +35,9 @@ SetKeyDelay, -1
 ;*********Program Vars**********************************************************
 
 progname = ClipJump
-version = 4.0
+version = 4.3
 Author = Avi Aryan
-updatefile = http://avis-sublime-4-autohotkey.googlecode.com/files/clipjumpversion.txt
+updatefile = https://dl.dropboxusercontent.com/u/116215806/Products/Clipjump/clipjumpversion.txt
 productpage = http://avi-win-tips.blogspot.com/p/clipjump.html
 
 ;*******************************************************************************
@@ -65,7 +65,7 @@ IniRead,R_lf,settings.ini,Main,Remove_Ending_Linefeeds
 Iniread,generalsleep,settings.ini,System,Wait_Key
 Iniread,version_ini,settings.ini,System,Version
 
-if (version_ini == "ERROR")
+if (version_ini == "ERROR" or version_ini != version)
 	IniWrite,%version%,settings.ini,System,Version
 
 IfEqual,maxclips
@@ -507,6 +507,7 @@ in_back := false
 caller := false
 addtowinclip(realactive, "has Clip " . realclipno)
 caller := true
+Gui, hide
 return
 
 compacter:
