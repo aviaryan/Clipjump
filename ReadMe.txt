@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////
 CLIPJUMP                                                     /
-v 4.5                                                        /
+v 4.5.5                                                        /
 Ultimate Release                                             /
 Avi Aryan                                                    /
 //////////////////////////////////////////////////////////////
@@ -38,9 +38,9 @@ THANKS |
 >Tic (Tariq Potter) for GDI+ Library.
 >Ken and Luke for pointing out bugs.
 
-============================
-CHANGES (in this release)  |
-============================
+===============================
+CHANGES (in this release 4.5)  |
+===============================
 •Bugs with certain applications such as HtmlPad,Internet Explorer Fixed and the algorithm has been globalised to include other apps which have the same tendency.
 •Now, Clipjump should not store duplicate clipboard entries when the user sends them one after another.
 •Lower Overall Memory Consumption

@@ -1,6 +1,6 @@
 ﻿/*
 	ClipJump --- The Multiple Clipboard Manager
-	v 4.5
+	v 4.55
     Copyright (C) 2013  Avi Aryan
 
 	############## IMPORTANT ##################
@@ -37,7 +37,7 @@ CoordMode,Mouse
 ;*********Program Vars**********************************************************
 
 progname = ClipJump
-version = 4.5
+version = 4.55
 Author = Avi Aryan
 updatefile = https://dl.dropboxusercontent.com/u/116215806/Products/Clipjump/clipjumpversion.txt
 productpage = http://avi-win-tips.blogspot.com/p/clipjump.html
@@ -259,6 +259,7 @@ If errlvl = 2
 	cursave+=1
 	Tooltip, %CopyMessage%
 	tempsave := cursave
+	LastClip := 
 	gosub, thumbgenerator
 	gosub, clipsaver
 	IfEqual,cursave,%totalclips%
@@ -536,6 +537,7 @@ tempsave := cursave
 return
 
 cleardata:
+LastClip := 
 FileDelete,cache\clips\*.avc
 FileDelete,cache\thumbs\*.jpg
 FileDelete,cache\fixate\*.fxt
@@ -544,6 +546,7 @@ tempsave := 0
 return
 
 clearclip:
+LastClip := 
 FileDelete,cache\clips\%realactive%.avc
 FileDelete,cache\thumbs\%realactive%.jpg
 FileDelete,cache\fixate\%realactive%.fxt
