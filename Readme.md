@@ -1,6 +1,6 @@
 [Clipjump](http://avi-win-tips.blogspot.com/p/clipjump.html)  
 A Magical Clipboard Manager  
-v 5.0 b
+v 5.0 b2
 Ultimate Release  
 Avi Aryan  
 
@@ -11,7 +11,6 @@ Allows you to simultaneously use multiple clipboards like never before.
 Everything that is transfered to your clipboard will get automatically  
 get transfered to Multiple-ClipBoard.  
 It's fast, it's easy, it's Magical.  
-The Best Clipboard Manager  
 
 FEATURES
 
@@ -30,6 +29,6 @@ FEATURES
  * Suspend Clipbaord monitoring if needed. (Requires Autohotkey knowledge)
  * Idiot-Proof! - Captures Clipboard entries from everywhere, whether it be an external program or PrintScreen Captures.
  * Configurable - You can change settings through a GUI
- * Portable - Carry where you go
+ * Portable , Free , Open Source
 
 [See Readme.txt](readme.txt)  

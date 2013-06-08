@@ -1,5 +1,5 @@
 ﻿/*
-	Clipjump v5.0b
+	Clipjump v5.0b2
 	
 	Copyright 2013 Avi Aryan
 
@@ -25,48 +25,47 @@ CoordMode,Mouse
 ;*********Program Vars**********************************************************
 
 progname = Clipjump
-version = 5.0b
-Author = Avi Aryan
-updatefile = https://dl.dropboxusercontent.com/u/116215806/Products/Clipjump/clipjumpversion.txt
-productpage = http://avi-win-tips.blogspot.com/p/clipjump.html
+version = 5.0b2
+updatefile = https://dl.dropboxusercontent.com/u/116215806/Products/Clipjump/Clipjumpversion.txt
+productpage = http://avi-win-tips.blogspot.com/p/Clipjump.html
 
 ;*******************************************************************************
 Clipboard = 
 Iniread,version_ini,settings.ini,System,Version
 
-If ( !FileExist("settings.ini") or version_ini == "ERROR" or version_ini != version )
+If ( !FileExist("settings.ini") or version_ini != version )
 {
 ;Faster
 datatobeadded=
 (
 [Main]
 Minimum_No_Of_Clips_to_be_Active=20
-;It is the minimum no of clipboards that you want simultaneously to be active.``nIF YOU WANT 20, SPECIFY 20.``nIf you want Unlimited, leave it blank. (Not Recommended)
+;It is the minimum no of clipboards that you want simultaneously to be active.``nIf you want 20, SPECIFY 20.``nIf you want Unlimited, leave it blank. (Not Recommended)
 Threshold=10
-;Threshold is the extra number of clipboard that will be active other than your minimum limit..``nMost recommended value is 10.``nTip - Threshold=1 will make Clipjump store exact number of clipboards.
+;Threshold is the extra number of clipboard that will be active other than your minimum limit..``nMost recommended value is 10.``n[TIP] - Threshold = 1 will make Clipjump store exact number of clipboards.
 Show_Copy_Message=1
-;This value determines whether you want to see the "Transfered to ClipJump" message or not while copy/cut operations.``n1 = enabled (default)``n0 = disabled
+;This value determines whether you want to see the "Transfered to Clipjump" message or not while copy/cut operations.``n1 = enabled (default)``n0 = disabled
 Quality_of_Thumbnail_Previews=20
-;The quality of Thumbnail previews you want to have.``nSo, it is recommended to let it be 20
+;The quality of Thumbnail previews you want to have.``nRecommended to let it be 20``Can be between 1 - 100
 Keep_Session=1
-;Should ClipJump keep all the saved clipboards after each Clipjump restart or simply Windows restart if you run it at Start up.``n1 = Yes (Clipboards kept)``n0 = No
+;Should Clipjump keep all the saved clipboards after each Clipjump restart or simply Windows restart if you run it at Start up.``n1 = Yes (Clipboards kept)``n0 = No
 Remove_Ending_Linefeeds=1
 ;Remove Linefeeds from end of Clips . These linefeeds if not removed can cause an Extra ENTER to be simulated while pasting Clips in Text-Holders.``n1 = Yes (Recommended)``n0 = No
 [System]
 Wait_Key=200
-;Dont Edit this key. See Settings Help file
+;Dont Edit (decrease) this key. 
 Version=%version%
 ;Current Clipjump Version
 [Clipboard_History]
 Days_to_store=10
 ;Number of days for which the clipboard record will be stored
 Store_Images=1
-;Will clipboard images be stored.``n1=yes``n0=no
+;Should clipboard images be stored in history ?``n1=yes``n0=no
 )
 
 	FileDelete,settings.ini
 	FileAppend,%datatobeadded%,settings.ini
-	FileCreateShortcut,%A_ScriptFullPath%,%A_Startup%/ClipJump.lnk
+	FileCreateShortcut,%A_ScriptFullPath%,%A_Startup%/Clipjump.lnk
 }
 
 IniRead,maxclips,settings.ini,Main,Minimum_No_Of_Clips_to_be_Active
@@ -105,7 +104,7 @@ IfEqual,keepsession,0
 	gosub, cleardata
 
 isimagestored := isimagestored = 0 ? 0 : 1
-days_to_store := days_to_store < 0 ? 0 : (days_to_store > 100 ? 100 : days_to_store)	;A max 100 days is allowed
+days_to_store := days_to_store < 0 ? 0 : (days_to_store > 200 ? 200 : days_to_store)	;A max 200 days is allowed
 gosub, historycleanup
 
 totalclips := Threshold + maxclips
@@ -128,7 +127,7 @@ gui, add, picture,x0 y0 w400 h300 vimagepreview,
 
 ;About GUI
 Gui, 2:Font, S18 CRed, Consolas
-Gui, 2:Add, Text, x2 y0 w550 h40 +Center gupdt, ClipJump v%version%
+Gui, 2:Add, Text, x2 y0 w550 h40 +Center gupdt, Clipjump v%version%
 Gui, 2:Font, S14 CBlue, Verdana
 Gui, 2:Add, Text, x2 y40 w550 h30 +Center gblog, Avi Aryan
 Gui, 2:Font, S16 CBlack, Verdana
@@ -139,7 +138,7 @@ Gui, 2:Font, S14 CRed Bold, Consolas
 Gui, 2:Add, Text, x2 y230 w200 h30 gsettings, Edit Settings
 Gui, 2:Font, CBlack
 Gui, 2:Add, Text, x2 y260 w300 h30 ghistory, See Clipjump History
-Gui, 2:Add, Text, x2 y290 w300 h30 ginstallationopen, Open Offline Help
+Gui, 2:Add, Text, x2 y290 w300 h30 ghlp, Go Online - See Manual
 Gui, 2:Font, S14 CBlack, Verdana
 Gui, 2:Add, Text, x-8 y330 w560 h24 +Center, Copyright (C) 2013
 
@@ -181,8 +180,10 @@ Gui, 4:Font, S13 Cblue, Consolas
 Gui, 4:Add, Text, x2 y50 w100 h30 , Search
 Gui, 4:Font, S12 CBlack, Consolas
 Gui, 4:Add, Edit, x242 y50 w470 h30 ghistory_edit vhistory_edit
-Gui, 4:Font, S12 CGreen, Consolas
-Gui, 4:Add, Text, x2 y490 w610 h20 , Double Click to open a clip
+Gui, 4:Font, S10 CGreen, Consolas
+Gui, 4:Add, Text, x2 y470 w610 h40 , Double Click to open a clip`nRight Click to see context menu
+Gui, 4:Font, CBlack
+Gui, 4:Add, Button, x600 y470 w100 h40, Delete_All
 
 ;History Preview
 Gui, 5:+ToolWindow
@@ -197,17 +198,17 @@ Gui, 5:Add, Button, x152 y340 w220 h30 , Copy_to_Clipboard
 ;TRAY
 Menu,Tray,NoStandard
 Menu,Tray,Add,%progname%,main
-Menu,Tray,Tip,ClipJump by Avi Aryan
+Menu,Tray,Tip,Clipjump by Avi Aryan
 if !(A_isCompiled)
 	Menu,Tray,Icon,iconx.ico
 Menu,Tray,Add
-Menu,Tray,Add,Clipboard History,history
+Menu,Tray,Add,Clipboard History		(Win+C),history
 Menu,Tray,Add
 Menu,Tray,Add,Preferences,settings
 Menu,Tray,Add,Run At Start Up,strtup
 Menu,Tray,Add,Check for Updates,updt
 Menu,Tray,Add
-Menu,Tray,Add,ReadMe,rdme
+Menu,Tray,Add,Readme,rdme
 Menu,Tray,Add,See Online Help,hlp
 Menu,Tray,Add
 Menu,Tray,Add,Quit,qt
@@ -220,10 +221,10 @@ Menu,HisMenu,Add,Delete,history_delete
 
 ;********************************************************************
 ;STARTUP
-IfExist,%a_startup%/ClipJump.lnk
+IfExist,%a_startup%/Clipjump.lnk
 {
-FileDelete,%a_startup%/ClipJump.lnk
-FileCreateShortcut,%A_ScriptFullPath%,%A_Startup%/ClipJump.lnk
+FileDelete,%a_startup%/Clipjump.lnk
+FileCreateShortcut,%A_ScriptFullPath%,%A_Startup%/Clipjump.lnk
 Menu,Tray,Check,Run At Start Up
 }
 
@@ -245,6 +246,7 @@ Hotkey,$^c,NativeCopy,On
 Hotkey,$^x,NativeCut,On
 Hotkey,^!c,CopyFile,On
 Hotkey,^!x,CopyFolder,On
+Hotkey,#c,History,On
 ;Environment
 OnMessage(0x4a, "Receive_WM_COPYDATA")  ; 0x4a is WM_COPYDATA
 
@@ -490,7 +492,7 @@ caller := false
 gui, hide
 IfEqual,ctrlref,cancel
 {
-	ToolTip, Cancelled
+	ToolTip, Canceled
 	tempsave := cursave
 }
 	else IfEqual,ctrlref,deleteall
@@ -517,7 +519,7 @@ IfEqual,ctrlref,cancel
 				Loop
 					IfExist,cache\clips\%cursave%.avc
 						break
-				CopyMessage = Transfered to ClipJump
+				CopyMessage = Transfered to Clipjump
 			}
 			else
 			{
@@ -534,7 +536,7 @@ IfEqual,ctrlref,cancel
 				Loop
 					IfExist,cache\clips\%cursave%.avc
 						break
-				CopyMessage = Transfered to ClipJump
+				CopyMessage = Transfered to Clipjump
 				}
 			}
 			}
@@ -553,7 +555,7 @@ IfEqual,ctrlref,cancel
 				Loop
 					IfExist,cache\clips\%cursave%.avc
 						break
-				CopyMessage = Transfered to ClipJump
+				CopyMessage = Transfered to Clipjump
 				}
 			}
 			tempsave := realactive
@@ -681,11 +683,11 @@ return
 
 ;**************** SETTINGS ************************************************************************************
 TvClick:
-if A_GuiEvent = DoubleClick
+if (A_GuiEvent == "DoubleClick") or (Tv_Enter = 1)
 {
 	Gui, 3:Default
 	GuiControl,3:,settings_savestatus,
-	TV_GetText( tv_outkey, TV_GetSelection() ) , TV_GetText( tv_outsec, TV_GetParent(TV_GetSelection()) )
+	TV_GetText( tv_outkey, TV_GetSelection() ) , TV_GetText( tv_outsec, TV_GetParent(TV_GetSelection()) ) , Tv_Enter := 0
 	if (tv_outkey != tv_outsec)
 	{
 		tv_outkey_formatted := tv_outkey
@@ -694,7 +696,6 @@ if A_GuiEvent = DoubleClick
 		settings_edit := _IniRead("settings.ini", tv_outsec, tv_outkey, settings_dtext)
 		GuiControl,3:,settings_dtext,% settings_dtext
 		GuiControl,3:,settings_edit,% settings_edit
-		GuiControl,3:Focus,settings_edit
 	}
 }
 return
@@ -757,9 +758,25 @@ if !Instr(clip_file_path, ".jpg")
 }
 return
 
+4ButtonDelete_All:
+FileDelete,cache\history\*
+HistoryUpdate()
+return
+
 5ButtonCopy_to_Clipboard:
 if history_text_act
 	Clipboard := clip_text
+else
+{
+	FileCreateDir,Restored images
+	temp_a_now := A_now
+	Filecopy,cache\history\%clip_file_path%,Restored images\%temp_a_now%.jpg
+	run, Restored images
+	loop,
+		if winexist("Restored images")
+			break
+	Send,% temp_a_now
+}
 return
 
 ;********** INSIDE *********
@@ -823,7 +840,7 @@ Run, readme.txt
 return
 
 hlp:
-BrowserRun("http://avi-win-tips.blogspot.com/2013/04/clipjump-online-guide.html")
+BrowserRun("http://avi-win-tips.blogspot.com/2013/04/Clipjump-online-guide.html")
 return
 
 settings:
@@ -853,10 +870,10 @@ return
 
 strtup:
 Menu,Tray,Togglecheck,Run At Start Up
-IfExist, %a_startup%/ClipJump.lnk
-	FileDelete,%a_startup%/ClipJump.lnk
+IfExist, %a_startup%/Clipjump.lnk
+	FileDelete,%a_startup%/Clipjump.lnk
 else
-	FileCreateShortcut,%A_ScriptFullPath%,%A_Startup%/ClipJump.lnk
+	FileCreateShortcut,%A_ScriptFullPath%,%A_Startup%/Clipjump.lnk
 return
 
 updt:
@@ -869,11 +886,11 @@ IfMsgBox OK
 	BrowserRun(productpage)
 }
 else
-	MsgBox, 64, ClipJump, No Updates Available
+	MsgBox, 64, Clipjump, No Updates Available
 return
 
 installationopen:
-run, %a_scriptdir%/help files/clipjump_offline_help.html
+run, %a_scriptdir%/help files/Clipjump_offline_help.html
 return
 
 blog:
@@ -884,7 +901,7 @@ return
 
 addtowinclip(lastentry, extratip)
 {
-ToolTip, Windows Clipboard %extratip%
+ToolTip, System Clipboard %extratip%
 IfNotEqual,cursave,0
 	fileread,Clipboard,*c %A_ScriptDir%/cache/clips/%lastentry%.avc
 
@@ -903,8 +920,22 @@ Receive_WM_COPYDATA(wParam, lParam)
     caller := StrGet(StringAddress)  ; Copy the string out of the structure.
 }
 ;##############################################################################
-
 #Include, lib/imagelib.ahk
 #include, lib/gdiplus.ahk
 #include, lib/_ini.ahk
 #include, lib/anticj_func_labels.ahk
+
+;# 	window native shortcuts
+#IfWinActive, Clipjump History Tool
+{
+	$Rbutton::Send, {Rbutton 2}
+}
+#IfWinActive
+#IfWinActive, Clipjump Settings Editor
+{
+	~Enter::
+	Tv_Enter := 1
+	gosub, Tvclick
+	return
+}
+#IfWinActive
