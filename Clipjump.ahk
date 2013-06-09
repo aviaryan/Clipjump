@@ -1,5 +1,5 @@
 ﻿/*
-	Clipjump v5.0b2
+	Clipjump v5.0
 	
 	Copyright 2013 Avi Aryan
 
@@ -25,7 +25,7 @@ CoordMode,Mouse
 ;*********Program Vars**********************************************************
 
 progname = Clipjump
-version = 5.0b2
+version = 5.0
 updatefile = https://dl.dropboxusercontent.com/u/116215806/Products/Clipjump/Clipjumpversion.txt
 productpage = http://avi-win-tips.blogspot.com/p/Clipjump.html
 
@@ -66,6 +66,10 @@ Store_Images=1
 	FileDelete,settings.ini
 	FileAppend,%datatobeadded%,settings.ini
 	FileCreateShortcut,%A_ScriptFullPath%,%A_Startup%/Clipjump.lnk
+	
+	MsgBox, 52, Recommended, It seems that you are running Clipjump v5.0 for the first time.`nDo you want to see ONLINE GUIDE before using ? `nDon't worry `, it won't take more than 10 minutes.`n`nNote that Clipjump doesn't have a offline help.
+	IfMsgBox, Yes
+		gosub, hlp
 }
 
 IniRead,maxclips,settings.ini,Main,Minimum_No_Of_Clips_to_be_Active

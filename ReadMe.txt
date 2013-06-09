@@ -1,9 +1,14 @@
 //////////////////////////////////////////////////////////////
 CLIPJUMP                                                     /
-v 5.0 b2                                                     /
+v 5.0                                                        /
 Ultimate Release                                             /
 Avi Aryan                                                    /
 //////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////
+ONLINE HELP (Recommended)                                           /
+http://avi-win-tips.blogspot.com/2013/04/clipjump-online-guide.html /
+/////////////////////////////////////////////////////////////////////
 
 A Magical Clipboard Manager
 
@@ -41,23 +46,16 @@ THANKS |
 >Chris and Lexikos for creating Autohotkey without which this program wouldn't have been possible.
 
 ===============================
-CHANGES (After 5.0b1)  			|
+CHANGES             		   |
 ===============================
+•Added a GUI for editing settings.
+•Added a Clipboard history tool with search to quickly locate old clipboard habitants.
 •Fixed a bug when copying/moving inside zipped folders open in Explorer
 •Enhanced running web links from Clipjump
 •Better About Window now
 •Now "[more]" symbolises more text in current clipboard
 •Fixed a bug where "---> more" didnt appear when moving backwards (Ctrl + C)
-•Added a GUI for editing settings.
-•Added a Clipboard history tool with search to quickly locate old clipboard habitants.
-•Now it's possible to suspend Clipjump's clipboard monitoring via Autohotkey script. (See ClipjumpCommunicator.ahk)
-
-### b2 ###
-
-•Single Right-Click now opens Context Menu in History tool.
-•Enter now opens keys in Ini settings editor.
-•Getting Image from History possible.
-•Delete All option in History Tool added.
+•Now it's possible to suspend Clipjump's clipboard monitoring via [Autohotkey] script. (See Source)
 
 ================================================================
 See Installation and Usage for more details!
@@ -67,4 +65,11 @@ See Installation and Usage for more details!
 ================================================================
 Web
 ================================================================
-http://avi-win-tips.blogspot.com/p/clipjump.html
+Page - http://avi-win-tips.blogspot.com/p/clipjump.html
+Tutorial - http://avi-win-tips.blogspot.com/2013/04/clipjump-online-guide.html
+
+Source - http://www.github.com/avi-aryan/clipjump
+
+Support - avi.aryan123@gmail.com
+
+
