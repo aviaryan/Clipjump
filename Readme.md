@@ -1,7 +1,5 @@
 [Clipjump](http://avi-win-tips.blogspot.com/p/clipjump.html)  
 A Magical Clipboard Manager  
-v 5.0
-Ultimate Release  
 Avi Aryan  
 
 [Download zip cum .exe](http://goo.gl/tUi4K)   

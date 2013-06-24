@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////
 CLIPJUMP                                                     /
-v 5.0                                                        /
+v 6.0b1	                                                     /
 Ultimate Release                                             /
 Avi Aryan                                                    /
 //////////////////////////////////////////////////////////////
@@ -48,14 +48,10 @@ THANKS |
 ===============================
 CHANGES             		   |
 ===============================
-•Added a GUI for editing settings.
-•Added a Clipboard history tool with search to quickly locate old clipboard habitants.
-•Fixed a bug when copying/moving inside zipped folders open in Explorer
-•Enhanced running web links from Clipjump
-•Better About Window now
-•Now "[more]" symbolises more text in current clipboard
-•Fixed a bug where "---> more" didnt appear when moving backwards (Ctrl + C)
-•Now it's possible to suspend Clipjump's clipboard monitoring via [Autohotkey] script. (See Source)
+•Fixed problems with MS Excel and other office apps
+•Clipjump now shows Data type in Tips. A very handy addition.
+•Better cosmetics now ! Thanks to chaz
+•The History tool now allows multiple selection and is resizable
 
 ================================================================
 See Installation and Usage for more details!
