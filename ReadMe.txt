@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////
 CLIPJUMP                                                     /
-v 6.0b1	                                                     /
+v 6.0b2	                                                     /
 Ultimate Release                                             /
 Avi Aryan                                                    /
 //////////////////////////////////////////////////////////////
@@ -26,7 +26,7 @@ FEATURES |
 •Data-Types are meaningless for Clipjump.It just stores everything.
 •Control Clipboards only by using Ctrl+x,Ctrl+c and Ctrl+v. 
 •Not Mandatory to perform Copy and Cut operations using Ctrl+C and Ctrl+X. Even an application's Copy and Cut will be transferred to Clipjump.
-•Clipjump History Tool - View, search and restore old clipboard items.
+•Clipjump History Tool - View, search and restore old clipboard items
 •FIX Clipboards at certain positions via FIXATE Option 
 •Add selective Data to Windows Clipboard if needed. 
 •Can have as much simultaneous clipboards as possible. (Depends on Disk Space).
@@ -46,12 +46,17 @@ THANKS |
 >Chris and Lexikos for creating Autohotkey without which this program wouldn't have been possible.
 
 ===============================
-CHANGES             		   |
+CHANGES (from v6.0 b1)         |
 ===============================
 •Fixed problems with MS Excel and other office apps
 •Clipjump now shows Data type in Tips. A very handy addition.
 •Better cosmetics now ! Thanks to chaz
-•The History tool now allows multiple selection and is resizable
+•The History tool now allows multiple selection and is resizable.
+
+•Better History tool now ! Thanks chaz
+•Better Settings editor
+•Cleaned up old obsolete code.
+•Fixed minor bugs.
 
 ================================================================
 See Installation and Usage for more details!

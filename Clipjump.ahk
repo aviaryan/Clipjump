@@ -18,21 +18,20 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 6.0b1
+;@Ahk2Exe-SetVersion 6.0b2
 ;@Ahk2Exe-SetCopyright (C) 2013 Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
 SetWorkingDir, %A_ScriptDir%
 SetBatchLines,-1
-SetKeyDelay, -1
 #SingleInstance, force
-CoordMode,Mouse
+CoordMode, Mouse
 
 ;*********Program Vars**********************************************************
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "6.0b1"
+global VERSION := "6.0b2"
 global CONFIGURATION_FILE := "settings.ini"
 global UPDATE_FILE := "https://dl.dropboxusercontent.com/u/116215806/Products/Clipjump/Clipjumpversion.txt"
 global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/Clipjump.html"
@@ -58,37 +57,20 @@ Iniread, ini_Version, %CONFIGURATION_FILE%, System, Version
 
 If (!FileExist(CONFIGURATION_FILE) or ini_Version != VERSION)
 {
-;Faster
-dataToBeAdded =
-( LTrim
-	[Main]
-	limit_MaxClips=1
-	;Will Clipjump's Clipboard be limited ! 1 = yes
-	Minimum_No_Of_Clips_to_be_Active=20
-	;It is the minimum no of clipboards that you want simultaneously to be active.``nIf you want 20, SPECIFY 20.``nIf you want Unlimited, leave it blank. (Not Recommended)
-	Threshold=10
-	;Threshold is the extra number of clipboard that will be active other than your minimum limit..``nMost recommended value is 10.``n[TIP] - Threshold = 1 will make Clipjump store exact number of clipboards.
-	Show_Copy_Message=1
-	;This value determines whether you want to see the "Transfered to Clipjump" message or not while copy/cut operations.``n1 = enabled (default)``n0 = disabled
-	Quality_of_Thumbnail_Previews=20
-	;The quality of Thumbnail previews you want to have.``nRecommended to let it be 20``Can be between 1 - 100
-	Keep_Session=1
-	;Should Clipjump keep all the saved clipboards after each Clipjump restart or simply Windows restart if you run it at Start up.``n1 = Yes (Clipboards kept)``n0 = No
-	Remove_Ending_Linefeeds=1
-	[System]
-	Wait_Key=200
-	;Dont Edit (decrease) this key. 
-	Version=%VERSION%
-	;Current Clipjump Version
-	[Clipboard_History]
-	Days_to_store=10
-	;Number of days for which the clipboard record will be stored
-	Store_Images=1
-	;Should clipboard images be stored in history ?``n1=yes``n0=no
-)
+	FileDelete,% CONFIGURATION_FILE		;This is a nec. step to remove comments from prev. versions.
+	
+	IniWrite, 1, % CONFIGURATION_FILE, Main, limit_MaxClips
+	IniWrite, 20,% CONFIGURATION_FILE, Main, Minimum_No_Of_Clips_to_be_Active
+	IniWrite, 10,% CONFIGURATION_FILE, Main, Threshold
+	IniWrite, 1, % CONFIGURATION_FILE, Main, Show_Copy_Message
+	IniWrite, 20,% CONFIGURATION_FILE, Main, Quality_of_Thumbnail_Previews
+	IniWrite, 1, % CONFIGURATION_FILE, Main, Keep_Session
 
-	FileDelete, %CONFIGURATION_FILE%
-	FileAppend, %dataToBeAdded%, %CONFIGURATION_FILE%
+	IniWrite, %VERSION%,% CONFIGURATION_FILE, System, Version
+
+	IniWrite, 10,% CONFIGURATION_FILE, Clipboard_History, Days_to_store
+	IniWrite, 1, % CONFIGURATION_FILE, Clipboard_History, Store_Images
+
 	FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%/Clipjump.lnk
 	
 	MsgBox, 52, Recommended, It seems that you are running Clipjump v5.0 for the first time.`nDo you want to see ONLINE GUIDE before using ? `nDon't worry `, it won't take more than 10 minutes.`n`nNote that Clipjump doesn't have a offline help.
@@ -97,36 +79,12 @@ dataToBeAdded =
 }
 
 ;Global Ini declarations
-global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold
-load_Settings()
+global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , CopyMessage
 
-if !ini_MaxClips			; if blank
-	ini_MaxClips := 9999999
-if ini_MaxClips is not integer
-	ini_MaxClips := 20
-If ini_Threshold is not integer
-	ini_Threshold := 10
+load_Settings()		;loads ini settings
+validate_Settings()		;validates ini settings
 
-global CopyMessage := ini_IsMessage = 0 ? "" : MSG_TRANSFER_COMPLETE
-
-If ini_Quality is not Integer
-	ini_Quality := 20
-if ini_KeepSession is not integer
-	ini_KeepSession := 1
-
-ini_RemoveLineFeeds := ini_RemoveLineFeeds = 0 ? 0 : 1
-
-if ini_GeneralSleep is not Integer
-	ini_GeneralSleep := 200
-if ini_GeneralSleep < 200
-	ini_GeneralSleep := 200
-
-if !ini_KeepSession
-	clearData()
-
-ini_IsImageStored := ini_IsImageStored = 0 ? 0 : 1
-ini_DaysToStore := ini_DaysToStore < 0 ? 0 : (ini_DaysToStore > 200 ? 200 : ini_DaysToStore)	;A max 200 days is allowed.
-gosub, historyCleanup
+historyCleanup()
 
 global TOTALCLIPS := ini_Threshold + ini_MaxClips
 global CURSAVE, TEMPSAVE, LASTCLIP
@@ -163,30 +121,6 @@ Gui, 2:Add, Text, x2 y290 w300 h30 ghlp, Go Online - See Manual
 Gui, 2:Font, S14 CBlack, Verdana
 Gui, 2:Add, Text, x-8 y330 w560 h24 +Center, Copyright (C) 2013
 
-;ClipboardHistory GUI
-Gui, 4:Default
-Gui, 4:+Resize
-Gui, 4:Font, S18
-Gui, 4:Add, Text, x0 y0 w724 h40 +Center, Clipjump Clipboard History		;Static1
-Gui, 4:Font, S8 CBlack, Consolas
-Gui, 4:Add, ListView, x2 y90 w720 r20 ghistoryclick vhistorylist, Clip|Date|Hiddendate		;600|120|1
-
-Gui, 4:Font, S13
-Gui, 4:Add, Text, x2 y50 w100 h30 , Search
-Gui, 4:Font, S12 CBlack
-Gui, 4:Add, Edit, x242 y50 w470 h30 ghistory_edit vhistory_edit
-Gui, 4:Font, S10 CGreen
-Gui, 4:Add, Text, x2 y470 w610 h40 , Double Click to open a clip`nRight Click to see context menu		;Static3
-Gui, 4:Font, CBlack
-Gui, 4:Add, Button, x600 y470 w100 h40, Delete_All
-
-;History Preview
-Gui, 5:+ToolWindow
-Gui, 5:Font, S10 CDefault, Consolas
-Gui, 5:Add, Edit, x2 y2 w0 h0 +VScroll +ReadOnly +Multi vhistory_text,
-Gui, 5:Add, Picture, x3 y3 vhistory_pic
-Gui, 5:Add, Button, x152 y340 w220 h30 , Copy_to_Clipboard
-
 ;******************************************************************
 ;MENUS
 
@@ -208,11 +142,6 @@ Menu, Tray, Add, See Online Help, hlp
 Menu, Tray, Add		; separator
 Menu, Tray, Add, Quit, qt
 Menu, Tray, Default, %PROGNAME%
-
-;History Right-Click Menu
-Menu, HisMenu, Add, Copy to Clipjump, history_clipboard
-Menu, HisMenu, Add		; separator
-Menu, HisMenu, Add, Delete, history_delete
 
 ;********************************************************************
 ;STARTUP
@@ -239,6 +168,7 @@ hkZ("^!c", "CopyFile") , hkZ("^!x", "CopyFolder")
 hkZ("#c", "History")
 ;Environment
 OnMessage(0x4a, "Receive_WM_COPYDATA")  ; 0x4a is WM_COPYDATA
+OnMessage(0x200, "WM_MOUSEMOVE")		; 0x200 is WM_MOUSEMOVE
 
 EmptyMem()
 return
@@ -274,7 +204,7 @@ paste:
 		if Clipboard =	; if blank
 		{
 			showPreview()
-			ToolTip,% "Clip  " realClipNo " of " CURSAVE "  " fixStatus (WinExist("Display_Cj") ? "" : "`n" MSG_ERROR) 
+			ToolTip,% "Clip  " realClipNo " of " CURSAVE "  " fixStatus (WinExist("Display_Cj") ? "" : "`n`n" MSG_ERROR) 
 			SetTimer, ctrlCheck, 50
 		}
 		else
@@ -356,7 +286,7 @@ moveBack:
 	if Clipboard =	; if blank
 	{
 		showPreview()
-		ToolTip, % "Clip " realclipno "of " CURSAVE "  " fixStatus (WinExist("Display_Cj") ? "" : "`n" MSG_ERROR)
+		ToolTip, % "Clip " realclipno "of " CURSAVE "  " fixStatus (WinExist("Display_Cj") ? "" : "`n`n" MSG_ERROR)
 		SetTimer, ctrlCheck, 50
 	}
 	else
@@ -441,6 +371,7 @@ fixate:
 	return
 
 clipSaver() {
+	FileDelete, cache/clips/%CURSAVE%.avc
 	FileAppend, %ClipboardAll%, cache/clips/%CURSAVE%.avc
 	Loop, %CURSAVE%
 	{
@@ -492,12 +423,6 @@ ctrlCheck:
 			ToolTip, %MSG_PASTING%
 			CopyMessage := ""
 			Send, ^v
-			Sleep, %ini_GeneralSleep%
-			;~ Loop
-			;~ {
-				;~ IfExist, cache\clips\%CURSAVE%.avc
-					;~ break
-			;~ }
 			copyMessage := MSG_TRANSFER_COMPLETE
 			TEMPSAVE := realActive
 		}
@@ -523,13 +448,13 @@ Ssuspnd:
 
 	hkZ("^Space", "fixate", 0)
 	hkZ("^c", "moveBack", 0)
-	hkZ("^s", "ssuspnd", 0)
+	hkZ("^s", "Ssuspnd", 0)
 	hkZ("^x", "cancel", 0) , hkZ("^x", "DeleteAll", 0) , hkZ("^x", "Delete", 0)
 
 	hkZ("$^c", "NativeCopy") , hkZ("$^x", "NativeCut")
 
 	IN_BACK := CALLER := false
-	addToWinClip(realactive, "has Clip " realclipno)
+	addToWinClip(realactive , "has Clip " realclipno)
 	CALLER := true
 	Gui, Hide
 	return
@@ -568,11 +493,11 @@ clearClip(realActive) {
 	TEMPSAVE := realActive - 1
 	if (TEMPSAVE == 0)
 		TEMPSAVE := 1
-	gosub, renameCorrect
+	renameCorrect(realActive)
 	CURSAVE -= 1
 }
 
-renameCorrect:
+renameCorrect(realActive) {
 	loopTime := CURSAVE - realactive
 	If loopTime != 0
 	{
@@ -585,12 +510,14 @@ renameCorrect:
 			FileMove, cache/fixate/%realactive%.fxt, cache/fixate/%newname%.fxt
 		}
 	}
-	return
+}
 
 thumbGenerator() {
 	ClipWait, , 1
 	Convert(0, A_ScriptDir "\cache\thumbs\" CURSAVE ".jpg", ini_Quality)
 }
+
+;~ ;**************** GUI Functions ***************************************************************************
 
 showPreview(){
 
@@ -619,113 +546,11 @@ showPreview(){
 	}
 }
 
-;**************** SETTINGS ************************************************************************************
-
-TvClick:
-	if (A_GuiEvent == "DoubleClick") or (Tv_Enter = 1)
-	{
-		Gui, 3:Default
-		GuiControl, 3:, settings_SaveStatus
-		TV_GetText( tv_outkey, TV_GetSelection() )
-		TV_GetText( tv_outsec, TV_GetParent(TV_GetSelection()) )
-		TV_Enter := 0
-		if (tv_outkey != tv_outsec)
-		{
-			tv_outkey_formatted := tv_outkey
-			StringReplace,tv_outkey,tv_outkey,%A_space%,_,ALL
-			StringReplace,tv_outsec,tv_outsec,%A_space%,_,ALL
-			settings_edit := _IniRead("settings.ini", tv_outsec, tv_outkey, settings_dtext)
-			GuiControl,3:,settings_dtext,% settings_dtext
-			GuiControl,3:,settings_edit,% settings_edit
-		}
-	}
-	return
-
-3ButtonSave:
-	Gui, 3:Submit, Nohide
-	Iniwrite, %settings_Edit%, %CONFIGURATION_FILE%, %tv_OutSec%, %tv_OutKey%
-	GuiControl, 3:, settings_savestatus, % "Settings for " tv_Outkey_Formatted " saved"
-	return
-
-;**************** HISTORY *******************************************************************************
-
-Historyclick:
-	history_selected := LV_GetCount("S")
-	if A_GuiEvent = DoubleClick
-	{
-		LV_GetText(clip_file_path, A_EventInfo, 3) , history_endsel := A_EventInfo
-		
-		if Instr(clip_file_path, ".jpg")
-		{
-			GuiControl, 5:move, history_Text, w0 h0
-			Guicontrol, 5:move, history_Pic, w530 h320
-			Guicontrol, 5:, history_Pic, *w530 *h320 cache\history\%clip_file_path%
-			history_text_act := false 
-		}
-		else
-		{
-			GuiControl, 5:Move, history_Text, w530 h320
-			Guicontrol, 5:Move, history_Pic, w0 h0
-			Lv_GetText(clip_text, A_eventinfo, 1)
-			GuiControl, 5:, history_Text, % clip_text
-			history_Text_Act := true
-		}
-		Gui, 5:Show, w531 h379, Clip Preview
-	}
-	else if A_GuiEvent = R
-	{
-		LV_GetText(clip_file_path, A_EventInfo, 3) , history_endsel := A_EventInfo , Lv_GetText(clip_text, A_eventinfo, 1)
-		history_text_act := Instr(clip_file_path, ".jpg") ? 0 : 1
-		Menu, HisMenu, Show, %A_guix%, %A_guiy%
-	}
-	return
-
-history_edit:
-	Gui, 4:Default
-	Gui, 4:Submit, NoHide
-	HistoryUpdate(history_Edit, false)
-	return
-
-history_delete:
-	Gui, 4:Default
-	loop,% history_selected
-	{
-		LV_GetText(clip_file_path, history_endsel-A_index+1, 3)
-		FileDelete,% "cache\history\" clip_file_path
-	}
-	Guicontrol, 4:focus, history_edit
-	historyUpdate(history_edit, false)
-	return
-
-4ButtonDelete_All:
-	MsgBox, 20, WARNING, This will delete all the clipboard history.`nDo you want to continue ?
-	IfMsgBox, Yes
-	{
-		FileDelete, cache\history\*
-		HistoryUpdate(" ", false)
-	}
-	return
-
-history_clipboard:
-5ButtonCopy_to_Clipboard:
-	if history_Text_Act
-		Clipboard := clip_Text
-	else
-	{
-		FileCreateDir, Restored Images
-		temp_A_Now := A_Now
-		Filecopy, cache\history\%clip_file_path%, Restored Images\%temp_a_now%.jpg
-		Run, Restored Images
-		Loop
-			if WinActive("Restored Images")
-				break
-		Send, % temp_A_Now
-	}
-	return
-
-;********** INSIDE *********
-
-historyCleanup:
+historyCleanup()
+;Cleans history in bunch
+{
+	global
+	local cur_Time , temp_file_name
 	cur_Time := A_now
 	Envadd, cur_Time, -%ini_DaysToStore%, D
 	Loop, cache\history\*
@@ -735,26 +560,6 @@ historyCleanup:
 		if temp_File_Name < 0
 			FileDelete, cache\history\%A_LoopFileName%
 	}
-	return
-
-HistoryUpdate(crit="", create=true)
-{
-	LV_Delete()
-	loop, cache\history\*
-	{
-		if Instr(A_loopfilefullpath, ".hst")
-			Fileread, lv_temp, %A_LoopFileFullPath%
-		else
-			lv_temp := MSG_HISTORY_PREVIEW_IMAGE
-		
-		if Instr(lv_temp, crit)
-		{
-			lv_Date := Substr(A_loopfilename,7,2) "/" Substr(A_loopfilename,5,2) " , " Substr(A_loopfilename,9,2) ":" Substr(A_loopfilename,11,2)
-			LV_Add("", lv_Temp, lv_Date, A_LoopFileName)	;not parsing here to maximize speed
-		}
-	}
-	if create
-		LV_ModifyCol(1, "600") , LV_ModifyCol(2, "120 NoSort") , Lv_ModifyCol(3, "1")
 }
 
 ;****************COPY FILE/FOLDER******************************************************************************
@@ -764,7 +569,6 @@ copyFile:
 	selectedFile := GetFile()
 	if ( selectedFile != "" )
 		Clipboard := selectedfile
-	Sleep, %ini_GeneralSleep%
 	CopyMessage := MSG_TRANSFER_COMPLETE
 	return
 
@@ -773,7 +577,6 @@ copyFolder:
 	openedFolder := GetFolder()
 	if ( openedfolder != "" )
 		Clipboard := openedFolder
-	Sleep, %ini_GeneralSleep%
 	copyMessage := MSG_TRANSFER_COMPLETE
 	return
 
@@ -790,13 +593,13 @@ hlp:
 	return
 
 settings:
+	Gui, 2:Hide
 	gui_Settings()
 	return
 	
 history:
-	Gui, 4:Default
-	HistoryUpdate()
-	Gui, 4:Show, w724 h526, %PROGNAME% History Tool
+	Gui, 2:Hide
+	gui_History()
 	return
 	
 main:
@@ -806,13 +609,6 @@ main:
 2GuiClose:
 	Gui, 2:Hide
 	EmptyMem()
-	return
-
-4GuiSize:
-	Gui, 4:Default
-	Anchor("historylist", "wh") , Anchor("Button1", "xy") , Anchor("Static3", "y") , Anchor("history_edit", "w") , Anchor("Static1", "w")
-	LV_ModifyCol(1, A_Guiwidth-124)
-	GuiControl, , Static1, Clipjump History Tool
 	return
 
 strtup:
@@ -842,16 +638,13 @@ blog:
 	BrowserRun(AUTHOR_PAGE)
 	return
 
-;******FUNCTIONS*************************************************
+;****** Helper FUNCTIONS ****************************************
 
 addToWinClip(lastEntry, extraTip)
 {
 	ToolTip, System Clipboard %extraTip%
 	if CURSAVE
 		FileRead, Clipboard, *c %A_ScriptDir%/cache/clips/%lastentry%.avc
-
-	if (Substr(Clipboard, -11) == "   --[PATH][")
-		StringTrimRight, Clipboard, Clipboard, 12
 	Sleep, 1000
 	ToolTip
 }
@@ -867,10 +660,6 @@ GetClipboardFormat(){		;Thanks nnnik
     return "[File/Folder]"
   else
     return "[Text]"
-}
-
-hkZ(HotKey, Label, Status=1) {
-	Hotkey,% HotKey,% Label,% Status ? "On" : "Off"
 }
 
 WinActiveOffice(){
@@ -893,22 +682,8 @@ Receive_WM_COPYDATA(wParam, lParam)
 ;##############################################################################
 #Include, lib/imagelib.ahk
 #include, lib/gdiplus.ahk
-#include, lib/_ini.ahk
 #include, lib/anticj_func_labels.ahk
-#include, lib/anchor.ahk
 #include, lib/settings gui plug.ahk
+#include, lib/history gui plug.ahk
 
-;# 	window native shortcuts
-#If WinActive( "Clipjump History Tool")
-{
-	$Rbutton::Send, {Rbutton 2}
-}
-#IfWinActive
-#If, WinActive(PROGNAME " Settings Editor")
-{
-	~Enter::
-	Tv_Enter := 1
-	gosub, Tvclick
-	return
-}
-#IfWinActive
+;------------------------------------------------------------------- X --------------------------------------------------------------------------------------

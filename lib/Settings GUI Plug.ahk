@@ -1,5 +1,5 @@
 ;Gui Settings for Clipjump
-;Courtesy of chaz
+;A lot of thanks to chaz
 
 gui_Settings()
 ; Preconditions: ini settings in variables starting with _ini
@@ -115,6 +115,48 @@ disableApplyButton:
 	return
 }
 
+WM_MOUSEMOVE()	; From the help file
+; Called whenever the mouse hovers over a control, this function shows a tooltip for the control over
+; which it is hovering. The tooltip text is specified in a global variable called variableOfControl_TT
+{
+    static currControl, prevControl, _TT  ; _TT is kept blank for use by the ToolTip command below.
+	
+	static NEW_LIMITMAXCLIPS_TT := "Will Clipjump's Clipboards be limited`nChecked = yes"
+
+	static NEW_MAXCLIPS_TT := "It is the minimum no of clipboards that you want simultaneously to be active.`nIf you want 20, SPECIFY 20."
+
+	static NEW_THRESHOLD_TT := "Threshold is the extra number of clipboard that will be active other than your minimum limit..`nMost recommended value is 10.`n`n[TIP] - Threshold=1 will make Clipjump store exact number of clipboards."
+
+	static NEW_QUALITY_TT := "The quality of Thumbnail previews you want to have.`nRecommended value is 20`nCan be between 1 - 100"
+	
+	static NEW_KEEPSESSION_TT := "Should Clipjump continue with all the saved clipboards after it's restart"
+	static NEW_ISMESSAGE_TT := "This value determines whether you want to see the ""Transferred to Clipjump"" message or not while copy/cut operations."
+
+	static NEW_DAYSTOSTORE_TT := "Number of days for which the clipboard record will be stored"
+	static NEW_ISIMAGESTORED_TT := "Should clipboard images be stored in history ?"
+
+	currControl := A_GuiControl
+    If (currControl <> prevControl and !InStr(currControl, " ") and !Instr(currControl, "&"))
+    {
+		ToolTip		;remove the old Tooltip
+		global Text_TT := %currControl%_TT
+		SetTimer, DisplayToolTip, 650
+        prevControl := currControl
+    }
+    return
+
+DisplayToolTip:
+    SetTimer, DisplayToolTip, Off
+    ToolTip % Text_TT  ; The leading percent sign tell it to use an expression.
+    SetTimer, RemoveToolTip, 8000
+    return
+
+removeToolTip:
+    SetTimer, removeToolTip, Off
+    ToolTip
+    return
+}
+
 load_Settings()
 ; Preconditions: None
 ; Postconditions: Reads settings from the configuration file and saves them in corresponding variables beginning with "ini_".
@@ -126,7 +168,7 @@ load_Settings()
 	IniRead, ini_IsMessage,		%CONFIGURATION_FILE%, Main, Show_Copy_Message
 	IniRead, ini_Quality,		%CONFIGURATION_FILE%, Main, Quality_of_Thumbnail_Previews
 	IniRead, ini_KeepSession,	%CONFIGURATION_FILE%, Main, Keep_Session
-	IniRead, ini_GeneralSleep,	%CONFIGURATION_FILE%, System, Wait_Key
+	;IniRead, ini_GeneralSleep,	%CONFIGURATION_FILE%, System, Wait_Key
 	IniRead, ini_Version,		%CONFIGURATION_FILE%, System, Version
 	IniRead, ini_DaysToStore,	%CONFIGURATION_FILE%, Clipboard_History, Days_to_store
 	IniRead, ini_IsImageStored,	%CONFIGURATION_FILE%, Clipboard_History, Store_images
@@ -145,4 +187,35 @@ save_Settings()
 	IniWrite, %new_KeepSession%,	%CONFIGURATION_FILE%, Main, Keep_Session
 	IniWrite, %new_DaysToStore%,	%CONFIGURATION_FILE%, Clipboard_History, Days_To_Store
 	IniWrite, %new_IsImageStored%,	%CONFIGURATION_FILE%, Clipboard_History, Store_Images
+	
+	validate_Settings()		;change dependant on ini variables
+}
+
+validate_Settings()
+; The function validates the settings for Clipjump . 
+; The reason validate_Settings() is not inside load_Settings() is conflicts with Ini_MaxClips and its unlimited value (0).
+{
+	global
+
+	if !ini_MaxClips			; if blank
+		ini_MaxClips := 9999999
+	if ini_MaxClips is not integer
+		ini_MaxClips := 20
+	If ini_Threshold is not integer
+		ini_Threshold := 10
+
+	CopyMessage := !ini_IsMessage ? "" : MSG_TRANSFER_COMPLETE
+
+	If ini_Quality is not Integer
+		ini_Quality := 20
+	if ini_KeepSession is not integer
+		ini_KeepSession := 1
+
+	ini_RemoveLineFeeds := ini_RemoveLineFeeds = 0 ? 0 : 1
+
+	if !ini_KeepSession
+		clearData()
+
+	ini_IsImageStored := ini_IsImageStored = 0 ? 0 : 1
+	ini_DaysToStore := ini_DaysToStore < 0 ? 0 : (ini_DaysToStore > 200 ? 200 : ini_DaysToStore)	;A max 200 days is allowed.
 }

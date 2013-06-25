@@ -53,3 +53,7 @@ IfNotEqual, Outputvar
 else
 	run,% "iexplore.exe" . " """ . site . """"	;internet explorer
 }
+
+hkZ(HotKey, Label, Status=1) {
+	Hotkey,% HotKey,% Label,% Status ? "On" : "Off"
+}
