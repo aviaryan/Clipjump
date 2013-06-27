@@ -125,7 +125,7 @@ WM_MOUSEMOVE()	; From the help file
 
 	static NEW_MAXCLIPS_TT := "It is the minimum no of clipboards that you want simultaneously to be active.`nIf you want 20, SPECIFY 20."
 
-	static NEW_THRESHOLD_TT := "Threshold is the extra number of clipboard that will be active other than your minimum limit..`nMost recommended value is 10.`n`n[TIP] - Threshold=1 will make Clipjump store exact number of clipboards."
+	static NEW_THRESHOLD_TT := "Threshold is the extra number of clipboard that will be active other than your minimum limit..`nMost recommended value is 10.`n`n[TIP] - Threshold = 1 will make Clipjump store an exact number of maximum clipboards."
 
 	static NEW_QUALITY_TT := "The quality of Thumbnail previews you want to have.`nRecommended value is 20`nCan be between 1 - 100"
 	
@@ -168,7 +168,6 @@ load_Settings()
 	IniRead, ini_IsMessage,		%CONFIGURATION_FILE%, Main, Show_Copy_Message
 	IniRead, ini_Quality,		%CONFIGURATION_FILE%, Main, Quality_of_Thumbnail_Previews
 	IniRead, ini_KeepSession,	%CONFIGURATION_FILE%, Main, Keep_Session
-	;IniRead, ini_GeneralSleep,	%CONFIGURATION_FILE%, System, Wait_Key
 	IniRead, ini_Version,		%CONFIGURATION_FILE%, System, Version
 	IniRead, ini_DaysToStore,	%CONFIGURATION_FILE%, Clipboard_History, Days_to_store
 	IniRead, ini_IsImageStored,	%CONFIGURATION_FILE%, Clipboard_History, Store_images

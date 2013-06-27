@@ -1,5 +1,5 @@
 ;History Gui labels and functions
-;Thanks to chaz
+;A lot Thanks to chaz
 
 gui_History()
 ; Creates and shows a GUI for managing and viewing the clipboard history
@@ -48,15 +48,20 @@ history_ButtonPreview:
 	return
 
 history_ButtonDelete:
-	;Allows deleting Multiple Selections
 	Gui, History:Default
-	row_count := LV_GetCount("S") , row_selected := LV_GetNext(0)
-	loop,% row_count
+
+	temp_row_s := 0 , rows_selected := ""
+	while (temp_row_s := Lv_GetNext(temp_row_s))
+		rows_selected .= temp_row_s ","
+	rows_selected := Substr(rows_selected, 1, -1)
+
+	loop, parse, rows_selected,`,
 	{
-		LV_GetText(clip_file_path, row_selected, 3)		;row_selected is kept constant because of Lv_delete below
-		LV_Delete(row_selected)
+		LV_GetText(clip_file_path, A_LoopField+1-A_index, 3)
+		LV_Delete( A_LoopField+1-A_index )
 		FileDelete,% "cache\history\" clip_file_path
 	}
+	
 	Guicontrol, History:Focus, history_SearchBox
 	return
 
@@ -145,7 +150,6 @@ gui_History_Preview(mode, previewText = "")
 		Gui, Font
 		history_Text_Act := true
 	}
-	
 	Gui, Add, Button, x210 y340 w110 h23 gbutton_Copy_To_Clipboard Default, Copy to Clipboard
 
 	Gui, Preview:+OwnerHistory
@@ -155,8 +159,9 @@ gui_History_Preview(mode, previewText = "")
 	return
 	
 button_Copy_to_Clipboard:
+	Gui, Preview:Submit, Nohide
 	if history_Text_Act
-		Clipboard := clip_Text
+		Clipboard := history_text
 	else
 	{
 		FileCreateDir, Restored Images
@@ -228,7 +233,7 @@ HistoryUpdate(crit="", create=true)
 				timePeriod := "PM"
 				hour := abs(hour - 12)
 			}
-			else timePeriod := "AM"
+			else hour := Abs(hour) , timePeriod := "AM"		;Abs() removes leading zeroes
 				
 			lv_Date := month " " day ", " year " " hour ":" minute " " timePeriod
 			;~ lv_Date := Substr(A_LoopFileName,7,2) "/" Substr(A_LoopFileName,5,2) ", " Substr(A_LoopFileName,9,2) ":" Substr(A_LoopFileName,11,2)

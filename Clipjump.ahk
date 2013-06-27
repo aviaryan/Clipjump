@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 6.0b2
+;@Ahk2Exe-SetVersion 6.0
 ;@Ahk2Exe-SetCopyright (C) 2013 Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -31,12 +31,12 @@ CoordMode, Mouse
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "6.0b2"
+global VERSION := "6.0"
 global CONFIGURATION_FILE := "settings.ini"
 global UPDATE_FILE := "https://dl.dropboxusercontent.com/u/116215806/Products/Clipjump/Clipjumpversion.txt"
 global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/Clipjump.html"
 global HELP_PAGE := "http://avi-win-tips.blogspot.com/2013/04/Clipjump-online-guide.html"
-global AUTHOR_PAGE := "www.avi-win-tips.blogspot.com"
+global AUTHOR_PAGE := "http://www.avi-win-tips.blogspot.com"
 
 global MSG_TRANSFER_COMPLETE := "Transferred to " PROGNAME
 global MSG_CLIPJUMP_EMPTY := PROGNAME " is empty"
@@ -104,6 +104,10 @@ loop
 Gui +LastFound +AlwaysOnTop -Caption +ToolWindow
 gui, add, picture,x0 y0 w400 h300 vimagepreview,
 
+;Tray Icon
+if !A_isCompiled			;Important for showing Cj's icon in the Titlebar of GUI
+	Menu, Tray, Icon, iconx.ico
+
 ;About GUI
 Gui, 2:Font, S18 CRed, Consolas
 Gui, 2:Add, Text, x2 y0 w550 h40 +Center gupdt, Clipjump v%version%
@@ -121,15 +125,15 @@ Gui, 2:Add, Text, x2 y290 w300 h30 ghlp, Go Online - See Manual
 Gui, 2:Font, S14 CBlack, Verdana
 Gui, 2:Add, Text, x-8 y330 w560 h24 +Center, Copyright (C) 2013
 
+;More GUIs can be seen in lib folder
+
 ;******************************************************************
 ;MENUS
 
-;TRAY
+;MAIN TRAY
 Menu, Tray, NoStandard
 Menu, Tray, Add, %PROGNAME%, main
 Menu, Tray, Tip, %PROGNAME% by Avi Aryan
-if !(A_isCompiled)
-	Menu, Tray, Icon, iconx.ico
 Menu, Tray, Add		; separator
 Menu, Tray, Add, Clipboard History		(Win+C), history
 Menu, Tray, Add		; separator
@@ -204,7 +208,7 @@ paste:
 		if Clipboard =	; if blank
 		{
 			showPreview()
-			ToolTip,% "Clip  " realClipNo " of " CURSAVE "  " fixStatus (WinExist("Display_Cj") ? "" : "`n`n" MSG_ERROR) 
+			ToolTip,% "Clip " realClipNo " of " CURSAVE "`t" fixStatus (WinExist("Display_Cj") ? "" : "`n`n" MSG_ERROR) 
 			SetTimer, ctrlCheck, 50
 		}
 		else
@@ -229,15 +233,10 @@ paste:
 onClipboardChange:
 	Critical
 	If CALLER
-		if WinactiveOffice()
-		{
-			if Office_Const
-				clipChange(ErrorLevel) , Office_Const := false
-			CALLER := true
-			Office_Const := true
-		}
-		else
-			clipChange(Errorlevel)
+	{
+		sleep, 200		;Wait for the 2nd transfer in Office products OR any other apps
+		clipChange(ErrorLevel)
+	}
 	return
 
 clipChange(ClipErrorlevel) {
@@ -286,7 +285,7 @@ moveBack:
 	if Clipboard =	; if blank
 	{
 		showPreview()
-		ToolTip, % "Clip " realclipno "of " CURSAVE "  " fixStatus (WinExist("Display_Cj") ? "" : "`n`n" MSG_ERROR)
+		ToolTip, % "Clip " realclipno " of " CURSAVE "`t" fixStatus (WinExist("Display_Cj") ? "" : "`n`n" MSG_ERROR)
 		SetTimer, ctrlCheck, 50
 	}
 	else
@@ -662,9 +661,10 @@ GetClipboardFormat(){		;Thanks nnnik
     return "[Text]"
 }
 
+;The below func is not used at all in Clipjump but is kept as a reference
 WinActiveOffice(){
-	;Not included - Word and Onenote
-	var := "ahk_class XLMAIN,ahk_class rctrl_renwnd32,ahk_class Framework::CFrame,ahk_class OFFDOCCACHE,ahk_class CAG_STANDALONE,ahk_class PPTFrameClass"
+	;Not included - Word, ppt and Onenote
+	var := "ahk_class XLMAIN,ahk_class rctrl_renwnd32,ahk_class Framework::CFrame,ahk_class OFFDOCCACHE,ahk_class CAG_STANDALONE"
 	loop,parse,var,`,
 		if WinActive(A_loopfield)
 			return 1
