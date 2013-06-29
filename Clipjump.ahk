@@ -33,9 +33,9 @@ CoordMode, Mouse
 global PROGNAME := "Clipjump"
 global VERSION := "6.0"
 global CONFIGURATION_FILE := "settings.ini"
-global UPDATE_FILE := "https://dl.dropboxusercontent.com/u/116215806/Products/Clipjump/Clipjumpversion.txt"
-global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/Clipjump.html"
-global HELP_PAGE := "http://avi-win-tips.blogspot.com/2013/04/Clipjump-online-guide.html"
+global UPDATE_FILE := "https://dl.dropboxusercontent.com/u/116215806/Products/Clipjump/clipjumpversion.txt"
+global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/clipjump.html"
+global HELP_PAGE := "http://avi-win-tips.blogspot.com/2013/04/clipjump-online-guide.html"
 global AUTHOR_PAGE := "http://www.avi-win-tips.blogspot.com"
 
 global MSG_TRANSFER_COMPLETE := "Transferred to " PROGNAME

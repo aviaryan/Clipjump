@@ -36,7 +36,6 @@ ToolTip
 
 !g::
 CjControl(0)	;disable Cj Monitoring
-sleep, 100	;A short sleep is necessary
 Clipboard := "I am Don. Clipjump can't catch me. ha ha"
 
 Text=
@@ -79,5 +78,7 @@ CjControl(ByRef StringToSend)  ; ByRef saves a little memory in this case.
     SendMessage, 0x4a, 0, &CopyDataStruct,, %TargetScriptTitle%
     DetectHiddenWindows %Prev_DetectHiddenWindows%
     SetTitleMatchMode %Prev_TitleMatchMode%
+	
+	sleep 100		;Additional sleep to allow var assignment on Clipjump's side
     return ErrorLevel  ; Return SendMessage's reply back to our caller.
 }
