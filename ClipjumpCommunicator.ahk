@@ -27,44 +27,15 @@ PLEASE >>>
 
 */
 
-;Run this Script. Make sure Clipjump v 5.0+ is also running.
-
-Clipboard := "@ I write this on clipboard, Clipjump can catch me. no no"
-ToolTip, CLIPJUMP will have the copied text `n "%Clipboard%"`n`nPress Esc to remove this ToolTip`n Then try PRESSING Alt + g
-KeyWait,Esc,D
-ToolTip
-
-!g::
-CjControl(0)	;disable Cj Monitoring
-Clipboard := "I am Don. Clipjump can't catch me. ha ha"
-
-Text=
-(
-Clipboard (not Clipjump) has
-"%Clipboard%"
-Dont believe me.
-Press Esc OR use Right-Click > Paste to paste written text on Clipboard
-Also see that Clipjump altough it is running, doesnt have this text.
-)
-Tooltip, %Text%
-
-KeyWait,Esc,D
-Send,^v
-CjControl(1)	;enable Cj Monitoring
-ToolTip
-ExitApp
-return
-
-;End of Example
-
 ;###########################################################################################
-;FUNCTION
+;FUNCTION (See HOW TO USE   above)
 ;###########################################################################################
 
 CjControl(ByRef StringToSend)  ; ByRef saves a little memory in this case.
-; This function sends the specified string to the specified window and returns the reply.
-; The reply is 1 if the target window processed the message, or 0 if it ignored it.
 {
+    if !Check4Clipjump()
+        return -1       ;Clipjump doesn't exist
+
 	Process,Exist,Clipjump.exe
 	TargetScriptTitle := "Clipjump" (Errorlevel=0 ? ".ahk " : ".exe ") "ahk_class AutoHotkey"
     VarSetCapacity(CopyDataStruct, 3*A_PtrSize, 0)
@@ -79,6 +50,19 @@ CjControl(ByRef StringToSend)  ; ByRef saves a little memory in this case.
     DetectHiddenWindows %Prev_DetectHiddenWindows%
     SetTitleMatchMode %Prev_TitleMatchMode%
 	
-	sleep 100		;Additional sleep to allow var assignment on Clipjump's side
+	sleep 150		;Additional sleep to allow var assignment on Clipjump's side
     return ErrorLevel  ; Return SendMessage's reply back to our caller.
+}
+
+Check4Clipjump(){
+    
+    HW := A_DetectHiddenWindows , TM := A_TitleMatchMode
+    DetectHiddenWindows, On
+    SetTitleMatchMode, 2
+    Process, Exist, Clipjump.exe
+    E := ErrorLevel , A := WinExist("\Clipjump.ahk - ahk_class AutoHotkey")
+    DetectHiddenWindows,% HW
+    SetTitleMatchMode,% TM
+    if A or E
+        return 1
 }

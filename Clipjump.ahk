@@ -629,10 +629,6 @@ updt:
 	else MsgBox, 64, Clipjump, No updates available
 	return
 
-installationopen:
-	run, %A_ScriptDir%/help files/Clipjump_offline_help.html
-	return
-
 blog:
 	BrowserRun(AUTHOR_PAGE)
 	return
