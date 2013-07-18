@@ -1,5 +1,4 @@
 ﻿/*
-
 Clipjump Communicator
 ---------------------
 Use this function to momentarily disable/enable Clipjump's "Clipboard monitoring" .

@@ -127,7 +127,7 @@ WM_MOUSEMOVE()	; From the help file
 
 	static NEW_THRESHOLD_TT := "Threshold is the extra number of clipboard that will be active other than your minimum limit..`nMost recommended value is 10.`n`n[TIP] - Threshold = 1 will make Clipjump store an exact number of maximum clipboards."
 
-	static NEW_QUALITY_TT := "The quality of Thumbnail previews you want to have.`nRecommended value is 20`nCan be between 1 - 100"
+	static NEW_QUALITY_TT := "The quality of Thumbnail previews you want to have.`nRecommended value is 90`nCan be between 1 - 100"
 	
 	static NEW_KEEPSESSION_TT := "Should Clipjump continue with all the saved clipboards after it's restart"
 	static NEW_ISMESSAGE_TT := "This value determines whether you want to see the ""Transferred to Clipjump"" message or not while copy/cut operations."

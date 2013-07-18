@@ -32,6 +32,7 @@ gui_History()
 	Menu, HisMenu, Add, Delete, history_ButtonDelete
 	
 	historyUpdate()
+	Hotkey, $Del, history_key_Del, On
 	
 	Gui, History:Show, w600 h500, %PROGNAME% Clipboard History
 	return
@@ -50,17 +51,22 @@ history_ButtonPreview:
 history_ButtonDelete:
 	Gui, History:Default
 
-	temp_row_s := 0 , rows_selected := ""
+	temp_row_s := 0 , rows_selected := "" , list_clipfilepath := ""
 	while (temp_row_s := Lv_GetNext(temp_row_s))
 		rows_selected .= temp_row_s ","
 	rows_selected := Substr(rows_selected, 1, -1)
 
+	;Delete Rows
 	loop, parse, rows_selected,`,
 	{
 		LV_GetText(clip_file_path, A_LoopField+1-A_index, 3)
 		LV_Delete( A_LoopField+1-A_index )
-		FileDelete,% "cache\history\" clip_file_path
+		list_clipfilepath .= clip_file_path "`n" 	;Important for faster results
 	}
+
+	;Delete items
+	loop, parse, list_clipfilepath, `n
+		FileDelete, % "cache\history\" A_LoopField
 	
 	Guicontrol, History:Focus, history_SearchBox
 	return
@@ -71,14 +77,14 @@ history_ButtonDeleteAll:
 	IfMsgBox, OK
 	{
 		FileDelete, cache\history\*
-		HistoryUpdate()
+		historyUpdate()
 	}
 	return
 
 history_SearchBox:
 	Gui, History:Default
 	Gui, History:Submit, NoHide
-	HistoryUpdate(history_SearchBox, 0)
+	historyUpdate(history_SearchBox, 0)
 	return
 
 historyLV:
@@ -102,6 +108,8 @@ history_clipboard:
 			Clipboard := temp_Read
 		}
 	}
+	else
+		Gdip_SetImagetoClipboard("cache\history\" clip_file_path)
 	return
 
 historyGuiContextMenu:
@@ -121,8 +129,17 @@ historyGuiSize:
 	}
 	return
 
+history_key_Del:
+	Gui, History:Default
+	if LV_GetNext(0)
+		gosub, history_ButtonDelete
+	else
+		Send, {Del}
+	return
+
 historyGuiClose:
 historyGuiEscape:
+	Hotkey, $Del, history_key_del, Off
 	Gui, History:Destroy
 	Menu, HisMenu, Delete
 	return
@@ -163,16 +180,7 @@ button_Copy_to_Clipboard:
 	if history_Text_Act
 		Clipboard := history_text
 	else
-	{
-		FileCreateDir, Restored Images
-		temp_A_Now := A_Now
-		Filecopy, cache\history\%clip_file_path%, Restored Images\%temp_a_now%.jpg
-		Run, Restored Images
-		Loop
-			if WinExist("Restored Images")
-				break
-		Send, % temp_A_Now
-	}
+		Gdip_SetImagetoClipboard("cache\history\" clip_file_path)
 	return
 
 previewGuiClose:
@@ -182,7 +190,7 @@ previewGuiEscape:
 	return
 }
 
-HistoryUpdate(crit="", create=true)
+historyUpdate(crit="", create=true)
 ; Update the history GUI listview
 ; create=false will prevent re-drawing of Columns , useful when the function is called in the SearchBox label and Gui Size is customized.
 {
@@ -243,7 +251,6 @@ HistoryUpdate(crit="", create=true)
 	if create
 		LV_ModifyCol(1, "385") , LV_ModifyCol(2, "165") , Lv_ModifyCol(3, "0")
 }
-
 
 LV_SortArrow(h, c, d="")	; by Solar (http://www.autohotkey.com/forum/viewtopic.php?t=69642)
 ; Shows a chevron in a sorted listview column pointing in the direction of sort (like in Explorer)

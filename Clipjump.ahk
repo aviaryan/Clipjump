@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 6.0
+;@Ahk2Exe-SetVersion 6.4
 ;@Ahk2Exe-SetCopyright (C) 2013 Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -31,7 +31,7 @@ CoordMode, Mouse
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "6.0"
+global VERSION := "6.4"
 global CONFIGURATION_FILE := "settings.ini"
 global UPDATE_FILE := "https://dl.dropboxusercontent.com/u/116215806/Products/Clipjump/clipjumpversion.txt"
 global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/clipjump.html"
@@ -63,7 +63,7 @@ If (!FileExist(CONFIGURATION_FILE) or ini_Version != VERSION)
 	IniWrite, 20,% CONFIGURATION_FILE, Main, Minimum_No_Of_Clips_to_be_Active
 	IniWrite, 10,% CONFIGURATION_FILE, Main, Threshold
 	IniWrite, 1, % CONFIGURATION_FILE, Main, Show_Copy_Message
-	IniWrite, 20,% CONFIGURATION_FILE, Main, Quality_of_Thumbnail_Previews
+	IniWrite, 90,% CONFIGURATION_FILE, Main, Quality_of_Thumbnail_Previews
 	IniWrite, 1, % CONFIGURATION_FILE, Main, Keep_Session
 
 	IniWrite, %VERSION%,% CONFIGURATION_FILE, System, Version
@@ -73,7 +73,7 @@ If (!FileExist(CONFIGURATION_FILE) or ini_Version != VERSION)
 
 	FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%/Clipjump.lnk
 	
-	MsgBox, 52, Recommended, It seems that you are running Clipjump v5.0 for the first time.`nDo you want to see ONLINE GUIDE before using ? `nDon't worry `, it won't take more than 10 minutes.`n`nNote that Clipjump doesn't have a offline help.
+	MsgBox, 52, Recommended, It seems that you are running Clipjump v%VERSION% for the first time.`nDo you want to see ONLINE GUIDE before using ? `nDon't worry `, it won't take more than 10 minutes.`n`nNote that Clipjump doesn't have a offline help.
 	IfMsgBox, Yes
 		gosub, hlp
 }
@@ -121,7 +121,7 @@ Gui, 2:Font, S14 CRed Bold, Consolas
 Gui, 2:Add, Text, x2 y230 w200 h30 gsettings, Edit Settings
 Gui, 2:Font, CBlack
 Gui, 2:Add, Text, x2 y260 w300 h30 ghistory, See Clipjump History
-Gui, 2:Add, Text, x2 y290 w300 h30 ghlp, Go Online - See Manual
+Gui, 2:Add, Text, x2 y290 w300 h30 ghlp, See Help file
 Gui, 2:Font, S14 CBlack, Verdana
 Gui, 2:Add, Text, x-8 y330 w560 h24 +Center, Copyright (C) 2013
 
@@ -142,7 +142,7 @@ Menu, Tray, Add, Run At Start Up, strtup
 Menu, Tray, Add, Check for Updates, updt
 Menu, Tray, Add		; separator
 Menu, Tray, Add, Readme, rdme
-Menu, Tray, Add, See Online Help, hlp
+Menu, Tray, Add, See Help File, hlp
 Menu, Tray, Add		; separator
 Menu, Tray, Add, Quit, qt
 Menu, Tray, Default, %PROGNAME%
@@ -231,11 +231,12 @@ paste:
 	return
 
 onClipboardChange:
-	Critical
+	Critical, On
 	If CALLER
 	{
 		sleep, 200		;Wait for the 2nd transfer in Office products OR any other apps
 		clipChange(ErrorLevel)
+		SetTimer, Empty_Lastclip, 3000 		;Emptying the clipboard to avoid user annoyances when copying items with same text
 	}
 	return
 
@@ -426,9 +427,7 @@ ctrlCheck:
 			TEMPSAVE := realActive
 		}
 		SetTimer, ctrlCheck, Off
-		CALLER := true , IN_BACK := false , tempClip := "" , ctrlRef := ""
-		sleep 700
-		ToolTip
+		IN_BACK := false , tempClip := "" , ctrlRef := ""
 
 		hkZ("^s", "ssuspnd", 0)
 		hkZ("^Space", "fixate", 0)
@@ -436,7 +435,12 @@ ctrlCheck:
 		hkZ("^x", "cancel", 0) , hkZ("^x", "DeleteAll", 0) , hkZ("^x", "Delete", 0)
 
 		hkZ("$^c", "NativeCopy") , hkZ("$^x", "NativeCut")
+		
 		EmptyMem()
+		sleep, 700
+		
+		ToolTip
+		CALLER := true
 	}
 	return
 
@@ -513,21 +517,20 @@ renameCorrect(realActive) {
 
 thumbGenerator() {
 	ClipWait, , 1
-	Convert(0, A_ScriptDir "\cache\thumbs\" CURSAVE ".jpg", ini_Quality)
+	Gdip_CaptureClipboard(A_ScriptDir "\cache\thumbs\" CURSAVE ".jpg", ini_Quality)
 }
 
 ;~ ;**************** GUI Functions ***************************************************************************
 
 showPreview(){
 
-	static scrnhgt := A_ScreenHeight / 2.5
-	static scrnwdt := A_ScreenWidth / 2
+	static scrnhgt := A_ScreenHeight / 2.5 , scrnwdt := A_ScreenWidth / 2
 	if FileExist(A_ScriptDir "\cache\thumbs\" TEMPSAVE ".jpg")
 	{
 		GDIPToken := Gdip_Startup()
 		pBM := Gdip_CreateBitmapFromFile( A_ScriptDir "\cache\thumbs\" TEMPSAVE ".jpg" )
 		widthOfThumb := Gdip_GetImageWidth( pBM )
-		heightOfThumb := Gdip_GetImageHeight( pBM )  
+		heightOfThumb := Gdip_GetImageHeight( pBM )
 		Gdip_DisposeImage( pBM )                                         
 		Gdip_Shutdown( GDIPToken )
 
@@ -580,6 +583,12 @@ copyFolder:
 	return
 
 ;***************Extra Functions and Labels**********************************************************************
+
+Empty_Lastclip:
+	SetTimer, Empty_lastclip, Off
+	LASTCLIP := ""
+	return
+
 qt:
 	ExitApp
 
@@ -588,7 +597,7 @@ rdme:
 	return
 
 hlp:
-	BrowserRun(HELP_PAGE)
+	run Clipjump.chm
 	return
 
 settings:
@@ -645,16 +654,18 @@ addToWinClip(lastEntry, extraTip)
 }
 
 GetClipboardFormat(){		;Thanks nnnik
-  DllCall("OpenClipboard")
-  while c := DllCall("EnumClipboardFormats","Int",c?c:0)
-    x .= "," c
-  DllCall("CloseClipboard")
-  if Instr(x, ",1") and Instr(x, ",13")
-    return "[Text]"
-  else If Instr(x, ",15")
-    return "[File/Folder]"
-  else
-    return "[Text]"
+
+ 	DllCall("OpenClipboard")
+ 	while c := DllCall("EnumClipboardFormats","Int",c?c:0)
+		x .= "," c
+	DllCall("CloseClipboard")
+
+  	if Instr(x, ",1") and Instr(x, ",13")
+    	return "[Text]"
+ 	else If Instr(x, ",15")
+    	return "[File/Folder]"
+  	else
+  		return "[Text]"
 }
 
 ;The below func is not used at all in Clipjump but is kept as a reference
@@ -670,13 +681,12 @@ WinActiveOffice(){
 
 Receive_WM_COPYDATA(wParam, lParam)
 {
-	global CALLER
-    StringAddress := NumGet(lParam + 2*A_PtrSize)  ; Retrieves the CopyDataStruct's lpData member.
+	global
+    Local StringAddress := NumGet(lParam + 2*A_PtrSize)  ; Retrieves the CopyDataStruct's lpData member.
     CALLER := StrGet(StringAddress)  ; Copy the string out of the structure.
 }
 
 ;##############################################################################
-#Include, lib/imagelib.ahk
 #include, lib/gdiplus.ahk
 #include, lib/anticj_func_labels.ahk
 #include, lib/settings gui plug.ahk

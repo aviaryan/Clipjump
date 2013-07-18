@@ -29,5 +29,4 @@ FEATURES
  * Configurable - You can change settings through a GUI
  * Portable , Free , Open Source
 
-[See Readme.txt](readme.txt)  
   
