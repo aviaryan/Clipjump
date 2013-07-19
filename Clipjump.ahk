@@ -73,7 +73,7 @@ If (!FileExist(CONFIGURATION_FILE) or ini_Version != VERSION)
 
 	FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%/Clipjump.lnk
 	
-	MsgBox, 52, Recommended, It seems that you are running Clipjump v%VERSION% for the first time.`nDo you want to see ONLINE GUIDE before using ? `nDon't worry `, it won't take more than 10 minutes.`n`nNote that Clipjump doesn't have a offline help.
+	MsgBox, 52, Recommended, Do you want to see the Clipjump help ?
 	IfMsgBox, Yes
 		gosub, hlp
 }
@@ -524,7 +524,8 @@ thumbGenerator() {
 
 showPreview(){
 
-	static scrnhgt := A_ScreenHeight / 2.5 , scrnwdt := A_ScreenWidth / 2
+	static scrnhgt := A_ScreenHeight / 2.5 , scrnwdt := A_ScreenWidth / 2 , displayH , displayW
+
 	if FileExist(A_ScriptDir "\cache\thumbs\" TEMPSAVE ".jpg")
 	{
 		GDIPToken := Gdip_Startup()
