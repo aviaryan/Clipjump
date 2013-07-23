@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 6.4
+;@Ahk2Exe-SetVersion 6.7
 ;@Ahk2Exe-SetCopyright (C) 2013 Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -26,12 +26,13 @@ SetWorkingDir, %A_ScriptDir%
 SetBatchLines,-1
 #SingleInstance, force
 CoordMode, Mouse
+FileEncoding, UTF-8
 
 ;*********Program Vars**********************************************************
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "6.4"
+global VERSION := "6.7"
 global CONFIGURATION_FILE := "settings.ini"
 global UPDATE_FILE := "https://dl.dropboxusercontent.com/u/116215806/Products/Clipjump/clipjumpversion.txt"
 global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/clipjump.html"
@@ -141,8 +142,7 @@ Menu, Tray, Add, Preferences, settings
 Menu, Tray, Add, Run At Start Up, strtup
 Menu, Tray, Add, Check for Updates, updt
 Menu, Tray, Add		; separator
-Menu, Tray, Add, Readme, rdme
-Menu, Tray, Add, See Help File, hlp
+Menu, Tray, Add, Help, hlp
 Menu, Tray, Add		; separator
 Menu, Tray, Add, Quit, qt
 Menu, Tray, Default, %PROGNAME%
@@ -165,6 +165,7 @@ FileSetAttrib, +H, %A_ScriptDir%\cache
 
 global CALLER := true
 global IN_BACK := false
+global FORMATTING := true
 
 hkZ("$^v", "Paste")
 hkZ("$^c", "NativeCopy") , hkZ("$^x", "NativeCut")
@@ -198,7 +199,7 @@ paste:
 	}
 	else
 	{
-		hkZ("^c", "MoveBack") , hkZ("^x", "Cancel")
+		hkZ("^c", "MoveBack") , hkZ("^x", "Cancel") , hkZ("^Z", "Formatting")
 		hkZ("^Space", "Fixate")
 		hkZ("^S", "Ssuspnd")
 
@@ -206,11 +207,7 @@ paste:
 		fixStatus := fixCheck()
 		realclipno := CURSAVE - TEMPSAVE + 1
 		if Clipboard =	; if blank
-		{
 			showPreview()
-			ToolTip,% "Clip " realClipNo " of " CURSAVE "`t" fixStatus (WinExist("Display_Cj") ? "" : "`n`n" MSG_ERROR) 
-			SetTimer, ctrlCheck, 50
-		}
 		else
 		{
 			length := strlen(Clipboard)
@@ -220,13 +217,14 @@ paste:
 				halfClip := halfClip . "`n`n" MSG_MORE_PREVIEW
 			}
 			else halfClip := Clipboard
-			ToolTip,% "Clip " realclipno " of " CURSAVE "`t" GetClipboardFormat() "`t" fixstatus "`n`n" halfclip
-			SetTimer, ctrlCheck, 50
 		}
-			realActive := TEMPSAVE
-			TEMPSAVE -= 1
-			If (TEMPSAVE == 0)
-				TEMPSAVE := CURSAVE
+		PasteModeTooltip()
+		SetTimer, ctrlCheck, 50
+
+		realActive := TEMPSAVE
+		TEMPSAVE -= 1
+		If (TEMPSAVE == 0)
+			TEMPSAVE := CURSAVE
 	}
 	return
 
@@ -284,11 +282,7 @@ moveBack:
 	fixStatus := fixCheck()
 	realClipNo := CURSAVE - TEMPSAVE + 1
 	if Clipboard =	; if blank
-	{
 		showPreview()
-		ToolTip, % "Clip " realclipno " of " CURSAVE "`t" fixStatus (WinExist("Display_Cj") ? "" : "`n`n" MSG_ERROR)
-		SetTimer, ctrlCheck, 50
-	}
 	else
 	{
 		length := strlen(Clipboard)
@@ -298,16 +292,17 @@ moveBack:
 			halfClip := halfClip "`n`n" MSG_MORE_PREVIEW
 		}
 		else halfClip := Clipboard
-		ToolTip, % "Clip " realclipno " of " CURSAVE "`t" GetClipboardFormat() "`t" fixstatus "`n`n" halfclip
-		SetTimer, ctrlCheck, 50
 	}
+	PasteModeTooltip()
+	SetTimer, ctrlCheck, 50
+
 	return
 
 cancel:
 	Gui, Hide
 	ToolTip, Cancel paste operation`t(1)`nRelease Ctrl to confirm`nPress X to switch modes
 	ctrlref := "cancel"
-	hkZ("^Space", "fixate", 0)
+	hkZ("^Space", "fixate", 0) , hkZ("^Z", "Formatting", 0)
 	hkZ("^S", "Ssuspnd", 0)
 	hkZ("^x", "Cancel", 0) , hkZ("^x", "Delete", 1)
 	return
@@ -353,6 +348,11 @@ ctrlForCopy:
 blocker:
 	return
 
+Formatting:
+	FORMATTING := !FORMATTING
+	PasteModeTooltip()
+	return
+
 fixate:
 	IfExist, cache\fixate\%realActive%.fxt
 	{
@@ -364,10 +364,7 @@ fixate:
 		fixStatus := MSG_FIXED
 		FileAppend, , %A_ScriptDir%\cache\fixate\%realActive%.fxt
 	}
-	if ( Clipboard == "" )	; if blank
-		Tooltip, Clip %realclipno% of %CURSAVE% %fixstatus%`n
-	else
-		ToolTip % "Clip " realclipno " of " CURSAVE "`t" GetClipboardFormat() "`t" fixstatus "`n`n" halfclip
+	PasteModeTooltip()
 	return
 
 clipSaver() {
@@ -398,6 +395,16 @@ fixCheck() {
 		Return "[FIXED]"
 }
 
+;Shows the Clipjump Paste Mode tooltip
+PasteModeTooltip() {
+	global
+	if ( Clipboard == "" )	; if blank
+		ToolTip % "Clip " realclipno " of " CURSAVE "`t" fixStatus (WinExist("Display_Cj") ? "" : "`n`n" MSG_ERROR)
+	else
+		ToolTip, % "Clip " realclipno " of " CURSAVE "`t" GetClipboardFormat() "`t" fixstatus (!FORMATTING ? "`t[NO-FORMATTING]" : "") "`n`n" halfclip
+}
+
+
 ctrlCheck:
 	if !GetKeyState("Ctrl")
 	{
@@ -422,7 +429,16 @@ ctrlCheck:
 		{
 			ToolTip, %MSG_PASTING%
 			CopyMessage := ""
-			Send, ^v
+
+			if !FORMATTING
+			{
+				if Instr(GetClipboardFormat(), "Text")
+					Clipboard .= "" 		;This is how I remove formatting
+				Send, ^v
+			}
+			else
+				Send, ^v
+
 			copyMessage := MSG_TRANSFER_COMPLETE
 			TEMPSAVE := realActive
 		}
@@ -430,7 +446,7 @@ ctrlCheck:
 		IN_BACK := false , tempClip := "" , ctrlRef := ""
 
 		hkZ("^s", "ssuspnd", 0)
-		hkZ("^Space", "fixate", 0)
+		hkZ("^Space", "fixate", 0) , hkZ("^Z", "Formatting", 0)
 		hkZ("^c", "moveBack", 0)
 		hkZ("^x", "cancel", 0) , hkZ("^x", "DeleteAll", 0) , hkZ("^x", "Delete", 0)
 
@@ -449,7 +465,7 @@ Ssuspnd:
 	ctrlRef := ""
 	TEMPSAVE := realActive
 
-	hkZ("^Space", "fixate", 0)
+	hkZ("^Space", "fixate", 0) , hkZ("^Z", "Formatting", 0)
 	hkZ("^c", "moveBack", 0)
 	hkZ("^s", "Ssuspnd", 0)
 	hkZ("^x", "cancel", 0) , hkZ("^x", "DeleteAll", 0) , hkZ("^x", "Delete", 0)
@@ -593,10 +609,6 @@ Empty_Lastclip:
 qt:
 	ExitApp
 
-rdme:
-	Run, readme.txt
-	return
-
 hlp:
 	run Clipjump.chm
 	return
@@ -706,9 +718,10 @@ Receive_WM_COPYDATA(wParam, lParam)
 }
 
 ;##############################################################################
-#include, lib/gdiplus.ahk
-#include, lib/anticj_func_labels.ahk
-#include, lib/settings gui plug.ahk
-#include, lib/history gui plug.ahk
+;#include, lib/gdiplus.ahk
+#include, %A_ScriptDir%\lib\Gdip_All.ahk
+#include, %A_ScriptDir%\lib\anticj_func_labels.ahk
+#include, %A_ScriptDir%\lib\settings gui plug.ahk
+#include, %A_ScriptDir%\lib\history gui plug.ahk
 
 ;------------------------------------------------------------------- X --------------------------------------------------------------------------------------
