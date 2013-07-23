@@ -1,15 +1,20 @@
 ﻿/*
-Clipjump Communicator
+Clipjump Communicator v2
 ---------------------
 Use this function to momentarily disable/enable Clipjump's "Clipboard monitoring" .
 
 #####################
 HOW TO USE
 #####################
-To disable Clipjump, execute
-	CjControl(0)
+To disable Clipjump, do the following -
+    to disable just clipboard monitoring
+        CjControl(0)
+    to disable ^v Paste mode as well
+        CjControl(-1)
+    to disable Clipjump History shortcut #c as well
+        CjControl(-2)
 
-To later enable Clipjump, execute
+To later enable Clipjump [at all modes], execute
 	CjControl(1)
 
 AN EXAMPLE IS SET UP BELOW (READY TO RUN), WHEN YOU UNDERSTAND THE CONCEPT , DELETE IT.
@@ -21,8 +26,8 @@ NOTES
 PLEASE >>>
 	Clipboard Monitoring is the method by which Cj monitors Clipboards for new data transfered to Clipboard in a hidden manner. Like PrintScreen, like sending data to
 	clipboard by AHK Script and using Context menu to send data.
-	This can be helpful if you want to use Clipboard for fetching/transferring huge data.
-	If you want to completely disable Clipjump, close and then run it at a required condition.
+	This can be helpful at times when you transfer data to Clipboard for temporaray purposes.
+    Use the disable modes a/c need . For ultimate disable, use -2
 
 */
 
@@ -50,7 +55,7 @@ CjControl(ByRef StringToSend)  ; ByRef saves a little memory in this case.
     SetTitleMatchMode %Prev_TitleMatchMode%
 	
 	sleep 150		;Additional sleep to allow var assignment on Clipjump's side
-    return ErrorLevel  ; Return SendMessage's reply back to our caller.
+    return 1        ;True
 }
 
 Check4Clipjump(){

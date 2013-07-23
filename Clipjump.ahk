@@ -678,13 +678,31 @@ WinActiveOffice(){
 			return 1
 }
 
+;The function enables/disables Clipjump with respect to the Communicator.
+;In Communicator , use
+;	 0 to disable just clipboard monitoring
+;	-1 to disable ^v Paste mode as well
+;	-2 to disable Clipjump History shortcut #c as well
+;Use 1 to enable at all times
+Act_CjControl(C){
+	global
+	local p
+
+	p := C ? 1 : 0 , CALLER := p
+	hkZ("$^c", "NativeCopy", p) , hkZ("$^x", "NativeCut", p)
+	hkZ("^!c", "CopyFile", p) , hkZ("^!x", "CopyFolder", p)
+	;Special changes
+	T := C<-1 ? hkZ("#c", "History", 0) : hkZ("#c", "History", 1)
+	T := C<0 ?  hkZ("$^v", "Paste", 0)  : hkZ("$^v", "Paste", 1)
+}
+
 ;#################### COMMUNICATION ##########################################
 
 Receive_WM_COPYDATA(wParam, lParam)
 {
 	global
     Local StringAddress := NumGet(lParam + 2*A_PtrSize)  ; Retrieves the CopyDataStruct's lpData member.
-    CALLER := StrGet(StringAddress)  ; Copy the string out of the structure.
+    Act_CjControl( StrGet(StringAddress) ) 				; Copy the string out of the structure.
 }
 
 ;##############################################################################
