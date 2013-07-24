@@ -28,6 +28,12 @@ SetBatchLines,-1
 CoordMode, Mouse
 FileEncoding, UTF-8
 
+if not A_IsAdmin
+{
+   Run *RunAs "%A_ScriptFullPath%"  ; Fixes Rights problem
+   ExitApp
+}
+
 ;*********Program Vars**********************************************************
 ; Capitalised variables (here and everywhere) indicate that they are global
 
@@ -77,6 +83,9 @@ If (!FileExist(CONFIGURATION_FILE) or ini_Version != VERSION)
 	MsgBox, 52, Recommended, Do you want to see the Clipjump help ?
 	IfMsgBox, Yes
 		gosub, hlp
+
+	if !A_isUnicode 		;One time Unicode warning
+		MsgBox, 16, WARNING, It is recommended to use AHK_L Unicode for using Clipjump.`nIf you are using some another version`, you can but remember my word.`n`nDon't Worry `,this message will shown just once .
 }
 
 ;Global Ini declarations
@@ -234,7 +243,7 @@ onClipboardChange:
 	{
 		sleep, 200		;Wait for the 2nd transfer in Office products OR any other apps
 		clipChange(ErrorLevel)
-		SetTimer, Empty_Lastclip, 3000 		;Emptying the clipboard to avoid user annoyances when copying items with same text
+		SetTimer, Empty_Lastclip, 5000 		;Emptying the clipboard to avoid user annoyances when copying items with same text
 	}
 	return
 
@@ -667,18 +676,16 @@ addToWinClip(lastEntry, extraTip)
 }
 
 GetClipboardFormat(){		;Thanks nnnik
+	Critical, On
 
  	DllCall("OpenClipboard")
  	while c := DllCall("EnumClipboardFormats","Int",c?c:0)
 		x .= "," c
 	DllCall("CloseClipboard")
-
   	if Instr(x, ",1") and Instr(x, ",13")
     	return "[Text]"
  	else If Instr(x, ",15")
     	return "[File/Folder]"
-  	else
-  		return "[Text]"
 }
 
 ;The below func is not used at all in Clipjump but is kept as a reference
