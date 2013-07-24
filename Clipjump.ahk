@@ -679,6 +679,7 @@ GetClipboardFormat(){		;Thanks nnnik
 	Critical, On
 
  	DllCall("OpenClipboard")
+
  	while c := DllCall("EnumClipboardFormats","Int",c?c:0)
 		x .= "," c
 	DllCall("CloseClipboard")
