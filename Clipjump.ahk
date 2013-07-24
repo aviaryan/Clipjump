@@ -442,7 +442,7 @@ ctrlCheck:
 			if !FORMATTING
 			{
 				if Instr(GetClipboardFormat(), "Text")
-					Clipboard .= "" 		;This is how I remove formatting
+					Clipboard .= "" , LASTCLIP := Clipboard		;This is how I remove formatting
 				Send, ^v
 			}
 			else
