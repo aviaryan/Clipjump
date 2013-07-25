@@ -35,13 +35,16 @@ PLEASE >>>
 ;FUNCTION (See HOW TO USE   above)
 ;###########################################################################################
 
-CjControl(ByRef StringToSend)  ; ByRef saves a little memory in this case.
+CjControl(ByRef StringToSend)
 {
-    if !Check4Clipjump()
+    global
+    local IsExe, TargetScriptTitle, CopyDataStruct, Prev_DetectHiddenWindows, Prev_TitleMatchMode, Z, S
+
+    if ! (IsExe := CjControl_check())
         return -1       ;Clipjump doesn't exist
 
-	Process,Exist,Clipjump.exe
-	TargetScriptTitle := "Clipjump" (Errorlevel=0 ? ".ahk " : ".exe ") "ahk_class AutoHotkey"
+	TargetScriptTitle := "Clipjump" (IsExe=2 ? ".ahk ahk_class AutoHotkey" : ".exe ahk_class AutoHotkey")
+
     VarSetCapacity(CopyDataStruct, 3*A_PtrSize, 0)
     SizeInBytes := (StrLen(StringToSend) + 1) * (A_IsUnicode ? 2 : 1)
     NumPut(SizeInBytes, CopyDataStruct, A_PtrSize)
@@ -50,15 +53,28 @@ CjControl(ByRef StringToSend)  ; ByRef saves a little memory in this case.
     Prev_TitleMatchMode := A_TitleMatchMode
     DetectHiddenWindows On
     SetTitleMatchMode 2
-    SendMessage, 0x4a, 0, &CopyDataStruct,, %TargetScriptTitle%
+    Z := 0
+
+    while !Z
+    {
+        SendMessage, 0x4a, 0, &CopyDataStruct,, %TargetScriptTitle%
+        Z := ErrorLevel
+    }
+
     DetectHiddenWindows %Prev_DetectHiddenWindows%
     SetTitleMatchMode %Prev_TitleMatchMode%
-	
-	sleep 150		;Additional sleep to allow var assignment on Clipjump's side
+
+    if ( (StringToSend+0)<1 )
+    {
+        while !FileExist(A_temp "\clipjumpcom.txt")
+            sleep 50
+        FileDelete % A_temp "\clipjumpcom.txt"
+    }
+
     return 1        ;True
 }
 
-Check4Clipjump(){
+CjControl_check(){
     
     HW := A_DetectHiddenWindows , TM := A_TitleMatchMode
     DetectHiddenWindows, On
@@ -67,6 +83,6 @@ Check4Clipjump(){
     E := ErrorLevel , A := WinExist("\Clipjump.ahk - ahk_class AutoHotkey")
     DetectHiddenWindows,% HW
     SetTitleMatchMode,% TM
-    if A or E
-        return 1
+
+    return E ? 1 : (A ? 2 : 0)
 }

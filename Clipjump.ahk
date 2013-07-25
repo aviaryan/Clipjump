@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 6.7
+;@Ahk2Exe-SetVersion 7.0b
 ;@Ahk2Exe-SetCopyright (C) 2013 Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -38,7 +38,7 @@ if not A_IsAdmin
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "6.7"
+global VERSION := "7.0b"
 global CONFIGURATION_FILE := "settings.ini"
 global UPDATE_FILE := "https://dl.dropboxusercontent.com/u/116215806/Products/Clipjump/clipjumpversion.txt"
 global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/clipjump.html"
@@ -97,7 +97,7 @@ validate_Settings()		;validates ini settings
 historyCleanup()
 
 global TOTALCLIPS := ini_Threshold + ini_MaxClips
-global CURSAVE, TEMPSAVE, LASTCLIP
+global CURSAVE, TEMPSAVE, LASTCLIP, LASTFORMAT
 
 loop
 {
@@ -241,10 +241,13 @@ onClipboardChange:
 	Critical, On
 	If CALLER
 	{
-		sleep, 200		;Wait for the 2nd transfer in Office products OR any other apps
-		clipChange(ErrorLevel)
-		SetTimer, Empty_Lastclip, 5000 		;Emptying the clipboard to avoid user annoyances when copying items with same text
+		;sleep, 200		;Wait for the 2nd transfer in Office products OR any other apps
+		if ( LASTFORMAT != (LASTFORMAT := GetClipboardFormat(0)) ) or ( LASTCLIP != Clipboard )
+			clipChange(A_EventInfo)
+		;SetTimer, Empty_Lastclip, 5000
 	}
+	else
+		LASTFORMAT := GetClipboardFormat(0)
 	return
 
 clipChange(ClipErrorlevel) {
@@ -332,6 +335,7 @@ nativeCopy:
 	Critical
 	hkZ("$^c", "nativeCopy", 0)
 	hkZ("$^c", "blocker")
+	LASTCLIP := ""
 	Send, ^c
 	setTimer, ctrlforCopy, 50
 	gosub, ctrlforCopy
@@ -341,6 +345,7 @@ nativeCut:
 	Critical
 	hkZ("$^x", "nativeCut", 0)
 	hkZ("$^x", "blocker")
+	LASTCLIP := ""
 	Send, ^x
 	setTimer, ctrlforCopy, 50
 	gosub, ctrlforCopy
@@ -442,7 +447,7 @@ ctrlCheck:
 			if !FORMATTING
 			{
 				if Instr(GetClipboardFormat(), "Text")
-					Clipboard .= "" , LASTCLIP := Clipboard		;This is how I remove formatting
+					Clipboard .= "" , LASTCLIP := Clipboard
 				Send, ^v
 			}
 			else
@@ -675,27 +680,27 @@ addToWinClip(lastEntry, extraTip)
 	ToolTip
 }
 
-GetClipboardFormat(){		;Thanks nnnik
+;type=1
+;	returns Text
+;type=0
+;	returns data types
+GetClipboardFormat(type=1){		;Thanks nnnik
 	Critical, On
 
- 	DllCall("OpenClipboard")
-
+ 	DllCall("OpenClipboard", "int", "")
  	while c := DllCall("EnumClipboardFormats","Int",c?c:0)
 		x .= "," c
 	DllCall("CloseClipboard")
-  	if Instr(x, ",1") and Instr(x, ",13")
-    	return "[Text]"
- 	else If Instr(x, ",15")
-    	return "[File/Folder]"
-}
 
-;The below func is not used at all in Clipjump but is kept as a reference
-WinActiveOffice(){
-	;Not included - Word, ppt and Onenote
-	var := "ahk_class XLMAIN,ahk_class rctrl_renwnd32,ahk_class Framework::CFrame,ahk_class OFFDOCCACHE,ahk_class CAG_STANDALONE"
-	loop,parse,var,`,
-		if WinActive(A_loopfield)
-			return 1
+	if type
+  		if Instr(x, ",1") and Instr(x, ",13")
+    		return "[Text]"
+ 		else If Instr(x, ",15")
+    		return "[File/Folder]"
+    	else
+    		return ""
+    else
+    	return x
 }
 
 ;The function enables/disables Clipjump with respect to the Communicator.
@@ -721,8 +726,14 @@ Act_CjControl(C){
 Receive_WM_COPYDATA(wParam, lParam)
 {
 	global
-    Local StringAddress := NumGet(lParam + 2*A_PtrSize)  ; Retrieves the CopyDataStruct's lpData member.
-    Act_CjControl( StrGet(StringAddress) ) 				; Copy the string out of the structure.
+    Local StringAddress := NumGet(lParam + 2*A_PtrSize) , D
+
+    Act_CjControl(D := StrGet(StringAddress, 2, "UTF-8"))
+
+    if ( (D+0)<1 )
+    	while !FileExist(A_temp "\clipjumpcom.txt")
+    		FileAppend, a,% A_temp "\clipjumpcom.txt"
+    return 1
 }
 
 ;##############################################################################
