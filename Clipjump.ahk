@@ -720,7 +720,7 @@ Act_CjControl(C){
 	global
 	local p
 
-	p := C ? 1 : 0 , CALLER := p
+	p := C>0 ? 1 : 0 , CALLER := p
 	hkZ("$^c", "NativeCopy", p) , hkZ("$^x", "NativeCut", p)
 	hkZ("^!c", "CopyFile", p) , hkZ("^!x", "CopyFolder", p)
 	;Special changes
