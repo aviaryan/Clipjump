@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 7.0b
+;@Ahk2Exe-SetVersion 7.0
 ;@Ahk2Exe-SetCopyright (C) 2013 Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -27,10 +27,17 @@ SetBatchLines,-1
 #SingleInstance, force
 CoordMode, Mouse
 FileEncoding, UTF-8
+if A_IsCompiled
+	#ErrorStdOut
 
 if not A_IsAdmin
 {
-   Run *RunAs "%A_ScriptFullPath%"  ; Fixes Rights problem
+	MsgBox, 16, WARNING, Clipjump is not running as Administrator nThe program will now close and try to re-run as Administrator`n`nPlease make sure Clipjump runs as Administrator to avoid this error message
+
+	if A_IsCompiled
+   		Run *RunAs "%A_ScriptFullPath%"  ; Fixes Rights problem
+   	else
+   		Run *RunAs "%A_AhkPath%" "%A_ScriptFullPath%"
    ExitApp
 }
 
@@ -38,7 +45,7 @@ if not A_IsAdmin
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "7.0b"
+global VERSION := "7.0"
 global CONFIGURATION_FILE := "settings.ini"
 global UPDATE_FILE := "https://dl.dropboxusercontent.com/u/116215806/Products/Clipjump/clipjumpversion.txt"
 global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/clipjump.html"
@@ -242,7 +249,7 @@ onClipboardChange:
 	If CALLER
 	{
 		;sleep, 200		;Wait for the 2nd transfer in Office products OR any other apps
-		if ( LASTFORMAT != (LASTFORMAT := GetClipboardFormat(0)) ) or ( LASTCLIP != Clipboard )
+		if ( LASTFORMAT != (LASTFORMAT := GetClipboardFormat(0)) ) or ( LASTCLIP != Clipboard ) or ( Clipboard == "" )
 			clipChange(A_EventInfo)
 		;SetTimer, Empty_Lastclip, 5000
 	}

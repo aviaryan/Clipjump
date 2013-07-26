@@ -1,6 +1,6 @@
 ﻿;@Ahk2Exe-SetName Clipjump Controller
 ;@Ahk2Exe-SetDescription Clipjump Controller
-;@Ahk2Exe-SetVersion 0.1
+;@Ahk2Exe-SetVersion 0.2
 ;@Ahk2Exe-SetCopyright (C) 2013 Avi Aryan
 ;@Ahk2Exe-SetOrigFilename ClipjumpControl.exe
 
@@ -35,7 +35,12 @@ GuiClose:
 cb:
 	C := Substr(A_GuiControl, 4)
 	StringReplace, C, C,_,-
-	Cjcontrol(C := C+0)
+	R := Cjcontrol(C := C+0)
+	if R = -1
+	{
+		SB_SetText("Clipjump not found!")
+		return
+	}
 	if C<1
 		SB_SetText("Clipjump Disabled")
 	else

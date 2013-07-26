@@ -19,6 +19,8 @@ gui_History()
 	Gui, Font, s9, Lucida Console
 	Gui, Font, s9, Consolas
 	Gui, Add, ListView, xs+1 AltSubmit HWNDhistoryLV ghistoryLV vhistoryLV, Clip|Date|Hiddendate	; LV0x4000 is LVS_EX_LABELTIP	600|120|1
+
+	Gui, Add, StatusBar,, % "Total Disk Consumption : " history_GetSize() " KB"
 	Gui, Font
 	;~ LV_Modify(1, "Focus")
 	;~ LV_Modify(1, "Select")
@@ -88,8 +90,24 @@ history_SearchBox:
 	return
 
 historyLV:
+	Gui, History:Default
 	GuiControl, Enable, history_ButtonDelete
 	GuiControl, Enable, history_ButtonPreview
+
+	temp_row_s := 0 , temp_size := 0
+
+	while ( temp_row_s := LV_GetNext(temp_row_s) )
+	{
+		LV_GetText(clip_file_path, temp_row_s, 3)
+		temp_size+= ( clip_file_path == "" ) ? 0 : history_GetSize(clip_file_path)
+	}
+
+	if !temp_size
+		temp_size := history_GetSize() , SB_SetText("Disk Consumption : " temp_size " KB")
+	else
+		SB_SetText("Selected Size : " temp_size " KB")
+
+
 	if A_GuiEvent = DoubleClick
 		gosub, history_ButtonPreview
 	else if A_GuiEvent = ColClick
@@ -124,7 +142,7 @@ historyGuiSize:
 		w := a_guiwidth
 		h := a_guiheight
 		LV_ModifyCol(1, w-215)
-		GuiControl, Move, historyLV, % "w" (w - 16) " h" (h - 45)
+		GuiControl, Move, historyLV, % "w" (w - 15) " h" (h - 65)     ;+20 H in no STB
 		GuiControl, Move, history_SearchBox, % "x330 w" (w - 338)
 	}
 	return
@@ -142,6 +160,7 @@ historyGuiEscape:
 	Hotkey, $Del, history_key_del, Off
 	Gui, History:Destroy
 	Menu, HisMenu, Delete
+	EmptyMem() 				;Free memory
 	return
 }
 
@@ -187,6 +206,7 @@ previewGuiClose:
 previewGuiEscape:
 	Gui, History:-Disabled
 	Gui, Preview:Destroy
+	EmptyMem()			;Free Memory
 	return
 }
 
@@ -250,6 +270,17 @@ historyUpdate(crit="", create=true)
 	}
 	if create
 		LV_ModifyCol(1, "385") , LV_ModifyCol(2, "165") , Lv_ModifyCol(3, "0")
+}
+
+history_GetSize(I := ""){
+;returns the size of given filename in history
+	If I !=
+		FileGetSize, R, % "cache\history\" I, B
+	else
+		Loop, cache\history\*.*, , 1
+    		R += %A_LoopFileSize%
+
+    return R/1024
 }
 
 LV_SortArrow(h, c, d="")	; by Solar (http://www.autohotkey.com/forum/viewtopic.php?t=69642)

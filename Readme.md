@@ -20,6 +20,7 @@ FEATURES
  * View, Edit, Search, Delete **Clipjump clipboard history** or simply clipboard history.
  * FIX Clipboards at certain positions. (See FIXATE in Installation Instructions below)
  * Add selective Data to Windows Clipboard if needed.
+ * Control Clipjump totally from external Api via Clipjump Controller
  * Can have as much simultaneous clipboards as possible. (Depends on Disk Space).
  * Copy Current Folder path to Clipboard (Ctrl+Alt+X) 
  * Copy selected files path(s) to Clipboard (Ctrl+Alt+C)

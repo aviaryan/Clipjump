@@ -96,6 +96,7 @@ settingsGuiEscape:
 settingsGuiClose:
 	Gui, Settings:Destroy
 	settingsHaveChanged := false
+	EmptyMem()
 	return
 	
 settingsButtonApply:
