@@ -211,8 +211,6 @@ validate_Settings()
 	if ini_KeepSession is not integer
 		ini_KeepSession := 1
 
-	ini_RemoveLineFeeds := ini_RemoveLineFeeds = 0 ? 0 : 1
-
 	if !ini_KeepSession
 		clearData()
 

@@ -30,4 +30,5 @@ FEATURES
  * Idiot-Proof! - Captures Clipboard entries from everywhere, whether it be an external program or PrintScreen Captures.
  * Unicode - Supports all characters
  * Configurable - You can change settings through a GUI
+ * Not touches the registry and system drive at all.
  * Portable , Free , Open Source

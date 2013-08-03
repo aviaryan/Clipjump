@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 7.0
+;@Ahk2Exe-SetVersion 7.2
 ;@Ahk2Exe-SetCopyright (C) 2013 Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -27,25 +27,15 @@ SetBatchLines,-1
 #SingleInstance, force
 CoordMode, Mouse
 FileEncoding, UTF-8
-if A_IsCompiled
-	#ErrorStdOut
 
-if not A_IsAdmin
-{
-	MsgBox, 16, WARNING, Clipjump is not running as Administrator nThe program will now close and try to re-run as Administrator`n`nPlease make sure Clipjump runs as Administrator to avoid this error message
-
-	if A_IsCompiled
-   		Run *RunAs "%A_ScriptFullPath%"  ; Fixes Rights problem
-   	else
-   		Run *RunAs "%A_AhkPath%" "%A_ScriptFullPath%"
-   ExitApp
-}
+if !A_IsAdmin
+	MsgBox, 16, WARNING, Clipjump is not running as Administrator`nThis (may) cause improper functioning of the program`nIf it does, you know what to do.
 
 ;*********Program Vars**********************************************************
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "7.0"
+global VERSION := "7.2"
 global CONFIGURATION_FILE := "settings.ini"
 global UPDATE_FILE := "https://dl.dropboxusercontent.com/u/116215806/Products/Clipjump/clipjumpversion.txt"
 global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/clipjump.html"
@@ -92,7 +82,7 @@ If (!FileExist(CONFIGURATION_FILE) or ini_Version != VERSION)
 		gosub, hlp
 
 	if !A_isUnicode 		;One time Unicode warning
-		MsgBox, 16, WARNING, It is recommended to use AHK_L Unicode for using Clipjump.`nIf you are using some another version`, you can but remember my word.`n`nDon't Worry `,this message will shown just once .
+		MsgBox, 16, WARNING, It is recommended to use AHK_L Unicode for using Clipjump.`nIf you are using some another version`, you can but remember my word.`n`nDon't Worry `,this message will be shown just once .
 }
 
 ;Global Ini declarations
@@ -126,21 +116,25 @@ if !A_isCompiled			;Important for showing Cj's icon in the Titlebar of GUI
 	Menu, Tray, Icon, iconx.ico
 
 ;About GUI
-Gui, 2:Font, S18 CRed, Consolas
-Gui, 2:Add, Text, x2 y0 w550 h40 +Center gupdt, Clipjump v%version%
-Gui, 2:Font, S14 CBlue, Verdana
-Gui, 2:Add, Text, x2 y40 w550 h30 +Center gblog, Avi Aryan
-Gui, 2:Font, S16 CBlack, Verdana
-Gui, 2:Font, S14 CBlack, Verdana
-Gui, 2:Add, Text, x2 y70 w550 h30 +Center, A Magical Clipboard Manager
-Gui, 2:Add, Picture, x230 y110 w100 h100,% (A_Iscompiled ? A_ScriptFullPath : A_ScriptDir "/iconx.ico")
-Gui, 2:Font, S14 CRed Bold, Consolas
-Gui, 2:Add, Text, x2 y230 w200 h30 gsettings, Edit Settings
-Gui, 2:Font, CBlack
-Gui, 2:Add, Text, x2 y260 w300 h30 ghistory, See Clipjump History
-Gui, 2:Add, Text, x2 y290 w300 h30 ghlp, See Help file
-Gui, 2:Font, S14 CBlack, Verdana
-Gui, 2:Add, Text, x-8 y330 w560 h24 +Center, Copyright (C) 2013
+Gui, 2:Font, S18, Consolas
+Gui, 2:Add, Text, x0 y0 w550 h40 +Center gupdt, Clipjump v%version%
+Gui, 2:Font, S14 +bold, 
+Gui, 2:Add, Text, xp+0 yp+40 wp+0 h30 +Center gblog, Avi Aryan (C) 2013
+Gui, 2:Font, norm
+Gui, 2:Add, Groupbox, xp+0 y80 wp+0 h170, About
+Gui, 2:Font, S10, Courier New
+
+Gui, 2:Add, Text, xp+5 y110 wp+0, % "
+(LTrim`t , Join`s
+	Clipjump was created to make working with Multiple Clipboards as easy (and fast) as it gets. It is a one and only highly innovated tool that makes you work with Multiple
+	Clipboards like never ever before. Use this free tool and feel the difference.`n`nIf you find the tool fabulous, please consider spreading the word!`nA short note of
+	appreciation will help many enjoy the benefits of this freebie.
+)"
+
+Gui, 2:Font, S12 norm +underline, Arial
+Gui, 2:Add, Text, x2 y280 gsettings , Edit Settings
+Gui, 2:Add, Text, yp+30 ghistory, See Clipjump's History
+Gui, 2:Add, Text, yp+30 ghlp, See Help file
 
 ;More GUIs can be seen in lib folder
 
@@ -248,10 +242,8 @@ onClipboardChange:
 	Critical, On
 	If CALLER
 	{
-		;sleep, 200		;Wait for the 2nd transfer in Office products OR any other apps
 		if ( LASTFORMAT != (LASTFORMAT := GetClipboardFormat(0)) ) or ( LASTCLIP != Clipboard ) or ( Clipboard == "" )
 			clipChange(A_EventInfo)
-		;SetTimer, Empty_Lastclip, 5000
 	}
 	else
 		LASTFORMAT := GetClipboardFormat(0)
@@ -645,7 +637,7 @@ history:
 	return
 	
 main:
-	Gui, 2:Show, x416 y126 h354 w557, %PROGNAME% v%VERSION%
+	Gui, 2:Show, w552, %PROGNAME% v%VERSION%
 	return
 
 2GuiClose:
@@ -744,10 +736,10 @@ Receive_WM_COPYDATA(wParam, lParam)
 }
 
 ;##############################################################################
-;#include, lib/gdiplus.ahk
+
 #include, %A_ScriptDir%\lib\Gdip_All.ahk
 #include, %A_ScriptDir%\lib\anticj_func_labels.ahk
 #include, %A_ScriptDir%\lib\settings gui plug.ahk
 #include, %A_ScriptDir%\lib\history gui plug.ahk
 
-;------------------------------------------------------------------- X --------------------------------------------------------------------------------------
+;------------------------------------------------------------------- X -------------------------------------------------------------------------------

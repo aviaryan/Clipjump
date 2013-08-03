@@ -95,3 +95,14 @@ Gdip_CaptureClipboard(file, quality){
 	Gdip_DisposeImage( pBitmap )
 	Gdip_Shutdown( PToken)
 }
+
+;	Flexible Active entity analyzer
+
+IsActive(n, w="classnn"){
+	if w = classnn
+		ControlGetFocus, O, A
+	else if w = window
+		WinGetActiveTitle, O
+	;msgbox % o
+	return ( O == n ) ? 1 : 0
+}

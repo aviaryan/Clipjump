@@ -15,8 +15,8 @@ gui_History()
 	Gui, Add, Button, x+6 ys w75 h23 			vhistory_ButtonDeleteAll ghistory_ButtonDeleteAll, Clear &history
 	Gui, Add, Text, x+15 ys+5 					vhistory_SearchText,	Search &Filter:
 	Gui, Add, Edit, ys+1  	ghistory_SearchBox	vhistory_SearchBox
-	Gui, Font, s9, Courier New
-	Gui, Font, s9, Lucida Console
+	;Gui, Font, s9, Courier New
+	;Gui, Font, s9, Lucida Console
 	Gui, Font, s9, Consolas
 	Gui, Add, ListView, xs+1 AltSubmit HWNDhistoryLV ghistoryLV vhistoryLV, Clip|Date|Hiddendate	; LV0x4000 is LVS_EX_LABELTIP	600|120|1
 
@@ -103,7 +103,7 @@ historyLV:
 	}
 
 	if !temp_size
-		temp_size := history_GetSize() , SB_SetText("Disk Consumption : " temp_size " KB")
+		temp_size := history_GetSize() , SB_SetText("Total Disk Consumption : " temp_size " KB")
 	else
 		SB_SetText("Selected Size : " temp_size " KB")
 
@@ -115,19 +115,7 @@ historyLV:
 	return
 
 history_clipboard:
-	Gui, History:Default
-	if !Instr(clip_File_Path, ".jpg")
-	{
-		row_selected := LV_GetNext(0)
-		LV_GetText(clip_file_path, row_selected, 3)
-		if !Instr(clip_file_path, ".jpg")
-		{
-			FileRead, temp_Read, cache\history\%clip_file_path%
-			Clipboard := temp_Read
-		}
-	}
-	else
-		Gdip_SetImagetoClipboard("cache\history\" clip_file_path)
+	history_clipboard()
 	return
 
 historyGuiContextMenu:
@@ -164,8 +152,6 @@ historyGuiEscape:
 	return
 }
 
-
-
 gui_History_Preview(mode, previewText = "")
 ; Creates and shows a GUI for viewing history items
 {
@@ -195,11 +181,13 @@ gui_History_Preview(mode, previewText = "")
 	return
 	
 button_Copy_to_Clipboard:
-	Gui, Preview:Submit, Nohide
+	Gui, Preview:Submit, nohide
 	if history_Text_Act
 		Clipboard := history_text
 	else
 		Gdip_SetImagetoClipboard("cache\history\" clip_file_path)
+	sleep 500 		;Sleep to show Tootlip and allow Clipboard-capture
+	gosub, previewGuiClose
 	return
 
 previewGuiClose:
@@ -209,6 +197,23 @@ previewGuiEscape:
 	EmptyMem()			;Free Memory
 	return
 }
+
+
+history_clipboard(){
+; Transfers the selected item from Listview to Clipboard
+; -
+	Gui, History:Default
+	row_selected := LV_GetNext(0)
+	LV_GetText(clip_file_path, row_selected, 3)
+	if !Instr(clip_file_path, ".jpg")
+	{
+		FileRead, temp_Read, cache\history\%clip_file_path%
+		Clipboard := temp_Read
+	}
+	else
+		Gdip_SetImagetoClipboard("cache\history\" clip_file_path)
+}
+
 
 historyUpdate(crit="", create=true)
 ; Update the history GUI listview
@@ -261,7 +266,7 @@ historyUpdate(crit="", create=true)
 				timePeriod := "PM"
 				hour := abs(hour - 12)
 			}
-			else hour := Abs(hour) , timePeriod := "AM"		;Abs() removes leading zeroes
+			else hour := Abs(hour) , timePeriod := "AM"
 				
 			lv_Date := month " " day ", " year " " hour ":" minute " " timePeriod
 			;~ lv_Date := Substr(A_LoopFileName,7,2) "/" Substr(A_LoopFileName,5,2) ", " Substr(A_LoopFileName,9,2) ":" Substr(A_LoopFileName,11,2)
@@ -282,6 +287,14 @@ history_GetSize(I := ""){
 
     return R/1024
 }
+
+history_InstaPaste(){
+	history_clipboard()
+	Gui, history:hide
+	WinWaitClose, Clipjump Clipboard History
+	Send, ^v
+}
+
 
 LV_SortArrow(h, c, d="")	; by Solar (http://www.autohotkey.com/forum/viewtopic.php?t=69642)
 ; Shows a chevron in a sorted listview column pointing in the direction of sort (like in Explorer)
@@ -313,3 +326,15 @@ LV_SortArrow(h, c, d="")	; by Solar (http://www.autohotkey.com/forum/viewtopic.p
 	}
 	return DllCall("SendMessage", ptr, h, "uint", LVM_SETCOLUMN, "uint", c, ptr, &lvColumn)
 }
+
+;------------------------------------ ACCESSIBILITY SHORTCUTS -------------------------------
+
+#if IsActive("Edit1", "classnn")
+	$Down::
+		Controlfocus, SysListView321, A
+		Send {Down}
+		return
+#if
+#if ( IsActive("SysListView321", "classnn") and IsActive("Clipjump Clipboard History", "window") )
+	+Enter::history_InstaPaste()
+#if
