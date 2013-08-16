@@ -229,47 +229,50 @@ historyUpdate(crit="", create=true)
 		
 		if Instr(lv_temp, crit)
 		{
-			FileGetTime, fileTimeStamp
-			year := SubStr(fileTimeStamp, 1, 4)
-			month := SubStr(fileTimeStamp, 5, 2)
-			day := SubStr(fileTimeStamp, 7, 2)
-			hour := SubStr(fileTimeStamp, 9, 2)
-			minute := SubStr(fileTimeStamp, 11, 2)
-			second := SubStr(fileTimeStamp, 12, 2)
+			;FileGetTime, fileTimeStamp
+			;year := SubStr(fileTimeStamp, 1, 4)
+			;month := SubStr(fileTimeStamp, 5, 2)
+			;day := SubStr(fileTimeStamp, 7, 2)
+			;hour := SubStr(fileTimeStamp, 9, 2)
+			;minute := SubStr(fileTimeStamp, 11, 2)
+			;second := SubStr(fileTimeStamp, 12, 2)
 			
-			if month = 01
-				month := "Jan"
-			else if month = 02
-				month := "Feb"
-			else if month = 03
-				month := "Mar"
-			else if month = 04
-				month := "Apr"
-			else if month = 05
-				month := "May"
-			else if month = 06
-				month := "Jun"
-			else if month = 07
-				month := "Jul"
-			else if month = 08
-				month := "Aug"
-			else if month = 09
-				month := "Sep"
-			else if month = 10
-				month := "Oct"
-			else if month = 11
-				month := "Nov"
-			else month := "Dec"
+			;if month = 01
+			;	month := "Jan"
+			;else if month = 02
+			;	month := "Feb"
+			;else if month = 03
+			;	month := "Mar"
+			;else if month = 04
+			;	month := "Apr"
+			;else if month = 05
+			;	month := "May"
+			;else if month = 06
+			;	month := "Jun"
+			;else if month = 07
+			;	month := "Jul"
+			;else if month = 08
+			;	month := "Aug"
+			;else if month = 09
+			;	month := "Sep"
+			;else if month = 10
+			;	month := "Oct"
+			;else if month = 11
+			;	month := "Nov"
+			;else month := "Dec"
 			
-			if (hour > 12) or (hour < 1)
-			{
-				timePeriod := "PM"
-				hour := abs(hour - 12)
-			}
-			else hour := Abs(hour) , timePeriod := "AM"
+			;if (hour > 12) or (hour < 1)
+			;{
+			;	timePeriod := "PM"
+			;	hour := abs(hour - 12)
+			;}
+			;else hour := Abs(hour) , timePeriod := "AM"
 				
-			lv_Date := month " " day ", " year " " hour ":" minute " " timePeriod
-			;~ lv_Date := Substr(A_LoopFileName,7,2) "/" Substr(A_LoopFileName,5,2) ", " Substr(A_LoopFileName,9,2) ":" Substr(A_LoopFileName,11,2)
+			;lv_Date := month " " day ", " year " " hour ":" minute " " timePeriod
+
+			lv_Date := Substr(A_LoopFileName,1,4) "-" Substr(A_LoopFileName,5,2) "-" Substr(A_LoopFileName,7,2) "  "
+						. Substr(A_LoopFileName,9,2) ":" Substr(A_LoopFileName,11,2) ":" Substr(A_LoopFileName, 13, 2)
+
 			LV_Add("", lv_Temp, lv_Date, A_LoopFileName)	; not parsing here to maximize speed
 		}
 	}

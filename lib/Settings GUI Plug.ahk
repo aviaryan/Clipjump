@@ -10,9 +10,9 @@ gui_Settings()
 	
 	Gui, Settings:New
 	Gui, Margin, 8, 8
-	Gui, Add, GroupBox,	w289 h164, Main		; for every new checkbox add 21 pixels to the height, and for every new spinner (UpDown control) add 26 pixels
+	Gui, Add, GroupBox,	w289 h169, Main		; for every new checkbox add 21 pixels to the height, and for every new spinner (UpDown control) add 26 pixels
 	
-	Gui, Add, CheckBox, xp+9 yp+17 Section Checked%ini_limitMaxClips% vnew_limitMaxClips gchkbox_limitMaxClips, &Limit the maximum number of active clipboards	; when this is checked the following two controls will be disabled
+	Gui, Add, CheckBox, xp+9 yp+22 Section Checked%ini_limitMaxClips% vnew_limitMaxClips gchkbox_limitMaxClips, &Limit the maximum number of active clipboards	; when this is checked the following two controls will be disabled
 	Gui, Add, Text,		xs+16, &Minimum number of active clipboards:
 	Gui, Add, Edit,		xm+225 yp-3 w50 r1 Number vnew_MaxClips gedit_MaxClips
 	Gui, Add, UpDown,	Range1-1000 gupdown_MaxClips, %ini_MaxClips%
@@ -28,19 +28,34 @@ gui_Settings()
 	Gui, Add, Checkbox, xs Checked%ini_IsMessage%		vnew_IsMessage			gchkbox_IsMessage,			&Show verification ToolTip when copying
 	Gui, Add, Checkbox, xs Checked%ini_KeepSession%		vnew_KeepSession		gchkbox_KeepSession,		&Retain clipboard data upon application restart
 
-	Gui, Add, GroupBox,	xm w289 h69,	Clipboard History
+	;---- Clipboard H
+	Gui, Add, GroupBox,	xm y+20 w289 h74,	Clipboard History
 
-	Gui, Add, Text,		xp+9 yp+17,		Number of days to keep items in &history:
+	Gui, Add, Text,		xp+9 yp+22,		Number of days to keep items in &history:
 	Gui, Add, Edit,		xm+225 yp-3 w50 r1 Number vnew_DaysToStore gedit_DaysToStore
 	Gui, Add, UpDown,	Range1-200 gupdown_DaysToStore, %ini_DaysToStore%
 
 	Gui, Add, Checkbox,	xs y+8 Checked%ini_IsImageStored% vnew_IsImageStored gchkbox_IsImageStored, Store &images in history
 
-	Gui, Add, Button,	x57 w75 h23 Default, 	&OK
+	;---- Shortcuts
+	Gui, Add, GroupBox, ym w289 h169 vshortcutgroupbox,	Shortcuts
+	Gui, Add, Text, 	xp+9 yp+22 section,	Copy File Path(s)
+	Gui, Add, Hotkey, 	xs+155 yp-3 vcfilep_K   ghotkey_cfilep, % Copyfilepath_K
+	Gui, Add, Text,		xs y+8,		Copy Active Folder Path
+	Gui, Add, Hotkey,	xs+155 yp-3 vcfolderp_K ghotkey_cfolderp, % Copyfolderpath_K
+	Gui, Add, Text,		xs y+8,		Copy File Data
+	Gui, Add, Hotkey,	xs+155 yp-3 vcfiled_K   ghotkey_cfiled, % Copyfiledata_K
+	Gui, Add, Text,		xs y+8,		Select Channel
+	Gui, Add, Hotkey,	xs+155 yp-3 vchnl_K		ghotkey_chnl, % channel_K
+	Gui, Add, Text,		xs y+8,		One Time Stop
+	Gui, Add, Hotkey,	xs+155 yp-3 vot_K		ghotkey_ot, % onetime_K
+
+	;---- Buttons
+	Gui, Add, Button,	x186 y280 w75 h23 Default, 	&OK 	;57 in vertical
 	Gui, Add, Button,	x+8 w75 h23,			&Cancel
 	Gui, Add, Button,	x+8 w75 h23	Disabled,	&Apply
 
-	Control, Disable, , Button9, %PROGNAME% Settings	; disable the Apply button; see comment below
+	Control, Disable, , &Apply, %PROGNAME% Settings	; disable the Apply button; see comment below
 	Gui, Settings:Show, , %PROGNAME% Settings
 	SetTimer, disableApplyButton	; for some reason the Apply button will not stay disabled unless this is done. Without this it'll disable then immediately enable again
 	if ini_limitMaxClips = 0
@@ -76,7 +91,12 @@ chkbox_IsMessage:
 edit_DaysToStore:
 updown_DaysToStore:
 chkbox_IsImageStored:
-	Control, Enable, , Button9, %PROGNAME% Settings
+hotkey_cfilep:
+hotkey_cfolderp:
+hotkey_cfiled:
+hotkey_chnl:
+hotkey_ot:
+	Control, Enable, , &Apply, %PROGNAME% Settings
 	settingsHaveChanged := true
 	return
 
@@ -85,7 +105,7 @@ settingsButtonOk:
 	if settingsHaveChanged		; we don't it to save if settings haven't changed (to increase performance, though minimal)
 	{
 		save_Settings()
-		load_Settings()
+		load_Settings() , validate_Settings()
 		settingsHaveChanged := false
 	}
 	Gui, Settings:Destroy
@@ -104,15 +124,15 @@ settingsButtonApply:
 	if settingsHaveChanged
 	{
 		save_Settings()
-		load_Settings()
+		load_Settings() , validate_Settings()
 		settingsHaveChanged := false
 	}
-	Control, Disable, , Button9, %PROGNAME% Settings
+	Control, Disable, , &Apply, %PROGNAME% Settings
 	return
 	
 disableApplyButton:
 	SetTimer, disableApplyButton, Off
-	Control, Disable, , Button9, %PROGNAME% Settings
+	Control, Disable, , &Apply, %PROGNAME% Settings
 	return
 }
 
@@ -123,18 +143,34 @@ WM_MOUSEMOVE()	; From the help file
     static currControl, prevControl, _TT  ; _TT is kept blank for use by the ToolTip command below.
 	
 	static NEW_LIMITMAXCLIPS_TT := "Will Clipjump's Clipboards be limited`nChecked = yes"
-
 	static NEW_MAXCLIPS_TT := "It is the minimum no of clipboards that you want simultaneously to be active.`nIf you want 20, SPECIFY 20."
 
-	static NEW_THRESHOLD_TT := "Threshold is the extra number of clipboard that will be active other than your minimum limit..`nMost recommended value is 10.`n`n[TIP] - Threshold = 1 will make Clipjump store an exact number of maximum clipboards."
+	static NEW_THRESHOLD_TT := "
+	(Ltrim
+		Threshold is the extra number of clipboard that will be active other than your minimum limit..
+		Most recommended value is 10.
+
+		[TIP] - Threshold = 1 will make Clipjump store an exact number of maximum clipboards.
+	)"
 
 	static NEW_QUALITY_TT := "The quality of Thumbnail previews you want to have.`nRecommended value is 90`nCan be between 1 - 100"
-	
 	static NEW_KEEPSESSION_TT := "Should Clipjump continue with all the saved clipboards after it's restart"
 	static NEW_ISMESSAGE_TT := "This value determines whether you want to see the ""Transferred to Clipjump"" message or not while copy/cut operations."
 
 	static NEW_DAYSTOSTORE_TT := "Number of days for which the clipboard record will be stored"
 	static NEW_ISIMAGESTORED_TT := "Should clipboard images be stored in history ?"
+
+	static chnl_K_TT := "Shortcut to show the <Select Channel> Window`nSet the shortcut to None to disable the key combination"
+	static cfilep_K_TT := "Shortcut to copy selected file's path`nSet the shortcut to None to disable the functionality"
+	static cfolderp_K_TT := "Shortcut to copy selected folder's path`nSet the shortcut to None to disable the functionality"
+	static cfiled_K_TT := "Shortcut to copy selected file contents to Clipjump`nSet it to None to disable the functionality"
+	static OT_K_TT := "
+	(LTrim
+		Select shortcut for [One Time Stop] feature.
+		[One Time Stop] feature will make Clipjump ignore the next data that is transferred to the system Clipboards from the time it is activated.
+		Set the key to None to free the key combination and disable the functionality
+	)"
+
 
 	currControl := A_GuiControl
     If (currControl <> prevControl and !InStr(currControl, " ") and !Instr(currControl, "&"))
@@ -172,6 +208,12 @@ load_Settings()
 	IniRead, ini_Version,		%CONFIGURATION_FILE%, System, Version
 	IniRead, ini_DaysToStore,	%CONFIGURATION_FILE%, Clipboard_History, Days_to_store
 	IniRead, ini_IsImageStored,	%CONFIGURATION_FILE%, Clipboard_History, Store_images
+
+	IniRead, Copyfilepath_K,% CONFIGURATION_FILE, Shortcuts, Copyfilepath_K
+	IniRead, Copyfolderpath_K,% CONFIGURATION_FILE, Shortcuts, Copyfolderpath_K
+	IniRead, Copyfiledata_K,% CONFIGURATION_FILE, Shortcuts, Copyfiledata_K
+	Iniread, channel_K,% CONFIGURATION_FILE, Shortcuts, channel_K
+	Iniread, onetime_K,% CONFIGURATION_FILE, Shortcuts, onetime_K
 }
 
 save_Settings()
@@ -180,7 +222,7 @@ save_Settings()
 {
 	global
 	IniWrite, %new_limitMaxClips%,		%CONFIGURATION_FILE%, Main, limit_MaxClips
-	IniWrite,% new_limitMaxClips ? new_Maxclips : 0, %CONFIGURATION_FILE%, Main, Minimum_No_Of_Clips_to_be_Active
+	IniWrite, % (new_limitMaxClips ? new_Maxclips : 0) , %CONFIGURATION_FILE%, Main, Minimum_No_Of_Clips_to_be_Active
 	IniWrite, %new_Threshold%,		%CONFIGURATION_FILE%, Main, Threshold
 	IniWrite, %new_IsMessage%,		%CONFIGURATION_FILE%, Main, Show_Copy_Message
 	IniWrite, %new_Quality%,		%CONFIGURATION_FILE%, Main, Quality_of_Thumbnail_Previews
@@ -188,7 +230,24 @@ save_Settings()
 	IniWrite, %new_DaysToStore%,	%CONFIGURATION_FILE%, Clipboard_History, Days_To_Store
 	IniWrite, %new_IsImageStored%,	%CONFIGURATION_FILE%, Clipboard_History, Store_Images
 	
-	validate_Settings()		;change dependant on ini variables
+	IniWrite, %Cfilep_K%  ,% CONFIGURATION_FILE, Shortcuts, Copyfilepath_K
+	IniWrite, %Cfolderp_K%,% CONFIGURATION_FILE, Shortcuts, Copyfolderpath_K
+	IniWrite, %Cfiled_K%  ,% CONFIGURATION_FILE, Shortcuts, Copyfiledata_K
+	Iniwrite, %chnl_K%	  ,% CONFIGURATION_FILE, Shortcuts, channel_K
+	IniWrite, %ot_K% 	  ,% CONFIGURATION_FILE, Shortcuts, onetime_K
+
+	  hkZ( (T := Cfilep_K) ? T : Copyfilepath_K, 	   "CopyFile", T?1:0) 
+	, hkZ( (T := Cfolderp_K) ? T : Copyfolderpath_K, "CopyFolder", T?1:0) 
+	, hkZ( (T := Cfiled_K) ? T : Copyfiledata_K,     "CopyFileData", T?1:0)
+	, hkZ( (T := chnl_K)   ? T : channel_K,			 "channelGUI",  T?1:0)
+	, hkZ( (T := ot_K)	   ? T : onetime_K,			"onetime",		T?1:0)
+
+	Copyfilepath_K := cfilep_K
+	, Copyfolderpath_K := cfolderp_K
+	, Copyfilepath_K := cfiled_K
+	, channel_K := chnl_K
+	, onetime_K := ot_K
+
 }
 
 validate_Settings()
@@ -204,7 +263,7 @@ validate_Settings()
 	If ini_Threshold is not integer
 		ini_Threshold := 10
 
-	CopyMessage := !ini_IsMessage ? "" : MSG_TRANSFER_COMPLETE
+	CopyMessage := ( !ini_IsMessage ? "" : MSG_TRANSFER_COMPLETE ) " {" ( (CN.NG=="") ? 0 : CN.NG ) "}"
 
 	If ini_Quality is not Integer
 		ini_Quality := 20
@@ -214,6 +273,9 @@ validate_Settings()
 	if !ini_KeepSession
 		clearData()
 
+	TOTALCLIPS := ini_Threshold + ini_Maxclips
+	CN.TotalClips := TotalClips
+
 	ini_IsImageStored := ini_IsImageStored = 0 ? 0 : 1
-	ini_DaysToStore := ini_DaysToStore < 0 ? 0 : (ini_DaysToStore > 200 ? 200 : ini_DaysToStore)	;A max 200 days is allowed.
+	ini_DaysToStore := ini_DaysToStore < 0 ? 0 : ini_DaysToStore
 }

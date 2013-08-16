@@ -17,8 +17,6 @@ To disable Clipjump, do the following -
 To later enable Clipjump [at all modes], execute
 	CjControl(1)
 
-AN EXAMPLE IS SET UP BELOW (READY TO RUN), WHEN YOU UNDERSTAND THE CONCEPT , DELETE IT.
-
 #####################
 NOTES
 	Make sure Clipjump is named as "Clipjump" (Case-Sensitive) both in exe or in ahk form
@@ -28,6 +26,10 @@ PLEASE >>>
 	clipboard by AHK Script and using Context menu to send data.
 	This can be helpful at times when you transfer data to Clipboard for temporaray purposes.
     Use the disable modes a/c need . For ultimate disable, use -2
+
+IMPORTANT >>>
+    The shortcuts "Copy file path", "Copy folder path", "Copy file data" and "Select Channel" are automatically disabled in any of the disable 
+    Modes.
 
 */
 
