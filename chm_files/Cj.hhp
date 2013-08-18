@@ -1,0 +1,51 @@
+
+
+
+
+
+
+
+
+
+
+
+[OPTIONS]
+Binary TOC=No
+Binary Index=Yes
+Compiled File=Clipjump.chm
+Contents File=Contents.hhc
+Index File=Index.hhk
+Default Window=
+Default Topic=clipjump.html
+Default Font=
+Full-text search=Yes
+Auto Index=Yes
+Language=
+Title=Clipjump Help
+Create CHI file=No
+Compatibility=1.1 or later
+Error log file=_errorlog.txt
+Full text search stop list file=
+Display compile progress=Yes
+Display compile notes=Yes
+
+[FILES]
+Blogs.css
+clipjump.html
+clipjumpcontroller.html
+contact.html
+images\cancel.JPG
+images\COPY.jpg
+images\delete.JPG
+images\deleteall.JPG
+images\fixate.JPG
+images\history.jpg
+images\noformat.jpg
+images\pasting.jpg
+images\path.jpg
+images\settings.jpg
+images\trayicon.jpg
+USAGE\basic_help.html
+USAGE\history.html
+USAGE\settings.html
+

@@ -6,7 +6,7 @@
 ;	Emtpties free memory
 
 EmptyMem(){
-return, dllcall("psapi.dll\EmptyWorkingSet", "UInt", -1)
+	return, dllcall("psapi.dll\EmptyWorkingSet", "UInt", -1)
 }
 
 ;GetFile()
@@ -70,7 +70,8 @@ else
 ;	Hotkey command function
 
 hkZ(HotKey, Label, Status=1) {
-	Hotkey,% HotKey,% Label,% Status ? "On" : "Off"
+	if Hotkey !=
+		Hotkey,% HotKey,% Label,% Status ? "On" : "Off"
 }
 
 ;Gdip_SetImagetoClipboard()
@@ -106,3 +107,52 @@ IsActive(n, w="classnn"){
 	;msgbox % o
 	return ( O == n ) ? 1 : 0
 }
+
+;Taken from HotkeyParse()
+;	http://www.autohotkey.com/board/topic/92805-
+
+HParse_rev(Keycombo){
+
+	if Instr(Keycombo, "&")
+	{
+		loop,parse,Keycombo,&,%A_space%%A_tab%
+			toreturn .= A_LoopField " + "
+		return Substr(toreturn, 1, -3)
+	}
+	Else
+	{
+		StringReplace, Keycombo, Keycombo,^,Ctrl&
+		StringReplace, Keycombo, Keycombo,#,Win&
+		StringReplace, Keycombo, Keycombo,+,Shift&
+		StringReplace, Keycombo, Keycombo,!,Alt&
+		loop,parse,Keycombo,&,%A_space%%A_tab%
+			toreturn .= ( Strlen(A_LoopField)=1 ? _StringUpper(A_LoopField) : A_LoopField ) " + "
+		return Substr(toreturn, 1, -3)
+	}
+}
+
+;Taken from Miscellaneous Functions by Avi Aryan
+getParams(sum){
+	static a := 1
+	while sum>0
+		loop
+		{
+			a*=2
+			if (a>sum)
+			{
+				a/=2,p.=Round(a)" ",sum-=a,a:=1
+				break
+			}
+		}
+	return Substr(p,1,-1)
+}
+
+_StringUpper(str){
+	StringUpper, o, str
+	return o
+}
+
+TooltipOff:
+	SetTimer, TooltipOff, Off
+	ToolTip
+	return

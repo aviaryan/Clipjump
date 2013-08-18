@@ -1,0 +1,53 @@
+body{
+    font : Consolas ;
+  font-family: "Consolas", sans-serif
+}
+h1{
+  font-size: 180%;
+  text-align: center;
+  font:  "Segoe UI", "Segoe UI Light", serif  ;
+}
+h2{
+  font-size: 150%;
+  color: #666633;
+}
+h3{
+  font-size: 130%;
+  color: #CC3333;
+}
+h4{
+  font-size: 115%;
+  color: #990066;
+}
+/* Lexixkos Pre-code*/
+pre, code, .Syntax {
+	font-family: Consolas, Courier New, monospace;
+}
+pre, code { background-color: #DFFF80; border: solid 1px #E3E3EF; }
+.Syntax   { background-color: #CCFFFF; border: solid 1px #66FFFF; }
+code, span.Syntax { padding: 0 1px; }
+pre {
+    margin: 0.7em 0em 0.7em 0em;
+    padding: 0.7em 0 0.7em 0.7em;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+pre.Syntax {
+    margin: 0 0 1.0em 0;
+    padding: 0px 0 12px 0px;
+    line-height: 150%;
+}
+pre, pre.Short /*used with .Syntax*/ { line-height: 120%; }
+/* comments */
+pre em, code em { color: #008000; font-style: normal; }
+
+
+strong.mild{
+  color: #CC0066;
+}
+strong.super{
+  color: #CC0000;
+}
+article{
+  font: Consolas;
+}

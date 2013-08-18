@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+<head>
+  <title>Guide</title>
+  <link rel="stylesheet" href="../Blogs.css" type="text/css">
+</head>
+<body>
+<h1><a href="http://avi-win-tips.blogspot.in/p/clipjump.html">Clipjump</a> Guide</h1>
+<center><h2>A Magical Clipboard Manager</h2></center>
+<br>
+<strong class="mild"><center>TABLE</center></strong>
+<pre><ul><li><a href="#bu">Basic Usage</a>
+<li><a href="#au">Advanced Usage</a>
+<ul><li><a href"channels.html">Clipjump Channels</a>
+<li><a href=#fx>Fixate Option</a>
+<li><a href=#path>Copying Paths to Clipjump</a>
+<li><a href=#winclip>Selective Windows Clipboard</a>
+<li><a href=#fdata>Copying file content to Clipjump</a>
+<li><a href=#ot>One Time Stop</a>
+<li><a href=#nof>No formatting mode</a>
+<li><a href="../clipjumpcontroller.html">Clipjump Controller</a>
+</ul>
+<li><a href="settings.html">Settings Editor</a>
+<li><a href="history.html">History Tool</a>
+<li><a href=#short>Shortcuts List</a>
+<li><a href=#notes>Important</a>
+</ul></pre><br>
+
+<h4><a name=bu>Basic Usage</a></h4><br>
+<ul>
+<li>After Downloading Clipjump, unzip it and run Clipjump.exe .<br>
+It's a portable application so no installation is needed.<br>
+<li>When you run the exe, Clipjump's icon will be seen in SystemTray.<br><br>
+<a href="../images/trayicon.jpg"><img src="../images/trayicon.jpg" border="0"></a><br><br>
+<li>Try copying either by Ctrl+C or by Right Click -> Copy or Shift+PrintScreen
+<li>You will notice a Tip, <b>[Transferred to Clipjump]</b>  when you copy something.This will mean that the copy has been succeeded.<br><br>
+<a href="../images/copy.jpg"><img src="../images/copy.jpg" border="0"></a><br><br>
+<li>Now, press <b>Ctrl+V</b>(paste action), you will see a tip containing the file or text to be copied.<strong class="super">[This is Paste Mode]</strong>.
+If an Image has been copied, a Window showing your image will pop-up.<br>
+You will have to release Ctrl to perform actions. <i>(You will know later)</i><br>
+Here, Release Ctrl to paste.<br> <br>
+<a href="../images/pasting.jpg"><img src="../images/pasting.jpg" border="0"></a><br><br>
+<li>To move through Multiple Clipboards, press V again while holding Ctrl. [while in Paste Mode]<br>
+Release Ctrl to Paste.Tap C while holding Ctrl to move backwards.
+<li>To Cancel Copy, press X while in Paste mode <b>[Ctrl Pressed]</b>.<br>
+The tip should change to a Cancel Message. This is <strong class="mild">[Cancel Mode]</strong><br>
+Release Ctrl to confirm.<br>
+<a href="../images/cancel.jpg"><img src="../images/cancel.jpg" border="0"></a><br><br>
+<li>To Delete Current Clipboard, press X twice in Paste Mode or once in Cancel Mode.
+The tip should now change to a Delete Message. This is <b>[Delete Mode]</b><br>
+Release Ctrl to confirm.<br><br>
+<a href="../images/delete.jpg"><img src="../images/delete.jpg" border="0"></a><br><br>
+To Delete all Clips, press X thrice in Paste Mode OR twice in Cancel Mode OR once in Delete Mode.
+The tip should change to a Delete All message.This is <b>[Delete All Mode]</b> <br>
+<a href="../images/deleteall.jpg"><img src="../images/deleteall.jpg" border="0"></a><br>
+Release Ctrl to confirm.
+</ul><br>
+<h3>Notes</H3><ul>
+<li>As you can see, Releasing Ctrl is the basis of performing actions in Clipjump.
+<li>Also, note that Cancel Mode,Delete Mode and Delete All Mode are inter-related.
+<strong class="mild">The program cycles through these modes when you press X while holding Ctrl.</strong><br>
+<b>So, pressing X while holding Ctrl in Delete All Mode will switch back to Cancel Mode.</b>
+</ul><br>
+<hr><br>
+
+<h2><a name=au>Advanced Usage</a></h2>
+<a name="fixate">
+<h3><a name=fx>The Fixate Option</a></h3>
+The Fixate option is meant to hold a current Clipboard at a fixed position while
+positions of all other Clipboards change.<br>Thus, if a Clipboard is fixed at [Clip 1], it
+will stay there at Clip 1 even after numerous Copies and Cuts.<br>
+This can be useful if you want a Clipboard entry to be easily accessible every time you
+go in Paste Mode using Ctrl+V. <br>
+<strong class="super">Please note</strong> that Clipjump remembers last pasted clip's position. So, if you have just pasted [Clip 5], Clipjump will
+<b>start from [Clip 5]</b> the next time you press Ctrl and then V [Paste Mode].<br>
+A workaround to go to [Clip 1] quickly can be going into [Cancel Mode] after pressing Ctrl+V and canceling and then again pressing Ctrl+V.
+Clipjump will now start from [Clip 1]<br><br>
+<strong class="super">Using Fixate</strong><br>
+Pressing SPACE while in [Paste Mode] toggles the Fixed status of a Clip.<br>
+If you reach the clip of your choice and want to fix it, press SPACE and you
+will notice a "[FIXED]" written after <b>(Clip x of y)</b>.<br>
+This means the Clip is Fixed there. As said above , <strong class="mild">pressing SPACE again
+on the fixed clip will remove the FIX from it and the "[FIXED]" from the tip will disappear.</strong>
+<br><br>
+<a href="../images/fixate.jpg"><img src="../images/fixate.jpg" border="0"></a><br><br>
+<strong class="super">Note that the DeleteAll option will delete FIXED Clips too.</strong><br><hr><br>
+<h3><a name=path>Copying Paths to Clipjump</a></h3>
+<ul>
+<li>Pressing the shortcut Ctrl+Alt+C will copy path(s) of selected files in Windows
+Explorer.<br>
+<a href="../images/path.jpg"><img src="../images/path.jpg" border="0"></a>
+<li>Pressing the shortcut Ctrl+Alt+X will copy path of current opened folder in Windows
+Explorer.</ul>
+</a><hr><br><br>
+
+<h3><a name=fdata>Copying File content to Clipjump</a></h3>
+<ul>
+<li>Pressing the shortcut Ctrl+Alt+F will copy selected file content to Clipjump
+</ul>
+<br><br>
+
+<h3><a name=ot>One Time Stop</a></h3>
+Many a times you have applications that use Clipboard's common transfer to extract data from various locations.
+These apps can be a headache when used with as consistent a tool as Clipjump. <br>
+The <b>One Time Stop</b> feature just solves this problem. Available with the configurable shortcut Alt+S, you can call it once to make Clipjump 
+automatically ignore the last data and linked content that is transferred to System Clipboard and so Clipjump. 
+<br><br>
+<strong class=super>WARNING</strong> - <b>One Time Stop</b> is deactivated when Paste Mode is accessed in the <i>ignore</i> period.
+<br><br><br>
+
+<a name="winclip">
+<h3>Selective Windows Clipboard</h3></a><br>
+Many a times there are situations where <b>you are not allowed to paste using the old shortcut Ctrl+V</b> (like in Command Prompt).<br>
+There the Selective Windows Clipboard Option comes handy.<br><br>
+<strong class="super">Using</strong><br>
+Cycle through the clipboards by Ctrl+V or C .When you reach the clip of your choice,
+<b>press S</b> while holding Ctrl.<br>
+You will see a Confirmation <b>(System Clipboard has Clip x)</b> in form of tip.
+That's it.<br>
+Now, the Right-Click > Paste Or any other option to Paste <i>other than the old Ctrl + V</i>
+will paste the Clip you had choose like it is  currently stored in System Clipboard.<br><hr><br>
+
+
+<a name=nof>
+<h3>No-Formatting Mode</h3>
+No formatting mode truncates formatting from Clipjump clips when they are pasted.<br>
+To access this mode, use the "Z" key as the toggle when in <strong class=super>[PASTE MODE]</strong><br>
+Press "Z" once while in [PASTE MODE] and you will see a <strong class="super">[NO-FORMATTING]</strong> in the Tip.<br>
+This will mean all the clipboard data pasted from now onwards will have Formatting truncated.<br>
+To disable this mode, press "Z" again while in [PASTE MODE] and the [NO-FORMATTING] text will dissappear.<br><br>
+<img src="../images/noformat.jpg" border="0">
+<br><br><br>
+
+<h3><a name=short>Shortcut List</a></h3>
+<b>Ctrl Held/Pressed</b><br>
+V - Move forward through Multiple Clipboards (from 1 to 2 , 2 to 3)<br>
+C - Move backwards through Multiple Clipboards (from 3 to 2 , 2 to 1) <br>
+S - Add current Clip to Windows Clipboard [Selective Windows Clipboard Option] <br>
+X - Toggle between, Cancel,Delete,Delete All MODE <br>
+Space - Fix/un-fix a clipboard at its position. <br>
+Z - Toggle Formatting for Clips <br><br>
+
+<b>General</b><br>
+Win+C - Open Clipjump Clipboard History Tool<br>
+Ctrl+Shift+C - Open Clipjump Channel Selector<br>
+Ctrl+Alt+X - Copy opened Folder Path<br>
+Ctrl+Alt+C - Copy File Path<br>
+Ctrl+Alt+F - Copy file content<br>
+Alt+S - One Time Stop<br><br>
+
+<a name="notes">
+<h3>Important</h3></a>
+<UL>
+<li>When Running Clipjump, make sure all other clipboard management utilities are closed.
+<br><br>
+</body>
+
+</html>
