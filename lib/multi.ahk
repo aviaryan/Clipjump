@@ -8,33 +8,54 @@
 
 channelGUI(){
 	global
-	static ChannelIsBuild
+	static local_ini_IsChannelMin
 
-	If !ChannelIsBuild
+	If ( ini_IsChannelMin != local_ini_IsChannelMin )
 	{
-		Gui, Channel:New
-		Gui, Font, S12
-		Gui, Add, Text, x4 y6 , &Choose Multi-Clipboard Channel
-		Gui, Font, S10
-		Gui, Add, Edit, x+165 yp-2 +Readonly vcIndex
-		Gui, Add, Updown,% "Range0-" CN.Total " gChannelupdown", 0
-	
-		Gui, Font, S8, Lucida Console
-		Gui, Add, Text, x4 y+30, Channel number 0 is the mainstream channel and should be used normally.
-		Gui, Add, Text, y+5 cGray, Consider using as less channels as possible.`nThis is just a suggestion.
-	
-		Gui, Font, S10, Arial
-		Gui, Add, Button, x4 y+30 w90 gchannel_Usebutton, &Use Channel
-		Gui, Add, Button, x+385 yp+0 w70 gchannel_Cancelbutton, Cance&l
-		Gui, Add, StatusBar
-		ChannelIsBuild := 1
+		if !ini_IsChannelMin
+		{
+			Gui, Channel:New
+			Gui, Font, S12
+			Gui, Add, Text, x4 y6 , &Choose Multi-Clipboard Channel
+			Gui, Font, S10
+			Gui, Add, Edit, x+165 yp-2 +Readonly vcIndex
+			Gui, Add, Updown,% "Wrap Range0-" CN.Total " gChannelupdown", 0
+		
+			Gui, Font, S8, Lucida Console
+			Gui, Add, Text, x4 y+30, Channel number 0 is the mainstream channel and should be used normally.
+			Gui, Add, Text, y+5 cGray, Consider using as less channels as possible.`nThis is just a suggestion.
+		
+			Gui, Font, S10, Arial
+			Gui, Add, Button, x4 y+30 w90 gchannel_Usebutton, &Use Channel
+			Gui, Add, Button, x+385 yp+0 w70 gchannel_Cancelbutton, Cance&l
+			Gui, Add, StatusBar
+
+			Hotkey, Enter, Channel_usebutton, Off
+		}
+		else
+		{
+			Gui, Channel:New
+			Gui, Font, S12
+			Gui, Add, Text, x4 y6 , Choose Multi-Clipboard Channel
+			Gui, Font, S10
+			Gui, Add, Edit, x+165 yp-2 +Readonly vcIndex
+			Gui, Add, Updown,% "Wrap Range0-" CN.Total " gChannelupdown", 0
+
+			Gui, Add, StatusBar
+
+			Hotkey, IfWinActive, %PROGNAME% Channels
+			Hotkey, Enter, Channel_usebutton, On
+			Hotkey, IfWinActive
+		}
+
+		local_ini_IsChannelMin := ini_IsChannelMin
 	}
 
 	CN["TEMPSAVE" CN.N] := TEMPSAVE , CN["CURSAVE" CN.N] := CURSAVE
 
 	Gui, Channel:Default
 	GuiControl,, cIndex, % CN.NG
-	Gui, Show, , Clipjump Channel
+	Gui, Show, , Clipjump Channels
 
 	SB_SetText("Clips in the Channel : " CN["CURSAVE" CN.N])
 	return
@@ -44,7 +65,7 @@ Channel_usebutton:
 	Gui, Channel:Submit, hide
 	changeChannel(cIndex)
 	ToolTip % "Channel " CN.NG " active"
-	setTimer, TooltipOff, 1000
+	setTimer, TooltipOff, 500
 Channel_cancelbutton:
 	Gui, Channel:Hide
 	GuiControl, , cIndex, % CN.NG

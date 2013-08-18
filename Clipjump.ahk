@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 7.7b1
+;@Ahk2Exe-SetVersion 7.8
 ;@Ahk2Exe-SetCopyright (C) 2013 Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -35,7 +35,7 @@ if !A_IsAdmin
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "7.7b1"
+global VERSION := "7.8"
 global CONFIGURATION_FILE := "settings.ini"
 global UPDATE_FILE := "https://dl.dropboxusercontent.com/u/116215806/Products/Clipjump/clipjumpversion.txt"
 global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/clipjump.html"
@@ -60,6 +60,7 @@ global MSG_FOLDER_PATH_COPIED := "Active folder path copied to " PROGNAME
 ;Init Non-Ini Configurations
 Clipboard := ""
 safeSleepTime := 50
+FileDelete, % A_temp "/clipjumpcom.txt"
 
 ;Ini Configurations
 Iniread, ini_Version, %CONFIGURATION_FILE%, System, Version
@@ -86,6 +87,8 @@ If (!FileExist(CONFIGURATION_FILE) or ini_Version != VERSION)
 	Iniwrite, ^+c,% CONFIGURATION_FILE, Shortcuts, channel_K
 	Iniwrite, !s, % CONFIGURATION_FILE, Shortcuts, onetime_K
 
+	IniWrite, 0,  % CONFIGURATION_FILE, Channels, IsChannelMin
+
 	FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%/Clipjump.lnk
 	
 	MsgBox, 52, Recommended, Do you want to see the Clipjump help ?
@@ -102,7 +105,7 @@ If (!FileExist(CONFIGURATION_FILE) or ini_Version != VERSION)
 }
 
 ;Global Ini declarations
-global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , CopyMessage
+global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_IsChannelMin := 1 , CopyMessage
 		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, channel_K, onetime_K
 
 global CN := {} , TOTALCLIPS		;The single variable to control Multiple multi-Clipboard channels
@@ -113,7 +116,7 @@ validate_Settings()
 
 historyCleanup()
 
-global CURSAVE, TEMPSAVE, LASTCLIP, LASTFORMAT
+global CURSAVE, TEMPSAVE, LASTCLIP, LASTFORMAT, NOINCOGNITO := 1
 
 ;Initialising Clipjump Channels
 initChannels()
@@ -147,13 +150,14 @@ Menu, Tray, NoStandard
 Menu, Tray, Add, %PROGNAME%, main
 Menu, Tray, Tip, %PROGNAME% {0}
 Menu, Tray, Add		; separator
+Menu, Tray, Add, Incognito Mode, incognito
+Menu, Tray, Add 	; separator
 Menu, Tray, Add,% "Select Channel`t`t" Hparse_Rev(channel_K), channelGUI
 Menu, Tray, Add, Clipboard History		Win+C, history
-Menu, Tray, Add		; separator
 Menu, Tray, Add, Preferences, settings
+Menu, Tray, Add		; separator
 Menu, Tray, Add, Run At Start Up, strtup
 Menu, Tray, Add, Check for Updates, updt
-Menu, Tray, Add		; separator
 Menu, Tray, Add, Help, hlp
 Menu, Tray, Add		; separator
 Menu, Tray, Add, Quit, qt
@@ -229,7 +233,8 @@ paste:
 		FileRead, Clipboard, *c %A_ScriptDir%/%CLIPS_dir%/%TEMPSAVE%.avc
 		fixStatus := fixCheck()
 		realclipno := CURSAVE - TEMPSAVE + 1
-		if Clipboard =	; if blank
+
+		if Clipboard =
 			showPreview()
 		else
 		{
@@ -274,8 +279,9 @@ onClipboardChange:
 		LASTFORMAT := GetClipboardFormat(0)
 		if onetimeOn
 		{
+			onetimeOn := false ;--- To avoid OnClipboardChange label to open this routine [IMPORTANT]
 			sleep 500 ;--- Allows the restore Clipboard Transfer in apps
-			CALLER := true , onetimeOn := false
+			CALLER := true
 			ToolTip, One Time Stop Deactivated
 			SetTimer, TooltipOff, 600
 		}
@@ -291,7 +297,10 @@ clipChange(ClipErrorlevel) {
 			CURSAVE += 1
 			clipSaver()
 			LASTCLIP := clipboard
-			FileAppend, %LASTCLIP%, cache\history\%A_Now%.hst
+
+			if NOINCOGNITO
+				FileAppend, %LASTCLIP%, cache\history\%A_Now%.hst
+
 			ToolTip, %copyMessage%
 			TEMPSAVE := CURSAVE
 			if ( CURSAVE >= TOTALCLIPS )
@@ -301,11 +310,12 @@ clipChange(ClipErrorlevel) {
 	else If ClipErrorlevel = 2
 	{
 			CURSAVE += 1 , TEMPSAVE := CURSAVE , LASTCLIP := ""
-
 			ToolTip, %copyMessage%
 			thumbGenerator()
-			if ini_IsImageStored
+
+			if NOINCOGNITO and ini_IsImageStored
 				FileCopy, %THUMBS_dir%\%CURSAVE%.jpg, cache\history\%A_Now%.jpg
+
 			clipSaver()
 			if ( CURSAVE >= TOTALCLIPS )
 				compacter()
@@ -663,7 +673,10 @@ qt:
 	ExitApp
 
 hlp:
-	run Clipjump.chm
+	if A_IsCompiled
+		run Clipjump.chm
+	else
+		run chm_files/clipjump.html
 	return
 
 settings:
@@ -721,6 +734,11 @@ oneTime:
 	setTimer, TooltipOff, 600
 	return
 
+incognito:
+	Menu, Tray, Togglecheck, Incognito Mode
+	NOINCOGNITO := !NOINCOGNITO
+	return
+
 ;type=1
 ;	returns Text
 ;type=0
@@ -745,23 +763,48 @@ GetClipboardFormat(type=1){		;Thanks nnnik
 }
 
 ;The function enables/disables Clipjump with respect to the Communicator.
-;In Communicator , use
-;	 0 to disable just clipboard monitoring
-;	-1 to disable ^v Paste mode as well
-;	-2 to disable Clipjump History shortcut #c as well
-;Use 1 to enable at all times
 Act_CjControl(C){
 	global
-	local p
+	local p:=0,d
 
-	p := C>0 ? 1 : 0 , CALLER := p
-	hkZ("$^c", "NativeCopy", p) , hkZ("$^x", "NativeCut", p)
-	hkZ(Copyfilepath_K, "CopyFile", p) , hkZ(Copyfolderpath_K, "CopyFolder", p)
-	hkZ(CopyFileData_K, "CopyFileData", p)
-	hkZ(Channel_K, "channelGUI", p)
-	;Special changes
-	T := C<-1 ? hkZ("#c", "History", 0) : hkZ("#c", "History", 1)
-	T := C<0 ?  hkZ("$^v", "Paste", 0)  : hkZ("$^v", "Paste", 1)
+	if C = 1
+	{
+		CALLER := 1
+		, hkZ("$^c", "NativeCopy") , hkZ("$^x", "NativeCut")
+		, hkZ(Copyfilepath_K, "CopyFile") , hkZ(Copyfolderpath_K, "CopyFolder"), hkZ(CopyFileData_K, "CopyFileData") 
+		, hkZ(Channel_K, "channelGUI") , hkZ(onetime_K, "onetime") 
+		, hkZ("$^v", "Paste") , hkZ("#c", "History")
+		return
+	}
+
+	;--- Backward Compatibility
+	if C<1
+		C := 2+4+64
+	;--- 
+
+	if C = 1048576
+		d := "2 4 8 16 32 64 128 256"
+	else
+		d := getParams(C)
+
+	loop, parse, d, %A_space%
+		if A_LoopField = 2
+			CALLER := false
+			, hkZ("$^c", "NativeCopy", 0) , hkZ("$^x", "NativeCut", 0)
+		else if A_LoopField = 4
+			hkZ("$^v", "Paste", 0)
+		else if A_LoopField = 8
+			hkZ(Copyfilepath_K, "CopyFile", 0)
+		else if A_LoopField = 16
+			hkZ(Copyfolderpath_K, "CopyFolder", 0)
+		else if A_LoopField = 32
+			hkZ(CopyFileData_K, "CopyFileData", 0)
+		else if A_LoopField = 64
+			hkZ("#c", "History", 0)
+		else if A_LoopField = 128
+			hkZ(Channel_K, "channelGUI", 0)
+		else if A_LoopField = 256
+			hkZ(onetime_K, "onetime", 0)
 }
 
 ;#################### COMMUNICATION ##########################################
@@ -769,15 +812,29 @@ Act_CjControl(C){
 Receive_WM_COPYDATA(wParam, lParam)
 {
 	global
-    Local StringAddress := NumGet(lParam + 2*A_PtrSize) , D
+    Local D
 
-    Act_CjControl(D := StrGet(StringAddress, 2, "UTF-8") + 0)
+    D := StrGet( NumGet(lParam + 2*A_PtrSize) ) + 0  ;unicode transfer
+    if D is not Integer
+    	D := StrGet( NumGet(lParam + 2*A_PtrSize), 8, "UTF-8")  ;ansi conversion
 
-    if D<1
-    	while !FileExist(A_temp "\clipjumpcom.txt")
-    		FileAppend, a,% A_temp "\clipjumpcom.txt"
+    Act_CjControl(D)
+
+    while !FileExist(A_temp "\clipjumpcom.txt")
+    	FileAppend, a,% A_temp "\clipjumpcom.txt"
+
+    ;-- Backward Compatibility
+    if D=1
+    	setTimer, clipjumpcom_delete, 500
+    ;----
+
     return 1
 }
+
+clipjumpcom_delete:
+	SetTimer, clipjumpcom_delete, Off
+	FileDelete, % A_temp "\clipjumpcom.txt"
+	return
 
 ;##############################################################################
 

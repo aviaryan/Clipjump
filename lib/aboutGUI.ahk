@@ -7,11 +7,12 @@ aboutGUI(){
 	Gui, 2:Destroy
 
 	Gui, 2:Font, S18, Consolas
-	Gui, 2:Add, Text, x0 y0 w550 h40 +Center gupdt, Clipjump v%version%
-	Gui, 2:Font, S14 +bold, 
-	Gui, 2:Add, Text, xp+0 yp+40 wp+0 h30 +Center gblog, Avi Aryan (C) 2013
+	Gui, 2:Add, Edit, x0 y0 w0 h0,
+	Gui, 2:Add, Link, x188 y0 gupdt, <a href="http://avi-win-tips.blogspot.com/p/clipjump.html">Clipjump</a> v%version%
+	Gui, 2:Font, S14, 
+	Gui, 2:Add, Link, x187 y+5 gblog, <a href="http://www.github.com/avi-aryan">Avi Aryan</a> (C) 2013
 	Gui, 2:Font, norm
-	Gui, 2:Add, Groupbox, xp+0 y80 wp+0 h170, About
+	Gui, 2:Add, Groupbox, x0 y80 w550 h170, About
 	Gui, 2:Font, S10, Courier New
 	
 	Gui, 2:Add, Text, xp+5 y110 wp+0, % "

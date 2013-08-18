@@ -29,7 +29,7 @@ gui_Settings()
 	Gui, Add, Checkbox, xs Checked%ini_KeepSession%		vnew_KeepSession		gchkbox_KeepSession,		&Retain clipboard data upon application restart
 
 	;---- Clipboard H
-	Gui, Add, GroupBox,	xm y+20 w289 h74,	Clipboard History
+	Gui, Add, GroupBox,	xm y185 w289 h74,	Clipboard History  ;h=169 + 16
 
 	Gui, Add, Text,		xp+9 yp+22,		Number of days to keep items in &history:
 	Gui, Add, Edit,		xm+225 yp-3 w50 r1 Number vnew_DaysToStore gedit_DaysToStore
@@ -49,6 +49,10 @@ gui_Settings()
 	Gui, Add, Hotkey,	xs+155 yp-3 vchnl_K		ghotkey_chnl, % channel_K
 	Gui, Add, Text,		xs y+8,		One Time Stop
 	Gui, Add, Hotkey,	xs+155 yp-3 vot_K		ghotkey_ot, % onetime_K
+
+	;---- Channels
+	Gui, Add, GroupBox, xs-9 y185 w289 h74, Clipjump Channels 	;h=169 + 16
+	Gui, Add, Checkbox, xs yp+22 Checked%ini_IsChannelMin% vnew_IsChannelMin gchkbox_isChannelMin, Use Minimal GUI
 
 	;---- Buttons
 	Gui, Add, Button,	x186 y280 w75 h23 Default, 	&OK 	;57 in vertical
@@ -96,6 +100,7 @@ hotkey_cfolderp:
 hotkey_cfiled:
 hotkey_chnl:
 hotkey_ot:
+chkbox_ischannelmin:
 	Control, Enable, , &Apply, %PROGNAME% Settings
 	settingsHaveChanged := true
 	return
@@ -171,6 +176,11 @@ WM_MOUSEMOVE()	; From the help file
 		Set the key to None to free the key combination and disable the functionality
 	)"
 
+	static NEW_ischannelmin_TT := "
+	(LTrim
+		Makes the Channel GUI minimal in details and more productive.
+		The Minimal GUI will not contain any buttons, you will have to use ENTER to confirm.
+	)"
 
 	currControl := A_GuiControl
     If (currControl <> prevControl and !InStr(currControl, " ") and !Instr(currControl, "&"))
@@ -214,6 +224,8 @@ load_Settings()
 	IniRead, Copyfiledata_K,% CONFIGURATION_FILE, Shortcuts, Copyfiledata_K
 	Iniread, channel_K,% CONFIGURATION_FILE, Shortcuts, channel_K
 	Iniread, onetime_K,% CONFIGURATION_FILE, Shortcuts, onetime_K
+
+	Iniread, ini_IsChannelMin,% CONFIGURATION_FILE, Channels, IsChannelMin
 }
 
 save_Settings()
@@ -235,6 +247,8 @@ save_Settings()
 	IniWrite, %Cfiled_K%  ,% CONFIGURATION_FILE, Shortcuts, Copyfiledata_K
 	Iniwrite, %chnl_K%	  ,% CONFIGURATION_FILE, Shortcuts, channel_K
 	IniWrite, %ot_K% 	  ,% CONFIGURATION_FILE, Shortcuts, onetime_K
+
+	Iniwrite, %new_ischannelMin%, % CONFIGURATION_FILE , Channels, IsChannelMin
 
 	  hkZ( (T := Cfilep_K) ? T : Copyfilepath_K, 	   "CopyFile", T?1:0) 
 	, hkZ( (T := Cfolderp_K) ? T : Copyfolderpath_K, "CopyFolder", T?1:0) 

@@ -131,6 +131,22 @@ HParse_rev(Keycombo){
 	}
 }
 
+;Taken from Miscellaneous Functions by Avi Aryan
+getParams(sum){
+	static a := 1
+	while sum>0
+		loop
+		{
+			a*=2
+			if (a>sum)
+			{
+				a/=2,p.=Round(a)" ",sum-=a,a:=1
+				break
+			}
+		}
+	return Substr(p,1,-1)
+}
+
 _StringUpper(str){
 	StringUpper, o, str
 	return o
