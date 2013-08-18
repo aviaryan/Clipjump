@@ -1,41 +1,44 @@
 ﻿/*
-Clipjump Communicator v2
+Clipjump Communicator v3
 ---------------------
 Use this function to momentarily disable/enable Clipjump's "Clipboard monitoring" .
 
 #####################
 HOW TO USE
 #####################
-To disable Clipjump, do the following -
-    to disable just clipboard monitoring
-        CjControl(0)
-    to disable ^v Paste mode as well
-        CjControl(-1)
-    to disable Clipjump History shortcut #c as well
-        CjControl(-2)
+To DISABLE the selected of the following functions , sum their codes and send in the function -
+    Clipboard Monitoring - 2
+    Paste Mode - 4    
+    Copy file path - 8
+    Copy folder path - 16
+    Copy file data - 32
+    Clipbord History Shortcut - 64
+    Select Channel - 128
+    One Time Stop shortcut - 256
 
-To later enable Clipjump [at all modes], execute
-	CjControl(1)
+DISABLE ALL = Use a single code '1048576'
 
-AN EXAMPLE IS SET UP BELOW (READY TO RUN), WHEN YOU UNDERSTAND THE CONCEPT , DELETE IT.
+ENABLE ALL = Use a single code  '1'
 
 #####################
 NOTES
+    SEE EXAMPLE
 	Make sure Clipjump is named as "Clipjump" (Case-Sensitive) both in exe or in ahk form
 
-PLEASE >>>
-	Clipboard Monitoring is the method by which Cj monitors Clipboards for new data transfered to Clipboard in a hidden manner. Like PrintScreen, like sending data to
-	clipboard by AHK Script and using Context menu to send data.
-	This can be helpful at times when you transfer data to Clipboard for temporaray purposes.
-    Use the disable modes a/c need . For ultimate disable, use -2
-
+#####################
+Example
+    To disable , Clipboard Monitoring and Copy file path shortcut, you use
+        CjControl(2+8) = CjControl(10)
+    Now to enable Copy file path shortcut but keep disabled the Clipboard Monitoring, use
+        CjControl(1) - enable all functionalities
+        CjControl(2) - disable Clipboard monitoring
 */
 
 ;###########################################################################################
 ;FUNCTION (See HOW TO USE   above)
 ;###########################################################################################
 
-CjControl(ByRef StringToSend)
+CjControl(ByRef Code)
 {
     global
     local IsExe, TargetScriptTitle, CopyDataStruct, Prev_DetectHiddenWindows, Prev_TitleMatchMode, Z, S
@@ -46,9 +49,9 @@ CjControl(ByRef StringToSend)
 	TargetScriptTitle := "Clipjump" (IsExe=2 ? ".ahk ahk_class AutoHotkey" : ".exe ahk_class AutoHotkey")
 
     VarSetCapacity(CopyDataStruct, 3*A_PtrSize, 0)
-    SizeInBytes := (StrLen(StringToSend) + 1) * (A_IsUnicode ? 2 : 1)
+    SizeInBytes := (StrLen(Code) + 1) * (A_IsUnicode ? 2 : 1)
     NumPut(SizeInBytes, CopyDataStruct, A_PtrSize)
-    NumPut(&StringToSend, CopyDataStruct, 2*A_PtrSize)
+    NumPut(&Code, CopyDataStruct, 2*A_PtrSize)
     Prev_DetectHiddenWindows := A_DetectHiddenWindows
     Prev_TitleMatchMode := A_TitleMatchMode
     DetectHiddenWindows On
@@ -64,12 +67,9 @@ CjControl(ByRef StringToSend)
     DetectHiddenWindows %Prev_DetectHiddenWindows%
     SetTitleMatchMode %Prev_TitleMatchMode%
 
-    if ( (StringToSend+0)<1 )
-    {
-        while !FileExist(A_temp "\clipjumpcom.txt")
-            sleep 50
-        FileDelete % A_temp "\clipjumpcom.txt"
-    }
+    while !FileExist(A_temp "\clipjumpcom.txt")
+       sleep 50
+    FileDelete % A_temp "\clipjumpcom.txt"
 
     return 1        ;True
 }

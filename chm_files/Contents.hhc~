@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML>
+<HEAD>
+<meta name="GENERATOR" content="Microsoft&reg; HTML Help Workshop 4.1">
+<!-- Sitemap 1.0 -->
+</HEAD>
+<BODY>
+   <OBJECT type="text/site properties">
+     <param name="Window Styles" value="0x800025">
+     <param name="FrameName" value="right">
+     <param name="comment" value="title:Online Help">
+     <param name="comment" value="base:index.htm">
+   </OBJECT>
+   <UL>
+      <LI><OBJECT type="text/sitemap">
+            <param name="Name" value="Clipjump">
+            <param name="Local" value="clipjump.html">
+          </OBJECT>
+      <LI><OBJECT type="text/sitemap">
+            <param name="Name" value="About">
+            <param name="Local" value="contact.html">
+          </OBJECT>
+      <LI><OBJECT type="text/sitemap">
+            <param name="Name" value="USAGE">
+          </OBJECT>
+      <UL>
+         <LI><OBJECT type="text/sitemap">
+               <param name="Name" value="Guide">
+               <param name="Local" value="USAGE/basic_help.html">
+             </OBJECT>
+         <LI><OBJECT type="text/sitemap">
+               <param name="Name" value="Clipjump History Tool">
+               <param name="Local" value="USAGE/history.html">
+             </OBJECT>
+         <LI><OBJECT type="text/sitemap">
+               <param name="Name" value="Clipjump Settings Editor">
+               <param name="Local" value="USAGE/settings.html">
+             </OBJECT>
+      </UL>
+      <LI> <OBJECT type="text/sitemap">
+          <param name="Name" value="Clipjump Controller">
+          <param name="Local" value="clipjumpcontroller.html">
+          </OBJECT>
+   </UL>
+</BODY>
+</HTML>

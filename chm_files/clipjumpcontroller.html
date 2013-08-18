@@ -1,0 +1,66 @@
+<html>
+
+<head>
+  <title>Clipjump Controller</title>
+  <link rel="stylesheet" href="Blogs.css" type="text/css">
+</head>
+
+<body>
+      <h1>Clipjump Controller v0.4</h1>
+      Control Clipjump completely<br /><br />
+      Clipjump Controller is a small-standalone application to control Clipjump.<br />
+      It can control all aspects of Clipjump, even Clipjump's Clipboard Monitoring.
+      The program is meant for <strong class="super">Clipjump 7.0 or above.</strong><br />
+      <br />
+      There are 2 modes in which the app can be used --<br />
+      <ul>
+      <li>Command-line Mode<br />
+      <dd>You can call ClipjumpControl.exe as <code class=syntax> clipjumpcontrol.exe <\switch></code> to perform desired action.<br />
+       </dd>
+
+       <li>GUI Mode<br />
+      <dd>You can simply run ClipjumpControl.exe to access the GUI. There you will get the whole set of options to control Clipjump.<br />
+      </dd>
+      </ul>
+      <br /><br />
+    <h2>The Options</h2>
+    There are 3 ways to control Clipjump --<br />
+    <ol>
+    <li>Selective Disable<br />
+    <dd>As the title is, this will disable only the selected compenents of Clipjump and leave all other un-touched.<br />
+    When you run ClipjumpControl.exe , you will see a GUI which will display all the components that can be disabled along with their codes.<br>
+    To disable multiple components through the GUI , select them and click OK . The Status Bar will display their summed code .
+    To access this mode from the commandline, sum up the required codes and send it as the primary switch .<br />
+    Code - <code>clipjumpcontrol.exe sum</code> where 'sum' is the summed up code.</dd>
+    <br>
+    Codes for disabling various functions are given below - 
+    <pre>    Clipboard Monitoring - 2
+    Paste Mode - 4    
+    Copy file path - 8
+    Copy folder path - 16
+    Copy file data - 32
+    Clipbord History Shortcut - 64
+    Select Channel - 128
+    One Time Stop shortcut - 256</pre>
+  <br><br>
+  
+    <li>Total Disable<br />
+    <dd>This will disable all functionalities of Clipjump and it's code (1048576) will be constant for future versions of Clipjump<br />
+    It's switch is <code class="Syntax">1048576</code><br />
+    Code - <code>clipjumpcontrol.exe 1048576</code></dd>
+  <br><br>
+  
+    <li>Enable<br />
+    <dd>This will enable Clipjump with all the components.<br />
+    It's code is 1<br />
+    Switch = <code class="Syntax">1</code><br />
+    Code - <code>clipjumpcontrol.exe 1</code></dd>
+    </ol><br /><br />
+    
+    <br /><br /><br />
+    <font size=+3><center><a href="https://dl.dropboxusercontent.com/u/116215806/Products/Clipjump/ClipjumpControl.exe">DOWNLOAD</a></FONT>
+    <br /></center>
+    <br /><br />
+</body>
+
+</html>
