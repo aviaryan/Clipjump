@@ -2,8 +2,10 @@
 ;== IDEAS ==
 ;	TEMPSAVE, CURSAVE
 ;		TOTALCLIPS
-;	Folders to be specified by N
+;	Folders to be specified by N ("", 1, 2, 3)
 ;	TotalClips = unlimited for other modes (1, 2, 3, 4, 5, 6)
+;
+;	CN.N contains Folder names amendment of the active Channel
 ;----------------------------------------------------------------------
 
 channelGUI(){
@@ -12,21 +14,26 @@ channelGUI(){
 
 	If ( ini_IsChannelMin != local_ini_IsChannelMin )
 	{
-		if !ini_IsChannelMin
-		{
-			Gui, Channel:New
+			Gui, Channel:New  ;Total width ~ 549
 			Gui, Font, S12
-			Gui, Add, Text, x4 y6 , &Choose Multi-Clipboard Channel
+			Gui, Add, Text, x4 y6 w235, &Choose Multi-Clipboard Channel
 			Gui, Font, S10
 			Gui, Add, Edit, x+165 yp-2 +Readonly vcIndex
-			Gui, Add, Updown,% "Wrap Range0-" CN.Total " gChannelupdown", 0
-		
+			Gui, Add, Updown,% "Wrap Range0-" CN.Total " gChannelupdown vChannelupdown", 0
+
+			Gui, Font, S12
+			Gui, Add, Text, x4 y+10 w235, Channel &Name
+			Gui, Font, S10
+			Gui, Add, Edit, x+165 yp-2 w150 vcname gedit_cname, % CN.Name
+
+		if !ini_IsChannelMin
+		{
 			Gui, Font, S8, Lucida Console
-			Gui, Add, Text, x4 y+30, Channel number 0 is the mainstream channel and should be used normally.
-			Gui, Add, Text, y+5 cGray, Consider using as less channels as possible.`nThis is just a suggestion.
-		
+			Gui, Add, Text, x4 y+25, Channel 0 (Default) is the mainstream channel and should be used normally.
+			Gui, Add, Text, y+5, Channel Name changes are saved automatically
+
 			Gui, Font, S10, Arial
-			Gui, Add, Button, x4 y+30 w90 gchannel_Usebutton, &Use Channel
+			Gui, Add, Button, x4 y+25 w90 gchannel_Usebutton, &Use Channel
 			Gui, Add, Button, x+385 yp+0 w70 gchannel_Cancelbutton, Cance&l
 			Gui, Add, StatusBar
 
@@ -34,13 +41,6 @@ channelGUI(){
 		}
 		else
 		{
-			Gui, Channel:New
-			Gui, Font, S12
-			Gui, Add, Text, x4 y6 , Choose Multi-Clipboard Channel
-			Gui, Font, S10
-			Gui, Add, Edit, x+165 yp-2 +Readonly vcIndex
-			Gui, Add, Updown,% "Wrap Range0-" CN.Total " gChannelupdown", 0
-
 			Gui, Add, StatusBar
 
 			Hotkey, IfWinActive, %PROGNAME% Channels
@@ -57,24 +57,22 @@ channelGUI(){
 	GuiControl,, cIndex, % CN.NG
 	Gui, Show, , Clipjump Channels
 
-	SB_SetText("Clips in the Channel : " CN["CURSAVE" CN.N])
+	SB_SetText("Clips in the Channel :" CN["CURSAVE" CN.N])
 	return
 
+edit_cname:
+	Gui, Channel:submit, nohide
+	ini_write("Channels", cIndex, cName, 0)
+	return
 
 Channel_usebutton:
-	Gui, Channel:Submit, hide
+	Gui, Channel:Submit, nohide
 	changeChannel(cIndex)
-	ToolTip % "Channel " CN.NG " active"
+	ToolTip % "Channel " CN.Name " active"
 	setTimer, TooltipOff, 500
 Channel_cancelbutton:
 	Gui, Channel:Hide
 	GuiControl, , cIndex, % CN.NG
-	return
-
-ChannelUpdown:
-	Gui, Channel:Submit, nohide
-	Gui, Channel:Default
-	SB_SetText("Clips in the Channel : " CN["CURSAVE" (!cIndex?"":cIndex)])
 	return
 
 channelGUIClose:
@@ -83,6 +81,14 @@ channelGUIEscape:
 	return
 
 }
+
+ChannelUpdown:
+	Gui, Channel:Submit, nohide
+	Gui, Channel:Default
+	SB_SetText("Clips in the Channel :" CN["CURSAVE" (!cIndex?"":cIndex)])
+	Iniread, cname, %CONFIGURATION_FILE%, channels,% cIndex, %A_space%
+	GuiControl,, cname, % (cname=="") ? cIndex : cname
+	return
 
 initChannels(){
 	global
@@ -101,7 +107,12 @@ initChannels(){
 		}
 		Else
 			break
-	CN["N"] := "" , CN.NG := !CN.N?0:CN.N 		;which channel is active
+	CN.NG := 0 
+
+	Iniread, temp, %CONFIGURATION_FILE%, channels, % CN.NG, %A_space%
+	CN.Name := (temp=="") or (temp==A_temp) ? "Default" : temp
+	ini_write("channels", "0", "Default")
+
 	CN["TOTALCLIPS"] := TOTALCLIPS
 }
 
@@ -109,8 +120,11 @@ initChannels(){
 changeChannel(cIndex){
 	global
 
-	if ( CN["TEMPSAVE" (cIndex-1)?cIndex-1:""] == "" )
+	if ( CN["TEMPSAVE" (cIndex?cIndex:"")] == "" )
 		CN.Total+=1
+
+	Iniread, temp, %CONFIGURATION_FILE%, channels, % cIndex, %A_space%
+	CN.Name := (temp=="") ? (!cIndex ? "Default" : cIndex) : temp
 
 	if !cIndex
 		TOTALCLIPS := CN["TOTALCLIPS"]
@@ -134,7 +148,20 @@ changeChannel(cIndex){
 	FileCreateDir, %THUMBS_dir%
 
 	LASTCLIP := LASTFORMAT := ""
-	copyMessage := MSG_TRANSFER_COMPLETE " {" CN.NG "}"
-	Menu, Tray, Tip, % PROGNAME " {" CN.NG "}"
+	copyMessage := MSG_TRANSFER_COMPLETE " {" CN.Name "}"
+	Menu, Tray, Tip, % PROGNAME " {" CN.Name "}"
 	
 }
+
+;-------------------------- ACCESSIBILTY SHORTCUTS ------------------------------------------------
+
+#if IsActive("Clipjump Channels", "window")
+	Up::
+		GuiControl, channel:, ChannelUpdown, +1
+		gosub, ChannelUpdown
+		return
+	Down::
+		GuiControl, channel:, ChannelUpdown, +-1
+		gosub, ChannelUpdown
+		return
+#if

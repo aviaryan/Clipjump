@@ -24,10 +24,10 @@ aboutGUI(){
 	
 	Gui, 2:Font, S12 norm +underline, Arial
 	Gui, 2:Add, Text, x2 y280 gsettings , Edit Settings
-	Gui, 2:Add, Text, yp+30 ghistory, See Clipjump's History (Win + C)
+	Gui, 2:Add, Text, yp+30 ghistory,% "See Clipjump's History (" hParse_Rev(history_K) ")"
 	Gui, 2:Add, Text, yp+30 ghlp, Help
 
-	Gui, 2:Show, w552, % PROGNAME " [ Channel: " CN.NG " ]"
+	Gui, 2:Show, w552, % PROGNAME " [ Channel: " CN.Name " ]"
 	return
 
 blog:
@@ -39,4 +39,37 @@ blog:
 	EmptyMem()
 	return
 
+}
+
+trayMenu(){
+	global
+
+	;Tray Icon
+	if !A_isCompiled			;Important for showing Cj's icon in the Titlebar of GUI
+		Menu, Tray, Icon, iconx.ico
+	Menu, Tray, NoStandard
+	Menu, Tray, Add, About %PROGNAME%, main
+	Menu, Tray, Tip, %PROGNAME% {Default}
+	Menu, Tray, Add		; separator
+	Menu, Tray, Add, &Incognito mode, incognito
+	Menu, Tray, Add 	; separator
+	Menu, Tray, Add,% "Clipboard &history`t" Hparse_Rev(history_K), history
+	Menu, Tray, Add,% "Select &Channel`t" Hparse_Rev(channel_K), channelGUI
+	Menu, Tray, Add, &Settings, settings
+	Menu, Tray, Add		; separator
+	Menu, Tray, Add, Check for &updates, updt
+	Menu, Tray, Add, Run at startup, strtup
+	Menu, Tray, Add, H&elp, hlp
+	Menu, Tray, Add		; separator
+	Menu, Tray, Add, &Restart, reload
+	Menu, Tray, Add, &Exit, qt
+	Menu, Tray, Default, About %PROGNAME%
+	return
+
+qt:
+	ExitApp
+
+reload:
+	Reload
+	return
 }

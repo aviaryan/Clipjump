@@ -10,11 +10,11 @@
 </OBJECT>
 <UL>
 	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="About">
+		<param name="Name" value="Contact">
 		<param name="Local" value="contact.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Clipjump">
+		<param name="Name" value="Index">
 		<param name="Local" value="clipjump.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
@@ -58,10 +58,25 @@
 		<param name="Local" value="USAGE/history.html#ipaste">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Insta-Paste (History GUI)">
-		<param name="Local" value="USAGE/history.html#incog">
+		<param name="Name" value="Modify/Disable History tool shortcut">
+		<param name="Local" value="USAGE/history.html#his_short">
 		</OBJECT>
-	
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Disable History keeping">
+		<param name="Local" value="USAGE/history.html#dis_his">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Export and share Clipboards">
+		<param name="Local" value="USAGE/basic_help.html#export">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Set names to Channels">
+		<param name="Local" value="USAGE/channels.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Changes in this version">
+		<param name="Local" value="clipjump.html#changes">
+		</OBJECT>
 </UL>
 </BODY>
 </HTML>

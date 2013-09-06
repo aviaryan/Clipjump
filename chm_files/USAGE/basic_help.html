@@ -20,6 +20,7 @@
 <li><a href=#fdata>Copying file content to Clipjump</a>
 <li><a href=#ot>One Time Stop</a>
 <li><a href=#nof>No formatting mode</a>
+<li><a href=#export>Exporting and sharing clipboards</a>
 <li><a href="../clipjumpcontroller.html">Clipjump Controller</a>
 </ul>
 <li><a href="settings.html">Settings Editor</a>
@@ -98,6 +99,8 @@ Explorer.</ul>
 <h3><a name=fdata>Copying File content to Clipjump</a></h3>
 <ul>
 <li>Pressing the shortcut Ctrl+Alt+F will copy selected file content to Clipjump
+<li><i>[8.4+]</i> The shortcut when pressed on a selected image file will copy its data to Clipboard.
+<li><code><a href="#export">.cj</a></code> files when used under this shortcut direct Clipjump to load contained Clipboard to itself.
 </ul>
 <br><br>
 
@@ -129,9 +132,18 @@ No formatting mode truncates formatting from Clipjump clips when they are pasted
 To access this mode, use the "Z" key as the toggle when in <strong class=super>[PASTE MODE]</strong><br>
 Press "Z" once while in [PASTE MODE] and you will see a <strong class="super">[NO-FORMATTING]</strong> in the Tip.<br>
 This will mean all the clipboard data pasted from now onwards will have Formatting truncated.<br>
-To disable this mode, press "Z" again while in [PASTE MODE] and the [NO-FORMATTING] text will dissappear.<br><br>
+To disable this mode, press "Z" again while in [PASTE MODE] and the [NO-FORMATTING] text will disappear.<br><br>
+<strong class=super>Note that</strong> that the No-Formatting setting doesn't mean that clips copied will not have any formatting, this means that the formatting will be 
+removed from them <b>temporarily</b> when they are pasted.<br><br>
 <img src="../images/noformat.jpg" border="0">
-<br><br><br>
+<br><br>
+
+<a name=export><h3>Export and share Clipboards</a></h3>
+Clipjump supports exporting clipboards as files which can be stored as a record OR send to a friend.<br>
+The feature is accessible by tapping <code>E</code> in <strong class=super>[PASTE MODE]</strong> and by the shortcut <code>Ctrl+E</code> in the Clipjump History Tool.<br>
+The Clip or Clipboard when exported will be saved in "My Documents" with a name <code>export[x].cj</code> where <code>x</code> is a variable.<br>
+The <code>.cj</code> file extension when used with <a href=#fdata>Copy File Data</a> directs Clipjump to load the file contents into itself.
+<br><br /><br>
 
 <h3><a name=short>Shortcut List</a></h3>
 <b>Ctrl Held/Pressed</b><br>
@@ -139,6 +151,7 @@ V - Move forward through Multiple Clipboards (from 1 to 2 , 2 to 3)<br>
 C - Move backwards through Multiple Clipboards (from 3 to 2 , 2 to 1) <br>
 S - Add current Clip to Windows Clipboard [Selective Windows Clipboard Option] <br>
 X - Toggle between, Cancel,Delete,Delete All MODE <br>
+E - Export current clip<br>
 Space - Fix/un-fix a clipboard at its position. <br>
 Z - Toggle Formatting for Clips <br><br>
 

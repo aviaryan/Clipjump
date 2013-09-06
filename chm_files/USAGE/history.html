@@ -6,8 +6,8 @@
 
 <body>
 <br>
-<h3><a name=his>Clipjump History Tool</a></h3><br>
-<img src="../images/history.jpg" border="0"><br><br>
+<h3><a name=his>Clipjump History Tool</a></h3><br><br>
+
 Clipjump's Clipboard History tool can be a real life saver when it's time comes.<br>
 This tool stores record of all the clipboard items transfered to Clipjump in the last "x" days. The "x" days can be selected a/c your preference from
  the settings editor.<br><br>
@@ -25,6 +25,25 @@ To enable Incognito mode, use the Tray menu.<br><br>
 
 <strong class="super">Tip</strong> - To view only Clipboard images in the History list, you can filter the listing with something like <br>
 <CODE CLASS=syntax>[Double-click to view image]</code><br><br>
+
+<a name=dis_his><strong class=super>Disabling the History tool</strong></a> - Change the <CODE>Number of days to keep items in History</code> setting to 0 to permanently 
+disable History tool. This will make Clipjump automatically start with the <b>Incognito Mode</b> ON as a symbol to show that History is not captured. <br>
+Please note that disabling the history tool in the way as said above will not delete old history items unlike to the fact that if you change the <code>Number of days to keep items in History</code> from 50 to 2, the history older than 2 days will be deleted by Clipjump.
+<br><br>
+
+<a name=his_short><strong class=super>Changing History Tool shortcut</strong></a> - The History tool shortcut (Win + C) can be changed or disabled via the Clipjump 
+Settings (Setting.ini) file. Just open the file and search for the key <code>history_K</code> in section <code>[Advanced]</code>. <br>
+By default, you will see the <i>history_K</i> key with the value <code>Win + C</code>. Empty this value to disable shortcut for History Tool or change this value to a 
+preferred shortcut to change the History tool shortcut.<br>
+Example values of <i>history_K</i> are -
+<pre>Shift+C
+Win+Alt+H
+
+Ctrl+Home
+F9</pre>
+The 3rd value is kept blank to demonstrate the NULL value which disables the History Tool shortcut.
+
+<br><br>
 </body>
 
 <html>

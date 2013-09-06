@@ -5,38 +5,56 @@ gui_History()
 ; Creates and shows a GUI for managing and viewing the clipboard history
 {
 	global
-	
+	static x, y
+
 	Gui, History:new
 	Gui, Margin, 7, 7
 	Gui, +Resize +MinSize390x110
 
 	Gui, Add, Button, w75 h23 Section Default Disabled	vhistory_ButtonPreview	ghistory_ButtonPreview, &Preview
-	Gui, Add, Button, x+6 ys w75 h23 Disabled			vhistory_ButtonDelete	ghistory_ButtonDelete, &Delete item
+	Gui, Add, Button, x+6 ys w75 h23 Disabled			vhistory_ButtonDelete	ghistory_ButtonDelete, Dele&te item
 	Gui, Add, Button, x+6 ys w75 h23 			vhistory_ButtonDeleteAll ghistory_ButtonDeleteAll, Clear &history
 	Gui, Add, Text, x+15 ys+5 					vhistory_SearchText,	Search &Filter:
 	Gui, Add, Edit, ys+1  	ghistory_SearchBox	vhistory_SearchBox
 	;Gui, Font, s9, Courier New
 	;Gui, Font, s9, Lucida Console
 	Gui, Font, s9, Consolas
-	Gui, Add, ListView, xs+1 AltSubmit HWNDhistoryLV ghistoryLV vhistoryLV LV0x4000, Clip|Date|Hiddendate	;	600|120|1
+	Gui, Add, ListView, xs+1 AltSubmit HWNDhistoryLV ghistoryLV vhistoryLV LV0x4000, Clip|Date|Hiddendate
 
 	Gui, Add, StatusBar,, % "Total Disk Consumption : " history_GetSize() " KB"
 	Gui, Font
 	;~ LV_Modify(1, "Focus")
 	;~ LV_Modify(1, "Select")
 	LV_ModifyCol(2, "Desc SortDesc")
-	;~ GuiControl, Focus, historyLV
 	GuiControl, Focus, history_SearchBox
 
 	;History Right-Click Menu
-	Menu, HisMenu, Add, Copy to %PROGNAME%, history_clipboard
-	Menu, HisMenu, Add		; separator
-	Menu, HisMenu, Add, Delete, history_ButtonDelete
-	
+	Menu, HisMenu, Add, &Preview, history_ButtonPreview
+	Menu, HisMenu, Add
+	Menu, HisMenu, Add, % "&Copy        (Ctrl+C)", history_clipboard
+	Menu, HisMenu, Add, % "&Insta-Paste (Shift+Enter)", history_InstaPaste
+	Menu, HisMenu, Add
+	Menu, HisMenu, Add, % "&Export Clip (Ctrl+E)", history_exportclip
+	Menu, HisMenu, Add, &Delete, history_ButtonDelete
+	Menu, HisMenu, Default, &Preview
+
+	Iniread, w, % CONFIGURATION_FILE, Clipboard_History_window, w, %A_Space%
+	Iniread, h, % CONFIGURATION_FILE, Clipboard_History_window, h, %A_Space%
+
 	historyUpdate()
-	Hotkey, $Del, history_key_Del, On
-	
-	Gui, History:Show, w600 h500, %PROGNAME% Clipboard History
+
+	if ((h+0) == WORKINGHT)
+	{
+		Gui, History:Show, Maximize, %PROGNAME% Clipboard History
+		WinMinimize, %PROGNAME% Clipboard History
+		WinMaximize, %PROGNAME% Clipboard History
+		GuiControl, focus, history_SearchBox
+	}
+	else
+		Gui, History:Show,% ( x ? "x" x " y" y : "" ) " w" (w?w:700) " h" (h?h:500), %PROGNAME% Clipboard History
+
+	WinWaitActive, %PROGNAME% Clipboard History
+	WinGetPos, x, y
 	return
 
 history_ButtonPreview:
@@ -56,15 +74,16 @@ history_ButtonDelete:
 	temp_row_s := 0 , rows_selected := "" , list_clipfilepath := ""
 	while (temp_row_s := Lv_GetNext(temp_row_s))
 		rows_selected .= temp_row_s ","
-	rows_selected := Substr(rows_selected, 1, -1)
+	rows_selected := Substr(rows_selected, 1, -1)     ;get CSV row numbers
+
+	;Get Row names
+	loop, parse, rows_selected,`,
+		LV_GetText(clip_file_path, A_LoopField, 3)
+		, list_clipfilepath .= clip_file_path "`n" 	;Important for faster results
 
 	;Delete Rows
 	loop, parse, rows_selected,`,
-	{
-		LV_GetText(clip_file_path, A_LoopField+1-A_index, 3)
-		LV_Delete( A_LoopField+1-A_index )
-		list_clipfilepath .= clip_file_path "`n" 	;Important for faster results
-	}
+		LV_Delete(A_LoopField+1-A_index)
 
 	;Delete items
 	loop, parse, list_clipfilepath, `n
@@ -127,30 +146,36 @@ historyGuiContextMenu:
 historyGuiSize:
 	if (A_EventInfo != 1)	; ignore minimising
 	{
-		w := a_guiwidth
-		h := a_guiheight
-		LV_ModifyCol(1, w-215)
-		GuiControl, Move, historyLV, % "w" (w - 15) " h" (h - 65)     ;+20 H in no STB
-		GuiControl, Move, history_SearchBox, % "x330 w" (w - 338)
+		gui_w := a_guiwidth
+		gui_h := a_guiheight
+		LV_ModifyCol(1, gui_w-215)
+		GuiControl, Move, historyLV, % "w" (gui_w - 15) " h" (gui_h - 65)     ;+20 H in no STB
+		GuiControl, Move, history_SearchBox, % "x330 w" (gui_w - 338)
 	}
-	return
-
-history_key_Del:
-	Gui, History:Default
-	if LV_GetNext(0)
-		gosub, history_ButtonDelete
-	else
-		Send, {Del}
 	return
 
 historyGuiClose:
 historyGuiEscape:
-	Hotkey, $Del, history_key_del, Off
+	Wingetpos, x, y, w, h, %PROGNAME% Clipboard History
+
+	h := h > WORKINGHT ? WORKINGHT : h-36                 ;36 is a value with which h is increased when using Wingetpos
+
+	Ini_write(temp_h := "Clipboard_History_window", "w", w, 0)
+	Ini_write(temp_h, "h", h, 0)
+
+	SendMessage, 0x1000+29, 0,	0, SysListView321, %PROGNAME% Clipboard History   ; 0x1000+29 is LVM_GETCOLUMNWIDTH
+	w1 := ErrorLevel
+	SendMessage, 0x1000+29, 1,	0, SysListView321, %PROGNAME% Clipboard History
+	w2 := ErrorLevel
+	Ini_write(temp_h, "w1", w1, 0)
+	Ini_write(temp_h, "w2", w2, 0)
+
 	Gui, History:Destroy
 	Menu, HisMenu, Delete
 	EmptyMem() 				;Free memory
 	return
 }
+
 
 gui_History_Preview(mode, previewText = "")
 ; Creates and shows a GUI for viewing history items
@@ -222,10 +247,11 @@ historyUpdate(crit="", create=true)
 	LV_Delete()
 	Loop, cache\history\*
 	{
-		if Instr(A_LoopFileFullPath, ".hst")
+		if Instr(A_LoopFileFullPath, ".txt")
 			Fileread, lv_temp, %A_LoopFileFullPath%
-		else
+		else if Instr(A_LoopFileFullPath, ".jpg")
 			lv_temp := MSG_HISTORY_PREVIEW_IMAGE
+		else Continue
 		
 		if Instr(lv_temp, crit)
 		{
@@ -235,8 +261,13 @@ historyUpdate(crit="", create=true)
 			LV_Add("", lv_Temp, lv_Date, A_LoopFileName)	; not parsing here to maximize speed
 		}
 	}
+
 	if create
-		LV_ModifyCol(1, "385") , LV_ModifyCol(2, "165") , Lv_ModifyCol(3, "0")
+	{
+		Iniread, w1,% CONFIGURATION_FILE, Clipboard_History_window, w1, %A_Space%
+		Iniread, w2,% CONFIGURATION_FILE, Clipboard_History_window, w2, %A_Space%
+		LV_ModifyCol(1, w1?w1:485) , LV_ModifyCol(2, w2?w2:165) , Lv_ModifyCol(3, "0")
+	}
 }
 
 history_GetSize(I := ""){
@@ -250,13 +281,25 @@ history_GetSize(I := ""){
     return R/1024
 }
 
-history_InstaPaste(){
+history_InstaPaste:
 	history_clipboard()
 	Gui, history:hide
 	WinWaitClose, Clipjump Clipboard History
 	Send, ^v
-}
+	return
 
+history_exportclip:
+	CALLER := false
+	history_clipboard()
+	ClipWait, ,1
+	loop
+		if !FileExist(temp := A_MyDocuments "\export" A_index ".cj")
+			break
+	Tooltip,% "Selected Clip exported to `n" temp
+	SetTimer, TooltipOff, 1000
+	FileAppend, %ClipboardAll%, %temp%
+	CALLER := true 
+	return
 
 LV_SortArrow(h, c, d="")	; by Solar (http://www.autohotkey.com/forum/viewtopic.php?t=69642)
 ; Shows a chevron in a sorted listview column pointing in the direction of sort (like in Explorer)
@@ -297,6 +340,11 @@ LV_SortArrow(h, c, d="")	; by Solar (http://www.autohotkey.com/forum/viewtopic.p
 		Send {Down}
 		return
 #if
-#if ( IsActive("SysListView321", "classnn") and IsActive("Clipjump Clipboard History", "window") )
-	+Enter::history_InstaPaste()
+#if ( IsActive("SysListView321", "classnn") and IsActive("Clipjump Clipboard History", "window") and ctrlRef!="pastemode" )
+	+Enter::gosub history_InstaPaste
+	^c::history_clipboard()
+	^e::gosub history_exportclip
+	Del::Send !t               ;Alt - shortcut for Delete
+	!d::Send !f  			   ;Alt - shortcut for Search
+	^f::Send !f
 #if

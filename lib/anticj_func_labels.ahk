@@ -9,6 +9,17 @@ EmptyMem(){
 	return, dllcall("psapi.dll\EmptyWorkingSet", "UInt", -1)
 }
 
+;Checks and makes sure Clipboard is available
+MakeClipboardAvailable(){
+
+	while !temp
+	{
+		temp := DllCall("OpenClipboard", "int", "")
+		sleep 10
+	}
+	DllCall("CloseClipboard")
+}
+
 ;GetFile()
 ;	Gets file path of selected item in Explorer
 
@@ -20,7 +31,7 @@ GetFile(hwnd=""){
 			if (window.hwnd==hwnd)
     sel := window.Document.SelectedItems
 	for item in sel
-	ToReturn .= item.path "`n"
+		ToReturn .= item.path "`n"
 	return Trim(ToReturn,"`n")
 }
 
@@ -99,36 +110,16 @@ Gdip_CaptureClipboard(file, quality){
 
 ;	Flexible Active entity analyzer
 
-IsActive(n, w="classnn"){
-	if w = classnn
+IsActive(what, oftype="classnn", ispattern=false){
+	if oftype = classnn
 		ControlGetFocus, O, A
-	else if w = window
+	else if oftype = window
 		WinGetActiveTitle, O
-	;msgbox % o
-	return ( O == n ) ? 1 : 0
-}
 
-;Taken from HotkeyParse()
-;	http://www.autohotkey.com/board/topic/92805-
-
-HParse_rev(Keycombo){
-
-	if Instr(Keycombo, "&")
-	{
-		loop,parse,Keycombo,&,%A_space%%A_tab%
-			toreturn .= A_LoopField " + "
-		return Substr(toreturn, 1, -3)
-	}
-	Else
-	{
-		StringReplace, Keycombo, Keycombo,^,Ctrl&
-		StringReplace, Keycombo, Keycombo,#,Win&
-		StringReplace, Keycombo, Keycombo,+,Shift&
-		StringReplace, Keycombo, Keycombo,!,Alt&
-		loop,parse,Keycombo,&,%A_space%%A_tab%
-			toreturn .= ( Strlen(A_LoopField)=1 ? _StringUpper(A_LoopField) : A_LoopField ) " + "
-		return Substr(toreturn, 1, -3)
-	}
+	if ispattern
+		return Instr(O, what) ? 1 : 0
+	else
+		return ( O == what ) ? 1 : 0
 }
 
 ;Taken from Miscellaneous Functions by Avi Aryan
@@ -147,12 +138,19 @@ getParams(sum){
 	return Substr(p,1,-1)
 }
 
-_StringUpper(str){
-	StringUpper, o, str
-	return o
-}
-
 TooltipOff:
 	SetTimer, TooltipOff, Off
 	ToolTip
 	return
+
+keyblocker:
+	return
+
+shortcutblocker_settings:
+	ControlGetFocus, temp, A
+	GuiControl, settings:,% temp,% A_ThisHotkey
+	return
+
+IsHotkeyControlActive(){
+	return IsActive("msctls_hotkey", "classnn", true)
+}

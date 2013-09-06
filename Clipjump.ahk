@@ -18,15 +18,18 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 7.8
+;@Ahk2Exe-SetVersion 8.4
 ;@Ahk2Exe-SetCopyright (C) 2013 Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
 SetWorkingDir, %A_ScriptDir%
 SetBatchLines,-1
 #SingleInstance, force
+#ClipboardTimeout 50              ;keeping this value low as I already check for OpenClipboard in OnClipboardChange label
 CoordMode, Mouse
 FileEncoding, UTF-8
+#HotkeyInterval 1000
+#MaxHotkeysPerInterval 1000
 
 if !A_IsAdmin
 	MsgBox, 16, WARNING, Clipjump is not running as Administrator`nThis (may) cause improper functioning of the program`nIf it does, you know what to do.
@@ -35,7 +38,7 @@ if !A_IsAdmin
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "7.8"
+global VERSION := "8.4"
 global CONFIGURATION_FILE := "settings.ini"
 global UPDATE_FILE := "https://dl.dropboxusercontent.com/u/116215806/Products/Clipjump/clipjumpversion.txt"
 global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/clipjump.html"
@@ -55,68 +58,61 @@ global MSG_HISTORY_PREVIEW_IMAGE := "[Double-click to view image]"
 global MSG_FILE_PATH_COPIED := "File path(s) copied to " PROGNAME
 global MSG_FOLDER_PATH_COPIED := "Active folder path copied to " PROGNAME
 
+Loop, cache\history\*.hst                 ;Rename old .hst extensions
+{
+	SplitPath, A_LoopFileName,,,, fileNameNoExt
+	FileMove, %A_LoopFileDir%\%fileNameNoExt%.hst, %A_LoopFileDir%\%fileNameNoExt%.txt, 1
+}
+
 ;*******************************************************************************
 
 ;Init Non-Ini Configurations
 Clipboard := ""
-safeSleepTime := 50
 FileDelete, % A_temp "/clipjumpcom.txt"
+
+;Global Data Holders
+Sysget, temp, MonitorWorkArea
+global WORKINGHT := tempbottom-temptop
+
+;Global Inits
+global CN := {} , TOTALCLIPS
+global CURSAVE, TEMPSAVE, LASTCLIP, LASTFORMAT
+global NOINCOGNITO := 1
 
 ;Ini Configurations
 Iniread, ini_Version, %CONFIGURATION_FILE%, System, Version
 
-If (!FileExist(CONFIGURATION_FILE) or ini_Version != VERSION)
+If !FileExist(CONFIGURATION_FILE)
 {
-	FileDelete % CONFIGURATION_FILE		;This is a nec. step to remove comments from prev. versions.
-	
-	IniWrite, 1, % CONFIGURATION_FILE, Main, limit_MaxClips
-	IniWrite, 20,% CONFIGURATION_FILE, Main, Minimum_No_Of_Clips_to_be_Active
-	IniWrite, 10,% CONFIGURATION_FILE, Main, Threshold
-	IniWrite, 1, % CONFIGURATION_FILE, Main, Show_Copy_Message
-	IniWrite, 90,% CONFIGURATION_FILE, Main, Quality_of_Thumbnail_Previews
-	IniWrite, 1, % CONFIGURATION_FILE, Main, Keep_Session
-
-	IniWrite, %VERSION%,% CONFIGURATION_FILE, System, Version
-
-	IniWrite, 10,% CONFIGURATION_FILE, Clipboard_History, Days_to_store
-	IniWrite, 1, % CONFIGURATION_FILE, Clipboard_History, Store_Images
-
-	IniWrite, ^!c,% CONFIGURATION_FILE, Shortcuts, Copyfilepath_K
-	IniWrite, ^!x,% CONFIGURATION_FILE, Shortcuts, Copyfolderpath_K
-	IniWrite, ^!f,% CONFIGURATION_FILE, Shortcuts, Copyfiledata_K
-	Iniwrite, ^+c,% CONFIGURATION_FILE, Shortcuts, channel_K
-	Iniwrite, !s, % CONFIGURATION_FILE, Shortcuts, onetime_K
-
-	IniWrite, 0,  % CONFIGURATION_FILE, Channels, IsChannelMin
-
-	FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%/Clipjump.lnk
+	save_default(1)
+	;FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%/Clipjump.lnk
 	
 	MsgBox, 52, Recommended, Do you want to see the Clipjump help ?
 	IfMsgBox, Yes
 		gosub, hlp
 
-	if !A_isUnicode 		;One time Unicode warning
+	if !A_isUnicode
 		MsgBox, 16, WARNING, It is recommended to use AHK_L Unicode for using Clipjump.`nIf you are using some another version`, you can but remember my word.`n`nDon't Worry `,this message will be shown just once .
 
 	try {
 		TrayTip, Clipjump, Hi!`nClipjump is now activated.`nTry doing some quick copy and pastes..., 10, 1
 	}
-
 }
+else if (ini_Version != VERSION)
+	save_default(0) 			;0 corresponds to selective save
+
 
 ;Global Ini declarations
 global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_IsChannelMin := 1 , CopyMessage
 		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, channel_K, onetime_K
 
-global CN := {} , TOTALCLIPS		;The single variable to control Multiple multi-Clipboard channels
-
 ;loading Settings
-load_Settings()
+load_Settings(1)
+trayMenu()
 validate_Settings()
 
+;Clean History
 historyCleanup()
-
-global CURSAVE, TEMPSAVE, LASTCLIP, LASTFORMAT, NOINCOGNITO := 1
 
 ;Initialising Clipjump Channels
 initChannels()
@@ -136,32 +132,7 @@ loop
 Gui +LastFound +AlwaysOnTop -Caption +ToolWindow
 gui, add, picture,x0 y0 w400 h300 vimagepreview,
 
-;Tray Icon
-if !A_isCompiled			;Important for showing Cj's icon in the Titlebar of GUI
-	Menu, Tray, Icon, iconx.ico
-
-;More GUIs can be seen in lib folder
-
-;******************************************************************
-;MENUS
-
-;MAIN TRAY
-Menu, Tray, NoStandard
-Menu, Tray, Add, %PROGNAME%, main
-Menu, Tray, Tip, %PROGNAME% {0}
-Menu, Tray, Add		; separator
-Menu, Tray, Add, Incognito Mode, incognito
-Menu, Tray, Add 	; separator
-Menu, Tray, Add,% "Select Channel`t`t" Hparse_Rev(channel_K), channelGUI
-Menu, Tray, Add, Clipboard History		Win+C, history
-Menu, Tray, Add, Preferences, settings
-Menu, Tray, Add		; separator
-Menu, Tray, Add, Run At Start Up, strtup
-Menu, Tray, Add, Check for Updates, updt
-Menu, Tray, Add, Help, hlp
-Menu, Tray, Add		; separator
-Menu, Tray, Add, Quit, qt
-Menu, Tray, Default, %PROGNAME%
+;More GUIs and Menus can be seen in lib folder
 
 ;********************************************************************
 ;STARTUP
@@ -169,7 +140,7 @@ IfExist, %A_Startup%/Clipjump.lnk
 {
 	FileDelete, %A_Startup%/Clipjump.lnk
 	FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%/Clipjump.lnk
-	Menu, Tray, Check, Run at start up
+	Menu, Tray, Check, Run at startup
 }
 
 ;Creating Storage Directories
@@ -193,22 +164,23 @@ global CLIPS_dir := "cache/clips"
 hkZ("$^v", "Paste")
 hkZ("$^c", "NativeCopy") , hkZ("$^x", "NativeCut")
 hkZ(Copyfilepath_K, "CopyFile") , hkZ(Copyfolderpath_K, "CopyFolder")
-hkZ("#c", "History")
+hkZ(history_K, "History")
 hkZ(Copyfiledata_K, "CopyFileData")
 hkZ(channel_K, "channelGUI")
 hkZ(onetime_K, "oneTime")
 
 ;Environment
 OnMessage(0x4a, "Receive_WM_COPYDATA")  ; 0x4a is WM_COPYDATA
-OnMessage(0x200, "WM_MOUSEMOVE")		; 0x200 is WM_MOUSEMOVE
 
 EmptyMem()
 return
-;End Of Auto-Execute============================================
+
+;End Of Auto-Execute================================================================================================================
 
 paste:
-	Gui, Hide
+	Gui, 1:Hide
 	CALLER := false
+	ctrlRef := "pastemode"
 	if IN_BACK
 	{
 		IN_BACK := false
@@ -226,9 +198,12 @@ paste:
 	}
 	else
 	{
-		hkZ("^c", "MoveBack") , hkZ("^x", "Cancel") , hkZ("^Z", "Formatting")
-		hkZ("^Space", "Fixate")
-		hkZ("^S", "Ssuspnd")
+		if !oldclip_exist
+		{
+			oldclip_exist := 1
+			oldclip_data := ClipboardAll       			;no single line
+		}
+		hkZ_Group(1)
 
 		FileRead, Clipboard, *c %A_ScriptDir%/%CLIPS_dir%/%TEMPSAVE%.avc
 		fixStatus := fixCheck()
@@ -260,17 +235,7 @@ onClipboardChange:
 	Critical, On
 	If CALLER
 	{
-		sleep % safeSleepTime
-
-		try {
-			DllCall("OpenClipboard", "int", "")
-			DllCall("CloseClipboard")
-		} catch {
-			MsgBox, 16, WARNING, % "Clipjump just now encountered an Error. `nIt will try to change internal settings to avoid the error in the future.`n"
-			 					. "Sorry for the inconvenience."
-			safeSleepTime +=50
-		}
-
+		makeClipboardAvailable()
 		if ( LASTFORMAT != (LASTFORMAT := GetClipboardFormat(0)) ) or ( LASTCLIP != Clipboard ) or ( Clipboard == "" )
 			clipChange(A_EventInfo)
 	}
@@ -279,7 +244,7 @@ onClipboardChange:
 		LASTFORMAT := GetClipboardFormat(0)
 		if onetimeOn
 		{
-			onetimeOn := false ;--- To avoid OnClipboardChange label to open this routine [IMPORTANT]
+			onetimeOn := 0 ;--- To avoid OnClipboardChange label to open this routine [IMPORTANT]
 			sleep 500 ;--- Allows the restore Clipboard Transfer in apps
 			CALLER := true
 			ToolTip, One Time Stop Deactivated
@@ -299,7 +264,7 @@ clipChange(ClipErrorlevel) {
 			LASTCLIP := clipboard
 
 			if NOINCOGNITO
-				FileAppend, %LASTCLIP%, cache\history\%A_Now%.hst
+				FileAppend, %LASTCLIP%, cache\history\%A_Now%.txt
 
 			ToolTip, %copyMessage%
 			TEMPSAVE := CURSAVE
@@ -320,8 +285,7 @@ clipChange(ClipErrorlevel) {
 			if ( CURSAVE >= TOTALCLIPS )
 				compacter()
 	}
-	sleep, 500
-	ToolTip
+	SetTimer, TooltipOff, 500
 	emptyMem()
 }
 
@@ -375,9 +339,8 @@ deleteall:
 
 nativeCopy:
 	Critical
-	hkZ("$^c", "nativeCopy", 0)
-	hkZ("$^c", "blocker")
-	LASTCLIP := ""
+	hkZ("$^c", "nativeCopy", 0) , hkZ("$^c", "keyblocker")
+	LASTCLIP := "" 
 	Send, ^c
 	setTimer, ctrlforCopy, 50
 	gosub, ctrlforCopy
@@ -385,8 +348,7 @@ nativeCopy:
 
 nativeCut:
 	Critical
-	hkZ("$^x", "nativeCut", 0)
-	hkZ("$^x", "blocker")
+	hkZ("$^x", "nativeCut", 0) , hkZ("$^x", "keyblocker")
 	LASTCLIP := ""
 	Send, ^x
 	setTimer, ctrlforCopy, 50
@@ -399,9 +361,6 @@ ctrlForCopy:
 		hkZ("$^c", "NativeCopy") , hkZ("$^x", "NativeCut")
 		SetTimer, ctrlforCopy, Off
 	}
-	return
-
-blocker:
 	return
 
 Formatting:
@@ -425,7 +384,10 @@ fixate:
 
 clipSaver() {
 	FileDelete, %CLIPS_dir%/%CURSAVE%.avc
+
+	makeClipboardAvailable()
 	FileAppend, %ClipboardAll%, %CLIPS_dir%/%CURSAVE%.avc
+
 	Loop, %CURSAVE%
 	{
 		tempNo := CURSAVE - A_Index + 1
@@ -444,6 +406,7 @@ clipSaver() {
 			FileMove, %FIXATE_dir%\%tempNo%.fxt, %FIXATE_dir%\%t_TempNo%.fxt
 		}
 	}
+
 }
 
 fixCheck() {
@@ -454,10 +417,10 @@ fixCheck() {
 ;Shows the Clipjump Paste Mode tooltip
 PasteModeTooltip() {
 	global
-	if ( Clipboard == "" )	; if blank
-		ToolTip % "{" CN.NG "} Clip " realclipno " of " CURSAVE "`t" fixStatus (WinExist("Display_Cj") ? "" : "`n`n" MSG_ERROR)
+	if Clipboard =
+		ToolTip % "{" CN.Name "} Clip " realclipno " of " CURSAVE "`t" fixStatus (WinExist("Display_Cj") ? "" : "`n`n" MSG_ERROR)
 	else
-		ToolTip % "{" CN.NG "} Clip " realclipno " of " CURSAVE "`t" GetClipboardFormat() "`t" fixstatus (!FORMATTING ? "`t[NO-FORMATTING]" : "") "`n`n" halfclip
+		ToolTip % "{" CN.Name "} Clip " realclipno " of " CURSAVE "`t" GetClipboardFormat() "`t" fixstatus (!FORMATTING ? "`t[NO-FORMATTING]" : "") "`n`n" halfclip
 }
 
 
@@ -499,20 +462,18 @@ ctrlCheck:
 			TEMPSAVE := realActive
 		}
 		SetTimer, ctrlCheck, Off
-		IN_BACK := false , tempClip := "" , ctrlRef := ""
+		IN_BACK := false , ctrlRef := ""
 
-		hkZ("^s", "ssuspnd", 0)
-		hkZ("^Space", "fixate", 0) , hkZ("^Z", "Formatting", 0)
-		hkZ("^c", "moveBack", 0)
-		hkZ("^x", "cancel", 0) , hkZ("^x", "DeleteAll", 0) , hkZ("^x", "Delete", 0)
+		hkZ_Group(0)
 
-		hkZ("$^c", "NativeCopy") , hkZ("$^x", "NativeCut")
-		
-		EmptyMem()
-		sleep % sleeptime
-		
+		if sleeptime != 100  ;pasted
+			oldclip_exist := 0
+			, Clipboard := oldclip_data
+
+		sleep % sleeptime-20
 		ToolTip
-		CALLER := true
+
+		CALLER := true , EmptyMem()
 	}
 	return
 
@@ -521,18 +482,27 @@ Ssuspnd:
 	ctrlRef := ""
 	TEMPSAVE := realActive
 
-	hkZ("^Space", "fixate", 0) , hkZ("^Z", "Formatting", 0)
-	hkZ("^c", "moveBack", 0)
-	hkZ("^s", "Ssuspnd", 0)
-	hkZ("^x", "cancel", 0) , hkZ("^x", "DeleteAll", 0) , hkZ("^x", "Delete", 0)
+	hkZ_Group(0)
 
-	hkZ("$^c", "NativeCopy") , hkZ("$^x", "NativeCut")
-
-	IN_BACK := CALLER := false
+	IN_BACK := CALLER := 0
 	addToWinClip(realactive , "has Clip " realclipno)
 	CALLER := true
-	Gui, Hide
+	Gui, 1:Hide
 	return
+
+hkZ_Group(mode=0){
+; mode=0 is initialising Clipjump
+; mode=1 is init Paste Mode
+	hkZ("^c", "MoveBack", mode) , hkZ("^x", "Cancel", mode) , hkZ("^Z", "Formatting", mode)
+	hkZ("^Space", "Fixate", mode) , hkZ("^S", "Ssuspnd", mode) , hkZ("^e", "export", mode)
+
+	if !mode        ;init Cj
+		hkZ("^x", "DeleteAll", 0) , hkZ("^x", "Delete", 0)
+		, hkZ("$^c", "NativeCopy") , hkZ("$^x", "NativeCut")
+
+}
+
+;---------------     Clips management based functions       ------------------
 
 compacter() {
 	loop, %ini_Threshold%
@@ -595,8 +565,7 @@ thumbGenerator() {
 ;~ ;**************** GUI Functions ***************************************************************************
 
 showPreview(){
-
-	static scrnhgt := A_ScreenHeight / 2.5 , scrnwdt := A_ScreenWidth / 2 , displayH , displayW
+	static scrnhgt := A_ScreenHeight / 2.5 , scrnwdt := A_ScreenWidth / 2
 
 	if FileExist(A_ScriptDir "\" THUMBS_dir "\" TEMPSAVE ".jpg")
 	{
@@ -626,6 +595,10 @@ historyCleanup()
 {
 	global
 	local cur_Time , temp_file_name
+
+	if !ini_DaysToStore                    ;Dont delete old data
+		return
+
 	cur_Time := A_now
 	Envadd, cur_Time, -%ini_DaysToStore%, D
 	Loop, cache\history\*
@@ -644,7 +617,7 @@ copyFile:
 	selectedFile := GetFile()
 	if ( selectedFile != "" )
 		Clipboard := selectedfile
-	CopyMessage := MSG_TRANSFER_COMPLETE " {" CN.NG "}"
+	CopyMessage := MSG_TRANSFER_COMPLETE " {" CN.Name "}"
 	return
 
 copyFolder:
@@ -652,25 +625,38 @@ copyFolder:
 	openedFolder := GetFolder()
 	if ( openedfolder != "" )
 		Clipboard := openedFolder
-	copyMessage := MSG_TRANSFER_COMPLETE " {" CN.NG "}"
+	copyMessage := MSG_TRANSFER_COMPLETE " {" CN.Name "}"
 	return
 
 CopyFileData:
+	hkZ(Copyfiledata_K, "CopyFileData", 0) ;disable key for repeate copies
+
 	selectedFile := GetFile()
-	FileRead, temp,% selectedFile
-	if temp !=
+	temp_extension := SubStr(selectedFile, Instr(selectedFile, ".", 0, 0)+1)
+
+	if temp_extension in jpg,jpeg,tiff,png,bmp,gif
+		Gdip_SetImagetoClipboard(selectedFile)
+
+	else if temp_extension in cj,avc
+	{
+		CALLER := 0
+		Fileread, Clipboard, *c %selectedFile%
+		ClipWait, 1, 1
+		oldclip := ClipboardAll
+		CALLER := true
+		Clipboard := oldclip , oldclip := ""           ;The methodology is adopted due to an AHK Bug
+	}
+	else
+	{
+		FileRead, temp,% selectedFile
 		Clipboard := temp
+	}
+
+	sleep 1000
+	hkZ(CopyFileData_k, "CopyFileData")
 	return
 
-;***************Extra Functions and Labels**********************************************************************
-
-Empty_Lastclip:
-	SetTimer, Empty_lastclip, Off
-	LASTCLIP := ""
-	return
-
-qt:
-	ExitApp
+;**********       Extra Functions and Labels            *******************************************************
 
 hlp:
 	if A_IsCompiled
@@ -698,7 +684,7 @@ main:
 	return
 
 strtup:
-	Menu, Tray, Togglecheck, Run at Start Up
+	Menu, Tray, Togglecheck, Run at Startup
 	IfExist, %A_Startup%/Clipjump.lnk
 		FileDelete, %A_Startup%/Clipjump.lnk
 	else FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%/Clipjump.lnk
@@ -735,8 +721,22 @@ oneTime:
 	return
 
 incognito:
-	Menu, Tray, Togglecheck, Incognito Mode
+	Menu, Tray, Togglecheck, &Incognito Mode
 	NOINCOGNITO := !NOINCOGNITO
+	return
+
+export:
+	Gui, 1:Hide
+	SetTimer, ctrlCheck, Off
+	ctrlRef := "" , TEMPSAVE := realActive
+	hkZ_Group(0) , CALLER := true
+
+	loop
+		if !FileExist(temp := A_MyDocuments "\export" A_index ".cj")
+			break
+	Tooltip % "{" CN.Name "} Clip " realClipNo " exported to `n" temp
+	SetTimer, TooltipOff, 1000
+	FileAppend, %ClipboardAll%, % temp
 	return
 
 ;type=1
@@ -762,6 +762,8 @@ GetClipboardFormat(type=1){		;Thanks nnnik
     	return x
 }
 
+;#################### COMMUNICATION ##########################################
+
 ;The function enables/disables Clipjump with respect to the Communicator.
 Act_CjControl(C){
 	global
@@ -773,7 +775,7 @@ Act_CjControl(C){
 		, hkZ("$^c", "NativeCopy") , hkZ("$^x", "NativeCut")
 		, hkZ(Copyfilepath_K, "CopyFile") , hkZ(Copyfolderpath_K, "CopyFolder"), hkZ(CopyFileData_K, "CopyFileData") 
 		, hkZ(Channel_K, "channelGUI") , hkZ(onetime_K, "onetime") 
-		, hkZ("$^v", "Paste") , hkZ("#c", "History")
+		, hkZ("$^v", "Paste") , hkZ(history_K, "History")
 		return
 	}
 
@@ -789,7 +791,7 @@ Act_CjControl(C){
 
 	loop, parse, d, %A_space%
 		if A_LoopField = 2
-			CALLER := false
+			CALLER := 0
 			, hkZ("$^c", "NativeCopy", 0) , hkZ("$^x", "NativeCut", 0)
 		else if A_LoopField = 4
 			hkZ("$^v", "Paste", 0)
@@ -800,14 +802,12 @@ Act_CjControl(C){
 		else if A_LoopField = 32
 			hkZ(CopyFileData_K, "CopyFileData", 0)
 		else if A_LoopField = 64
-			hkZ("#c", "History", 0)
+			hkZ(history_K, "History", 0)
 		else if A_LoopField = 128
 			hkZ(Channel_K, "channelGUI", 0)
 		else if A_LoopField = 256
 			hkZ(onetime_K, "onetime", 0)
 }
-
-;#################### COMMUNICATION ##########################################
 
 Receive_WM_COPYDATA(wParam, lParam)
 {
@@ -840,9 +840,13 @@ clipjumpcom_delete:
 
 #Include %A_ScriptDir%\lib\multi.ahk
 #Include %A_ScriptDir%\lib\aboutgui.ahk
-#include, %A_ScriptDir%\lib\Gdip_All.ahk
-#include, %A_ScriptDir%\lib\anticj_func_labels.ahk
-#include, %A_ScriptDir%\lib\settings gui plug.ahk
-#include, %A_ScriptDir%\lib\history gui plug.ahk
+#include %A_ScriptDir%\lib\Gdip_All.ahk
+#include %A_ScriptDir%\lib\anticj_func_labels.ahk
+#include %A_ScriptDir%\lib\settings gui plug.ahk
+#include %A_ScriptDir%\lib\history gui plug.ahk
+;#include %A_ScriptDir%\lib\history gui plug_new.ahk
+;#include %A_ScriptDir%\lib\dlg.ahk
+
+#include %A_ScriptDir%\lib\HotkeyParser.ahk
 
 ;------------------------------------------------------------------- X -------------------------------------------------------------------------------

@@ -9,6 +9,7 @@
 
 
 
+
 [OPTIONS]
 Binary TOC=No
 Binary Index=Yes
@@ -39,11 +40,9 @@ images\COPY.jpg
 images\delete.JPG
 images\deleteall.JPG
 images\fixate.JPG
-images\history.jpg
 images\noformat.jpg
 images\pasting.jpg
 images\path.jpg
-images\settings.jpg
 images\trayicon.jpg
 USAGE\basic_help.html
 USAGE\history.html

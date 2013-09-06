@@ -7,7 +7,10 @@ gui_Settings()
 {
 	global
 	local settingsHaveChanged := false
-	
+
+	;enable tooltips
+	OnMessage(0x200, "WM_MOUSEMOVE")
+
 	Gui, Settings:New
 	Gui, Margin, 8, 8
 	Gui, Add, GroupBox,	w289 h169, Main		; for every new checkbox add 21 pixels to the height, and for every new spinner (UpDown control) add 26 pixels
@@ -33,7 +36,7 @@ gui_Settings()
 
 	Gui, Add, Text,		xp+9 yp+22,		Number of days to keep items in &history:
 	Gui, Add, Edit,		xm+225 yp-3 w50 r1 Number vnew_DaysToStore gedit_DaysToStore
-	Gui, Add, UpDown,	Range1-200 gupdown_DaysToStore, %ini_DaysToStore%
+	Gui, Add, UpDown,	Range0-100000 gupdown_DaysToStore, %ini_DaysToStore%
 
 	Gui, Add, Checkbox,	xs y+8 Checked%ini_IsImageStored% vnew_IsImageStored gchkbox_IsImageStored, Store &images in history
 
@@ -61,12 +64,25 @@ gui_Settings()
 
 	Control, Disable, , &Apply, %PROGNAME% Settings	; disable the Apply button; see comment below
 	Gui, Settings:Show, , %PROGNAME% Settings
+
 	SetTimer, disableApplyButton	; for some reason the Apply button will not stay disabled unless this is done. Without this it'll disable then immediately enable again
 	if ini_limitMaxClips = 0
 	{
 		Control, Disable, , Edit1, %PROGNAME% Settings
 		Control, Disable, , Edit2, %PROGNAME% Settings
 	}
+
+	;disable hotkey keys
+	Hotkey, IfWinActive, %PROGNAME% Settings
+	#If IsHotkeyControlActive()
+	Hotkey, If, IsHotkeyControlActive()
+	Hotkey,% Copyfilepath_K, shortcutblocker_settings, On
+	Hotkey,% Copyfolderpath_K, shortcutblocker_settings, On
+	Hotkey,% Copyfiledata_K, shortcutblocker_settings, On
+	Hotkey,% channel_K, shortcutblocker_settings, On
+	Hotkey,% onetime_K, shortcutblocker_settings, On
+	#If
+
 	return
 
 chkbox_limitMaxClips:
@@ -121,6 +137,7 @@ settingsGuiEscape:
 settingsGuiClose:
 	Gui, Settings:Destroy
 	settingsHaveChanged := false
+	OnMessage(0x200, "")
 	EmptyMem()
 	return
 	
@@ -147,6 +164,8 @@ WM_MOUSEMOVE()	; From the help file
 {
     static currControl, prevControl, _TT  ; _TT is kept blank for use by the ToolTip command below.
 	
+	;--- Descriptions --------------
+
 	static NEW_LIMITMAXCLIPS_TT := "Will Clipjump's Clipboards be limited`nChecked = yes"
 	static NEW_MAXCLIPS_TT := "It is the minimum no of clipboards that you want simultaneously to be active.`nIf you want 20, SPECIFY 20."
 
@@ -182,6 +201,8 @@ WM_MOUSEMOVE()	; From the help file
 		The Minimal GUI will not contain any buttons, you will have to use ENTER to confirm.
 	)"
 
+	;---------------------------------------------
+
 	currControl := A_GuiControl
     If (currControl <> prevControl and !InStr(currControl, " ") and !Instr(currControl, "&"))
     {
@@ -204,7 +225,7 @@ removeToolTip:
     return
 }
 
-load_Settings()
+load_Settings(all=false)
 ; Preconditions: None
 ; Postconditions: Reads settings from the configuration file and saves them in corresponding variables beginning with "ini_".
 {
@@ -226,6 +247,12 @@ load_Settings()
 	Iniread, onetime_K,% CONFIGURATION_FILE, Shortcuts, onetime_K
 
 	Iniread, ini_IsChannelMin,% CONFIGURATION_FILE, Channels, IsChannelMin
+
+	if (all) {
+		Iniread, history_K,% CONFIGURATION_FILE, Advanced, history_K
+		history_K := HParse(history_K)
+	}
+
 }
 
 save_Settings()
@@ -264,6 +291,46 @@ save_Settings()
 
 }
 
+save_Default(full=1){
+; Saves the default settings for Clipjump
+	
+	if (full){
+	IniWrite, 1, % CONFIGURATION_FILE, Main, limit_MaxClips
+	IniWrite, 20,% CONFIGURATION_FILE, Main, Minimum_No_Of_Clips_to_be_Active
+	IniWrite, 10,% CONFIGURATION_FILE, Main, Threshold
+	IniWrite, 1, % CONFIGURATION_FILE, Main, Show_Copy_Message
+	IniWrite, 90,% CONFIGURATION_FILE, Main, Quality_of_Thumbnail_Previews
+	IniWrite, 1, % CONFIGURATION_FILE, Main, Keep_Session
+
+	IniWrite, 10,% CONFIGURATION_FILE, Clipboard_History, Days_to_store
+	IniWrite, 1, % CONFIGURATION_FILE, Clipboard_History, Store_Images
+	}
+
+	IniWrite, %VERSION%,% CONFIGURATION_FILE, System, Version
+
+	s := "Shortcuts"
+	Ini_Write(s, "Copyfilepath_K", "^!c")
+	Ini_Write(s, "Copyfolderpath_K", "^!x")
+	Ini_Write(s, "Copyfiledata_K", "^!f")
+	Ini_write(s, "channel_K", "^+c")
+	Ini_write(s, "onetime_k", "!s")
+
+	Ini_Write("Channels", "IsChannelMin", "0")
+	;---- Non GUI
+	Ini_write("Advanced", "history_k", "Win + c")
+}
+
+
+Ini_write(section, key, value, ifblank=true){
+	Iniread, v,% CONFIGURATION_FILE,% section,% key
+
+	if ifblank && (v == "ERROR")
+		IniWrite,% value,% CONFIGURATION_FILE,% section,% key
+	if !ifblank
+		IniWrite,% value,% CONFIGURATION_FILE,% section,% key
+}
+
+
 validate_Settings()
 ; The function validates the settings for Clipjump . 
 ; The reason validate_Settings() is not inside load_Settings() is conflicts with Ini_MaxClips and its unlimited value (0).
@@ -277,7 +344,7 @@ validate_Settings()
 	If ini_Threshold is not integer
 		ini_Threshold := 10
 
-	CopyMessage := ( !ini_IsMessage ? "" : MSG_TRANSFER_COMPLETE ) " {" ( (CN.NG=="") ? 0 : CN.NG ) "}"
+	CopyMessage := ( !ini_IsMessage ? "" : MSG_TRANSFER_COMPLETE ) " {" ( (CN.Name=="") ? "Default" : CN.Name ) "}"
 
 	If ini_Quality is not Integer
 		ini_Quality := 20
@@ -292,4 +359,10 @@ validate_Settings()
 
 	ini_IsImageStored := ini_IsImageStored = 0 ? 0 : 1
 	ini_DaysToStore := ini_DaysToStore < 0 ? 0 : ini_DaysToStore
+
+	if !ini_DaysToStore
+	{
+		NOINCOGNITO := false
+		Menu, Tray, check, &Incognito Mode
+	}
 }
