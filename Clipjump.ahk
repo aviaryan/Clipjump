@@ -31,9 +31,6 @@ FileEncoding, UTF-8
 #HotkeyInterval 1000
 #MaxHotkeysPerInterval 1000
 
-if !A_IsAdmin
-	MsgBox, 16, WARNING, Clipjump is not running as Administrator`nThis (may) cause improper functioning of the program`nIf it does, you know what to do.
-
 ;*********Program Vars**********************************************************
 ; Capitalised variables (here and everywhere) indicate that they are global
 
@@ -90,6 +87,9 @@ If !FileExist(CONFIGURATION_FILE)
 	MsgBox, 52, Recommended, Do you want to see the Clipjump help ?
 	IfMsgBox, Yes
 		gosub, hlp
+
+	if !A_IsAdmin
+		MsgBox, 16, WARNING, Clipjump is not running as Administrator`nThis (may) cause improper functioning of the program`nIf it does, you know what to do.
 
 	if !A_isUnicode
 		MsgBox, 16, WARNING, It is recommended to use AHK_L Unicode for using Clipjump.`nIf you are using some another version`, you can but remember my word.`n`nDon't Worry `,this message will be shown just once .
