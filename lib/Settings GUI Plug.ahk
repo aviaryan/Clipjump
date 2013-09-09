@@ -76,11 +76,11 @@ gui_Settings()
 	Hotkey, IfWinActive, %PROGNAME% Settings
 	#If IsHotkeyControlActive()
 	Hotkey, If, IsHotkeyControlActive()
-	Hotkey,% Copyfilepath_K, shortcutblocker_settings, On
-	Hotkey,% Copyfolderpath_K, shortcutblocker_settings, On
-	Hotkey,% Copyfiledata_K, shortcutblocker_settings, On
-	Hotkey,% channel_K, shortcutblocker_settings, On
-	Hotkey,% onetime_K, shortcutblocker_settings, On
+	Hotkey,% Copyfilepath_K, shortcutblocker_settings, On UseErrorLevel
+	Hotkey,% Copyfolderpath_K, shortcutblocker_settings, On UseErrorLevel
+	Hotkey,% Copyfiledata_K, shortcutblocker_settings, On UseErrorLevel
+	Hotkey,% channel_K, shortcutblocker_settings, On UseErrorLevel
+	Hotkey,% onetime_K, shortcutblocker_settings, On UseErrorLevel
 	#If
 
 	return
@@ -318,6 +318,7 @@ save_Default(full=1){
 	Ini_Write("Channels", "IsChannelMin", "0")
 	;---- Non GUI
 	Ini_write("Advanced", "history_k", "Win + c")
+	Ini_write("Advanced", "instapaste_write_clipboard", "0")
 }
 
 

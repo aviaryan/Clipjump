@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 8.4
+;@Ahk2Exe-SetVersion 8.5
 ;@Ahk2Exe-SetCopyright (C) 2013 Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -28,6 +28,7 @@ SetBatchLines,-1
 #ClipboardTimeout 50              ;keeping this value low as I already check for OpenClipboard in OnClipboardChange label
 CoordMode, Mouse
 FileEncoding, UTF-8
+ListLines, Off
 #HotkeyInterval 1000
 #MaxHotkeysPerInterval 1000
 
@@ -35,7 +36,7 @@ FileEncoding, UTF-8
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "8.4"
+global VERSION := "8.5"
 global CONFIGURATION_FILE := "settings.ini"
 global UPDATE_FILE := "https://dl.dropboxusercontent.com/u/116215806/Products/Clipjump/clipjumpversion.txt"
 global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/clipjump.html"
@@ -82,7 +83,6 @@ Iniread, ini_Version, %CONFIGURATION_FILE%, System, Version
 If !FileExist(CONFIGURATION_FILE)
 {
 	save_default(1)
-	;FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%/Clipjump.lnk
 	
 	MsgBox, 52, Recommended, Do you want to see the Clipjump help ?
 	IfMsgBox, Yes
@@ -152,7 +152,7 @@ FileCreateDir, cache/history
 FileSetAttrib, +H, %A_ScriptDir%\cache
 
 ;Initailizing Common Variables
-global CALLER := true
+global CALLER := CALLER_STATUS := true
 	, IN_BACK := false
 	, FORMATTING := true
 
@@ -194,7 +194,7 @@ paste:
 		Tooltip, %MSG_CLIPJUMP_EMPTY% 			;No Clip Exists
 		sleep, 700
 		Tooltip
-		CALLER := true
+		CALLER := CALLER_STATUS
 	}
 	else
 	{
@@ -246,7 +246,7 @@ onClipboardChange:
 		{
 			onetimeOn := 0 ;--- To avoid OnClipboardChange label to open this routine [IMPORTANT]
 			sleep 500 ;--- Allows the restore Clipboard Transfer in apps
-			CALLER := true
+			CALLER := 1
 			ToolTip, One Time Stop Deactivated
 			SetTimer, TooltipOff, 600
 		}
@@ -473,7 +473,7 @@ ctrlCheck:
 		sleep % sleeptime-20
 		ToolTip
 
-		CALLER := true , EmptyMem()
+		CALLER := CALLER_STATUS , EmptyMem()             ;If Controller orders CALLER 0 and user pastes data
 	}
 	return
 
@@ -486,7 +486,7 @@ Ssuspnd:
 
 	IN_BACK := CALLER := 0
 	addToWinClip(realactive , "has Clip " realclipno)
-	CALLER := true
+	CALLER := CALLER_STATUS
 	Gui, 1:Hide
 	return
 
@@ -643,7 +643,7 @@ CopyFileData:
 		Fileread, Clipboard, *c %selectedFile%
 		ClipWait, 1, 1
 		oldclip := ClipboardAll
-		CALLER := true
+		CALLER := CALLER_STATUS
 		Clipboard := oldclip , oldclip := ""           ;The methodology is adopted due to an AHK Bug
 	}
 	else
@@ -729,7 +729,7 @@ export:
 	Gui, 1:Hide
 	SetTimer, ctrlCheck, Off
 	ctrlRef := "" , TEMPSAVE := realActive
-	hkZ_Group(0) , CALLER := true
+	hkZ_Group(0) , CALLER := CALLER_STATUS
 
 	loop
 		if !FileExist(temp := A_MyDocuments "\export" A_index ".cj")
@@ -771,7 +771,7 @@ Act_CjControl(C){
 
 	if C = 1
 	{
-		CALLER := 1
+		CALLER := 1 , CALLER_STATUS := 1
 		, hkZ("$^c", "NativeCopy") , hkZ("$^x", "NativeCut")
 		, hkZ(Copyfilepath_K, "CopyFile") , hkZ(Copyfolderpath_K, "CopyFolder"), hkZ(CopyFileData_K, "CopyFileData") 
 		, hkZ(Channel_K, "channelGUI") , hkZ(onetime_K, "onetime") 
@@ -791,7 +791,7 @@ Act_CjControl(C){
 
 	loop, parse, d, %A_space%
 		if A_LoopField = 2
-			CALLER := 0
+			CALLER := 0 , CALLER_STATUS := 0
 			, hkZ("$^c", "NativeCopy", 0) , hkZ("$^x", "NativeCut", 0)
 		else if A_LoopField = 4
 			hkZ("$^v", "Paste", 0)

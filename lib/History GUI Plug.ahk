@@ -1,11 +1,11 @@
 ;History Gui labels and functions
-;A lot Thanks to chaz
+;A lot Thanks to chazc
 
 gui_History()
 ; Creates and shows a GUI for managing and viewing the clipboard history
 {
 	global
-	static x, y
+	static x, y, date_sort := 0
 
 	Gui, History:new
 	Gui, Margin, 7, 7
@@ -25,7 +25,6 @@ gui_History()
 	Gui, Font
 	;~ LV_Modify(1, "Focus")
 	;~ LV_Modify(1, "Select")
-	LV_ModifyCol(2, "Desc SortDesc")
 	GuiControl, Focus, history_SearchBox
 
 	;History Right-Click Menu
@@ -42,6 +41,7 @@ gui_History()
 	Iniread, h, % CONFIGURATION_FILE, Clipboard_History_window, h, %A_Space%
 
 	historyUpdate()
+	LV_ModifyCol(2, date_sort ? "Sort" : "SortDesc")
 
 	if ((h+0) == WORKINGHT)
 	{
@@ -109,6 +109,7 @@ history_SearchBox:
 	return
 
 historyLV:
+
 	Gui, History:Default
 	GuiControl, Enable, history_ButtonDelete
 	GuiControl, Enable, history_ButtonPreview
@@ -131,6 +132,7 @@ historyLV:
 		gosub, history_ButtonPreview
 	else if A_GuiEvent = ColClick
 		LV_SortArrow(historyLV, A_EventInfo)
+		, date_sort := A_EventInfo=2 ? !date_sort : date_sort
 	return
 
 history_clipboard:
@@ -258,7 +260,7 @@ historyUpdate(crit="", create=true)
 			lv_Date := Substr(A_LoopFileName,1,4) "-" Substr(A_LoopFileName,5,2) "-" Substr(A_LoopFileName,7,2) "  "
 						. Substr(A_LoopFileName,9,2) ":" Substr(A_LoopFileName,11,2) ":" Substr(A_LoopFileName, 13, 2)
 
-			LV_Add("", lv_Temp, lv_Date, A_LoopFileName)	; not parsing here to maximize speed
+			LV_Add("", lv_temp, lv_Date, A_LoopFileName)	; not parsing here to maximize speed
 		}
 	}
 
@@ -282,10 +284,17 @@ history_GetSize(I := ""){
 }
 
 history_InstaPaste:
-	history_clipboard()
+	IniRead, clipboard_instapaste, % CONFIGURATION_FILE, Advanced, Instapaste_write_clipboard, %A_Space%
+	if clipboard_instapaste
+		history_clipboard()
+	else
+		CALLER := 0
+		, history_clipboard()
+
 	Gui, history:hide
 	WinWaitClose, Clipjump Clipboard History
 	Send, ^v
+	CALLER := CALLER_STATUS
 	return
 
 history_exportclip:
@@ -298,7 +307,7 @@ history_exportclip:
 	Tooltip,% "Selected Clip exported to `n" temp
 	SetTimer, TooltipOff, 1000
 	FileAppend, %ClipboardAll%, %temp%
-	CALLER := true 
+	CALLER := CALLER_STATUS
 	return
 
 LV_SortArrow(h, c, d="")	; by Solar (http://www.autohotkey.com/forum/viewtopic.php?t=69642)
