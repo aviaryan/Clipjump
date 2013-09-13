@@ -1,5 +1,5 @@
 ;Gui Settings for Clipjump
-;A lot of thanks to chaz
+;A lot of thanks to cha
 
 gui_Settings()
 ; Preconditions: ini settings in variables starting with _ini
@@ -13,7 +13,7 @@ gui_Settings()
 
 	Gui, Settings:New
 	Gui, Margin, 8, 8
-	Gui, Add, GroupBox,	w289 h169, Main		; for every new checkbox add 21 pixels to the height, and for every new spinner (UpDown control) add 26 pixels
+	Gui, Add, GroupBox,	w289 h179, Main		; for every new checkbox add 21 pixels to the height, and for every new spinner (UpDown control) add 26 pixels
 	
 	Gui, Add, CheckBox, xp+9 yp+22 Section Checked%ini_limitMaxClips% vnew_limitMaxClips gchkbox_limitMaxClips, &Limit the maximum number of active clipboards	; when this is checked the following two controls will be disabled
 	Gui, Add, Text,		xs+16, &Minimum number of active clipboards:
@@ -32,7 +32,7 @@ gui_Settings()
 	Gui, Add, Checkbox, xs Checked%ini_KeepSession%		vnew_KeepSession		gchkbox_KeepSession,		&Retain clipboard data upon application restart
 
 	;---- Clipboard H
-	Gui, Add, GroupBox,	xm y185 w289 h74,	Clipboard History  ;h=169 + 16
+	Gui, Add, GroupBox,	xm y195 w289 h74,	Clipboard History  ;h=169 + 16 ; + 10 in v8.7
 
 	Gui, Add, Text,		xp+9 yp+22,		Number of days to keep items in &history:
 	Gui, Add, Edit,		xm+225 yp-3 w50 r1 Number vnew_DaysToStore gedit_DaysToStore
@@ -41,8 +41,10 @@ gui_Settings()
 	Gui, Add, Checkbox,	xs y+8 Checked%ini_IsImageStored% vnew_IsImageStored gchkbox_IsImageStored, Store &images in history
 
 	;---- Shortcuts
-	Gui, Add, GroupBox, ym w289 h169 vshortcutgroupbox,	Shortcuts
-	Gui, Add, Text, 	xp+9 yp+22 section,	Copy File Path(s)
+	Gui, Add, GroupBox, ym w289 h179 vshortcutgroupbox,	Shortcuts
+	Gui, Add, Text, 	xp+9 yp+22 section,	Paste-Mode (Ctrl + ..)
+	Gui, Add, Edit, 	Limit1 Uppercase -Wantreturn xs+155 yp-3 w120 vpst_K ghotkey_paste, % paste_k
+	Gui, Add, Text, 	xs y+8,		Copy File Path(s)
 	Gui, Add, Hotkey, 	xs+155 yp-3 vcfilep_K   ghotkey_cfilep, % Copyfilepath_K
 	Gui, Add, Text,		xs y+8,		Copy Active Folder Path
 	Gui, Add, Hotkey,	xs+155 yp-3 vcfolderp_K ghotkey_cfolderp, % Copyfolderpath_K
@@ -54,18 +56,16 @@ gui_Settings()
 	Gui, Add, Hotkey,	xs+155 yp-3 vot_K		ghotkey_ot, % onetime_K
 
 	;---- Channels
-	Gui, Add, GroupBox, xs-9 y185 w289 h74, Clipjump Channels 	;h=169 + 16
+	Gui, Add, GroupBox, xs-9 y195 w289 h74, Clipjump Channels 	;h=169 + 16 ; +10 in v8.7 
 	Gui, Add, Checkbox, xs yp+22 Checked%ini_IsChannelMin% vnew_IsChannelMin gchkbox_isChannelMin, Use Minimal GUI
 
 	;---- Buttons
-	Gui, Add, Button,	x186 y280 w75 h23 Default, 	&OK 	;57 in vertical
+	Gui, Add, Button,	x186 y290 w75 h23 Default, 	&OK 	;57 in vertical
 	Gui, Add, Button,	x+8 w75 h23,			&Cancel
 	Gui, Add, Button,	x+8 w75 h23	Disabled,	&Apply
 
-	Control, Disable, , &Apply, %PROGNAME% Settings	; disable the Apply button; see comment below
 	Gui, Settings:Show, , %PROGNAME% Settings
 
-	SetTimer, disableApplyButton	; for some reason the Apply button will not stay disabled unless this is done. Without this it'll disable then immediately enable again
 	if ini_limitMaxClips = 0
 	{
 		Control, Disable, , Edit1, %PROGNAME% Settings
@@ -81,8 +81,9 @@ gui_Settings()
 	Hotkey,% Copyfiledata_K, shortcutblocker_settings, On UseErrorLevel
 	Hotkey,% channel_K, shortcutblocker_settings, On UseErrorLevel
 	Hotkey,% onetime_K, shortcutblocker_settings, On UseErrorLevel
+	Hotkey, If
 	#If
-
+	Hotkey, If
 	return
 
 chkbox_limitMaxClips:
@@ -121,6 +122,15 @@ chkbox_ischannelmin:
 	settingsHaveChanged := true
 	return
 
+hotkey_paste:
+	GuiControlGet, pst_k
+	pst_K := Trim(pst_k, "ESCXZ `t")
+	if pst_k =
+		GuiControl,, pst_k
+	Control, Enable, , &Apply, %PROGNAME% Settings
+	settingsHaveChanged := true
+	return
+
 settingsButtonOk:
 	Gui, Settings:Submit, NoHide
 	if settingsHaveChanged		; we don't it to save if settings haven't changed (to increase performance, though minimal)
@@ -151,11 +161,6 @@ settingsButtonApply:
 	}
 	Control, Disable, , &Apply, %PROGNAME% Settings
 	return
-	
-disableApplyButton:
-	SetTimer, disableApplyButton, Off
-	Control, Disable, , &Apply, %PROGNAME% Settings
-	return
 }
 
 WM_MOUSEMOVE()	; From the help file
@@ -184,6 +189,8 @@ WM_MOUSEMOVE()	; From the help file
 	static NEW_DAYSTOSTORE_TT := "Number of days for which the clipboard record will be stored"
 	static NEW_ISIMAGESTORED_TT := "Should clipboard images be stored in history ?"
 
+	static pst_k_TT := "Single character combination to use with Ctrl in activating [PASTE MODE]`nNote that letters  E C X Z S  are reserved."
+						. "`n`nAlso make sure to see ""Setting shortcut to copy to system Clipboard"" in the help file"
 	static chnl_K_TT := "Shortcut to show the <Select Channel> Window`nSet the shortcut to None to disable the key combination"
 	static cfilep_K_TT := "Shortcut to copy selected file's path`nSet the shortcut to None to disable the functionality"
 	static cfolderp_K_TT := "Shortcut to copy selected folder's path`nSet the shortcut to None to disable the functionality"
@@ -245,12 +252,21 @@ load_Settings(all=false)
 	IniRead, Copyfiledata_K,% CONFIGURATION_FILE, Shortcuts, Copyfiledata_K
 	Iniread, channel_K,% CONFIGURATION_FILE, Shortcuts, channel_K
 	Iniread, onetime_K,% CONFIGURATION_FILE, Shortcuts, onetime_K
+	Iniread, paste_K, % CONFIGURATION_FILE, Shortcuts, paste_K
 
 	Iniread, ini_IsChannelMin,% CONFIGURATION_FILE, Channels, IsChannelMin
 
 	if (all) {
-		Iniread, history_K,% CONFIGURATION_FILE, Advanced, history_K
+		Iniread, history_K,  % CONFIGURATION_FILE, Advanced, history_K
 		history_K := HParse(history_K)
+		Iniread, FORMATTING, % CONFIGURATION_FILE, Advanced, Start_with_formatting
+		FORMATTING := FORMATTING = ERROR ? 1 : FORMATTING
+		Iniread, MSG_PASTING_t,% CONFIGURATION_FILE, Advanced, Show_pasting_tip, %A_space%
+		MSG_PASTING := MSG_PASTING_t ? MSG_PASTING : ""
+
+		iniread, windows_copy_k,% CONFIGURATION_FILE, Advanced, windows_copy_shortcut, %A_space%
+		iniread, windows_cut_k, % CONFIGURATION_FILE, Advanced, windows_cut_shortcut, %A_space%
+		windows_copy_k := HParse(windows_copy_k) , windows_cut_k := Hparse(windows_cut_k)
 	}
 
 }
@@ -274,6 +290,7 @@ save_Settings()
 	IniWrite, %Cfiled_K%  ,% CONFIGURATION_FILE, Shortcuts, Copyfiledata_K
 	Iniwrite, %chnl_K%	  ,% CONFIGURATION_FILE, Shortcuts, channel_K
 	IniWrite, %ot_K% 	  ,% CONFIGURATION_FILE, Shortcuts, onetime_K
+	Iniwrite, %pst_k%	  ,% CONFIGURATION_FILE, Shortcuts, paste_K
 
 	Iniwrite, %new_ischannelMin%, % CONFIGURATION_FILE , Channels, IsChannelMin
 
@@ -282,13 +299,14 @@ save_Settings()
 	, hkZ( (T := Cfiled_K) ? T : Copyfiledata_K,     "CopyFileData", T?1:0)
 	, hkZ( (T := chnl_K)   ? T : channel_K,			 "channelGUI",  T?1:0)
 	, hkZ( (T := ot_K)	   ? T : onetime_K,			"onetime",		T?1:0)
+	, hkZ( "$^" ( (T := pst_k) ? T : paste_k ), 		"paste", 	T?1:0)
 
 	Copyfilepath_K := cfilep_K
 	, Copyfolderpath_K := cfolderp_K
 	, Copyfilepath_K := cfiled_K
 	, channel_K := chnl_K
 	, onetime_K := ot_K
-
+	, paste_K := pst_K
 }
 
 save_Default(full=1){
@@ -314,11 +332,16 @@ save_Default(full=1){
 	Ini_Write(s, "Copyfiledata_K", "^!f")
 	Ini_write(s, "channel_K", "^+c")
 	Ini_write(s, "onetime_k", "!s")
+	ini_write(s, "paste_k", "V")
 
 	Ini_Write("Channels", "IsChannelMin", "0")
 	;---- Non GUI
-	Ini_write("Advanced", "history_k", "Win + c")
-	Ini_write("Advanced", "instapaste_write_clipboard", "0")
+	Ini_write(s := "Advanced", "history_k", "Win + c")
+	Ini_write(s, "instapaste_write_clipboard", "0")
+	ini_write(s, "Start_with_formatting", "1")
+	ini_write(s, "Show_pasting_tip", "1")
+	ini_write(s, "windows_copy_shortcut", "")
+	ini_write(s, "windows_cut_shortcut",  "")
 }
 
 
@@ -364,6 +387,12 @@ validate_Settings()
 	if !ini_DaysToStore
 	{
 		NOINCOGNITO := false
+		if CALLER_STATUS
+			Menu, tray, icon, icons\no_history.ico
 		Menu, Tray, check, &Incognito Mode
 	}
+
+	if paste_K = ERROR
+		paste_K := "V"
+	paste_K := Substr(paste_K, 1, 1)
 }

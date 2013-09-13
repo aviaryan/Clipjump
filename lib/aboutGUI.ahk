@@ -46,10 +46,10 @@ trayMenu(){
 
 	;Tray Icon
 	if !A_isCompiled			;Important for showing Cj's icon in the Titlebar of GUI
-		Menu, Tray, Icon, iconx.ico
+		Menu, Tray, Icon, icons\icon.ico
 	Menu, Tray, NoStandard
 	Menu, Tray, Add, About %PROGNAME%, main
-	Menu, Tray, Tip, %PROGNAME% {Default}
+	Menu, Tray, Tip, % PROGNAME " {" CN.Name "}"
 	Menu, Tray, Add		; separator
 	Menu, Tray, Add, &Incognito mode, incognito
 	Menu, Tray, Add 	; separator

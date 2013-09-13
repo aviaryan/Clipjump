@@ -1,5 +1,5 @@
 ;History Gui labels and functions
-;A lot Thanks to chazc
+;A lot Thanks to chaz
 
 gui_History()
 ; Creates and shows a GUI for managing and viewing the clipboard history
@@ -31,7 +31,7 @@ gui_History()
 	Menu, HisMenu, Add, &Preview, history_ButtonPreview
 	Menu, HisMenu, Add
 	Menu, HisMenu, Add, % "&Copy        (Ctrl+C)", history_clipboard
-	Menu, HisMenu, Add, % "&Insta-Paste (Shift+Enter)", history_InstaPaste
+	Menu, HisMenu, Add, % "&Insta-Paste (Space)", history_InstaPaste
 	Menu, HisMenu, Add
 	Menu, HisMenu, Add, % "&Export Clip (Ctrl+E)", history_exportclip
 	Menu, HisMenu, Add, &Delete, history_ButtonDelete
@@ -151,18 +151,18 @@ historyGuiSize:
 		gui_w := a_guiwidth
 		gui_h := a_guiheight
 		LV_ModifyCol(1, gui_w-215)
-		GuiControl, Move, historyLV, % "w" (gui_w - 15) " h" (gui_h - 65)     ;+20 H in no STB
+		GuiControl, Move, historyLV, % "w" (gui_w - 15) " h" (gui_h - 65)     ;+20 H in no STatus Bar
 		GuiControl, Move, history_SearchBox, % "x330 w" (gui_w - 338)
 	}
 	return
 
 historyGuiClose:
 historyGuiEscape:
-	Wingetpos, x, y, w, h, %PROGNAME% Clipboard History
+	Wingetpos,,,, h, %PROGNAME% Clipboard History
 
-	h := h > WORKINGHT ? WORKINGHT : h-36                 ;36 is a value with which h is increased when using Wingetpos
+	h := h > WORKINGHT ? WORKINGHT : gui_h               ;gui_h and gui_w are function vars created in the historyGUISIze label (above).
 
-	Ini_write(temp_h := "Clipboard_History_window", "w", w, 0)
+	Ini_write(temp_h := "Clipboard_History_window", "w", gui_w, 0)
 	Ini_write(temp_h, "h", h, 0)
 
 	SendMessage, 0x1000+29, 0,	0, SysListView321, %PROGNAME% Clipboard History   ; 0x1000+29 is LVM_GETCOLUMNWIDTH
@@ -350,7 +350,7 @@ LV_SortArrow(h, c, d="")	; by Solar (http://www.autohotkey.com/forum/viewtopic.p
 		return
 #if
 #if ( IsActive("SysListView321", "classnn") and IsActive("Clipjump Clipboard History", "window") and ctrlRef!="pastemode" )
-	+Enter::gosub history_InstaPaste
+	Space::gosub history_InstaPaste
 	^c::history_clipboard()
 	^e::gosub history_exportclip
 	Del::Send !t               ;Alt - shortcut for Delete

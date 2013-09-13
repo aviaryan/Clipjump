@@ -71,7 +71,7 @@ Channel_usebutton:
 	ToolTip % "Channel " CN.Name " active"
 	setTimer, TooltipOff, 500
 Channel_cancelbutton:
-	Gui, Channel:Hide
+	Gui, Channel:hide
 	GuiControl, , cIndex, % CN.NG
 	return
 

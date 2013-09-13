@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 8.5
+;@Ahk2Exe-SetVersion 8.7b1
 ;@Ahk2Exe-SetCopyright (C) 2013 Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -36,7 +36,7 @@ ListLines, Off
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "8.5"
+global VERSION := "8.7b1"
 global CONFIGURATION_FILE := "settings.ini"
 global UPDATE_FILE := "https://dl.dropboxusercontent.com/u/116215806/Products/Clipjump/clipjumpversion.txt"
 global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/clipjump.html"
@@ -77,6 +77,16 @@ global CN := {} , TOTALCLIPS
 global CURSAVE, TEMPSAVE, LASTCLIP, LASTFORMAT
 global NOINCOGNITO := 1
 
+;Initailizing Common Variables
+global CALLER := CALLER_STATUS := true
+	, IN_BACK := false
+
+;Setting up Icons
+FileCreateDir, icons
+;FileInstall, icons\icon.ico, icons\icon.ico, Flag (1 = overwrite)]
+FileInstall, icons\no_history.Ico, icons\no_history.Ico, 0 			;Allow users to have their icons
+FileInstall, icons\no_monitoring.ico, icons\no_monitoring.ico, 0
+
 ;Ini Configurations
 Iniread, ini_Version, %CONFIGURATION_FILE%, System, Version
 
@@ -103,19 +113,17 @@ else if (ini_Version != VERSION)
 
 
 ;Global Ini declarations
-global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_IsChannelMin := 1 , CopyMessage
-		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, channel_K, onetime_K
+global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_IsChannelMin := 1 , CopyMessage, FORMATTING
+		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, channel_K, onetime_K, paste_k
+global windows_copy_k, windows_cut_k
+
+;Initialising Clipjump Channels
+initChannels()
 
 ;loading Settings
 load_Settings(1)
 trayMenu()
 validate_Settings()
-
-;Clean History
-historyCleanup()
-
-;Initialising Clipjump Channels
-initChannels()
 
 loop
 {
@@ -151,17 +159,12 @@ FileCreateDir, cache/fixate
 FileCreateDir, cache/history
 FileSetAttrib, +H, %A_ScriptDir%\cache
 
-;Initailizing Common Variables
-global CALLER := CALLER_STATUS := true
-	, IN_BACK := false
-	, FORMATTING := true
-
 global CLIPS_dir := "cache/clips"
 	, THUMBS_dir := "cache/thumbs"
 	, FIXATE_dir := "cache/fixate"
 
 ;Setting Up shortcuts
-hkZ("$^v", "Paste")
+hkZ( ( paste_k ? "$^" paste_k : emptyvar ) , "Paste")
 hkZ("$^c", "NativeCopy") , hkZ("$^x", "NativeCut")
 hkZ(Copyfilepath_K, "CopyFile") , hkZ(Copyfolderpath_K, "CopyFolder")
 hkZ(history_K, "History")
@@ -169,8 +172,14 @@ hkZ(Copyfiledata_K, "CopyFileData")
 hkZ(channel_K, "channelGUI")
 hkZ(onetime_K, "oneTime")
 
+;more shortcuts
+hkZ(windows_copy_k, "windows_copy") , hkZ(windows_cut_k, "windows_cut")
+
 ;Environment
 OnMessage(0x4a, "Receive_WM_COPYDATA")  ; 0x4a is WM_COPYDATA
+
+;Clean History
+historyCleanup()
 
 EmptyMem()
 return
@@ -249,6 +258,11 @@ onClipboardChange:
 			CALLER := 1
 			ToolTip, One Time Stop Deactivated
 			SetTimer, TooltipOff, 600
+
+			if A_IsCompiled     ;Icon
+				Menu, tray, icon,*
+			else
+				Menu, tray, icon, icons\icon.ico
 		}
 	}
 	return
@@ -466,9 +480,8 @@ ctrlCheck:
 
 		hkZ_Group(0)
 
-		if sleeptime != 100  ;pasted
-			oldclip_exist := 0
-			, Clipboard := oldclip_data
+		oldclip_exist := 0
+		, Clipboard := oldclip_data
 
 		sleep % sleeptime-20
 		ToolTip
@@ -702,7 +715,7 @@ updt:
 	else MsgBox, 64, Clipjump, No updates available
 	return
 
-;****** Helper FUNCTIONS ****************************************
+;************************************** Helper FUNCTIONS ****************************************
 
 addToWinClip(lastEntry, extraTip)
 {
@@ -718,11 +731,20 @@ oneTime:
 	onetimeOn := 1
 	Tooltip % "One Time Stop ACTIVATED"
 	setTimer, TooltipOff, 600
+	Menu, tray, icon, icons\no_monitoring.ico
 	return
 
 incognito:
 	Menu, Tray, Togglecheck, &Incognito Mode
 	NOINCOGNITO := !NOINCOGNITO
+
+	IF CALLER_STATUS
+		IF NOINCOGNITO && !A_IsCompiled
+			Menu, Tray, icon, icons\icon.ico
+		else if NOINCOGNITO
+			Menu, Tray, icon,*
+		else if !NOINCOGNITO
+			Menu, Tray, icon, icons\no_history.ico
 	return
 
 export:
@@ -762,6 +784,22 @@ GetClipboardFormat(type=1){		;Thanks nnnik
     	return x
 }
 
+windows_copy:
+	CALLER := 0
+	Send ^c
+	makeClipboardAvailable()
+	sleep 100
+	CALLER := CALLER_STATUS
+	return
+
+windows_cut:
+	CALLER := 0
+	Send ^x
+	makeClipboardAvailable()
+	sleep 100
+	CALLER := CALLER_STATUS
+	return
+
 ;#################### COMMUNICATION ##########################################
 
 ;The function enables/disables Clipjump with respect to the Communicator.
@@ -775,7 +813,12 @@ Act_CjControl(C){
 		, hkZ("$^c", "NativeCopy") , hkZ("$^x", "NativeCut")
 		, hkZ(Copyfilepath_K, "CopyFile") , hkZ(Copyfolderpath_K, "CopyFolder"), hkZ(CopyFileData_K, "CopyFileData") 
 		, hkZ(Channel_K, "channelGUI") , hkZ(onetime_K, "onetime") 
-		, hkZ("$^v", "Paste") , hkZ(history_K, "History")
+		, hkZ( ( paste_k ? "$^" paste_k : emptyvar ) , "Paste") , hkZ(history_K, "History")
+
+		if A_IsCompiled
+			Menu, tray, icon,*
+		else
+			Menu, tray, icon, icons\icon.ico
 		return
 	}
 
@@ -791,10 +834,14 @@ Act_CjControl(C){
 
 	loop, parse, d, %A_space%
 		if A_LoopField = 2
+		{
 			CALLER := 0 , CALLER_STATUS := 0
 			, hkZ("$^c", "NativeCopy", 0) , hkZ("$^x", "NativeCut", 0)
+
+			Menu, tray, icon, icons\no_monitoring.ico
+		}
 		else if A_LoopField = 4
-			hkZ("$^v", "Paste", 0)
+			hkZ( ( paste_k ? "$^" paste_k : emptyvar ) , "Paste", 0)
 		else if A_LoopField = 8
 			hkZ(Copyfilepath_K, "CopyFile", 0)
 		else if A_LoopField = 16

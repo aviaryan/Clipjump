@@ -18,9 +18,11 @@
 <li><a href=#path>Copying Paths to Clipjump</a>
 <li><a href=#winclip>Selective Windows Clipboard</a>
 <li><a href=#fdata>Copying file content to Clipjump</a>
+<li><a href=#paste>Changing Paste-Mode shortcut</a>
 <li><a href=#ot>One Time Stop</a>
 <li><a href=#nof>No formatting mode</a>
 <li><a href=#export>Exporting and sharing clipboards</a>
+<li><a href=#misc>Miscellaneous</a>
 <li><a href="../clipjumpcontroller.html">Clipjump Controller</a>
 </ul>
 <li><a href="settings.html">Settings Editor</a>
@@ -87,6 +89,7 @@ on the fixed clip will remove the FIX from it and the "[FIXED]" from the tip wil
 <br><br>
 <a href="../images/fixate.jpg"><img src="../images/fixate.jpg" border="0"></a><br><br>
 <strong class="super">Note that the DeleteAll option will delete FIXED Clips too.</strong><br><hr><br>
+
 <h3><a name=path>Copying Paths to Clipjump</a></h3>
 <ul>
 <li>Pressing the shortcut Ctrl+Alt+C will copy path(s) of selected files in Windows
@@ -104,11 +107,18 @@ Explorer.</ul>
 </ul>
 <br><br>
 
+<h3><a name=paste>Changing Paste-Mode shortcut</a></h3>
+To force Clipjump Paste Mode to be activated by some other key other than Ctrl+V, you can use the Settings editor of Clipjump. <br>
+Simply open the editor and look for the <code>Paste Mode(Ctrl +..)</code> value in the <code>Shortcuts</code> group. Change the default <i>V</i> in the box to some other key to make the Clipjump Paste Mode to be activated by the Ctrl combination of that key. Make the value blank  to disable <code>Clipjump Paste Mode</code>.
+<br><br><br>
+
 <h3><a name=ot>One Time Stop</a></h3>
 Many a times you have applications that use Clipboard's common transfer to extract data from various locations.
 These apps can be a headache when used with as consistent a tool as Clipjump. <br>
-The <b>One Time Stop</b> feature just solves this problem. Available with the configurable shortcut Alt+S, you can call it once to make Clipjump 
-automatically ignore the last data and linked content that is transferred to System Clipboard and so Clipjump. 
+The <b>One Time Stop</b> feature just solves this problem. Available with the configurable shortcut Alt+S, you can call it once to make Clipjump automatically ignore the 
+last data and linked content that is transferred to System Clipboard and so Clipjump.  In this period, what really happens is that the Clipjump Clipboard Monitoring is 
+deactivated , a feature which can be controlled via <a href="../clipjumpcontroller.html">Clipjump Controller</a>. <br> 
+<strong class=super>NOTE</strong> - When Clipboard Monitoring is disabled (as in One Time Stop) , Clipjump's tray icon will become dark.  
 <br><br>
 <strong class=super>WARNING</strong> - <b>One Time Stop</b> is deactivated when Paste Mode is accessed in the <i>ignore</i> period.
 <br><br><br>
@@ -126,17 +136,18 @@ Now, the Right-Click > Paste Or any other option to Paste <i>other than the old 
 will paste the Clip you had choose like it is  currently stored in System Clipboard.<br><hr><br>
 
 
-<a name=nof>
-<h3>No-Formatting Mode</h3>
+<a name=nof><h3>No-Formatting Mode</h3>
 No formatting mode truncates formatting from Clipjump clips when they are pasted.<br>
 To access this mode, use the "Z" key as the toggle when in <strong class=super>[PASTE MODE]</strong><br>
 Press "Z" once while in [PASTE MODE] and you will see a <strong class="super">[NO-FORMATTING]</strong> in the Tip.<br>
 This will mean all the clipboard data pasted from now onwards will have Formatting truncated.<br>
-To disable this mode, press "Z" again while in [PASTE MODE] and the [NO-FORMATTING] text will disappear.<br><br>
+To disable this mode, press "Z" again while in [PASTE MODE] and the [NO-FORMATTING] text will dissappear.<br><br>
 <strong class=super>Note that</strong> that the No-Formatting setting doesn't mean that clips copied will not have any formatting, this means that the formatting will be 
 removed from them <b>temporarily</b> when they are pasted.<br><br>
 <img src="../images/noformat.jpg" border="0">
 <br><br>
+<strong class=super>TIP</strong> - To make Clipjump start by default in NO-FORMATTING mode , change the <code>Start_with_formatting</code> value in the <code>[ADVANCED]</code> section of Settings.ini to 0.
+<br><br><br>
 
 <a name=export><h3>Export and share Clipboards</a></h3>
 Clipjump supports exporting clipboards as files which can be stored as a record OR send to a friend.<br>
@@ -145,9 +156,20 @@ The Clip or Clipboard when exported will be saved in "My Documents" with a name 
 The <code>.cj</code> file extension when used with <a href=#fdata>Copy File Data</a> directs Clipjump to load the file contents into itself.
 <br><br /><br>
 
+<a name=misc><h3>Miscellaneous</a></h3>
+<strong class=super>Hiding the Pasting tooltip</strong> - To make Clipjump feel faster, you can also disable the <code>Pasting..</code> tip which comes when you paste some 
+data. To do so, change the value of <code>Show_pasting_tip</code> in the [Advanced] section of Settings.ini to 0.
+<br><br>
+
+<strong class=super>Setting shortcut to copy to system Clipboard</strong> - You can also create a unique shortcut in Clipjump to copy/cut data only to System Clipboard 
+and not Clipjump. To create these shortcuts, open the [Advanced] section of Settings.ini and write down shortcut values for <code>windows_copy_shortcut</code> and 
+<code>windows_cut_shortcut</code>. As you may have guessed, these shortcuts are disabled by default and by writing shortcut values for them in the ini you create them.
+<br>These shortcuts can be very useful when in need to copy sensitive or crap information of the Clipboard.
+
+
 <h3><a name=short>Shortcut List</a></h3>
 <b>Ctrl Held/Pressed</b><br>
-V - Move forward through Multiple Clipboards (from 1 to 2 , 2 to 3)<br>
+V - Activate PASTE-MODE and move forward through Multiple Clipboards (from 1 to 2 , 2 to 3)<br>
 C - Move backwards through Multiple Clipboards (from 3 to 2 , 2 to 1) <br>
 S - Add current Clip to Windows Clipboard [Selective Windows Clipboard Option] <br>
 X - Toggle between, Cancel,Delete,Delete All MODE <br>
@@ -163,11 +185,7 @@ Ctrl+Alt+C - Copy File Path<br>
 Ctrl+Alt+F - Copy file content<br>
 Alt+S - One Time Stop<br><br>
 
-<a name="notes">
-<h3>Important</h3></a>
-<UL>
-<li>When Running Clipjump, make sure all other clipboard management utilities are closed.
-<br><br>
+
 </body>
 
 </html>
