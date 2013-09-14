@@ -257,11 +257,7 @@ onClipboardChange:
 			CALLER := 1
 			ToolTip, One Time Stop Deactivated
 			SetTimer, TooltipOff, 600
-
-			if A_IsCompiled     ;Icon
-				Menu, tray, icon,*
-			else
-				Menu, tray, icon, icons\icon.ico
+			changeIcon()
 		}
 	}
 	return
@@ -728,25 +724,31 @@ addToWinClip(lastEntry, extraTip)
 	ToolTip
 }
 
+changeIcon(){
+global
+
+	if A_IsCompiled
+		Menu, tray, icon,*
+	else
+		Menu, tray, icon, icons\icon.ico
+	if !NOINCOGNITO
+		Menu, Tray, icon, icons\no_history.ico
+	if !CALLER_STATUS or !CALLER
+		Menu, Tray, icon, icons\no_monitoring.ico
+}
+
 oneTime:
 	CALLER := false
 	onetimeOn := 1
 	Tooltip % "One Time Stop ACTIVATED"
 	setTimer, TooltipOff, 600
-	Menu, tray, icon, icons\no_monitoring.ico
+	changeIcon()
 	return
 
 incognito:
 	Menu, Tray, Togglecheck, &Incognito Mode
 	NOINCOGNITO := !NOINCOGNITO
-
-	IF CALLER_STATUS
-		IF NOINCOGNITO && !A_IsCompiled
-			Menu, Tray, icon, icons\icon.ico
-		else if NOINCOGNITO
-			Menu, Tray, icon,*
-		else if !NOINCOGNITO
-			Menu, Tray, icon, icons\no_history.ico
+	changeIcon()
 	return
 
 export:
@@ -816,11 +818,7 @@ Act_CjControl(C){
 		, hkZ(Copyfilepath_K, "CopyFile") , hkZ(Copyfolderpath_K, "CopyFolder"), hkZ(CopyFileData_K, "CopyFileData") 
 		, hkZ(Channel_K, "channelGUI") , hkZ(onetime_K, "onetime") 
 		, hkZ( ( paste_k ? "$^" paste_k : emptyvar ) , "Paste") , hkZ(history_K, "History")
-
-		if A_IsCompiled
-			Menu, tray, icon,*
-		else
-			Menu, tray, icon, icons\icon.ico
+		changeIcon()
 		return
 	}
 
@@ -836,12 +834,9 @@ Act_CjControl(C){
 
 	loop, parse, d, %A_space%
 		if A_LoopField = 2
-		{
 			CALLER := 0 , CALLER_STATUS := 0
 			, hkZ("$^c", "NativeCopy", 0) , hkZ("$^x", "NativeCut", 0)
-
-			Menu, tray, icon, icons\no_monitoring.ico
-		}
+			, changeIcon()
 		else if A_LoopField = 4
 			hkZ( ( paste_k ? "$^" paste_k : emptyvar ) , "Paste", 0)
 		else if A_LoopField = 8
