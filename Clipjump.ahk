@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 8.7b1
+;@Ahk2Exe-SetVersion 8.7
 ;@Ahk2Exe-SetCopyright (C) 2013 Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -36,7 +36,7 @@ ListLines, Off
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "8.7b1"
+global VERSION := "8.7"
 global CONFIGURATION_FILE := "settings.ini"
 global UPDATE_FILE := "https://dl.dropboxusercontent.com/u/116215806/Products/Clipjump/clipjumpversion.txt"
 global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/clipjump.html"
@@ -83,7 +83,6 @@ global CALLER := CALLER_STATUS := true
 
 ;Setting up Icons
 FileCreateDir, icons
-;FileInstall, icons\icon.ico, icons\icon.ico, Flag (1 = overwrite)]
 FileInstall, icons\no_history.Ico, icons\no_history.Ico, 0 			;Allow users to have their icons
 FileInstall, icons\no_monitoring.ico, icons\no_monitoring.ico, 0
 
@@ -244,9 +243,9 @@ onClipboardChange:
 	Critical, On
 	If CALLER
 	{
-		makeClipboardAvailable()
-		if ( LASTFORMAT != (LASTFORMAT := GetClipboardFormat(0)) ) or ( LASTCLIP != Clipboard ) or ( Clipboard == "" )
-			clipChange(A_EventInfo)
+		clipboard_copy := makeClipboardAvailable()
+		if ( LASTFORMAT != (LASTFORMAT := GetClipboardFormat(0)) ) or ( LASTCLIP != clipboard_copy) or ( clipboard_copy == "" )
+			clipChange(A_EventInfo, clipboard_copy)
 	}
 	else
 	{
@@ -267,7 +266,7 @@ onClipboardChange:
 	}
 	return
 
-clipChange(ClipErrorlevel) {
+clipChange(ClipErrorlevel, clipboard_copy) {
 
 	If ClipErrorlevel = 1
 	{
@@ -275,7 +274,7 @@ clipChange(ClipErrorlevel) {
 		{
 			CURSAVE += 1
 			clipSaver()
-			LASTCLIP := clipboard
+			LASTCLIP := clipboard_copy
 
 			if NOINCOGNITO
 				FileAppend, %LASTCLIP%, cache\history\%A_Now%.txt
@@ -441,7 +440,7 @@ PasteModeTooltip() {
 ctrlCheck:
 	if !GetKeyState("Ctrl")
 	{
-		CALLER := 0 , sleeptime := 700
+		CALLER := 0 , sleeptime := 300
 
 		Gui, 1:Hide
 		if ctrlRef = cancel
@@ -466,27 +465,30 @@ ctrlCheck:
 			if !FORMATTING
 			{
 				if Instr(GetClipboardFormat(), "Text")
-					Clipboard .= "" , LASTCLIP := Clipboard
+					Clipboard := Rtrim(Clipboard, "`r`n")
 				Send, ^v
+				sleeptime := 1
 			}
 			else
+			{
 				Send, ^v
-			sleeptime := 100
+				sleeptime := 100
+			}
 
 			TEMPSAVE := realActive
 		}
 		SetTimer, ctrlCheck, Off
 		IN_BACK := false , ctrlRef := ""
-
 		hkZ_Group(0)
 
+		makeClipboardAvailable()  		;The paste is completed
 		oldclip_exist := 0
-		, Clipboard := oldclip_data
+		Clipboard := oldclip_data       ;The command opens, writes and closes clipboard . The ONCC Label is launched when writing takes place.
 
-		sleep % sleeptime-20
-		ToolTip
-
-		CALLER := CALLER_STATUS , EmptyMem()             ;If Controller orders CALLER 0 and user pastes data
+		sleep % sleeptime
+		Tooltip
+		
+		CALLER := CALLER_STATUS , EmptyMem()
 	}
 	return
 
@@ -787,16 +789,16 @@ GetClipboardFormat(type=1){		;Thanks nnnik
 windows_copy:
 	CALLER := 0
 	Send ^c
-	makeClipboardAvailable()
 	sleep 100
+	makeClipboardAvailable()   ;wait till Clipboard is ready
 	CALLER := CALLER_STATUS
 	return
 
 windows_cut:
 	CALLER := 0
 	Send ^x
-	makeClipboardAvailable()
 	sleep 100
+	makeClipboardAvailable()
 	CALLER := CALLER_STATUS
 	return
 

@@ -74,6 +74,14 @@
 		<param name="Local" value="USAGE/channels.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Copy to system Clipboard">
+		<param name="Local" value="usage/basic_help.html#syscopy">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Change Paste Mode shortcut">
+		<param name="Local" value="usage/basic_help.html#paste">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Changes in this version">
 		<param name="Local" value="clipjump.html#changes">
 		</OBJECT>

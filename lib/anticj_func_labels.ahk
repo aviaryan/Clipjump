@@ -18,6 +18,7 @@ MakeClipboardAvailable(){
 		sleep 10
 	}
 	DllCall("CloseClipboard")
+	return Clipboard
 }
 
 ;GetFile()

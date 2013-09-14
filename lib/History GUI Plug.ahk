@@ -158,7 +158,7 @@ historyGuiSize:
 
 historyGuiClose:
 historyGuiEscape:
-	Wingetpos,,,, h, %PROGNAME% Clipboard History
+	Wingetpos, x, y,, h, %PROGNAME% Clipboard History
 
 	h := h > WORKINGHT ? WORKINGHT : gui_h               ;gui_h and gui_w are function vars created in the historyGUISIze label (above).
 
@@ -173,7 +173,7 @@ historyGuiEscape:
 	Ini_write(temp_h, "w2", w2, 0)
 
 	Gui, History:Destroy
-	Menu, HisMenu, Delete
+	Menu, HisMenu, DeleteAll
 	EmptyMem() 				;Free memory
 	return
 }
@@ -291,8 +291,8 @@ history_InstaPaste:
 		CALLER := 0
 		, history_clipboard()
 
-	Gui, history:hide
-	WinWaitClose, Clipjump Clipboard History
+	WinClose, %PROGNAME% Clipboard History
+	WinWaitClose, %PROGNAME% Clipboard History
 	Send, ^v
 	CALLER := CALLER_STATUS
 	return

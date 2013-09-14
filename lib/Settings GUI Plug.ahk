@@ -1,5 +1,5 @@
 ;Gui Settings for Clipjump
-;A lot of thanks to cha
+;A lot of thanks to chaz
 
 gui_Settings()
 ; Preconditions: ini settings in variables starting with _ini
@@ -339,7 +339,7 @@ save_Default(full=1){
 	Ini_write(s := "Advanced", "history_k", "Win + c")
 	Ini_write(s, "instapaste_write_clipboard", "0")
 	ini_write(s, "Start_with_formatting", "1")
-	ini_write(s, "Show_pasting_tip", "1")
+	ini_write(s, "Show_pasting_tip", "0")
 	ini_write(s, "windows_copy_shortcut", "")
 	ini_write(s, "windows_cut_shortcut",  "")
 }
@@ -368,7 +368,7 @@ validate_Settings()
 	If ini_Threshold is not integer
 		ini_Threshold := 10
 
-	CopyMessage := ( !ini_IsMessage ? "" : MSG_TRANSFER_COMPLETE ) " {" ( (CN.Name=="") ? "Default" : CN.Name ) "}"
+	CopyMessage := !ini_IsMessage ? "" : MSG_TRANSFER_COMPLETE " {" ( (CN.Name=="") ? "Default" : CN.Name ) "}"
 
 	If ini_Quality is not Integer
 		ini_Quality := 20

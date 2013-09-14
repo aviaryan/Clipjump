@@ -148,9 +148,9 @@ changeChannel(cIndex){
 	FileCreateDir, %THUMBS_dir%
 
 	LASTCLIP := LASTFORMAT := ""
-	copyMessage := MSG_TRANSFER_COMPLETE " {" CN.Name "}"
+	CopyMessage := !ini_IsMessage ? "" : MSG_TRANSFER_COMPLETE " {" CN.Name "}"
+
 	Menu, Tray, Tip, % PROGNAME " {" CN.Name "}"
-	
 }
 
 ;-------------------------- ACCESSIBILTY SHORTCUTS ------------------------------------------------
