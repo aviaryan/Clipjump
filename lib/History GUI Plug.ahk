@@ -343,13 +343,13 @@ LV_SortArrow(h, c, d="")	; by Solar (http://www.autohotkey.com/forum/viewtopic.p
 
 ;------------------------------------ ACCESSIBILITY SHORTCUTS -------------------------------
 
-#if IsActive("Edit1", "classnn")
+#if IsActive("Edit1", "classnn") and IsActive(PROGNAME " Clipboard History", "window")
 	$Down::
 		Controlfocus, SysListView321, A
 		Send {Down}
 		return
 #if
-#if ( IsActive("SysListView321", "classnn") and IsActive("Clipjump Clipboard History", "window") and ctrlRef!="pastemode" )
+#if ( IsActive("SysListView321", "classnn") and IsActive(PROGNAME " Clipboard History", "window") and ctrlRef!="pastemode" )
 	Space::gosub history_InstaPaste
 	^c::history_clipboard()
 	^e::gosub history_exportclip

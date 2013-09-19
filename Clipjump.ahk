@@ -18,16 +18,16 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 8.7
+;@Ahk2Exe-SetVersion 8.8
 ;@Ahk2Exe-SetCopyright (C) 2013 Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
 SetWorkingDir, %A_ScriptDir%
 SetBatchLines,-1
 #SingleInstance, force
-#ClipboardTimeout 50              ;keeping this value low as I already check for OpenClipboard in OnClipboardChange label
+#ClipboardTimeout 0              ;keeping this value low as I already check for OpenClipboard in OnClipboardChange label
 CoordMode, Mouse
-FileEncoding, UTF-8
+FileEncoding, UTF-16
 ListLines, Off
 #HotkeyInterval 1000
 #MaxHotkeysPerInterval 1000
@@ -36,7 +36,7 @@ ListLines, Off
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "8.7"
+global VERSION := "8.8"
 global CONFIGURATION_FILE := "settings.ini"
 global UPDATE_FILE := "https://dl.dropboxusercontent.com/u/116215806/Products/Clipjump/clipjumpversion.txt"
 global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/clipjump.html"
@@ -65,7 +65,7 @@ Loop, cache\history\*.hst                 ;Rename old .hst extensions
 ;*******************************************************************************
 
 ;Init Non-Ini Configurations
-Clipboard := ""
+try Clipboard := ""
 FileDelete, % A_temp "/clipjumpcom.txt"
 
 ;Global Data Holders
@@ -243,7 +243,10 @@ onClipboardChange:
 	Critical, On
 	If CALLER
 	{
-		clipboard_copy := makeClipboardAvailable()
+		try {
+			clipboard_copy := makeClipboardAvailable()
+		}
+		
 		if ( LASTFORMAT != (LASTFORMAT := GetClipboardFormat(0)) ) or ( LASTCLIP != clipboard_copy) or ( clipboard_copy == "" )
 			clipChange(A_EventInfo, clipboard_copy)
 	}
@@ -392,10 +395,17 @@ fixate:
 	return
 
 clipSaver() {
+
 	FileDelete, %CLIPS_dir%/%CURSAVE%.avc
 
-	makeClipboardAvailable()
-	FileAppend, %ClipboardAll%, %CLIPS_dir%/%CURSAVE%.avc
+	makeClipboardAvailable(0)
+	while !copied
+		try {
+			FileAppend, %ClipboardAll%, %CLIPS_dir%/%CURSAVE%.avc
+			copied := 1
+		}
+		catch 
+			copied := 0
 
 	Loop, %CURSAVE%
 	{
@@ -463,6 +473,7 @@ ctrlCheck:
 				if Instr(GetClipboardFormat(), "Text")
 					Clipboard := Rtrim(Clipboard, "`r`n")
 				Send, ^v
+
 				sleeptime := 1
 			}
 			else
@@ -477,9 +488,9 @@ ctrlCheck:
 		IN_BACK := false , ctrlRef := ""
 		hkZ_Group(0)
 
-		makeClipboardAvailable()  		;The paste is completed
+		makeClipboardAvailable(0)  		;The paste is completed
 		oldclip_exist := 0
-		Clipboard := oldclip_data       ;The command opens, writes and closes clipboard . The ONCC Label is launched when writing takes place.
+		try Clipboard := oldclip_data       ;The command opens, writes and closes clipboard . The ONCC Label is launched when writing takes place.
 
 		sleep % sleeptime
 		Tooltip
@@ -792,7 +803,7 @@ windows_copy:
 	CALLER := 0
 	Send ^c
 	sleep 100
-	makeClipboardAvailable()   ;wait till Clipboard is ready
+	makeClipboardAvailable(0)   ;wait till Clipboard is ready
 	CALLER := CALLER_STATUS
 	return
 
@@ -800,7 +811,7 @@ windows_cut:
 	CALLER := 0
 	Send ^x
 	sleep 100
-	makeClipboardAvailable()
+	makeClipboardAvailable(0)
 	CALLER := CALLER_STATUS
 	return
 

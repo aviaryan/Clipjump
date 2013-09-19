@@ -10,7 +10,8 @@ EmptyMem(){
 }
 
 ;Checks and makes sure Clipboard is available
-MakeClipboardAvailable(){
+;Use 0 as the param when for calling the function, the aim is only to free clipboard and not get its contents
+MakeClipboardAvailable(doreturn=1){
 
 	while !temp
 	{
@@ -18,7 +19,7 @@ MakeClipboardAvailable(){
 		sleep 10
 	}
 	DllCall("CloseClipboard")
-	return Clipboard
+	return doreturn ? Clipboard : ""
 }
 
 ;GetFile()
