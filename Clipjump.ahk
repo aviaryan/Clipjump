@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 8.8
+;@Ahk2Exe-SetVersion 8.82
 ;@Ahk2Exe-SetCopyright (C) 2013 Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -36,7 +36,7 @@ ListLines, Off
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "8.8"
+global VERSION := "8.82"
 global CONFIGURATION_FILE := "settings.ini"
 global UPDATE_FILE := "https://dl.dropboxusercontent.com/u/116215806/Products/Clipjump/clipjumpversion.txt"
 global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/clipjump.html"
@@ -98,7 +98,7 @@ If !FileExist(CONFIGURATION_FILE)
 		gosub, hlp
 
 	if !A_IsAdmin
-		MsgBox, 16, WARNING, Clipjump is not running as Administrator`nThis (may) cause improper functioning of the program`nIf it does, you know what to do.
+		MsgBox, 16, WARNING, Clipjump is not running as Administrator`nThis (may) cause improper functioning of the program.`n`n[This message will be shown only once]
 
 	if !A_isUnicode
 		MsgBox, 16, WARNING, It is recommended to use AHK_L Unicode for using Clipjump.`nIf you are using some another version`, you can but remember my word.`n`nDon't Worry `,this message will be shown just once .
@@ -269,7 +269,7 @@ clipChange(ClipErrorlevel, clipboard_copy) {
 
 	If ClipErrorlevel = 1
 	{
-		if ( Clipboard != LASTCLIP )
+		if ( clipboard_copy != LASTCLIP )
 		{
 			CURSAVE += 1
 			clipSaver()
@@ -311,7 +311,7 @@ moveBack:
 	FileRead, clipboard, *c %CLIPS_dir%/%TEMPSAVE%.avc
 	fixStatus := fixCheck()
 	realClipNo := CURSAVE - TEMPSAVE + 1
-	if Clipboard =	; if blank
+	if Clipboard =
 		showPreview()
 	else
 	{
