@@ -36,7 +36,7 @@ ListLines, Off
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "8.85"
+global VERSION := 8.85
 global CONFIGURATION_FILE := "settings.ini"
 global UPDATE_FILE := "https://raw.github.com/avi-aryan/Clipjump/master/version.txt"
 global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/clipjump.html"
@@ -718,9 +718,9 @@ strtup:
 updt:
 	URLDownloadToFile, %UPDATE_FILE%, %A_ScriptDir%/cache/latestversion.txt
 	FileRead, latestVersion, %A_ScriptDir%/cache/latestversion.txt
-	if latestVersion > %VERSION%
+	if ( (latestVersion+0) > VERSION )
 	{
-		MsgBox, 48, Update available, Your Version: %VERSION%         `nCurrent version = %latestVersion%       `n`nGo to website
+		MsgBox, 48, % "Update available, Your Version: " VERSION "`nCurrent version = " latestVersion+0 "`n`nGo to website"
 		IfMsgBox OK
 			BrowserRun(PRODUCT_PAGE)
 	}
