@@ -14,6 +14,7 @@ gui_Settings()
 	Gui, Settings:New
 	Gui, Margin, 8, 8
 	Gui, Add, GroupBox,	w289 h179, Main		; for every new checkbox add 21 pixels to the height, and for every new spinner (UpDown control) add 26 pixels
+	; The total width of the GUI is about 289 x 2
 	
 	Gui, Add, CheckBox, xp+9 yp+22 Section Checked%ini_limitMaxClips% vnew_limitMaxClips gchkbox_limitMaxClips, &Limit the maximum number of active clipboards	; when this is checked the following two controls will be disabled
 	Gui, Add, Text,		xs+16, &Minimum number of active clipboards:
@@ -60,7 +61,10 @@ gui_Settings()
 	Gui, Add, Checkbox, xs yp+22 Checked%ini_IsChannelMin% vnew_IsChannelMin gchkbox_isChannelMin, Use Minimal GUI
 
 	;---- Buttons
-	Gui, Add, Button,	x186 y290 w75 h23 Default, 	&OK 	;57 in vertical
+	Gui, Font, Underline
+	Gui, Add, Text, 	y275 x480 cBlue gsettings_open_advanced, See Advanced Settings
+	Gui, font, norm
+	Gui, Add, Button,	x186 y300 w75 h23 Default, 	&OK 	;57 in vertical
 	Gui, Add, Button,	x+8 w75 h23,			&Cancel
 	Gui, Add, Button,	x+8 w75 h23	Disabled,	&Apply
 
@@ -161,6 +165,20 @@ settingsButtonApply:
 	}
 	Control, Disable, , &Apply, %PROGNAME% Settings
 	return
+
+settings_open_advanced:
+	try {
+		run % "notepad.exe " CONFIGURATION_FILE
+		WinWaitActive, ahk_class Notepad
+		Send ^g
+		;Winwait, Go To Line
+		Send % NUMBER_ADVANCED "{Enter}"
+	} 
+	catch {
+		MsgBox, 16, ERROR, Clipjump is not able to find the settings file (settings.ini) or Notepad ? Make sure both exist in their respective places. `n`nTry contacting the author if problem persists.
+	}
+	return
+
 }
 
 WM_MOUSEMOVE()	; From the help file

@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 8.82
+;@Ahk2Exe-SetVersion 8.85
 ;@Ahk2Exe-SetCopyright (C) 2013 Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -36,9 +36,9 @@ ListLines, Off
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "8.82"
+global VERSION := "8.85"
 global CONFIGURATION_FILE := "settings.ini"
-global UPDATE_FILE := "https://dl.dropboxusercontent.com/u/116215806/Products/Clipjump/clipjumpversion.txt"
+global UPDATE_FILE := "https://raw.github.com/avi-aryan/Clipjump/master/version.txt"
 global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/clipjump.html"
 global HELP_PAGE := "http://avi-win-tips.blogspot.com/2013/04/clipjump-online-guide.html"
 global AUTHOR_PAGE := "http://www.avi-win-tips.blogspot.com"
@@ -55,6 +55,9 @@ global MSG_FIXED := "[FIXED]"
 global MSG_HISTORY_PREVIEW_IMAGE := "[Double-click to view image]"
 global MSG_FILE_PATH_COPIED := "File path(s) copied to " PROGNAME
 global MSG_FOLDER_PATH_COPIED := "Active folder path copied to " PROGNAME
+
+global NUMBER_ADVANCED := 26
+
 
 Loop, cache\history\*.hst                 ;Rename old .hst extensions
 {
@@ -209,7 +212,7 @@ paste:
 		if !oldclip_exist
 		{
 			oldclip_exist := 1
-			oldclip_data := ClipboardAll       			;no single line
+			oldclip_data := ClipboardAll
 		}
 		hkZ_Group(1)
 
@@ -488,9 +491,9 @@ ctrlCheck:
 		IN_BACK := false , ctrlRef := ""
 		hkZ_Group(0)
 
-		makeClipboardAvailable(0)  		;The paste is completed
 		oldclip_exist := 0
-		try Clipboard := oldclip_data       ;The command opens, writes and closes clipboard . The ONCC Label is launched when writing takes place.
+		if ( sleeptime != 100 )        ;not pasting
+			try Clipboard := oldclip_data       ;The command opens, writes and closes clipboard . The ONCC Label is launched when writing takes place.
 
 		sleep % sleeptime
 		Tooltip
