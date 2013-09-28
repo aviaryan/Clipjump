@@ -4,6 +4,8 @@
 ;@Ahk2Exe-SetCopyright (C) 2013 Avi Aryan
 ;@Ahk2Exe-SetOrigFilename ClipjumpControl.exe
 
+;delete menu, dialog and icon in Restorator
+
 SetWorkingDir %A_ScriptDir%
 #NoTrayIcon
 

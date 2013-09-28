@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 8.85
+;@Ahk2Exe-SetVersion 9.0
 ;@Ahk2Exe-SetCopyright (C) 2013 Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -36,7 +36,7 @@ ListLines, Off
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := 8.85
+global VERSION := 9.0
 global CONFIGURATION_FILE := "settings.ini"
 global UPDATE_FILE := "https://raw.github.com/avi-aryan/Clipjump/master/version.txt"
 global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/clipjump.html"
@@ -55,9 +55,8 @@ global MSG_FIXED := "[FIXED]"
 global MSG_HISTORY_PREVIEW_IMAGE := "[Double-click to view image]"
 global MSG_FILE_PATH_COPIED := "File path(s) copied to " PROGNAME
 global MSG_FOLDER_PATH_COPIED := "Active folder path copied to " PROGNAME
-
-global NUMBER_ADVANCED := 26
-
+;History Tool
+global hidden_date_no := 4
 
 Loop, cache\history\*.hst                 ;Rename old .hst extensions
 {
@@ -103,12 +102,8 @@ If !FileExist(CONFIGURATION_FILE)
 	if !A_IsAdmin
 		MsgBox, 16, WARNING, Clipjump is not running as Administrator`nThis (may) cause improper functioning of the program.`n`n[This message will be shown only once]
 
-	if !A_isUnicode
-		MsgBox, 16, WARNING, It is recommended to use AHK_L Unicode for using Clipjump.`nIf you are using some another version`, you can but remember my word.`n`nDon't Worry `,this message will be shown just once .
-
-	try {
-		TrayTip, Clipjump, Hi!`nClipjump is now activated.`nTry doing some quick copy and pastes..., 10, 1
-	}
+	try TrayTip, Clipjump, Hi!`nClipjump is now activated.`nTry doing some quick copy and pastes..., 10, 1
+	
 }
 else if (ini_Version != VERSION)
 	save_default(0) 			;0 corresponds to selective save
@@ -164,6 +159,7 @@ FileSetAttrib, +H, %A_ScriptDir%\cache
 global CLIPS_dir := "cache/clips"
 	, THUMBS_dir := "cache/thumbs"
 	, FIXATE_dir := "cache/fixate"
+	, NUMBER_ADVANCED := 22 + CN.Total + 1 					;the number stores the line number of ADVANCED section
 
 ;Setting Up shortcuts
 hkZ( ( paste_k ? "$^" paste_k : emptyvar ) , "Paste")
@@ -212,27 +208,29 @@ paste:
 		if !oldclip_exist
 		{
 			oldclip_exist := 1
-			oldclip_data := ClipboardAll
+			try oldclip_data := ClipboardAll
 		}
 		hkZ_Group(1)
 
-		FileRead, Clipboard, *c %A_ScriptDir%/%CLIPS_dir%/%TEMPSAVE%.avc
+		try FileRead, Clipboard, *c %A_ScriptDir%/%CLIPS_dir%/%TEMPSAVE%.avc
+		try temp_clipboard := Clipboard
+
 		fixStatus := fixCheck()
 		realclipno := CURSAVE - TEMPSAVE + 1
 
-		if Clipboard =
+		if temp_clipboard =
 			showPreview()
 		else
 		{
-			length := strlen(Clipboard)
+			length := strlen(temp_clipboard)
 			IfGreater,length,200
 			{
-				StringLeft,halfclip,Clipboard, 200
+				StringLeft,halfclip,temp_clipboard, 200
 				halfClip := halfClip . "`n`n" MSG_MORE_PREVIEW
 			}
-			else halfClip := Clipboard
+			else halfClip := temp_clipboard
 		}
-		PasteModeTooltip()
+		PasteModeTooltip(temp_clipboard)
 		SetTimer, ctrlCheck, 50
 
 		realActive := TEMPSAVE
@@ -246,9 +244,7 @@ onClipboardChange:
 	Critical, On
 	If CALLER
 	{
-		try {
-			clipboard_copy := makeClipboardAvailable()
-		}
+		try clipboard_copy := makeClipboardAvailable()
 		
 		if ( LASTFORMAT != (LASTFORMAT := GetClipboardFormat(0)) ) or ( LASTCLIP != clipboard_copy) or ( clipboard_copy == "" )
 			clipChange(A_EventInfo, clipboard_copy)
@@ -278,7 +274,7 @@ clipChange(ClipErrorlevel, clipboard_copy) {
 			clipSaver()
 			LASTCLIP := clipboard_copy
 
-			if NOINCOGNITO
+			if NOINCOGNITO and ( CN.Name != "pit" )
 				FileAppend, %LASTCLIP%, cache\history\%A_Now%.txt
 
 			ToolTip, %copyMessage%
@@ -293,7 +289,7 @@ clipChange(ClipErrorlevel, clipboard_copy) {
 			ToolTip, %copyMessage%
 			thumbGenerator()
 
-			if NOINCOGNITO and ini_IsImageStored
+			if NOINCOGNITO and ini_IsImageStored and ( CN.Name != "pit" )
 				FileCopy, %THUMBS_dir%\%CURSAVE%.jpg, cache\history\%A_Now%.jpg
 
 			clipSaver()
@@ -311,22 +307,24 @@ moveBack:
 	if realActive = %CURSAVE%
 		TEMPSAVE := 1
 	realActive := TEMPSAVE
-	FileRead, clipboard, *c %CLIPS_dir%/%TEMPSAVE%.avc
+	try FileRead, clipboard, *c %CLIPS_dir%/%TEMPSAVE%.avc
+	try temp_clipboard := Clipboard
+
 	fixStatus := fixCheck()
 	realClipNo := CURSAVE - TEMPSAVE + 1
-	if Clipboard =
+	if temp_clipboard =
 		showPreview()
 	else
 	{
-		length := strlen(Clipboard)
+		length := strlen(temp_clipboard)
 		if length > 200
 		{
-			StringLeft, halfClip, Clipboard, 200
+			StringLeft, halfClip, temp_clipboard, 200
 			halfClip := halfClip "`n`n" MSG_MORE_PREVIEW
 		}
-		else halfClip := Clipboard
+		else halfClip := temp_clipboard
 	}
-	PasteModeTooltip()
+	PasteModeTooltip(temp_clipboard)
 	SetTimer, ctrlCheck, 50
 
 	return
@@ -380,7 +378,7 @@ ctrlForCopy:
 
 Formatting:
 	FORMATTING := !FORMATTING
-	PasteModeTooltip()
+	PasteModeTooltip(temp_clipboard)
 	return
 
 fixate:
@@ -394,7 +392,7 @@ fixate:
 		fixStatus := MSG_FIXED
 		FileAppend, , %A_ScriptDir%\%FIXATE_dir%\%realActive%.fxt
 	}
-	PasteModeTooltip()
+	PasteModeTooltip(temp_clipboard)
 	return
 
 clipSaver() {
@@ -437,10 +435,10 @@ fixCheck() {
 }
 
 ;Shows the Clipjump Paste Mode tooltip
-PasteModeTooltip() {
+PasteModeTooltip(temp_clipboard) {
 	global
-	if Clipboard =
-		ToolTip % "{" CN.Name "} Clip " realclipno " of " CURSAVE "`t" fixStatus (WinExist("Display_Cj") ? "" : "`n`n" MSG_ERROR)
+	if temp_clipboard =
+		ToolTip % "{" CN.Name "} Clip " realclipno " of " CURSAVE "`t" fixStatus (WinExist("Display_Cj") ? "" : "`n`n" MSG_ERROR "`n`n")
 	else
 		ToolTip % "{" CN.Name "} Clip " realclipno " of " CURSAVE "`t" GetClipboardFormat() "`t" fixstatus (!FORMATTING ? "`t[NO-FORMATTING]" : "") "`n`n" halfclip
 }
@@ -474,7 +472,7 @@ ctrlCheck:
 			if !FORMATTING
 			{
 				if Instr(GetClipboardFormat(), "Text")
-					Clipboard := Rtrim(Clipboard, "`r`n")
+					try Clipboard := Rtrim(Clipboard, "`r`n")
 				Send, ^v
 
 				sleeptime := 1
@@ -641,7 +639,7 @@ copyFile:
 	copyMessage := MSG_FILE_PATH_COPIED
 	selectedFile := GetFile()
 	if ( selectedFile != "" )
-		Clipboard := selectedfile
+		try Clipboard := selectedfile
 	CopyMessage := MSG_TRANSFER_COMPLETE " {" CN.Name "}"
 	return
 
@@ -649,7 +647,7 @@ copyFolder:
 	copyMessage := MSG_FOLDER_PATH_COPIED
 	openedFolder := GetFolder()
 	if ( openedfolder != "" )
-		Clipboard := openedFolder
+		try Clipboard := openedFolder
 	copyMessage := MSG_TRANSFER_COMPLETE " {" CN.Name "}"
 	return
 
@@ -665,16 +663,17 @@ CopyFileData:
 	else if temp_extension in cj,avc
 	{
 		CALLER := 0
-		Fileread, Clipboard, *c %selectedFile%
+		try Fileread, Clipboard, *c %selectedFile%
 		ClipWait, 1, 1
 		oldclip := ClipboardAll
 		CALLER := CALLER_STATUS
-		Clipboard := oldclip , oldclip := ""           ;The methodology is adopted due to an AHK Bug
+		try Clipboard := oldclip 
+		oldclip := ""           ;The methodology is adopted due to an AHK Bug
 	}
 	else
 	{
 		FileRead, temp,% selectedFile
-		Clipboard := temp
+		try Clipboard := temp
 	}
 
 	sleep 1000
@@ -687,7 +686,7 @@ hlp:
 	if A_IsCompiled
 		run Clipjump.chm
 	else
-		run chm_files/clipjump.html
+		run chm_files\clipjump.html
 	return
 
 settings:
@@ -733,7 +732,7 @@ addToWinClip(lastEntry, extraTip)
 {
 	ToolTip, System Clipboard %extraTip%
 	if CURSAVE
-		FileRead, Clipboard, *c %A_ScriptDir%/%CLIPS_dir%/%lastentry%.avc
+		try FileRead, Clipboard, *c %A_ScriptDir%/%CLIPS_dir%/%lastentry%.avc
 	Sleep, 1000
 	ToolTip
 }
@@ -776,7 +775,7 @@ export:
 			break
 	Tooltip % "{" CN.Name "} Clip " realClipNo " exported to `n" temp
 	SetTimer, TooltipOff, 1000
-	FileAppend, %ClipboardAll%, % temp
+	try FileAppend, %ClipboardAll%, % temp
 	return
 
 ;type=1
@@ -902,9 +901,6 @@ clipjumpcom_delete:
 #include %A_ScriptDir%\lib\anticj_func_labels.ahk
 #include %A_ScriptDir%\lib\settings gui plug.ahk
 #include %A_ScriptDir%\lib\history gui plug.ahk
-;#include %A_ScriptDir%\lib\history gui plug_new.ahk
-;#include %A_ScriptDir%\lib\dlg.ahk
-
 #include %A_ScriptDir%\lib\HotkeyParser.ahk
 
 ;------------------------------------------------------------------- X -------------------------------------------------------------------------------

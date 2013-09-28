@@ -2,10 +2,12 @@
 ;== IDEAS ==
 ;	TEMPSAVE, CURSAVE
 ;		TOTALCLIPS
-;	Folders to be specified by N ("", 1, 2, 3)
-;	TotalClips = unlimited for other modes (1, 2, 3, 4, 5, 6)
 ;
-;	CN.N contains Folder names amendment of the active Channel
+;	Folders to be specified by N ("", 1, 2, 3)
+;	CN.TotalClips = unlimited for other modes (1, 2, 3, 4, 5, 6) and as specified in Ini for 0 channel
+;	CN.Name = name of channel
+;	CN.N = contains Folder names amendment of the active Channel
+;	CN.Total = Total number of channels
 ;----------------------------------------------------------------------
 
 channelGUI(){
@@ -30,7 +32,8 @@ channelGUI(){
 		{
 			Gui, Font, S8, Lucida Console
 			Gui, Add, Text, x4 y+25, Channel 0 (Default) is the mainstream channel and should be used normally.
-			Gui, Add, Text, y+5, Channel Name changes are saved automatically
+			Gui, Add, Text, y+5, Channel Name changes are saved automatically.
+			Gui, Add, Text, y+5, Next Channels are available only if the previous one has been activated (used).
 
 			Gui, Font, S10, Arial
 			Gui, Add, Button, x4 y+25 w90 gchannel_Usebutton, &Use Channel
@@ -68,6 +71,9 @@ edit_cname:
 Channel_usebutton:
 	Gui, Channel:Submit, nohide
 	changeChannel(cIndex)
+	if ( cIndex == CN.Total-1 )  			; -1 as CN.tOTAL is already updated in changeChannel()
+		local_ini_IsChannelMin := "x" 		;force re-building Gui
+
 	ToolTip % "Channel " CN.Name " active"
 	setTimer, TooltipOff, 500
 Channel_cancelbutton:
@@ -135,7 +141,7 @@ changeChannel(cIndex){
 	CN["TEMPSAVE" CN.N] := TEMPSAVE , CN["CURSAVE" CN.N] := CURSAVE		;Saving Old
 	CN.N := cIndex , CN.NG := !CN.N?0:CN.N
 
-	TEMPSAVE := CN["TEMPSAVE" cIndex] , CURSAVE := CN["CURSAVE" cIndex] 	;Restoring current
+	TEMPSAVE := CN["TEMPSAVE" cIndex] + 0 , CURSAVE := CN["CURSAVE" cIndex] + 0		;Restoring current
 
 	T := Substr(CLIPS_dir, 0)
 	if T is Integer

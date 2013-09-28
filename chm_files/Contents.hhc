@@ -59,6 +59,12 @@
 			<param name="Name" value="Clipjump Channels">
 			<param name="Local" value="USAGE/channels.html">
 			</OBJECT>
+		<UL>
+			<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="The Pit channel">
+			<param name="Local" value="USAGE/channels.html#pit">
+			</OBJECT>
+		</UL>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Clipjump History Tool">
 			<param name="Local" value="USAGE/history.html">

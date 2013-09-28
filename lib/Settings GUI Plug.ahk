@@ -208,7 +208,7 @@ WM_MOUSEMOVE()	; From the help file
 	static NEW_ISIMAGESTORED_TT := "Should clipboard images be stored in history ?"
 
 	static pst_k_TT := "Single character combination to use with Ctrl in activating [PASTE MODE]`nNote that letters  E C X Z S  are reserved."
-						. "`n`nAlso make sure to see ""Setting shortcut to copy to system Clipboard"" in the help file"
+						. "`n`nAlso make sure to see ""Copy bypassing Clipjump"" in the help file"
 	static chnl_K_TT := "Shortcut to show the <Select Channel> Window`nSet the shortcut to None to disable the key combination"
 	static cfilep_K_TT := "Shortcut to copy selected file's path`nSet the shortcut to None to disable the functionality"
 	static cfolderp_K_TT := "Shortcut to copy selected folder's path`nSet the shortcut to None to disable the functionality"

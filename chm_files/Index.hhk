@@ -26,6 +26,14 @@
 		<param name="Local" value="clipjumpcontroller.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Disable history with the Pit channel">
+		<param name="Local" value="USAGE/channels.html#pit">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="The Pit channel">
+		<param name="Local" value="USAGE/channels.html#pit">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Clipjump History Tool">
 		<param name="Local" value="USAGE/history.html">
 		</OBJECT>
