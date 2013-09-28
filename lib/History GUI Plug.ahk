@@ -275,7 +275,7 @@ historyUpdate(crit="", create=true)
 		Iniread, w1,% CONFIGURATION_FILE, Clipboard_History_window, w1, %A_Space%
 		Iniread, w2,% CONFIGURATION_FILE, Clipboard_History_window, w2, %A_Space%
 		Iniread, w3,% CONFIGURATION_FILE, Clipboard_History_window, w3, %A_Space%
-		LV_ModifyCol(1, w1?w1:445) , LV_ModifyCol(2, w2?w2:145) , Lv_ModifyCol(3, (w3?w3:80) " Integer") , Lv_ModifyCol(4, "0")
+		LV_ModifyCol(1, w1?w1:445) , LV_ModifyCol(2, w2?w2:155) , Lv_ModifyCol(3, (w3?w3:70) " Integer") , Lv_ModifyCol(4, "0")
 	}
 }
 

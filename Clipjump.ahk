@@ -66,6 +66,14 @@ Loop, cache\history\*.hst                 ;Rename old .hst extensions
 
 ;*******************************************************************************
 
+;Creating Storage Directories
+FileCreateDir, cache
+FileCreateDir, cache/clips
+FileCreateDir, cache/thumbs
+FileCreateDir, cache/fixate
+FileCreateDir, cache/history
+FileSetAttrib, +H, %A_ScriptDir%\cache
+
 ;Init Non-Ini Configurations
 try Clipboard := ""
 FileDelete, % A_temp "/clipjumpcom.txt"
@@ -103,7 +111,7 @@ If !FileExist(CONFIGURATION_FILE)
 		MsgBox, 16, WARNING, Clipjump is not running as Administrator`nThis (may) cause improper functioning of the program.`n`n[This message will be shown only once]
 
 	try TrayTip, Clipjump, Hi!`nClipjump is now activated.`nTry doing some quick copy and pastes..., 10, 1
-	
+
 }
 else if (ini_Version != VERSION)
 	save_default(0) 			;0 corresponds to selective save
@@ -147,14 +155,6 @@ IfExist, %A_Startup%/Clipjump.lnk
 	FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%/Clipjump.lnk
 	Menu, Tray, Check, Run at startup
 }
-
-;Creating Storage Directories
-FileCreateDir, cache
-FileCreateDir, cache/clips
-FileCreateDir, cache/thumbs
-FileCreateDir, cache/fixate
-FileCreateDir, cache/history
-FileSetAttrib, +H, %A_ScriptDir%\cache
 
 global CLIPS_dir := "cache/clips"
 	, THUMBS_dir := "cache/thumbs"
