@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 9.0
+;@Ahk2Exe-SetVersion 9.02
 ;@Ahk2Exe-SetCopyright (C) 2013 Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -27,7 +27,7 @@ SetBatchLines,-1
 #SingleInstance, force
 #ClipboardTimeout 0              ;keeping this value low as I already check for OpenClipboard in OnClipboardChange label
 CoordMode, Mouse
-FileEncoding, UTF-16
+FileEncoding, UTF-8
 ListLines, Off
 #HotkeyInterval 1000
 #MaxHotkeysPerInterval 1000
@@ -36,7 +36,7 @@ ListLines, Off
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := 9.0
+global VERSION := 9.02
 global CONFIGURATION_FILE := "settings.ini"
 global UPDATE_FILE := "https://raw.github.com/avi-aryan/Clipjump/master/version.txt"
 global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/clipjump.html"

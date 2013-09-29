@@ -12,7 +12,7 @@ aboutGUI(){
 	Gui, 2:Font, S14, 
 	Gui, 2:Add, Link, x187 y+5 gblog, <a href="http://www.github.com/avi-aryan">Avi Aryan</a> (C) 2013
 	Gui, 2:Font, norm
-	Gui, 2:Add, Groupbox, x0 y80 w550 h170, About
+	Gui, 2:Add, Groupbox, x5 y80 w540 h170, About
 	Gui, 2:Font, S10, Courier New
 	
 	Gui, 2:Add, Text, xp+5 y110 wp+0, % "
@@ -22,10 +22,10 @@ aboutGUI(){
 		appreciation will help many enjoy the benefits of this freebie.
 	)"
 	
-	Gui, 2:Font, S12 norm +underline, Arial
-	Gui, 2:Add, Text, x2 y280 gsettings , Edit Settings
-	Gui, 2:Add, Text, yp+30 ghistory,% "See Clipjump's History (" hParse_Rev(history_K) ")"
-	Gui, 2:Add, Text, yp+30 ghlp, Help
+	Gui, 2:Font, S10 norm +underline, Arial
+	Gui, 2:Add, Text, x5 y280 gsettings , Edit Settings
+	Gui, 2:Add, Text, yp+20 ghistory,% "See Clipjump's History (" hParse_Rev(history_K) ")"
+	Gui, 2:Add, Text, yp+20 ghlp, Help
 
 	Gui, 2:Show, w552, % PROGNAME " [ Channel: " CN.Name " ]"
 	return

@@ -93,6 +93,10 @@
 		<param name="Local" value="clipjumpcontroller.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Changelog">
+		<param name="Local" value="changelog.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Contact">
 		<param name="Local" value="contact.html">
 		</OBJECT>

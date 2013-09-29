@@ -93,6 +93,10 @@
 		<param name="Name" value="Changes in this version">
 		<param name="Local" value="clipjump.html#changes">
 		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Changelog">
+		<param name="Local" value="changelog.html">
+		</OBJECT>
 </UL>
 </BODY>
 </HTML>

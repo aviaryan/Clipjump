@@ -1,6 +1,6 @@
 Microsoft HTML Help Compiler 4.74.8702
 
-Compiling s:\Portables\AutoHotkey\My Scripts\ClipStep\Non-project\chm_files\Clipjump.chm
+Compiling s:\Portables\AutoHotkey\My Scripts\ClipStep\chm_files\Clipjump.chm
 
 Blogs.css
 clipjump.html
@@ -20,14 +20,15 @@ USAGE\basic_help.html
 USAGE\history.html
 USAGE\settings.html
 USAGE\channels.html
+changelog.html
 images\channelpaste.jpg
 
 Compile time: 0 minutes, 3 seconds
-20	Topics
-49	Local links
-9	Internet links
+21	Topics
+50	Local links
+21	Internet links
 1	Graphic
 
 
-Created s:\Portables\AutoHotkey\My Scripts\ClipStep\Non-project\chm_files\Clipjump.chm, 73,130 bytes
-Compression decreased file by 38,337 bytes.
+Created s:\Portables\AutoHotkey\My Scripts\ClipStep\chm_files\Clipjump.chm, 78,328 bytes
+Compression decreased file by 68,262 bytes.
