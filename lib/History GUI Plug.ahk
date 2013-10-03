@@ -5,7 +5,7 @@ gui_History()
 ; Creates and shows a GUI for managing and viewing the clipboard history
 {
 	global
-	static x, y, how_sort := 2_sort := 3_sort := 0, what_sort
+	static x, y, how_sort := 2_sort := 3_sort := 0, what_sort := 2
 	;2_3_sort are the vars storing how cols are sorted , 1 means in Sort ; 0 means SortDesc
 
 	Gui, History:new

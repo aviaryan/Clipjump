@@ -22,18 +22,46 @@ MakeClipboardAvailable(doreturn=1){
 	return doreturn ? Clipboard : ""
 }
 
+;type=1
+;	returns Text
+;type=0
+;	returns data types
+GetClipboardFormat(type=1){		;Thanks nnnik
+	Critical, On
+
+ 	DllCall("OpenClipboard", "int", "")
+ 	while c := DllCall("EnumClipboardFormats","Int",c?c:0)
+		x .= "," c
+	DllCall("CloseClipboard")
+
+	if type
+  		if Instr(x, ",1") and Instr(x, ",13")
+    		return "[Text]"
+ 		else If Instr(x, ",15")
+    		return "[File/Folder]"
+    	else
+    		return ""
+    else
+    	return x
+}
+
 ;GetFile()
 ;	Gets file path of selected item in Explorer
 
 GetFile(hwnd=""){
 	hwnd := hwnd ? hwnd : WinExist("A")
 	WinGetClass class, ahk_id %hwnd%
-	if (class="CabinetWClass" or class="ExploreWClass" or class="Progman")
+	if (class="CabinetWClass" or class="ExploreWClass")
+	{
 		for window in ComObjCreate("Shell.Application").Windows
 			if (window.hwnd==hwnd)
-    sel := window.Document.SelectedItems
-	for item in sel
-		ToReturn .= item.path "`n"
+    			sel := window.Document.SelectedItems
+    	for item in sel
+			ToReturn .= item.path "`n"
+    }
+    else
+    	Toreturn := Copytovar(4)
+
 	return Trim(ToReturn,"`n")
 }
 
@@ -61,6 +89,10 @@ GetFolder()
 			}
 		}
 	return v
+	}
+	else
+	{
+		return Copytovar(2, "!d^c{Esc}")
 	}
 }
 

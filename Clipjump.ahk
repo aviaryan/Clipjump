@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 9.02
+;@Ahk2Exe-SetVersion 9.05
 ;@Ahk2Exe-SetCopyright (C) 2013 Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -36,7 +36,7 @@ ListLines, Off
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := 9.02
+global VERSION := 9.05
 global CONFIGURATION_FILE := "settings.ini"
 global UPDATE_FILE := "https://raw.github.com/avi-aryan/Clipjump/master/version.txt"
 global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/clipjump.html"
@@ -88,6 +88,7 @@ global CURSAVE, TEMPSAVE, LASTCLIP, LASTFORMAT
 global NOINCOGNITO := 1
 
 ;Initailizing Common Variables
+global CALLER_STATUS		; global vars are not declared like the below , without initialising
 global CALLER := CALLER_STATUS := true
 	, IN_BACK := false
 
@@ -256,7 +257,7 @@ onClipboardChange:
 		{
 			onetimeOn := 0 ;--- To avoid OnClipboardChange label to open this routine [IMPORTANT]
 			sleep 500 ;--- Allows the restore Clipboard Transfer in apps
-			CALLER := 1
+			CALLER := CALLER_STATUS
 			ToolTip, One Time Stop Deactivated
 			SetTimer, TooltipOff, 600
 			changeIcon()
@@ -778,29 +779,6 @@ export:
 	try FileAppend, %ClipboardAll%, % temp
 	return
 
-;type=1
-;	returns Text
-;type=0
-;	returns data types
-GetClipboardFormat(type=1){		;Thanks nnnik
-	Critical, On
-
- 	DllCall("OpenClipboard", "int", "")
- 	while c := DllCall("EnumClipboardFormats","Int",c?c:0)
-		x .= "," c
-	DllCall("CloseClipboard")
-
-	if type
-  		if Instr(x, ",1") and Instr(x, ",13")
-    		return "[Text]"
- 		else If Instr(x, ",15")
-    		return "[File/Folder]"
-    	else
-    		return ""
-    else
-    	return x
-}
-
 windows_copy:
 	CALLER := 0
 	Send ^c
@@ -816,6 +794,22 @@ windows_cut:
 	makeClipboardAvailable(0)
 	CALLER := CALLER_STATUS
 	return
+
+;Copies text to a var in the script without invoking Clipjump
+CopytoVar(clipwait_time=3, send_macro="^c"){
+
+	CALLER := 0
+    try oldclip := ClipboardAll
+    try Clipboard := ""
+    Send % send_macro
+    ClipWait, % clipwait_time
+    try var := Clipboard
+    try Clipboard := oldclip
+    CALLER := CALLER_STATUS
+
+    return var
+}
+
 
 ;#################### COMMUNICATION ##########################################
 

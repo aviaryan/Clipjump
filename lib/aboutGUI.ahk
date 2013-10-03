@@ -5,17 +5,16 @@ aboutGUI(){
 	global
 	;About GUI
 	Gui, 2:Destroy
-
 	Gui, 2:Font, S18, Consolas
 	Gui, 2:Add, Edit, x0 y0 w0 h0,
-	Gui, 2:Add, Link, x188 y0 gupdt, <a href="http://avi-win-tips.blogspot.com/p/clipjump.html">Clipjump</a> v%version%
-	Gui, 2:Font, S14, 
-	Gui, 2:Add, Link, x187 y+5 gblog, <a href="http://www.github.com/avi-aryan">Avi Aryan</a> (C) 2013
+	Gui, 2:Add, Link, x188 y5 gupdt, <a href="http://avi-win-tips.blogspot.com/p/clipjump.html">Clipjump</a> v%version%
+	Gui, 2:Font, S12, 
+	Gui, 2:Add, Link, xp+3 y+3 gblog, <a href="http://www.github.com/avi-aryan">Avi Aryan</a> (C) 2013
 	Gui, 2:Font, norm
-	Gui, 2:Add, Groupbox, x5 y80 w540 h170, About
+	Gui, 2:Add, Groupbox, x7 y80 w540 h170, About
 	Gui, 2:Font, S10, Courier New
 	
-	Gui, 2:Add, Text, xp+5 y110 wp+0, % "
+	Gui, 2:Add, Text, xp+10 y110 wp+0, % "
 	(LTrim`t , Join`s
 		Clipjump was created to make working with Multiple Clipboards as easy (and fast) as it gets. It is a one and only highly innovated tool that makes you work with Multiple
 		Clipboards like never ever before. Use this free tool and feel the difference.`n`nIf you find the tool fabulous, please consider spreading the word!`nA short note of
@@ -23,7 +22,7 @@ aboutGUI(){
 	)"
 	
 	Gui, 2:Font, S10 norm +underline, Arial
-	Gui, 2:Add, Text, x5 y280 gsettings , Edit Settings
+	Gui, 2:Add, Text, x10 y280 gsettings , Edit Settings
 	Gui, 2:Add, Text, yp+20 ghistory,% "See Clipjump's History (" hParse_Rev(history_K) ")"
 	Gui, 2:Add, Text, yp+20 ghlp, Help
 
