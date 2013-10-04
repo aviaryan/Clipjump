@@ -186,6 +186,7 @@ return
 ;End Of Auto-Execute================================================================================================================
 
 paste:
+	Critical
 	Gui, 1:Hide
 	CALLER := false
 	ctrlRef := "pastemode"
@@ -582,7 +583,7 @@ renameCorrect(realActive) {
 }
 
 thumbGenerator() {
-	ClipWait, , 1
+	ClipWait, 3, 1 				;Dont need a Clipwait here , but just for special cases I put a wait of 3 secs
 	Gdip_CaptureClipboard(A_ScriptDir "\" THUMBS_dir "\" CURSAVE ".jpg", ini_Quality)
 }
 
