@@ -719,7 +719,9 @@ strtup:
 	return
 
 updt:
+	Tooltip, Checking for Updates ......
 	URLDownloadToFile, %UPDATE_FILE%, %A_ScriptDir%/cache/latestversion.txt
+	ToolTip
 	FileRead, latestVersion, %A_ScriptDir%/cache/latestversion.txt
 	if ( (latestVersion+0) > VERSION )
 	{
