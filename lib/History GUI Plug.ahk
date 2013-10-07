@@ -246,6 +246,7 @@ historyUpdate(crit="", create=true)
 ; create=false will prevent re-drawing of Columns , useful when the function is called in the SearchBox label and Gui Size is customized.
 {
 	static his_obj := {}
+	local totalSize := 0
 
 	LV_Delete()
 	Loop, cache\history\*
@@ -266,9 +267,12 @@ historyUpdate(crit="", create=true)
 				his_obj[A_LoopFileName "_size"] := O
 			}
 
-			LV_Add("", lv_temp, his_obj[A_LoopFileName "_date"], his_obj[A_LoopFileName "_size"], A_LoopFileName)	; not parsing here to maximize speed
+			LV_Add("", lv_temp, his_obj[A_LoopFileName "_date"], t := his_obj[A_LoopFileName "_size"], A_LoopFileName)
+			totalSize += t 				; speed factor
 		}
 	}
+
+	history_UpdateSTB("" totalSize/1024)
 
 	if create
 	{
@@ -290,8 +294,10 @@ history_GetSize(I := ""){
     return R/1024
 }
 
-history_UpdateSTB(){
-	SB_SetText("Total Disk Consumption : " history_GetSize() " KB")
+history_UpdateSTB(size=""){
+	; If size is passed, that size is used
+	Gui, History:Default
+	SB_SetText("Disk Consumption : " ( size="" ? history_GetSize() : size ) " KB")
 }
 
 

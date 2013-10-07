@@ -1,0 +1,100 @@
+<html>
+<head>
+  <title>Clipjump FAQ</title>
+  <link rel="stylesheet" href="../Blogs.css" type="text/css">
+
+	<!-- 
+	<script language="JavaScript">
+		function ShowHide(divId)
+		{
+			if(document.getElementById(divId).style.display == 'none')
+				document.getElementById(divId).style.display='block';
+			else
+				document.getElementById(divId).style.display = 'none';
+		}
+	</script> -->
+</head>
+
+
+<body>
+	<center><h3> Frequently asked questions </h3></center>
+<br><br><br>
+
+<dl>
+	<dt>I had the copied the file/folder to Clipjump but when I paste it , nothing happens ?
+	<dd><li>Make sure that what you are pasting is a [FILE/FOLDER] and not it's path.
+		<li>Make sure that you are pasting it in a file manager such as Windows Explorer.
+		<li>Check that the path given by Clipjump's [PASTE MODE] tip exists . This means if Clipjump's tip contains <code>C:\test.txt</code> , then make 
+			sure the file exists. 
+
+	<br><br><br>
+
+	<dt>The Clear History button in History Tool doesn't delete the recent Clips in Ctrl+V Paste Mode ?
+	<dd>The History Tool and the Paste-Mode are two different components and there clips are independent of each other . <br>
+		The <code>Clear History</code> button deletes all the History items whereas the <a href="basic_help.html#delete_all">DeleteAll mode</a> deletes all the clips that are in that channel.
+
+	<br><br><br>
+
+	<dt>I copy an image from Windows Explorer but I don't see it's preview in the Paste Mode ?
+	<dd>The thing you copy when you press Ctrl+C on an image file in Windows Explorer is the link to the file and not the file's data . <br>
+		Similarly here, you are not copying the image but the link to the image file. To copy the image to Clipjump , you have 2 ways -
+		<li>Open the image in an Image editor such as MS Paint. Select a region and then from the Right click menu, select <code>Copy</code>.
+		<li>Use the <a href="basic_help.html#fdata">Copy File Data</a> feature and press its shortcut while selecting the image file in Explorer 
+			or any other file manager. You will notice the <code>Transferred to Clipjump</code> and then the (previewed) image will be available on Clipjump.
+
+	<br><br><br>
+
+	<dt>I have disabled the <i>Retain Clipboard data after Restart</i> feature but the clips in Paste Mode are still there ?
+	<dd><a href="channels.html#channel_notes">See Here</a>
+
+	<br><br><br>
+
+	<dt>Will my clips lose formatting when I enable the NO-FORMATTING option ?</dt>
+	<dt>Is no formatting permanent ?</dt>
+	<dd><a href="basic_help.html#nof_notes">See Here</a>
+
+	<br><br><br>
+
+	<dt>Why do I get the warning <i>Clipjump is not running as administrator</i> ?
+	<dd>When Clipjump, a portable application is placed in drives or folders which don't allow users to write to them , Clipjump will not be able to 
+		save its clips and thus will become of no use. To avoid such a condition, a one time warning is coded into Clipjump to aware users of the 
+		fact.
+
+	<br><br><br>
+
+	<dt>Will updating Clipjump preserve my settings , history and clips ?
+	<dd>Yes , you will lose nothing. 
+
+	<br><br><br>
+
+	<dt>How do I update Clipjump ?
+	<dd>To update Clipjump , follow these steps - 
+		<li>Close Clipjump from the tray menu.
+		<li>Go to the <a href="http://www.avi-win-tips.blogspot.com/p/clipjump.html">site</a> and download the latest version. 
+		<li>Extract the latest version from the archive and copy its files.
+		<li>Paste the files on your current copy of Clipjump such that <i>new</i> Clipjump.exe replaces the old one.
+		<li>Run Clipjump.exe
+
+	<br><br><br>
+
+	<dt>I don't want duplicate data to be stored in Clipjump . What should I do ?
+	<dd>These are some steps you can undertake to avoid redundancy in Clipjump -
+		<li>Change the setting <code>is_duplicate_copied</code> to 0 in the [Advanced] section of the Settings.ini to make sure Clipjump doesn't copy duplicate data 
+			when they are sent one after another.
+		<li>Whenever doing some work in which you are ought to copy duplicate/crap data to Clipboard (Clipjump) , consider using the <a href="channels.html#pit">Pit channel
+			</a>.</li>
+
+	<br><br><br>
+
+	<dt>Can History Tool only store distinct history items ?
+	<dd>No. The History tool in Clipjump is meant to keep track of all the clips that were copied to Clipjump with their timestamps.<br>
+		If you are looking to free History disk consumption, try sorting the Window with the 'Size' column. 
+
+	<br><br><br>
+
+	<dt>The Column Mode data in Notepad++ is not pasted properly ?
+	<dd>This is a known issue. A way out will be using shortcuts to <a href=basic_help.html#syscopy>copy data to clipboard bypassing Clipjump</a> 
+	 to copy column mode data and then pasting using either right-click menu OR Ctrl+V with the <a href=basic_help.html#paste>paste-mode shortcut</a> 
+	 changed to some key other than V.
+
+	 <br><br><br>

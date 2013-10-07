@@ -13,14 +13,24 @@ h2{
 }
 h3{
   font-size: 130%;
-  color: #CC3333;
+  color: #3FA82D;
+  text-decoration: underline;
 }
 h4{
   font-size: 115%;
-  color: #990066;
+  color: #5506E6;
 }
+
+dt{
+  font-size: 105%;
+  background-color: #CFCFCF;
+}
+dd{
+  font-size: 90%;
+}
+
 /* Lexixkos Pre-code*/
-pre, code, .Syntax {
+pre, code .Syntax {
 	font-family: Consolas, Courier New, monospace;
 }
 pre, code { background-color: #DFFF80; border: solid 1px #E3E3EF; }

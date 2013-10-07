@@ -13,7 +13,7 @@ gui_Settings()
 
 	Gui, Settings:New
 	Gui, Margin, 8, 8
-	Gui, Add, GroupBox,	w289 h179, Main		; for every new checkbox add 21 pixels to the height, and for every new spinner (UpDown control) add 26 pixels
+	Gui, Add, GroupBox,	w289 h197, Main		; for every new checkbox add 18 pixels to the height, and for every new spinner (UpDown control) add 26 pixels
 	; The total width of the GUI is about 289 x 2
 	
 	Gui, Add, CheckBox, xp+9 yp+22 Section Checked%ini_limitMaxClips% vnew_limitMaxClips gchkbox_limitMaxClips, &Limit the maximum number of active clipboards	; when this is checked the following two controls will be disabled
@@ -31,9 +31,10 @@ gui_Settings()
 
 	Gui, Add, Checkbox, xs Checked%ini_IsMessage%		vnew_IsMessage			gchkbox_IsMessage,			&Show verification ToolTip when copying
 	Gui, Add, Checkbox, xs Checked%ini_KeepSession%		vnew_KeepSession		gchkbox_KeepSession,		&Retain clipboard data upon application restart
+	Gui, Add, Checkbox, % "xs Checked" !ini_formatting " vnew_formatting			gchkbox_formatting",		Start with No &Formatting mode Enabled 
 
 	;---- Clipboard H
-	Gui, Add, GroupBox,	xm y195 w289 h74,	Clipboard History  ;h=169 + 16 ; + 10 in v8.7
+	Gui, Add, GroupBox,	xm y213 w289 h74,	Clipboard History  ;h=169 + 16 ; + 10 in v8.7
 
 	Gui, Add, Text,		xp+9 yp+22,		Number of days to keep items in &history:
 	Gui, Add, Edit,		xm+225 yp-3 w50 r1 Number vnew_DaysToStore gedit_DaysToStore
@@ -42,7 +43,7 @@ gui_Settings()
 	Gui, Add, Checkbox,	xs y+8 Checked%ini_IsImageStored% vnew_IsImageStored gchkbox_IsImageStored, Store &images in history
 
 	;---- Shortcuts
-	Gui, Add, GroupBox, ym w289 h179 vshortcutgroupbox,	Shortcuts
+	Gui, Add, GroupBox, ym w289 h197 vshortcutgroupbox,	Shortcuts
 	Gui, Add, Text, 	xp+9 yp+22 section,	Paste-Mode (Ctrl + ..)
 	Gui, Add, Edit, 	Limit1 Uppercase -Wantreturn xs+155 yp-3 w120 vpst_K ghotkey_paste, % paste_k
 	Gui, Add, Text, 	xs y+8,		Copy File Path(s)
@@ -57,14 +58,14 @@ gui_Settings()
 	Gui, Add, Hotkey,	xs+155 yp-3 vot_K		ghotkey_ot, % onetime_K
 
 	;---- Channels
-	Gui, Add, GroupBox, xs-9 y195 w289 h74, Clipjump Channels 	;h=169 + 16 ; +10 in v8.7 
+	Gui, Add, GroupBox, xs-9 y213 w289 h74, Clipjump Channels 	;h=169 + 16 ; +10 in v8.7 
 	Gui, Add, Checkbox, xs yp+22 Checked%ini_IsChannelMin% vnew_IsChannelMin gchkbox_isChannelMin, Use Minimal GUI
 
 	;---- Buttons
 	Gui, Font, Underline
-	Gui, Add, Text, 	y275 x480 cBlue gsettings_open_advanced, See Advanced Settings
+	Gui, Add, Text, 	y293 x480 cBlue gsettings_open_advanced, See Advanced Settings
 	Gui, font, norm
-	Gui, Add, Button,	x186 y300 w75 h23 Default, 	&OK 	;57 in vertical
+	Gui, Add, Button,	x186 y318 w75 h23 Default, 	&OK 	;57 in vertical
 	Gui, Add, Button,	x+8 w75 h23,			&Cancel
 	Gui, Add, Button,	x+8 w75 h23	Disabled,	&Apply
 
@@ -113,6 +114,7 @@ edit_Quality:
 updown_Quality:
 chkbox_KeepSession:
 chkbox_IsMessage:
+chkbox_formatting:
 edit_DaysToStore:
 updown_DaysToStore:
 chkbox_IsImageStored:
@@ -203,6 +205,7 @@ WM_MOUSEMOVE()	; From the help file
 	static NEW_QUALITY_TT := "The quality of Thumbnail previews you want to have.`nRecommended value is 90`nCan be between 1 - 100"
 	static NEW_KEEPSESSION_TT := "Should Clipjump continue with all the saved clipboards after it's restart"
 	static NEW_ISMESSAGE_TT := "This value determines whether you want to see the ""Transferred to Clipjump"" message or not while copy/cut operations."
+	static NEW_FORMATTING_TT := "Do you want Clipjump to start with No-Formatting Mode enabled ?`nTick for Yes."
 
 	static NEW_DAYSTOSTORE_TT := "Number of days for which the clipboard record will be stored"
 	static NEW_ISIMAGESTORED_TT := "Should clipboard images be stored in history ?"
@@ -277,14 +280,18 @@ load_Settings(all=false)
 	if (all) {
 		Iniread, history_K,  % CONFIGURATION_FILE, Advanced, history_K
 		history_K := HParse(history_K)
-		Iniread, FORMATTING, % CONFIGURATION_FILE, Advanced, Start_with_formatting
-		FORMATTING := FORMATTING = ERROR ? 1 : FORMATTING
+
+		Iniread, ini_formatting, % CONFIGURATION_FILE, Advanced, Start_with_formatting, %A_space%
+		FORMATTING := ini_formatting ? 1 : 0
+
 		Iniread, MSG_PASTING_t,% CONFIGURATION_FILE, Advanced, Show_pasting_tip, %A_space%
 		MSG_PASTING := MSG_PASTING_t ? MSG_PASTING : ""
 
 		iniread, windows_copy_k,% CONFIGURATION_FILE, Advanced, windows_copy_shortcut, %A_space%
 		iniread, windows_cut_k, % CONFIGURATION_FILE, Advanced, windows_cut_shortcut, %A_space%
 		windows_copy_k := HParse(windows_copy_k) , windows_cut_k := Hparse(windows_cut_k)
+
+		iniread, ini_is_duplicate_copied, % CONFIGURATION_FILE, Advanced, is_duplicate_copied, %A_space%
 	}
 
 }
@@ -300,6 +307,7 @@ save_Settings()
 	IniWrite, %new_IsMessage%,		%CONFIGURATION_FILE%, Main, Show_Copy_Message
 	IniWrite, %new_Quality%,		%CONFIGURATION_FILE%, Main, Quality_of_Thumbnail_Previews
 	IniWrite, %new_KeepSession%,	%CONFIGURATION_FILE%, Main, Keep_Session
+	Iniwrite, % !new_formatting, 	%CONFIGURATION_FILE%, Advanced, Start_with_formatting
 	IniWrite, %new_DaysToStore%,	%CONFIGURATION_FILE%, Clipboard_History, Days_To_Store
 	IniWrite, %new_IsImageStored%,	%CONFIGURATION_FILE%, Clipboard_History, Store_Images
 	
@@ -360,6 +368,7 @@ save_Default(full=1){
 	ini_write(s, "Show_pasting_tip", "0")
 	ini_write(s, "windows_copy_shortcut", "")
 	ini_write(s, "windows_cut_shortcut",  "")
+	ini_write(s, "is_duplicate_copied", "1")
 }
 
 
@@ -392,6 +401,7 @@ validate_Settings()
 		ini_Quality := 20
 	if ini_KeepSession is not integer
 		ini_KeepSession := 1
+	ini_formatting := ini_formatting ? 1 : 0
 
 	if !ini_KeepSession
 		clearData()

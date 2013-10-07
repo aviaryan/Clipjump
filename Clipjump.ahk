@@ -18,8 +18,8 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 9.05
-;@Ahk2Exe-SetCopyright (C) 2013 Avi Aryan
+;@Ahk2Exe-SetVersion 9.1
+;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
 SetWorkingDir, %A_ScriptDir%
@@ -36,7 +36,7 @@ ListLines, Off
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := 9.05
+global VERSION := 9.1
 global CONFIGURATION_FILE := "settings.ini"
 global UPDATE_FILE := "https://raw.github.com/avi-aryan/Clipjump/master/version.txt"
 global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/clipjump.html"
@@ -120,7 +120,7 @@ else if (ini_Version != VERSION)
 
 ;Global Ini declarations
 global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_IsChannelMin := 1 , CopyMessage, FORMATTING
-		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, channel_K, onetime_K, paste_k
+		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, channel_K, onetime_K, paste_k, ini_is_duplicate_copied, ini_formatting
 global windows_copy_k, windows_cut_k
 
 ;Initialising Clipjump Channels
@@ -143,7 +143,7 @@ loop
 ;*******GUIS******************************************************
 
 ;Preview GUI
-Gui +LastFound +AlwaysOnTop -Caption +ToolWindow
+Gui +LastFound +AlwaysOnTop -Caption +ToolWindow +Border
 gui, add, picture,x0 y0 w400 h300 vimagepreview,
 
 ;More GUIs and Menus can be seen in lib folder
@@ -355,7 +355,8 @@ deleteall:
 nativeCopy:
 	Critical
 	hkZ("$^c", "nativeCopy", 0) , hkZ("$^c", "keyblocker")
-	LASTCLIP := "" 
+	if ini_is_duplicate_copied
+		LASTCLIP := "" 
 	Send, ^c
 	setTimer, ctrlforCopy, 50
 	gosub, ctrlforCopy
@@ -364,7 +365,8 @@ nativeCopy:
 nativeCut:
 	Critical
 	hkZ("$^x", "nativeCut", 0) , hkZ("$^x", "keyblocker")
-	LASTCLIP := ""
+	if ini_is_duplicate_copied
+		LASTCLIP := ""
 	Send, ^x
 	setTimer, ctrlforCopy, 50
 	gosub, ctrlforCopy
@@ -590,7 +592,7 @@ thumbGenerator() {
 ;~ ;**************** GUI Functions ***************************************************************************
 
 showPreview(){
-	static scrnhgt := A_ScreenHeight / 2.5 , scrnwdt := A_ScreenWidth / 2
+	static scrnhgt := A_ScreenHeight / 2 , scrnwdt := A_ScreenWidth / 2
 
 	if FileExist(A_ScriptDir "\" THUMBS_dir "\" TEMPSAVE ".jpg")
 	{
@@ -601,16 +603,16 @@ showPreview(){
 		Gdip_DisposeImage( pBM )                                         
 		Gdip_Shutdown( GDIPToken )
 
-		if heightOfThumb > %scrnHgt%
+		if ( heightOfThumb > scrnHgt ) or ( widthOfThumb > scrnWdt )
 			displayH := heightOfThumb / 2
-		else displayH := heightofthumb
-		if widthOfThumb > %scrnWdt%
-			displayW := widthOfThumb / 2
-		else displayW := widthOfThumb
+			, displayW := widthOfThumb / 2
+		else 
+			displayH := heightofthumb
+			, displayW := widthOfThumb
 
 		GuiControl, , imagepreview, *w%displayW% *h%displayH% %THUMBS_dir%\%TEMPSAVE%.jpg
 		MouseGetPos, ax, ay
-		ay := ay + (scrnHgt / 8)
+		ay := ay + (scrnHgt / 10)
 		Gui, Show, x%ax% y%ay% h%displayh% w%displayw%, Display_Cj
 	}
 }

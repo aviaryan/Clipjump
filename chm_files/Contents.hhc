@@ -97,6 +97,10 @@
 		<param name="Local" value="changelog.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="FAQ">
+		<param name="Local" value="USAGE\faq.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Contact">
 		<param name="Local" value="contact.html">
 		</OBJECT>

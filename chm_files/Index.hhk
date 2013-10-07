@@ -14,6 +14,10 @@
 		<param name="Local" value="contact.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="FAQ">
+		<param name="Local" value="USAGE\faq.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Index">
 		<param name="Local" value="clipjump.html">
 		</OBJECT>
@@ -88,10 +92,6 @@
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Change Paste Mode shortcut">
 		<param name="Local" value="usage/basic_help.html#paste">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Changes in this version">
-		<param name="Local" value="clipjump.html#changes">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Changelog">
