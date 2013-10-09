@@ -188,3 +188,8 @@ shortcutblocker_settings:
 IsHotkeyControlActive(){
 	return IsActive("msctls_hotkey", "classnn", true)
 }
+
+getLines(str){
+	StringReplace, str, str, `n, `n, UseErrorLevel
+	return ErrorLevel + 1
+}

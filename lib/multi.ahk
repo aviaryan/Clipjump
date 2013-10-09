@@ -58,6 +58,7 @@ channelGUI(){
 
 	Gui, Channel:Default
 	GuiControl,, cIndex, % CN.NG
+	GuiControl,, cName , % CN.Name
 	Gui, Show, , Clipjump Channels
 
 	SB_SetText("Clips in the Channel :" CN["CURSAVE" CN.N])
@@ -79,6 +80,7 @@ Channel_usebutton:
 Channel_cancelbutton:
 	Gui, Channel:hide
 	GuiControl, , cIndex, % CN.NG
+	GuiControl, , cName,  % CN.Name
 	return
 
 channelGUIClose:
@@ -155,6 +157,7 @@ changeChannel(cIndex){
 
 	LASTCLIP := LASTFORMAT := ""
 	CopyMessage := !ini_IsMessage ? "" : MSG_TRANSFER_COMPLETE " {" CN.Name "}"
+	cacheImages()
 
 	Menu, Tray, Tip, % PROGNAME " {" CN.Name "}"
 }

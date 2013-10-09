@@ -105,6 +105,7 @@ history_ButtonDeleteAll:
 	return
 
 history_SearchBox:
+	Critical, On
 	Gui, History:Default
 	Gui, History:Submit, NoHide
 	historyUpdate(history_SearchBox, 0)
@@ -182,23 +183,26 @@ gui_History_Preview(mode, previewText = "")
 ; Creates and shows a GUI for viewing history items
 {
 	global
+	static wt := A_ScreenWidth / 2 , ht := A_ScreenHeight / 2 , maxlines = Round(ht / 13)
 	
 	Gui, Preview:New
 	if mode = image
 	{
 		Gui, Margin, 0, 0
-		Gui, Add, Picture, w530 h320 vhistory_pic, cache\history\%clip_file_path%
+		Gui, Add, Picture, w%wt% h%ht% vhistory_pic, cache\history\%clip_file_path%
 		history_Text_Act := false
 	}
 	else if mode = text
 	{
 		Gui, Margin, 8, 8
 		Gui, Font, s9, Consolas
-		Gui, Add, Edit, w530 h320 +ReadOnly -Wrap +HScroll vhistory_text, %previewText%
+		;13 pixels = 1 line
+		r := ( t:=getLines(previewText) ) > maxlines ? maxlines : ( (t+8) > maxlines ? maxlines : t+8 )
+		Gui, Add, Edit, w%wt% r%r% +ReadOnly -Wrap +HScroll vhistory_text, %previewText%
 		Gui, Font
 		history_Text_Act := true
 	}
-	Gui, Add, Button, x210 y340 w110 h23 gbutton_Copy_To_Clipboard Default, Copy to Clipboard
+	Gui, Add, Button, % "x" (wt/2)-55 " y+10 w110 h23 gbutton_Copy_To_Clipboard Default", Copy to Clipboard
 
 	Gui, Preview:+OwnerHistory
 	Gui, History:+Disabled
@@ -252,12 +256,20 @@ historyUpdate(crit="", create=true)
 	Loop, cache\history\*
 	{
 		if Instr(A_LoopFileFullPath, ".txt")
-			Fileread, lv_temp, %A_LoopFileFullPath%
+		{
+			if !his_obj[A_LoopFileName "_data"]
+			{
+				Fileread, lv_temp, %A_LoopFileFullPath%
+				data := his_obj[A_LoopFileName "_data"] := lv_temp
+			}
+			else
+				data := his_obj[A_LoopFileName "_data"]
+		}
 		else if Instr(A_LoopFileFullPath, ".jpg")
-			lv_temp := MSG_HISTORY_PREVIEW_IMAGE
+			data := his_obj[A_LoopFileName "_data"] := MSG_HISTORY_PREVIEW_IMAGE
 		else Continue
 		
-		if Instr(lv_temp, crit)
+		if Instr(data, crit)
 		{
 			if !his_obj[A_LoopFileName "_date"]
 			{
@@ -267,7 +279,7 @@ historyUpdate(crit="", create=true)
 				his_obj[A_LoopFileName "_size"] := O
 			}
 
-			LV_Add("", lv_temp, his_obj[A_LoopFileName "_date"], t := his_obj[A_LoopFileName "_size"], A_LoopFileName)
+			LV_Add("", data, his_obj[A_LoopFileName "_date"], t := his_obj[A_LoopFileName "_size"], A_LoopFileName)
 			totalSize += t 				; speed factor
 		}
 	}
@@ -361,6 +373,9 @@ LV_SortArrow(h, c, d="")	; by Solar (http://www.autohotkey.com/forum/viewtopic.p
 
 ;------------------------------------ ACCESSIBILITY SHORTCUTS -------------------------------
 
+;#if IsActive(PROGNAME " Clipboard History", "window")
+;	F5::historyUpdate(blankvar, 0)
+;#if
 #if IsActive("Edit1", "classnn") and IsActive(PROGNAME " Clipboard History", "window")
 	$Down::
 		Controlfocus, SysListView321, A

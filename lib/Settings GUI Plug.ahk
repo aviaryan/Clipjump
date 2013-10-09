@@ -1,6 +1,7 @@
 ;Gui Settings for Clipjump
 ;A lot of thanks to chaz
 
+; Tooltip Number for Settings GUI - 4
 gui_Settings()
 ; Preconditions: ini settings in variables starting with _ini
 ; Postconditions: Builds and shows a GUI in which Clipjump settings can be changed. New settings are written to the configuration file when OK or Apply is pressed, but only if changes have been made.
@@ -152,6 +153,7 @@ settingsButtonCancel:
 settingsGuiEscape:
 settingsGuiClose:
 	Gui, Settings:Destroy
+	Tooltip, ,,, 4
 	settingsHaveChanged := false
 	OnMessage(0x200, "")
 	EmptyMem()
@@ -234,7 +236,7 @@ WM_MOUSEMOVE()	; From the help file
 	currControl := A_GuiControl
     If (currControl <> prevControl and !InStr(currControl, " ") and !Instr(currControl, "&"))
     {
-		ToolTip		;remove the old Tooltip
+		ToolTip, ,,, 4	;remove the old Tooltip
 		global Text_TT := %currControl%_TT
 		SetTimer, DisplayToolTip, 650
         prevControl := currControl
@@ -243,13 +245,13 @@ WM_MOUSEMOVE()	; From the help file
 
 DisplayToolTip:
     SetTimer, DisplayToolTip, Off
-    ToolTip % Text_TT  ; The leading percent sign tell it to use an expression.
+    ToolTip, % Text_TT,,, 4  ; The leading percent sign tell it to use an expression.
     SetTimer, RemoveToolTip, 8000
     return
 
 removeToolTip:
     SetTimer, removeToolTip, Off
-    ToolTip
+    ToolTip, ,,, 4
     return
 }
 

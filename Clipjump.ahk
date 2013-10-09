@@ -83,7 +83,7 @@ Sysget, temp, MonitorWorkArea
 global WORKINGHT := tempbottom-temptop
 
 ;Global Inits
-global CN := {} , TOTALCLIPS
+global CN := {} , Icache := {} , TOTALCLIPS
 global CURSAVE, TEMPSAVE, LASTCLIP, LASTFORMAT
 global NOINCOGNITO := 1
 
@@ -91,6 +91,9 @@ global NOINCOGNITO := 1
 global CALLER_STATUS		; global vars are not declared like the below , without initialising
 global CALLER := CALLER_STATUS := true
 	, IN_BACK := false
+
+;Init General vars
+is_pstMode_active := 0
 
 ;Setting up Icons
 FileCreateDir, icons
@@ -179,6 +182,7 @@ OnMessage(0x4a, "Receive_WM_COPYDATA")  ; 0x4a is WM_COPYDATA
 
 ;Clean History
 historyCleanup()
+cacheImages()
 
 EmptyMem()
 return
@@ -198,6 +202,7 @@ paste:
 		else
 			TEMPSAVE -= 1
 	}
+
 	If !FileExist(CLIPS_dir "/" TEMPSAVE ".avc")
 	{
 		Tooltip, %MSG_CLIPJUMP_EMPTY% 			;No Clip Exists
@@ -212,7 +217,8 @@ paste:
 			oldclip_exist := 1
 			try oldclip_data := ClipboardAll
 		}
-		hkZ_Group(1)
+		if !is_pstMode_active
+			hkZ_Group(1) , is_pstMode_active := 1
 
 		try FileRead, Clipboard, *c %A_ScriptDir%/%CLIPS_dir%/%TEMPSAVE%.avc
 		try temp_clipboard := Clipboard
@@ -496,7 +502,8 @@ ctrlCheck:
 		oldclip_exist := 0
 		if ( sleeptime != 100 )        ;not pasting
 			try Clipboard := oldclip_data       ;The command opens, writes and closes clipboard . The ONCC Label is launched when writing takes place.
-
+		is_pstMode_active := 0
+		
 		sleep % sleeptime
 		Tooltip
 		
@@ -596,12 +603,8 @@ showPreview(){
 
 	if FileExist(A_ScriptDir "\" THUMBS_dir "\" TEMPSAVE ".jpg")
 	{
-		GDIPToken := Gdip_Startup()
-		pBM := Gdip_CreateBitmapFromFile( A_ScriptDir "\" THUMBS_dir "\" TEMPSAVE ".jpg" )
-		widthOfThumb := Gdip_GetImageWidth( pBM )
-		heightOfThumb := Gdip_GetImageHeight( pBM )
-		Gdip_DisposeImage( pBM )                                         
-		Gdip_Shutdown( GDIPToken )
+		widthOfThumb := Icache[TEMPSAVE "w"]
+		heightOfThumb := Icache[TEMPSAVE "h"]
 
 		if ( heightOfThumb > scrnHgt ) or ( widthOfThumb > scrnWdt )
 			displayH := heightOfThumb / 2
@@ -614,6 +617,20 @@ showPreview(){
 		MouseGetPos, ax, ay
 		ay := ay + (scrnHgt / 10)
 		Gui, Show, x%ax% y%ay% h%displayh% w%displayw%, Display_Cj
+	}
+}
+
+cacheImages(){
+;Caches Image resolutions in an obj 'Icache' for further reference (see above)
+	loop, %THUMBS_dir%\*.jpg
+	{
+		name := Substr(A_LoopFileName, 1, -4)
+		GDIPToken := Gdip_Startup()
+		pBM := Gdip_CreateBitmapFromFile( A_LoopFileFullPath )
+		Icache[name "w"] := Gdip_GetImageWidth( pBM )
+		Icache[name "h"] := Gdip_GetImageHeight( pBM )
+		Gdip_DisposeImage( pBM )
+		Gdip_Shutdown( GDIPToken )
 	}
 }
 
