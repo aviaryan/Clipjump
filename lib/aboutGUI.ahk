@@ -45,7 +45,8 @@ reset:
 	{
 		FileRemoveDir, cache, 1
 		FileDelete, settings.ini
-		FileRemoveDir, icons, 1
+		if A_IsCompiled
+			FileRemoveDir, icons, 1
 		IfExist, %A_Startup%/Clipjump.lnk
 		{
 			MsgBox, 52, Resetting Clipjump, A startup entry for Clipjump was found. Do you want to remove it as well ?
