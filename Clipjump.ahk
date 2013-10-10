@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 9.1
+;@Ahk2Exe-SetVersion
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -36,7 +36,7 @@ ListLines, Off
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := 9.1
+global VERSION := "9.4b1"
 global CONFIGURATION_FILE := "settings.ini"
 global UPDATE_FILE := "https://raw.github.com/avi-aryan/Clipjump/master/version.txt"
 global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/clipjump.html"
@@ -55,6 +55,7 @@ global MSG_FIXED := "[FIXED]"
 global MSG_HISTORY_PREVIEW_IMAGE := "[Double-click to view image]"
 global MSG_FILE_PATH_COPIED := "File path(s) copied to " PROGNAME
 global MSG_FOLDER_PATH_COPIED := "Active folder path copied to " PROGNAME
+
 ;History Tool
 global hidden_date_no := 4
 
@@ -173,6 +174,7 @@ hkZ(history_K, "History")
 hkZ(Copyfiledata_K, "CopyFileData")
 hkZ(channel_K, "channelGUI")
 hkZ(onetime_K, "oneTime")
+hkZ(pitswap_K, "pitswap")
 
 ;more shortcuts
 hkZ(windows_copy_k, "windows_copy") , hkZ(windows_cut_k, "windows_cut")
@@ -187,6 +189,7 @@ cacheImages()
 EmptyMem()
 return
 
+;Tooltip No 1 is used for Paste Mode tips, 2 is used for notifications , 3 .. , 4 is used in Settings
 ;End Of Auto-Execute================================================================================================================
 
 paste:
@@ -265,8 +268,7 @@ onClipboardChange:
 			onetimeOn := 0 ;--- To avoid OnClipboardChange label to open this routine [IMPORTANT]
 			sleep 500 ;--- Allows the restore Clipboard Transfer in apps
 			CALLER := CALLER_STATUS
-			ToolTip, One Time Stop Deactivated
-			SetTimer, TooltipOff, 600
+			autoTooltip("One Time Stop DEACTIVATED", 600, 2)
 			changeIcon()
 		}
 	}
@@ -342,7 +344,7 @@ cancel:
 	ToolTip, Cancel paste operation`t(1)`nRelease Ctrl to confirm`nPress X to switch modes
 	ctrlref := "cancel"
 	hkZ("^Space", "fixate", 0) , hkZ("^Z", "Formatting", 0)
-	hkZ("^S", "Ssuspnd", 0)
+	hkZ("^S", "Ssuspnd", 0) , hkZ("^Up", "channel_up", 0) , hkZ("^Down", "channel_down", 0)
 	hkZ("^x", "Cancel", 0) , hkZ("^x", "Delete", 1)
 	return
 
@@ -415,7 +417,7 @@ clipSaver() {
 			FileAppend, %ClipboardAll%, %CLIPS_dir%/%CURSAVE%.avc
 			copied := 1
 		}
-		catch 
+		catch
 			copied := 0
 
 	Loop, %CURSAVE%
@@ -529,12 +531,39 @@ hkZ_Group(mode=0){
 ; mode=1 is init Paste Mode
 	hkZ("^c", "MoveBack", mode) , hkZ("^x", "Cancel", mode) , hkZ("^Z", "Formatting", mode)
 	hkZ("^Space", "Fixate", mode) , hkZ("^S", "Ssuspnd", mode) , hkZ("^e", "export", mode)
+	hkZ("^Up", "channel_up", mode) , hkZ("^Down", "channel_down", mode)
 
 	if !mode        ;init Cj
 		hkZ("^x", "DeleteAll", 0) , hkZ("^x", "Delete", 0)
 		, hkZ("$^c", "NativeCopy") , hkZ("$^x", "NativeCut")
 
 }
+
+channel_up:
+	CN.NG += 2 				;+2 to counter that -1 below
+channel_down:
+	CN.NG -= 1
+	if Instr(CN.NG, "-")
+		CN.NG := CN.Total-1
+	else if (CN.NG == CN.Total) 		;if no of channels has exceeded
+		CN.NG := 0
+	changeChannel(CN.NG) , CN.pit_NG := ""
+	gosub, paste
+	return
+
+pitSwap:
+	if ( CN.pit_NG != "" )
+	{
+		changeChannel(CN.pit_NG) , CN.pit_NG := ""
+		, autoTooltip("PitSwap Deactivated", 500)
+		return
+	}
+	if (temp := channel_Pitindex()) == ""
+		autoTooltip("""Pit"" channel not found !", 800, 2)
+	else
+		CN.pit_NG := CN.NG , changeChannel(temp)
+		, autoTooltip("PitSwap Activated", 500)
+	return
 
 ;---------------     Clips management based functions       ------------------
 
@@ -592,13 +621,17 @@ renameCorrect(realActive) {
 }
 
 thumbGenerator() {
+	Critical
 	ClipWait, 3, 1 				;Dont need a Clipwait here , but just for special cases I put a wait of 3 secs
-	Gdip_CaptureClipboard(A_ScriptDir "\" THUMBS_dir "\" CURSAVE ".jpg", ini_Quality)
+	Gdip_CaptureClipboard( ( img := A_ScriptDir "\" THUMBS_dir "\" CURSAVE ".jpg" ), ini_Quality)
+	Gdip_getLengths(img, w, h)
+	Icache[CURSAVE "w"] := w , Icache[CURSAVE "h"] := h
 }
 
 ;~ ;**************** GUI Functions ***************************************************************************
 
 showPreview(){
+	Critical
 	static scrnhgt := A_ScreenHeight / 2 , scrnwdt := A_ScreenWidth / 2
 
 	if FileExist(A_ScriptDir "\" THUMBS_dir "\" TEMPSAVE ".jpg")
@@ -616,7 +649,9 @@ showPreview(){
 		GuiControl, , imagepreview, *w%displayW% *h%displayH% %THUMBS_dir%\%TEMPSAVE%.jpg
 		MouseGetPos, ax, ay
 		ay := ay + (scrnHgt / 10)
-		Gui, Show, x%ax% y%ay% h%displayh% w%displayw%, Display_Cj
+
+		; Try ensures we dont see the error if it happens due to thread overlaps
+		try Gui, Show, x%ax% y%ay% h%displayh% w%displayw%, Display_Cj
 	}
 }
 
@@ -625,12 +660,9 @@ cacheImages(){
 	loop, %THUMBS_dir%\*.jpg
 	{
 		name := Substr(A_LoopFileName, 1, -4)
-		GDIPToken := Gdip_Startup()
-		pBM := Gdip_CreateBitmapFromFile( A_LoopFileFullPath )
-		Icache[name "w"] := Gdip_GetImageWidth( pBM )
-		Icache[name "h"] := Gdip_GetImageHeight( pBM )
-		Gdip_DisposeImage( pBM )
-		Gdip_Shutdown( GDIPToken )
+		Gdip_getLengths(A_LoopFileFullPath, w, h)
+		Icache[name "w"] := w
+		Icache[name "h"] := h
 	}
 }
 
@@ -776,8 +808,7 @@ global
 oneTime:
 	CALLER := false
 	onetimeOn := 1
-	Tooltip % "One Time Stop ACTIVATED"
-	setTimer, TooltipOff, 600
+	autoTooltip("One Time Stop ACTIVATED", 600, 2)
 	changeIcon()
 	return
 

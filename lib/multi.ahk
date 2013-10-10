@@ -7,7 +7,9 @@
 ;	CN.TotalClips = unlimited for other modes (1, 2, 3, 4, 5, 6) and as specified in Ini for 0 channel
 ;	CN.Name = name of channel
 ;	CN.N = contains Folder names amendment of the active Channel
+;	CN.NG = contains real channel indexes 0,1,2
 ;	CN.Total = Total number of channels
+; 	CN.pit_NG = contains item active before the Pit swap
 ;----------------------------------------------------------------------
 
 channelGUI(){
@@ -71,7 +73,7 @@ edit_cname:
 
 Channel_usebutton:
 	Gui, Channel:Submit, nohide
-	changeChannel(cIndex)
+	changeChannel(cIndex) , CN.pit_NG := ""
 	if ( cIndex == CN.Total-1 )  			; -1 as CN.tOTAL is already updated in changeChannel()
 		local_ini_IsChannelMin := "x" 		;force re-building Gui
 
@@ -141,7 +143,7 @@ changeChannel(cIndex){
 		TOTALCLIPS := 999999999999
 
 	CN["TEMPSAVE" CN.N] := TEMPSAVE , CN["CURSAVE" CN.N] := CURSAVE		;Saving Old
-	CN.N := cIndex , CN.NG := !CN.N?0:CN.N
+	CN.N := cIndex , CN.NG := !CN.N?0:CN.N 				;note that cIndex has been emptied if 0
 
 	TEMPSAVE := CN["TEMPSAVE" cIndex] + 0 , CURSAVE := CN["CURSAVE" cIndex] + 0		;Restoring current
 
@@ -160,6 +162,21 @@ changeChannel(cIndex){
 	cacheImages()
 
 	Menu, Tray, Tip, % PROGNAME " {" CN.Name "}"
+}
+
+;--------------------------- Pit ------------------------------------------------------------------
+
+channel_Pitindex(){
+	Iniread, o, %CONFIGURATION_FILE%, Channels
+	loop, parse, o, `n, `r
+	{
+		if Substr(A_LoopField, -3) == "=pit"
+		{
+			N := Substr(A_LoopField, 1, -4)
+			break
+		}
+	}
+	return N
 }
 
 ;-------------------------- ACCESSIBILTY SHORTCUTS ------------------------------------------------

@@ -6,6 +6,7 @@ gui_History()
 {
 	global
 	static x, y, how_sort := 2_sort := 3_sort := 0, what_sort := 2
+	local selected_row
 	;2_3_sort are the vars storing how cols are sorted , 1 means in Sort ; 0 means SortDesc
 
 	Gui, History:new
@@ -27,14 +28,16 @@ gui_History()
 	GuiControl, Focus, history_SearchBox
 
 	;History Right-Click Menu
-	Menu, HisMenu, Add, &Preview, history_ButtonPreview
+	Menu, HisMenu, Add, % "&Preview" , history_MenuPreview
 	Menu, HisMenu, Add
-	Menu, HisMenu, Add, % "&Copy        (Ctrl+C)", history_clipboard
-	Menu, HisMenu, Add, % "&Insta-Paste (Space)", history_InstaPaste
+	;Use a Space and a tab to separate
+	Menu, HisMenu, Add, % "&Copy 			(Ctrl+C)", history_clipboard
+	Menu, HisMenu, Add, % "&Insta-Paste 	(Space)", history_InstaPaste
+	Menu, HisMenu, Add, % "&Export Clip 	(Ctrl+E)", history_exportclip
 	Menu, HisMenu, Add
-	Menu, HisMenu, Add, % "&Export Clip (Ctrl+E)", history_exportclip
-	Menu, HisMenu, Add, &Delete, history_ButtonDelete
-	Menu, HisMenu, Default, &Preview
+	Menu, HisMenu, Add, % "&Refresh", history_SearchBox
+	Menu, HisMenu, Add, % "&Delete", history_ButtonDelete 
+	Menu, HisMenu, Default, % "&Preview"
 
 	Iniread, w, % CONFIGURATION_FILE, Clipboard_History_window, w, %A_Space%
 	Iniread, h, % CONFIGURATION_FILE, Clipboard_History_window, h, %A_Space%
@@ -55,17 +58,26 @@ gui_History()
 
 	WinWaitActive, %PROGNAME% Clipboard History
 	WinGetPos, x, y
+
+	;create hotkeys
+	Hotkey, IfWinActive, % PROGNAME " Clipboard History"
+	Hotkey, F5, history_SearchBox, On
+	Hotkey, If
+	return
+
+history_MenuPreview:
+; Invoking the prev. button . 
+	Send {Enter}
 	return
 
 history_ButtonPreview:
-	LV_GetText(clip_file_path, LV_GetNext("", "Focused"), hidden_date_no)
-	if Instr(clip_file_path, ".jpg")
-		gui_History_Preview("image")
-	else 
-	{
-		FileRead, previewText, cache\history\%clip_file_path%
-		gui_History_Preview("text", previewText)
-	}
+	Gui, submit, nohide
+	if (LV_GetNext() == "0")
+		v := selected_row
+	else v := LV_GetNext()
+
+	LV_GetText(clip_file_path, v, hidden_date_no)
+	gui_History_Preview(clip_file_path, history_SearchBox)
 	return
 
 history_ButtonDelete:
@@ -134,6 +146,7 @@ history_clipboard:
 historyGuiContextMenu:
 	if (A_GuiControl != "historyLV") or (LV_GetNext() = 0)
 		return
+	selected_row := LV_GetNext()
 	Menu, HisMenu, Show, %A_GuiX%, %A_GuiY%
 	return
 
@@ -179,44 +192,63 @@ historyGuiEscape:
 }
 
 
-gui_History_Preview(mode, previewText = "")
+gui_History_Preview(path, history_SearchBox)
 ; Creates and shows a GUI for viewing history items
 {
-	global
+	global prev_copybtn, prev_findtxt, prev_handle, preview_search, prev_picture, preview
 	static wt := A_ScreenWidth / 2 , ht := A_ScreenHeight / 2 , maxlines = Round(ht / 13)
-	
+	preview := {}
+
+	preview.isimg := Instr(Substr(path, -2), "jpg") ? 1 : 0
+	preview.path := A_scriptdir "\cache\history\" path
+
 	Gui, Preview:New
-	if mode = image
+	Gui, Margin, 0, 0
+
+	if preview.isimg
 	{
-		Gui, Margin, 0, 0
-		Gui, Add, Picture, w%wt% h%ht% vhistory_pic, cache\history\%clip_file_path%
-		history_Text_Act := false
+		Gui, Add, Picture, w%wt% h%ht% vprev_picture, 
+		Gdip_getlengths(preview.path, w, h)
+		preview.w := w , preview.h := h
+		wf := preview.w/wt , hf := preview.h/ht
+		if (wf>=hf) && (wf>1)
+			wn := preview.w/wf , hn:= preview.h/wf
+		else if (hf>wf) && (hf>1)
+			wn := preview.w/hf , hn := preview.h/hf
+		else
+		 	wn := preview.w , hn := preview.h
+		GuiControl, , prev_picture,% " *w" wn " *h" hn " " preview.path
 	}
-	else if mode = text
+	else
 	{
-		Gui, Margin, 8, 8
-		Gui, Font, s9, Consolas
-		;13 pixels = 1 line
-		r := ( t:=getLines(previewText) ) > maxlines ? maxlines : ( (t+8) > maxlines ? maxlines : t+8 )
-		Gui, Add, Edit, w%wt% r%r% +ReadOnly -Wrap +HScroll vhistory_text, %previewText%
-		Gui, Font
-		history_Text_Act := true
+		Gui, Add, ActiveX, w%wt% h%ht% vprev_handle, Shell.Explorer
+		prev_handle.Navigate( preview.path )
 	}
-	Gui, Add, Button, % "x" (wt/2)-55 " y+10 w110 h23 gbutton_Copy_To_Clipboard Default", Copy to Clipboard
+
+	Gui, Font, s11
+	Gui, Add, Button, % "x5 y+10 w125 h27 gbutton_Copy_To_Clipboard Default vprev_copybtn Section", Copy to Clipboard
+	; button's x till 130 , search's width will 200 p from right
+	Gui, Add, Text, % "x" wt-200 " yp+2 w30 h23 vprev_findtxt", Fin&d 		; +2 to level text
+	Gui, Font, norm
+	Gui, Add, Edit, % "x+10 yp-2 w155 h23 vpreview_search gpreviewSearch " ( preview.isimg ? "+ReadOnly" : "" ),  	; -5 margin on right side
+	Gui, Add, Text, x5 y+0 w5 			; white-space just below the button
 
 	Gui, Preview:+OwnerHistory
 	Gui, History:+Disabled
-	Gui, Preview: -MaximizeBox -MinimizeBox
+	Gui, Preview: +Resize +MaximizeBox -MinimizeBox
 	Gui, Preview:Show, AutoSize, Preview
+
+	if !preview.isimg
+		GuiControl, , preview_search, % history_SearchBox
 	return
 	
 button_Copy_to_Clipboard:
 	Gui, Preview:Submit, nohide
-	if history_Text_Act
-		try Clipboard := history_text
+	if !preview.isimg
+		try Fileread, Clipboard, % preview.path
 	else
-		Gdip_SetImagetoClipboard("cache\history\" clip_file_path)
-	sleep 500 		;Sleep to show Tootlip and allow Clipboard-capture
+		Gdip_SetImagetoClipboard(preview.path)
+	sleep 500
 	gosub, previewGuiClose
 	return
 
@@ -224,8 +256,48 @@ previewGuiClose:
 previewGuiEscape:
 	Gui, History:-Disabled
 	Gui, Preview:Destroy
-	EmptyMem()			;Free Memory
+	prev_handle := ""
+	prev_document := ""
+	EmptyMem()
 	return
+
+previewSearch:
+	Critical
+	Gui, submit, nohide
+	prev_document := prev_handle.Document.body.createTextRange
+	prev_document.execCommand("BackColor", 0, "White")
+	if preview_search =
+		return
+	while prev_document.findtext(preview_search)
+	{
+		prev_document.execCommand("BackColor", 0, "Aqua")        
+		prev_document.Collapse(0) 
+	}
+	return
+
+PreviewGuiSize:
+	if (A_EventInfo != 1)
+	{
+		gui_w := A_GuiWidth , gui_h := A_GuiHeight
+		GuiControl, move, preview_search, % "x" gui_w-160 " y" gui_h-30
+		GuiControl, move, prev_findtxt, % "x" gui_w-200 " y" gui_h-30
+		GuiControl, move, prev_copybtn, % "y" gui_h-32
+		if !preview.isimg
+			GuiControl, move, prev_handle, % "w" gui_w " h" gui_h-42
+		else {
+			GuiControl, move, prev_handle, % "w" gui_w " h" gui_h-42
+
+			wn := gui_w , hn := gui_h-42
+			if (gui_w+0)>preview.w
+				wn := preview.w
+			if (gui_h-42)>preview.h
+				hn := preview.h
+			
+			GuiControl, , prev_picture, % "*w" wn " *h" hn " " preview.path
+		}
+	}
+	return
+
 }
 
 
@@ -373,9 +445,6 @@ LV_SortArrow(h, c, d="")	; by Solar (http://www.autohotkey.com/forum/viewtopic.p
 
 ;------------------------------------ ACCESSIBILITY SHORTCUTS -------------------------------
 
-;#if IsActive(PROGNAME " Clipboard History", "window")
-;	F5::historyUpdate(blankvar, 0)
-;#if
 #if IsActive("Edit1", "classnn") and IsActive(PROGNAME " Clipboard History", "window")
 	$Down::
 		Controlfocus, SysListView321, A
@@ -389,4 +458,7 @@ LV_SortArrow(h, c, d="")	; by Solar (http://www.autohotkey.com/forum/viewtopic.p
 	Del::Send !t               ;Alt - shortcut for Delete
 	!d::Send !f  			   ;Alt - shortcut for Search
 	^f::Send !f
+#if
+#if Winactive("Preview ahk_class AutoHotkeyGUI")
+	^f::Send !d
 #if

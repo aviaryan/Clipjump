@@ -60,7 +60,9 @@ gui_Settings()
 
 	;---- Channels
 	Gui, Add, GroupBox, xs-9 y213 w289 h74, Clipjump Channels 	;h=169 + 16 ; +10 in v8.7 
-	Gui, Add, Checkbox, xs yp+22 Checked%ini_IsChannelMin% vnew_IsChannelMin gchkbox_isChannelMin, Use Minimal GUI
+	Gui, Add, Text, 	xs yp+22,		PitSwap activation hotkey
+	Gui, Add, Hotkey,	xs+155 yp-3 vpitswp_K  ghotkey_pitswp, % pitswap_K
+	Gui, Add, Checkbox, xs y+8 Checked%ini_IsChannelMin% vnew_IsChannelMin gchkbox_isChannelMin, Use Minimal GUI
 
 	;---- Buttons
 	Gui, Font, Underline
@@ -87,6 +89,7 @@ gui_Settings()
 	Hotkey,% Copyfiledata_K, shortcutblocker_settings, On UseErrorLevel
 	Hotkey,% channel_K, shortcutblocker_settings, On UseErrorLevel
 	Hotkey,% onetime_K, shortcutblocker_settings, On UseErrorLevel
+	Hotkey,% pitswap_K, shortcutblocker_settings, On UseErrorLevel
 	Hotkey, If
 	#If
 	Hotkey, If
@@ -125,6 +128,7 @@ hotkey_cfiled:
 hotkey_chnl:
 hotkey_ot:
 chkbox_ischannelmin:
+hotkey_pitswp:
 	Control, Enable, , &Apply, %PROGNAME% Settings
 	settingsHaveChanged := true
 	return
@@ -225,6 +229,7 @@ WM_MOUSEMOVE()	; From the help file
 		Set the key to None to free the key combination and disable the functionality
 	)"
 
+	static PITSWP_K_TT := "The shortcut to activate the PitSwap feature.`n For more details on the feature refer the Help file."
 	static NEW_ischannelmin_TT := "
 	(LTrim
 		Makes the Channel GUI minimal in details and more productive.
@@ -270,13 +275,14 @@ load_Settings(all=false)
 	IniRead, ini_DaysToStore,	%CONFIGURATION_FILE%, Clipboard_History, Days_to_store
 	IniRead, ini_IsImageStored,	%CONFIGURATION_FILE%, Clipboard_History, Store_images
 
-	IniRead, Copyfilepath_K,% CONFIGURATION_FILE, Shortcuts, Copyfilepath_K
+	IniRead, Copyfilepath_K,% CONFIGURATION_FILE, Shortcuts, Copyfilepath_K, %A_space%
 	IniRead, Copyfolderpath_K,% CONFIGURATION_FILE, Shortcuts, Copyfolderpath_K
 	IniRead, Copyfiledata_K,% CONFIGURATION_FILE, Shortcuts, Copyfiledata_K
 	Iniread, channel_K,% CONFIGURATION_FILE, Shortcuts, channel_K
 	Iniread, onetime_K,% CONFIGURATION_FILE, Shortcuts, onetime_K
 	Iniread, paste_K, % CONFIGURATION_FILE, Shortcuts, paste_K
 
+	Iniread, pitswap_K, % CONFIGURATION_FILE, Channels, pitswap_K
 	Iniread, ini_IsChannelMin,% CONFIGURATION_FILE, Channels, IsChannelMin
 
 	if (all) {
@@ -320,6 +326,7 @@ save_Settings()
 	IniWrite, %ot_K% 	  ,% CONFIGURATION_FILE, Shortcuts, onetime_K
 	Iniwrite, %pst_k%	  ,% CONFIGURATION_FILE, Shortcuts, paste_K
 
+	IniWrite, %pitswp_k%  ,% CONFIGURATION_FILE, Shortcuts, pitswap_K
 	Iniwrite, %new_ischannelMin%, % CONFIGURATION_FILE , Channels, IsChannelMin
 
 	  hkZ( (T := Cfilep_K) ? T : Copyfilepath_K, 	   "CopyFile", T?1:0) 
@@ -328,6 +335,7 @@ save_Settings()
 	, hkZ( (T := chnl_K)   ? T : channel_K,			 "channelGUI",  T?1:0)
 	, hkZ( (T := ot_K)	   ? T : onetime_K,			"onetime",		T?1:0)
 	, hkZ( "$^" ( (T := pst_k) ? T : paste_k ), 		"paste", 	T?1:0)
+	, hkZ( (T := pitswp_K) ? T : pitswap_K, 	   "PitSwap", T?1:0)
 
 	Copyfilepath_K := cfilep_K
 	, Copyfolderpath_K := cfolderp_K
@@ -335,6 +343,7 @@ save_Settings()
 	, channel_K := chnl_K
 	, onetime_K := ot_K
 	, paste_K := pst_K
+	, pitswap_K := pitswp_k
 }
 
 save_Default(full=1){
@@ -362,6 +371,7 @@ save_Default(full=1){
 	Ini_write(s, "onetime_k", "!s")
 	ini_write(s, "paste_k", "V")
 
+	ini_write("Channels",  "pitswap_K",  "^+z")
 	Ini_Write("Channels", "IsChannelMin", "0")
 	;---- Non GUI
 	Ini_write(s := "Advanced", "history_k", "Win + c")

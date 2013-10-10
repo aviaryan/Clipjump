@@ -142,6 +142,18 @@ Gdip_CaptureClipboard(file, quality){
 	Gdip_Shutdown( PToken)
 }
 
+; Gdip_Getdimensions()
+
+Gdip_getLengths(img, byref width, byref height) {
+
+	GDIPToken := Gdip_Startup()
+	pBM := Gdip_CreateBitmapFromFile( img )
+	width := Gdip_GetImageWidth( pBM )
+	height := Gdip_GetImageHeight( pBM )
+	Gdip_DisposeImage( pBM )
+	Gdip_Shutdown( GDIPToken )
+}
+
 ;	Flexible Active entity analyzer
 
 IsActive(what, oftype="classnn", ispattern=false){
@@ -172,10 +184,20 @@ getParams(sum){
 	return Substr(p,1,-1)
 }
 
+autoTooltip(Text, Time, which=1){
+	ToolTip, % Text, , , % which
+	SetTimer,% "Tooltipoff" which ,% Time
+}
+
 TooltipOff:
-	SetTimer, TooltipOff, Off
-	ToolTip
+TooltipOff1:
+TooltipOff2:
+TooltipOff3:
+TooltipOff4:
+	SetTimer, % A_ThisLabel, Off
+	ToolTip,,,, % ( Substr(A_ThisLabel, 0) == "f" ) ? 1 : Substr(A_ThisLabel, 0) 
 	return
+
 
 keyblocker:
 	return

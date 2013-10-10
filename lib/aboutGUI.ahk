@@ -5,6 +5,7 @@ aboutGUI(){
 	global
 	;About GUI
 	Gui, 2:Destroy
+	Gui, 2:Margin, 0, 0
 	Gui, 2:Font, S18, Consolas
 	Gui, 2:Add, Edit, x0 y0 w0 h0,
 	Gui, 2:Add, Link, x188 y5 gupdt, <a href="http://avi-win-tips.blogspot.com/p/clipjump.html">Clipjump</a> v%version%
@@ -21,10 +22,10 @@ aboutGUI(){
 		appreciation will help many enjoy the benefits of this freebie.
 	)"
 	
-	Gui, 2:Font, S10 norm +underline, Arial
-	Gui, 2:Add, Text, x10 y280 gsettings , Edit Settings
-	Gui, 2:Add, Text, yp+20 ghistory,% "See Clipjump's History (" hParse_Rev(history_K) ")"
-	Gui, 2:Add, Text, yp+20 ghlp, Help
+	Gui, 2:Font, S10 norm, Arial
+	Gui, 2:Add, Button, xp-10 y+50 w70 g2GuiClose Default, &OK
+	Gui, 2:Add, Button, x430 yp w117 greset, &Reset Clipjump
+	Gui, 2:Add, Text, y+0 h0,
 
 	Gui, 2:Show, w552, % PROGNAME " [ Channel: " CN.Name " ]"
 	return
@@ -38,6 +39,22 @@ blog:
 	EmptyMem()
 	return
 
+reset:
+	MsgBox, 20, Warning, Are you sure you want to reset Clipjump by removing all its clips and settings ?
+	IfMsgBox, Yes
+	{
+		FileRemoveDir, cache, 1
+		FileDelete, settings.ini
+		FileRemoveDir, icons, 1
+		IfExist, %A_Startup%/Clipjump.lnk
+		{
+			MsgBox, 52, Resetting Clipjump, A startup entry for Clipjump was found. Do you want to remove it as well ?
+			IfMsgBox, Yes
+				FileDelete, %A_Startup%/Clipjump.lnk
+		}
+		MsgBox, 64, Reset Complete, Clipjump will be closed now.
+	}
+	return
 }
 
 trayMenu(){
