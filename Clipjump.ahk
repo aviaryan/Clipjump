@@ -195,7 +195,7 @@ return
 paste:
 	Critical
 	Gui, 1:Hide
-	CALLER := false
+	CALLER := 0
 	ctrlRef := "pastemode"
 	if IN_BACK
 	{
@@ -265,8 +265,8 @@ onClipboardChange:
 	{
 		LASTFORMAT := GetClipboardFormat(0)
 		if restoreCaller
-			CALLER := CALLER_STATUS , restoreCaller := 0
-		else if onetimeOn
+			restoreCaller := "" , CALLER := CALLER_STATUS
+		if onetimeOn
 		{
 			onetimeOn := 0 ;--- To avoid OnClipboardChange label to open this routine [IMPORTANT]
 			sleep 500 ;--- Allows the restore Clipboard Transfer in apps
@@ -465,7 +465,7 @@ ctrlCheck:
 	if !GetKeyState("Ctrl")
 	{
 		Critical
-		CALLER := 0 , sleeptime := 300
+		CALLER := false , sleeptime := 300
 
 		Gui, 1:Hide
 		if ctrlRef = cancel
@@ -516,6 +516,7 @@ ctrlCheck:
 		sleep % sleeptime
 		Tooltip
 		
+		restoreCaller := 0 			; make it 0 in case Clipboard was not touched (Pasting was done) 
 		CALLER := CALLER_STATUS , EmptyMem()
 	}
 	return
