@@ -215,3 +215,33 @@ getLines(str){
 	StringReplace, str, str, `n, `n, UseErrorLevel
 	return ErrorLevel + 1
 }
+
+/*
+SuperInstr()
+	Returns min/max position for a | separated values of Needle(s)
+	
+	return_min = true  ; return minimum position
+	return_max = false ; return maximum position
+
+*/
+SuperInstr(Hay, Needles, return_min=true, Case=false, Startpoint=1, Occurrence=1){
+	
+	pos := return_min*Strlen(Hay)
+	Needles := Rtrim(Needles, A_space)
+	
+	if return_min
+	{
+		loop, parse, Needles, %A_space%
+			if ( pos > (var := Instr(Hay, A_LoopField, Case, startpoint, Occurrence)) )
+				pos := ( var = 0 ? pos : var )
+	}
+	else
+	{
+		if Needles=
+			return Strlen(Hay)
+		loop, parse, Needles, %A_space%
+			if ( (var := Instr(Hay, A_LoopField, Case, startpoint, Occurrence)) > pos )
+				pos := var
+	}
+	return pos
+}

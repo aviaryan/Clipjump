@@ -36,7 +36,7 @@ ListLines, Off
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "9.4b1"
+global VERSION := "9.4b2"
 global CONFIGURATION_FILE := "settings.ini"
 global UPDATE_FILE := "https://raw.github.com/avi-aryan/Clipjump/master/version.txt"
 global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/clipjump.html"
@@ -82,9 +82,10 @@ FileDelete, % A_temp "/clipjumpcom.txt"
 ;Global Data Holders
 Sysget, temp, MonitorWorkArea
 global WORKINGHT := tempbottom-temptop
+global history_partial := 0 , restoreCaller := 0
 
 ;Global Inits
-global CN := {} , Icache := {} , TOTALCLIPS
+global CN := {} , TOTALCLIPS 
 global CURSAVE, TEMPSAVE, LASTCLIP, LASTFORMAT
 global NOINCOGNITO := 1
 
@@ -164,7 +165,7 @@ IfExist, %A_Startup%/Clipjump.lnk
 global CLIPS_dir := "cache/clips"
 	, THUMBS_dir := "cache/thumbs"
 	, FIXATE_dir := "cache/fixate"
-	, NUMBER_ADVANCED := 22 + CN.Total + 1 					;the number stores the line number of ADVANCED section
+	, NUMBER_ADVANCED := 23 + CN.Total + 1 					;the number stores the line number of ADVANCED section
 
 ;Setting Up shortcuts
 hkZ( ( paste_k ? "$^" paste_k : emptyvar ) , "Paste")
@@ -184,7 +185,6 @@ OnMessage(0x4a, "Receive_WM_COPYDATA")  ; 0x4a is WM_COPYDATA
 
 ;Clean History
 historyCleanup()
-cacheImages()
 
 EmptyMem()
 return
@@ -257,13 +257,16 @@ onClipboardChange:
 	{
 		try clipboard_copy := makeClipboardAvailable()
 		
-		if ( LASTFORMAT != (LASTFORMAT := GetClipboardFormat(0)) ) or ( LASTCLIP != clipboard_copy) or ( clipboard_copy == "" )
+		if ( LASTFORMAT != (temp23 := GetClipboardFormat(0)) ) or ( LASTCLIP != clipboard_copy) or ( clipboard_copy == "" )
 			clipChange(A_EventInfo, clipboard_copy)
+		LASTFORMAT := temp23
 	}
 	else
 	{
 		LASTFORMAT := GetClipboardFormat(0)
-		if onetimeOn
+		if restoreCaller
+			CALLER := CALLER_STATUS , restoreCaller := 0
+		else if onetimeOn
 		{
 			onetimeOn := 0 ;--- To avoid OnClipboardChange label to open this routine [IMPORTANT]
 			sleep 500 ;--- Allows the restore Clipboard Transfer in apps
@@ -311,6 +314,7 @@ clipChange(ClipErrorlevel, clipboard_copy) {
 }
 
 moveBack:
+	Critical
 	Gui, 1:Hide
 	IN_BACK := true
 	TEMPSAVE := realActive + 1
@@ -383,6 +387,7 @@ nativeCut:
 ctrlForCopy:
 	if GetKeyState("Ctrl", "P") = 0		; if key is up
 	{
+		Critical
 		hkZ("$^c", "NativeCopy") , hkZ("$^x", "NativeCut")
 		SetTimer, ctrlforCopy, Off
 	}
@@ -459,6 +464,7 @@ PasteModeTooltip(temp_clipboard) {
 ctrlCheck:
 	if !GetKeyState("Ctrl")
 	{
+		Critical
 		CALLER := 0 , sleeptime := 300
 
 		Gui, 1:Hide
@@ -498,13 +504,14 @@ ctrlCheck:
 			TEMPSAVE := realActive
 		}
 		SetTimer, ctrlCheck, Off
-		IN_BACK := false , ctrlRef := ""
+		IN_BACK := false , ctrlRef := "" , is_pstMode_active := 0 , oldclip_exist := 0
 		hkZ_Group(0)
-
-		oldclip_exist := 0
-		if ( sleeptime != 100 )        ;not pasting
+		restoreCaller := 1 			; Restore CALLER in the ONC label . This a second line of defence wrt to the last line of this label.
+		Critical, Off
+		; The below thread will be interrupted when the Clipboard command is executed. The ONC label will exit as CALLER := 0 in the situtaion
+		
+		if !Instr(sleeptime, "100")        ;not pasting
 			try Clipboard := oldclip_data       ;The command opens, writes and closes clipboard . The ONCC Label is launched when writing takes place.
-		is_pstMode_active := 0
 		
 		sleep % sleeptime
 		Tooltip
@@ -527,8 +534,10 @@ Ssuspnd:
 	return
 
 hkZ_Group(mode=0){
-; mode=0 is initialising Clipjump
-; mode=1 is init Paste Mode
+; mode=0 is for initialising Clipjump
+; mode=1 is for init Paste Mode
+	Critical
+
 	hkZ("^c", "MoveBack", mode) , hkZ("^x", "Cancel", mode) , hkZ("^Z", "Formatting", mode)
 	hkZ("^Space", "Fixate", mode) , hkZ("^S", "Ssuspnd", mode) , hkZ("^e", "export", mode)
 	hkZ("^Up", "channel_up", mode) , hkZ("^Down", "channel_down", mode)
@@ -623,21 +632,17 @@ renameCorrect(realActive) {
 thumbGenerator() {
 	Critical
 	ClipWait, 3, 1 				;Dont need a Clipwait here , but just for special cases I put a wait of 3 secs
-	Gdip_CaptureClipboard( ( img := A_ScriptDir "\" THUMBS_dir "\" CURSAVE ".jpg" ), ini_Quality)
-	Gdip_getLengths(img, w, h)
-	Icache[CURSAVE "w"] := w , Icache[CURSAVE "h"] := h
+	Gdip_CaptureClipboard( A_ScriptDir "\" THUMBS_dir "\" CURSAVE ".jpg", ini_Quality)
 }
 
 ;~ ;**************** GUI Functions ***************************************************************************
 
 showPreview(){
-	Critical
 	static scrnhgt := A_ScreenHeight / 2 , scrnwdt := A_ScreenWidth / 2
 
-	if FileExist(A_ScriptDir "\" THUMBS_dir "\" TEMPSAVE ".jpg")
+	if FileExist( (img := A_ScriptDir "\" THUMBS_dir "\" TEMPSAVE ".jpg") )
 	{
-		widthOfThumb := Icache[TEMPSAVE "w"]
-		heightOfThumb := Icache[TEMPSAVE "h"]
+		Gdip_getLengths(img, widthOfThumb, heightOfThumb)
 
 		if ( heightOfThumb > scrnHgt ) or ( widthOfThumb > scrnWdt )
 			displayH := heightOfThumb / 2
@@ -652,17 +657,6 @@ showPreview(){
 
 		; Try ensures we dont see the error if it happens due to thread overlaps
 		try Gui, Show, x%ax% y%ay% h%displayh% w%displayw%, Display_Cj
-	}
-}
-
-cacheImages(){
-;Caches Image resolutions in an obj 'Icache' for further reference (see above)
-	loop, %THUMBS_dir%\*.jpg
-	{
-		name := Substr(A_LoopFileName, 1, -4)
-		Gdip_getLengths(A_LoopFileFullPath, w, h)
-		Icache[name "w"] := w
-		Icache[name "h"] := h
 	}
 }
 
@@ -768,9 +762,9 @@ strtup:
 	return
 
 updt:
-	Tooltip, Checking for Updates ......
+	Tooltip, Checking for Updates ...... , , , 3
 	URLDownloadToFile, %UPDATE_FILE%, %A_ScriptDir%/cache/latestversion.txt
-	ToolTip
+	ToolTip, ,,, 3
 	FileRead, latestVersion, %A_ScriptDir%/cache/latestversion.txt
 	if ( (latestVersion+0) > VERSION )
 	{

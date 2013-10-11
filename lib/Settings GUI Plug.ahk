@@ -1,6 +1,7 @@
 ;Gui Settings for Clipjump
 ;A lot of thanks to chaz
 
+; When adding new settings m remember to update ADVANCED_NUMBER var in the main file
 ; Tooltip Number for Settings GUI - 4
 gui_Settings()
 ; Preconditions: ini settings in variables starting with _ini

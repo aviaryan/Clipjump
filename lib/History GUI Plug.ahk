@@ -17,7 +17,8 @@ gui_History()
 	Gui, Add, Button, x+6 ys w75 h23			vhistory_ButtonDelete	ghistory_ButtonDelete, Dele&te item
 	Gui, Add, Button, x+6 ys w75 h23 			vhistory_ButtonDeleteAll ghistory_ButtonDeleteAll, Clear &history
 	Gui, Add, Text, x+15 ys+5 					vhistory_SearchText,	Search &Filter:
-	Gui, Add, Edit, ys+1  	ghistory_SearchBox	vhistory_SearchBox
+	Gui, Add, Checkbox, x+10 ys+5 w65 Checked%history_partial% vhistory_partial ghistory_SearchBox, Pa&rtial
+	Gui, Add, Edit, ys  	ghistory_SearchBox	vhistory_SearchBox
 	;Gui, Font, s9, Courier New
 	;Gui, Font, s9, Lucida Console
 	Gui, Font, s9, Consolas
@@ -120,7 +121,7 @@ history_SearchBox:
 	Critical, On
 	Gui, History:Default
 	Gui, History:Submit, NoHide
-	historyUpdate(history_SearchBox, 0)
+	historyUpdate(history_SearchBox, 0, history_partial)
 	LV_ModifyCol(what_sort, how_sort ? "Sort" : "SortDesc") 		;sort column correctly
 	return
 
@@ -162,7 +163,7 @@ historyGuiSize:
 
 		LV_ModifyCol(1, gui_w-w2-w3-40) 				;gui_w - x  where   x  =  width of all cols + 40
 		GuiControl, Move, historyLV, % "w" (gui_w - 15) " h" (gui_h - 65)     ;+20 H in no STatus Bar
-		GuiControl, Move, history_SearchBox, % "x330 w" (gui_w - 338)
+		GuiControl, Move, history_SearchBox, % "x400 w" (gui_w - 338 - 70)
 	}
 	return
 
@@ -268,11 +269,21 @@ previewSearch:
 	prev_document.execCommand("BackColor", 0, "White")
 	if preview_search =
 		return
-	while prev_document.findtext(preview_search)
+
+	;highlight partial matches
+	if history_partial
 	{
-		prev_document.execCommand("BackColor", 0, "Aqua")        
-		prev_document.Collapse(0) 
+		loop, parse, preview_search, %A_space%
+			while prev_document.findtext(A_LoopField)
+				prev_document.execCommand("BackColor", 0, "Aqua")        
+				, prev_document.Collapse(0) 
+		prev_document := prev_handle.Document.body.createTextRange
 	}
+
+	;highlight exact matches
+	while prev_document.findtext(preview_search)
+		prev_document.execCommand("BackColor", 0, "Yellow")        
+		, prev_document.Collapse(0) 
 	return
 
 PreviewGuiSize:
@@ -317,7 +328,7 @@ history_clipboard(){
 }
 
 
-historyUpdate(crit="", create=true)
+historyUpdate(crit="", create=true, partial=false)
 ; Update the history GUI listview
 ; create=false will prevent re-drawing of Columns , useful when the function is called in the SearchBox label and Gui Size is customized.
 {
@@ -325,8 +336,10 @@ historyUpdate(crit="", create=true)
 	local totalSize := 0
 
 	LV_Delete()
+
 	Loop, cache\history\*
 	{
+		; Filling Text data in obj
 		if Instr(A_LoopFileFullPath, ".txt")
 		{
 			if !his_obj[A_LoopFileName "_data"]
@@ -341,7 +354,9 @@ historyUpdate(crit="", create=true)
 			data := his_obj[A_LoopFileName "_data"] := MSG_HISTORY_PREVIEW_IMAGE
 		else Continue
 		
-		if Instr(data, crit)
+		func := partial ? "Superinstr" : "Instr" 		;too smart - The third param 0 has diff meanings in both cases
+		;  Searching
+		if %func%(data, crit, 0)
 		{
 			if !his_obj[A_LoopFileName "_date"]
 			{

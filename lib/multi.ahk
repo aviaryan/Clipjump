@@ -159,7 +159,6 @@ changeChannel(cIndex){
 
 	LASTCLIP := LASTFORMAT := ""
 	CopyMessage := !ini_IsMessage ? "" : MSG_TRANSFER_COMPLETE " {" CN.Name "}"
-	cacheImages()
 
 	Menu, Tray, Tip, % PROGNAME " {" CN.Name "}"
 }
