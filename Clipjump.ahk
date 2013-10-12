@@ -57,7 +57,7 @@ global MSG_FILE_PATH_COPIED := "File path(s) copied to " PROGNAME
 global MSG_FOLDER_PATH_COPIED := "Active folder path copied to " PROGNAME
 
 ;History Tool
-global hidden_date_no := 4
+global hidden_date_no := 4 , history_w
 
 Loop, cache\history\*.hst                 ;Rename old .hst extensions
 {
