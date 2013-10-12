@@ -13,6 +13,9 @@ gui_History()
 	Gui, Margin, 7, 7
 	Gui, +Resize +MinSize390x110
 
+	Iniread, history_w, % CONFIGURATION_FILE, Clipboard_History_window, w, %A_Space%
+	Iniread, h, % CONFIGURATION_FILE, Clipboard_History_window, h, %A_Space%
+
 	Gui, Add, Button, w75 h23 Section Default	vhistory_ButtonPreview	ghistory_ButtonPreview, &Preview
 	Gui, Add, Button, x+6 ys w75 h23			vhistory_ButtonDelete	ghistory_ButtonDelete, Dele&te item
 	Gui, Add, Button, x+6 ys w75 h23 			vhistory_ButtonDeleteAll ghistory_ButtonDeleteAll, Clear &history
@@ -22,7 +25,7 @@ gui_History()
 	;Gui, Font, s9, Courier New
 	;Gui, Font, s9, Lucida Console
 	Gui, Font, s9, Consolas
-	Gui, Add, ListView, xs+1 HWNDhistoryLV ghistoryLV vhistoryLV LV0x4000, Clip|Date|Size(B)|Hiddendate
+	Gui, Add, ListView, % "xs+1 HWNDhistoryLV ghistoryLV vhistoryLV LV0x4000 w" (history_w ? history_w-25 : 675) , Clip|Date|Size(B)|Hiddendate
 
 	Gui, Add, StatusBar
 	Gui, Font
@@ -39,9 +42,6 @@ gui_History()
 	Menu, HisMenu, Add, % "&Refresh", history_SearchBox
 	Menu, HisMenu, Add, % "&Delete", history_ButtonDelete 
 	Menu, HisMenu, Default, % "&Preview"
-
-	Iniread, history_w, % CONFIGURATION_FILE, Clipboard_History_window, w, %A_Space%
-	Iniread, h, % CONFIGURATION_FILE, Clipboard_History_window, h, %A_Space%
 
 	historyUpdate()
 	history_UpdateSTB()
@@ -152,6 +152,7 @@ historyGuiContextMenu:
 	return
 
 historyGuiSize:
+	Critical, Off
 	if (A_EventInfo != 1)	; ignore minimising
 	{
 		gui_w := a_guiwidth , gui_h := a_guiheight
@@ -161,8 +162,8 @@ historyGuiSize:
 		SendMessage, 0x1000+29, 2,	0, SysListView321, %PROGNAME% Clipboard History
 		w3 := ErrorLevel
 
-		LV_ModifyCol(1, gui_w-15-w2-w3-25) 				;gui_w - x  where   x  =  width of all cols + 25
 		GuiControl, Move, historyLV, % "w" (gui_w - 15) " h" (gui_h - 65)     ;+20 H in no STatus Bar
+		LV_ModifyCol(1, gui_w-15-w2-w3-25) 				;gui_w - x  where   x  =  width of all cols + 25
 		GuiControl, Move, history_SearchBox, % "x400 w" (gui_w - 338 - 70)
 	}
 	return
@@ -378,7 +379,7 @@ historyUpdate(crit="", create=true, partial=false)
 	{
 		Iniread, w2,% CONFIGURATION_FILE, Clipboard_History_window, w2, 155
 		Iniread, w3,% CONFIGURATION_FILE, Clipboard_History_window, w3, 70
-		w1 := (history_w - 15 - w2 - w3) - 25
+		w1 := (history_w - 15 - w2 - w3)
 		LV_ModifyCol(1, w1) , LV_ModifyCol(2, w2?w2:155) , Lv_ModifyCol(3, (w3?w3:70) " Integer") , Lv_ModifyCol(4, "0")
 	}
 }
