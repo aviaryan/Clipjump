@@ -327,7 +327,7 @@ save_Settings()
 	IniWrite, %ot_K% 	  ,% CONFIGURATION_FILE, Shortcuts, onetime_K
 	Iniwrite, %pst_k%	  ,% CONFIGURATION_FILE, Shortcuts, paste_K
 
-	IniWrite, %pitswp_k%  ,% CONFIGURATION_FILE, Shortcuts, pitswap_K
+	IniWrite, %pitswp_k%  ,% CONFIGURATION_FILE, Channels, pitswap_K
 	Iniwrite, %new_ischannelMin%, % CONFIGURATION_FILE , Channels, IsChannelMin
 
 	  hkZ( (T := Cfilep_K) ? T : Copyfilepath_K, 	   "CopyFile", T?1:0) 

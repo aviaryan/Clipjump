@@ -267,23 +267,27 @@ previewSearch:
 	Gui, submit, nohide
 	prev_document := prev_handle.Document.body.createTextRange
 	prev_document.execCommand("BackColor", 0, "White")
+	preview_search := Trim(preview_search, A_space)
 	if preview_search =
 		return
 
+	try {
 	;highlight partial matches
 	if history_partial
-	{
-		loop, parse, preview_search, %A_space%
+		loop, parse, preview_search, %A_space%, %A_space%
+		{
 			while prev_document.findtext(A_LoopField)
 				prev_document.execCommand("BackColor", 0, "Aqua")        
-				, prev_document.Collapse(0) 
-		prev_document := prev_handle.Document.body.createTextRange
-	}
+				, prev_document.Collapse(0)
+			prev_document := prev_handle.Document.body.createTextRange
+		}
 
 	;highlight exact matches
 	while prev_document.findtext(preview_search)
 		prev_document.execCommand("BackColor", 0, "Yellow")        
 		, prev_document.Collapse(0) 
+
+	}
 	return
 
 PreviewGuiSize:
@@ -356,7 +360,7 @@ historyUpdate(crit="", create=true, partial=false)
 		
 		func := partial ? "Superinstr" : "Instr" 		;too smart - The third param 0 has diff meanings in both cases
 		;  Searching
-		if %func%(data, crit, 0)
+		if %func%(data, crit, partial ? 1 :0)
 		{
 			if !his_obj[A_LoopFileName "_date"]
 			{

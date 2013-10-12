@@ -227,13 +227,13 @@ SuperInstr()
 SuperInstr(Hay, Needles, return_min=true, Case=false, Startpoint=1, Occurrence=1){
 	
 	pos := return_min*Strlen(Hay)
-	Needles := Rtrim(Needles, A_space)
+	Needles := Rtrim(Needles, " ")
 	
 	if return_min
 	{
 		loop, parse, Needles, %A_space%
 			if ( pos > (var := Instr(Hay, A_LoopField, Case, startpoint, Occurrence)) )
-				pos := ( var = 0 ? pos : var )
+				pos := var
 	}
 	else
 	{

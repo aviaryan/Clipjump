@@ -1,6 +1,6 @@
 /*
 	Clipjump
-	
+
 	Copyright 2013 Avi Aryan
 
 	Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 0.0
+;@Ahk2Exe-SetVersion 9.5
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -36,7 +36,7 @@ ListLines, Off
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "9.4b2"
+global VERSION := "9.5"
 global CONFIGURATION_FILE := "settings.ini"
 global UPDATE_FILE := "https://raw.github.com/avi-aryan/Clipjump/master/version.txt"
 global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/clipjump.html"
@@ -189,7 +189,7 @@ historyCleanup()
 EmptyMem()
 return
 
-;Tooltip No 1 is used for Paste Mode tips, 2 is used for notifications , 3 .. , 4 is used in Settings
+;Tooltip No 1 is used for Paste Mode tips, 2 is used for notifications , 3 is used for updates , 4 is used in Settings
 ;End Of Auto-Execute================================================================================================================
 
 paste:
@@ -387,7 +387,7 @@ nativeCut:
 ctrlForCopy:
 	if GetKeyState("Ctrl", "P") = 0		; if key is up
 	{
-		Critical
+		Critical 			;To make sure the hotkeys are changed
 		hkZ("$^c", "NativeCopy") , hkZ("$^x", "NativeCut")
 		SetTimer, ctrlforCopy, Off
 	}
@@ -465,6 +465,7 @@ ctrlCheck:
 	if !GetKeyState("Ctrl")
 	{
 		Critical
+		SetTimer, ctrlCheck, Off
 		CALLER := false , sleeptime := 300
 
 		Gui, 1:Hide
@@ -503,7 +504,6 @@ ctrlCheck:
 
 			TEMPSAVE := realActive
 		}
-		SetTimer, ctrlCheck, Off
 		IN_BACK := false , ctrlRef := "" , is_pstMode_active := 0 , oldclip_exist := 0
 		hkZ_Group(0)
 		restoreCaller := 1 			; Restore CALLER in the ONC label . This a second line of defence wrt to the last line of this label.
