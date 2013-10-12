@@ -54,6 +54,10 @@
 				<param name="Name" value="Shortcut List">
 				<param name="Local" value="usage/basic_help.html#short">
 				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Resetting Clipjump">
+				<param name="Local" value="USAGE/basic_help.html#reset">
+				</OBJECT>
 			</UL>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Clipjump Channels">
@@ -61,15 +65,31 @@
 			</OBJECT>
 		<UL>
 			<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="The Pit channel">
-			<param name="Local" value="USAGE/channels.html#pit">
-			</OBJECT>
+				<param name="Name" value="Changing Channels in Paste Mode">
+				<param name="Local" value="USAGE/channels.html#chnljumps">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="The Pit channel">
+				<param name="Local" value="USAGE/channels.html#pit">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="PitSwap">
+				<param name="Local" value="USAGE/channels.html#pitswap">
+				</OBJECT>
 		</UL>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Clipjump History Tool">
 			<param name="Local" value="USAGE/history.html">
 			</OBJECT>
 		<UL>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Preview Window">
+				<param name="Local" value="USAGE/history.html#preview">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Partial Searching">
+				<param name="Local" value="USAGE/history.html#partial">
+				</OBJECT>
 			<LI> <OBJECT type="text/sitemap">
 				<param name="Name" value="Insta-Paste (History GUI)">
 				<param name="Local" value="USAGE/history.html#ipaste">

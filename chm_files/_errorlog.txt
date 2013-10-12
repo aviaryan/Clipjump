@@ -12,8 +12,8 @@ images\COPY.jpg
 images\delete.JPG
 images\deleteall.JPG
 images\fixate.JPG
-images\noformat.jpg
-images\pasting.jpg
+images\noformat.png
+images\pasting.png
 images\path.jpg
 images\trayicon.jpg
 USAGE\basic_help.html
@@ -24,12 +24,12 @@ changelog.html
 USAGE\faq.html
 images\channelpaste.jpg
 
-Compile time: 0 minutes, 3 seconds
-21	Topics
-59	Local links
+Compile time: 0 minutes, 4 seconds
+26	Topics
+68	Local links
 8	Internet links
 1	Graphic
 
 
-Created s:\Portables\AutoHotkey\My Scripts\ClipStep\chm_files\Clipjump.chm, 78,582 bytes
-Compression decreased file by 24,680 bytes.
+Created s:\Portables\AutoHotkey\My Scripts\ClipStep\chm_files\Clipjump.chm, 77,844 bytes
+Compression decreased file by 14,638 bytes.

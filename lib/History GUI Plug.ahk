@@ -152,7 +152,6 @@ historyGuiContextMenu:
 	return
 
 historyGuiSize:
-	Critical, Off
 	if (A_EventInfo != 1)	; ignore minimising
 	{
 		gui_w := a_guiwidth , gui_h := a_guiheight
@@ -473,8 +472,8 @@ LV_SortArrow(h, c, d="")	; by Solar (http://www.autohotkey.com/forum/viewtopic.p
 	^c::history_clipboard()
 	^e::gosub history_exportclip
 	Del::Send !t               ;Alt - shortcut for Delete
-	!d::Send !f  			   ;Alt - shortcut for Search
-	^f::Send !f
+	!d::Send ^f  			   ;Alt - shortcut for Search
+	^f::GuiControl, History:focus, history_SearchBox
 #if
 #if Winactive("Preview ahk_class AutoHotkeyGUI")
 	^f::Send !d
