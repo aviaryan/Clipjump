@@ -190,6 +190,10 @@ EmptyMem()
 return
 
 ;Tooltip No 1 is used for Paste Mode tips, 2 is used for notifications , 3 is used for updates , 4 is used in Settings
+
+;OLD VERSION COMPATIBILITES TO REMOVE
+;* History extension coversion
+;* Communication timer
 ;End Of Auto-Execute================================================================================================================
 
 paste:
@@ -544,8 +548,11 @@ hkZ_Group(mode=0){
 	hkZ("^Up", "channel_up", mode) , hkZ("^Down", "channel_down", mode)
 
 	if !mode        ;init Cj
+	{
 		hkZ("^x", "DeleteAll", 0) , hkZ("^x", "Delete", 0)
-		, hkZ("$^c", "NativeCopy") , hkZ("$^x", "NativeCut")
+		hkZ("$^x", "keyblocker", 0) , hkZ("$^c", "keyblocker", 0) 			;taken as a preventive step
+		hkZ("$^c", "NativeCopy") , hkZ("$^x", "NativeCut")
+	}
 
 }
 
