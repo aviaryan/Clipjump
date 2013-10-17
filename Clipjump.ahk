@@ -376,7 +376,7 @@ nativeCopy:
 	hkZ("$^c", "nativeCopy", 0) , hkZ("$^c", "keyblocker")
 	if ini_is_duplicate_copied
 		LASTCLIP := "" 
-	Send, ^{sc02e}
+	Send, ^{vk43}
 	setTimer, ctrlforCopy, 50
 	gosub, ctrlforCopy
 	return
@@ -386,7 +386,7 @@ nativeCut:
 	hkZ("$^x", "nativeCut", 0) , hkZ("$^x", "keyblocker")
 	if ini_is_duplicate_copied
 		LASTCLIP := ""
-	Send, ^{sc02d}
+	Send, ^{vk58}
 	setTimer, ctrlforCopy, 50
 	gosub, ctrlforCopy
 	return
@@ -510,13 +510,13 @@ ctrlCheck:
 			{
 				if Instr(GetClipboardFormat(), "Text")
 					try Clipboard := Rtrim(Clipboard, "`r`n")
-				Send, ^{sc02f}
+				Send, ^{vk56}
 
 				sleeptime := 1
 			}
 			else
 			{
-				Send, ^{sc02f} 				;vk56
+				Send, ^{vk56} 				;vk56
 				sleeptime := 100
 			}
 
@@ -710,6 +710,8 @@ actionmode:
 	temp_am := TT_Console(ACTIONMODE.text, ACTIONMODE.keys, temp3, temp3, 5, "s8", "Consolas")
 	if ACTIONMODE[temp_am] != ""
 		gosub % ACTIONMODE[temp_am]
+	else
+		EmptyMem()
 	return
 
 init_actionmode() {
@@ -902,7 +904,7 @@ export:
 
 windows_copy:
 	CALLER := 0
-	Send ^{sc02e}
+	Send ^{vk43}
 	sleep 100
 	makeClipboardAvailable(0)   ;wait till Clipboard is ready
 	CALLER := CALLER_STATUS
@@ -910,14 +912,14 @@ windows_copy:
 
 windows_cut:
 	CALLER := 0
-	Send ^{sc02d}
+	Send ^{vk58}
 	sleep 100
 	makeClipboardAvailable(0)
 	CALLER := CALLER_STATUS
 	return
 
 ;Copies text to a var in the script without invoking Clipjump
-CopytoVar(clipwait_time=3, send_macro="^{sc02e}"){
+CopytoVar(clipwait_time=3, send_macro="^{vk43}"){
 
 	CALLER := 0
     try oldclip := ClipboardAll

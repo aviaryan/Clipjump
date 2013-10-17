@@ -71,7 +71,7 @@ gui_Settings()
 	Gui, Font, Underline
 	Gui, Add, Text, 	y303 x480 cBlue gsettings_open_advanced, See Advanced Settings
 	Gui, font, norm
-	Gui, Add, Button,	x186 y318 w75 h23 Default, 	&OK 	;57 in vertical
+	Gui, Add, Button,	x186 y328 w75 h23 Default, 	&OK 	;57 in vertical
 	Gui, Add, Button,	x+8 w75 h23,			&Cancel
 	Gui, Add, Button,	x+8 w75 h23	Disabled,	&Apply
 
@@ -183,9 +183,9 @@ settings_open_advanced:
 	try {
 		run % "notepad.exe " CONFIGURATION_FILE
 		WinWaitActive, ahk_class Notepad
-		Send ^{sc022} 					;^g
+		Send ^{vk47} 					;^g
 		;Winwait, Go To Line
-		Send % NUMBER_ADVANCED "{Enter}"
+		Send % NUMBER_ADVANCED "{vk0d}"
 	} 
 	catch {
 		MsgBox, 16, ERROR, Clipjump is not able to find the settings file (settings.ini) or Notepad ? Make sure both exist in their respective places. `n`nTry contacting the author if problem persists.

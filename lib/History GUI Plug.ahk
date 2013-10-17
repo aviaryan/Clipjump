@@ -68,7 +68,7 @@ gui_History()
 
 history_MenuPreview:
 ; Invoking the prev. button . 
-	Send {Enter}
+	Send {vk0d}
 	return
 
 history_ButtonPreview:
@@ -411,7 +411,7 @@ history_InstaPaste:
 
 	WinClose, %PROGNAME% Clipboard History
 	WinWaitClose, %PROGNAME% Clipboard History
-	Send, ^{sc02f}
+	Send, ^{vk56}
 	CALLER := CALLER_STATUS
 	return
 
@@ -464,17 +464,17 @@ LV_SortArrow(h, c, d="")	; by Solar (http://www.autohotkey.com/forum/viewtopic.p
 #if IsActive("Edit1", "classnn") and IsActive(PROGNAME " Clipboard History", "window")
 	$Down::
 		Controlfocus, SysListView321, A
-		Send {Down}
+		Send {vk28}
 		return
 #if
 #if ( IsActive("SysListView321", "classnn") and IsActive(PROGNAME " Clipboard History", "window") and ctrlRef!="pastemode" )
 	Space::gosub history_InstaPaste
 	^c::history_clipboard()
 	^e::gosub history_exportclip
-	Del::Send !{sc014}               ;Alt+T - shortcut for Delete
-	!d::Send ^{sc021}  			   ;Alt+F - shortcut for Search
+	Del::Send !{vk54}               ;Alt+T - shortcut for Delete
+	!d::Send ^{vk46}  			   ;Alt+F - shortcut for Search
 	^f::GuiControl, History:focus, history_SearchBox
 #if
 #if Winactive("Preview ahk_class AutoHotkeyGUI")
-	^f::Send !{sc020}              ;Alt+D
+	^f::Send !{vk44}              ;Alt+D
 #if
