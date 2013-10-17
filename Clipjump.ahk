@@ -376,7 +376,7 @@ nativeCopy:
 	hkZ("$^c", "nativeCopy", 0) , hkZ("$^c", "keyblocker")
 	if ini_is_duplicate_copied
 		LASTCLIP := "" 
-	Send, ^c
+	Send, ^{sc02e}
 	setTimer, ctrlforCopy, 50
 	gosub, ctrlforCopy
 	return
@@ -386,7 +386,7 @@ nativeCut:
 	hkZ("$^x", "nativeCut", 0) , hkZ("$^x", "keyblocker")
 	if ini_is_duplicate_copied
 		LASTCLIP := ""
-	Send, ^x
+	Send, ^{sc02d}
 	setTimer, ctrlforCopy, 50
 	gosub, ctrlforCopy
 	return
@@ -510,13 +510,13 @@ ctrlCheck:
 			{
 				if Instr(GetClipboardFormat(), "Text")
 					try Clipboard := Rtrim(Clipboard, "`r`n")
-				Send, ^v
+				Send, ^{sc02f}
 
 				sleeptime := 1
 			}
 			else
 			{
-				Send, ^v
+				Send, ^{sc02f} 				;vk56
 				sleeptime := 100
 			}
 
@@ -902,7 +902,7 @@ export:
 
 windows_copy:
 	CALLER := 0
-	Send ^c
+	Send ^{sc02e}
 	sleep 100
 	makeClipboardAvailable(0)   ;wait till Clipboard is ready
 	CALLER := CALLER_STATUS
@@ -910,14 +910,14 @@ windows_copy:
 
 windows_cut:
 	CALLER := 0
-	Send ^x
+	Send ^{sc02d}
 	sleep 100
 	makeClipboardAvailable(0)
 	CALLER := CALLER_STATUS
 	return
 
 ;Copies text to a var in the script without invoking Clipjump
-CopytoVar(clipwait_time=3, send_macro="^c"){
+CopytoVar(clipwait_time=3, send_macro="^{sc02e}"){
 
 	CALLER := 0
     try oldclip := ClipboardAll

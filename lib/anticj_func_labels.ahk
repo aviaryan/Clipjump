@@ -92,7 +92,7 @@ GetFolder()
 	}
 	else
 	{
-		return Copytovar(2, "!d^c{Esc}")
+		return Copytovar(2, "!{sc020}^{sc02e}{Esc}") 			;!d^c
 	}
 }
 

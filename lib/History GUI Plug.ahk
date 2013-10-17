@@ -411,7 +411,7 @@ history_InstaPaste:
 
 	WinClose, %PROGNAME% Clipboard History
 	WinWaitClose, %PROGNAME% Clipboard History
-	Send, ^v
+	Send, ^{sc02f}
 	CALLER := CALLER_STATUS
 	return
 
@@ -471,10 +471,10 @@ LV_SortArrow(h, c, d="")	; by Solar (http://www.autohotkey.com/forum/viewtopic.p
 	Space::gosub history_InstaPaste
 	^c::history_clipboard()
 	^e::gosub history_exportclip
-	Del::Send !t               ;Alt - shortcut for Delete
-	!d::Send ^f  			   ;Alt - shortcut for Search
+	Del::Send !{sc014}               ;Alt+T - shortcut for Delete
+	!d::Send ^{sc021}  			   ;Alt+F - shortcut for Search
 	^f::GuiControl, History:focus, history_SearchBox
 #if
 #if Winactive("Preview ahk_class AutoHotkeyGUI")
-	^f::Send !d
+	^f::Send !{sc020}              ;Alt+D
 #if

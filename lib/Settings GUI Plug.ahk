@@ -183,7 +183,7 @@ settings_open_advanced:
 	try {
 		run % "notepad.exe " CONFIGURATION_FILE
 		WinWaitActive, ahk_class Notepad
-		Send ^g
+		Send ^{sc022} 					;^g
 		;Winwait, Go To Line
 		Send % NUMBER_ADVANCED "{Enter}"
 	} 
