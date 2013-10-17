@@ -15,7 +15,7 @@ gui_Settings()
 
 	Gui, Settings:New
 	Gui, Margin, 8, 8
-	Gui, Add, GroupBox,	w289 h197, Main		; for every new checkbox add 18 pixels to the height, and for every new spinner (UpDown control) add 26 pixels
+	Gui, Add, GroupBox,	w289 h207, Main		; for every new checkbox add 18 pixels to the height, and for every new spinner (UpDown control) add 26 pixels
 	; The total width of the GUI is about 289 x 2
 	
 	Gui, Add, CheckBox, xp+9 yp+22 Section Checked%ini_limitMaxClips% vnew_limitMaxClips gchkbox_limitMaxClips, &Limit the maximum number of active clipboards	; when this is checked the following two controls will be disabled
@@ -36,7 +36,7 @@ gui_Settings()
 	Gui, Add, Checkbox, % "xs Checked" !ini_formatting " vnew_formatting			gchkbox_formatting",		Start with No &Formatting mode Enabled 
 
 	;---- Clipboard H
-	Gui, Add, GroupBox,	xm y213 w289 h74,	Clipboard History  ;h=169 + 16 ; + 10 in v8.7
+	Gui, Add, GroupBox,	xm y223 w289 h74,	Clipboard History  ;h=169 + 16 ; + 10 in v8.7
 
 	Gui, Add, Text,		xp+9 yp+22,		Number of days to keep items in &history:
 	Gui, Add, Edit,		xm+225 yp-3 w50 r1 Number vnew_DaysToStore gedit_DaysToStore
@@ -45,9 +45,11 @@ gui_Settings()
 	Gui, Add, Checkbox,	xs y+8 Checked%ini_IsImageStored% vnew_IsImageStored gchkbox_IsImageStored, Store &images in history
 
 	;---- Shortcuts
-	Gui, Add, GroupBox, ym w289 h197 vshortcutgroupbox,	Shortcuts
+	Gui, Add, GroupBox, ym w289 h207 vshortcutgroupbox,	Shortcuts
 	Gui, Add, Text, 	xp+9 yp+22 section,	Paste-Mode (Ctrl + ..)
 	Gui, Add, Edit, 	Limit1 Uppercase -Wantreturn xs+155 yp-3 w120 vpst_K ghotkey_paste, % paste_k
+	Gui, Add, Text, 	xs y+8,		Action Mode
+	Gui, Add, Hotkey, 	xs+155 yp-3 vactmd_K   ghotkey_actmd, % Actionmode_K
 	Gui, Add, Text, 	xs y+8,		Copy File Path(s)
 	Gui, Add, Hotkey, 	xs+155 yp-3 vcfilep_K   ghotkey_cfilep, % Copyfilepath_K
 	Gui, Add, Text,		xs y+8,		Copy Active Folder Path
@@ -60,14 +62,14 @@ gui_Settings()
 	Gui, Add, Hotkey,	xs+155 yp-3 vot_K		ghotkey_ot, % onetime_K
 
 	;---- Channels
-	Gui, Add, GroupBox, xs-9 y213 w289 h74, Clipjump Channels 	;h=169 + 16 ; +10 in v8.7 
+	Gui, Add, GroupBox, xs-9 y223 w289 h74, Clipjump Channels 	;h=169 + 16 ; +10 in v8.7 
 	Gui, Add, Text, 	xs yp+22,		PitSwap activation hotkey
 	Gui, Add, Hotkey,	xs+155 yp-3 vpitswp_K  ghotkey_pitswp, % pitswap_K
 	Gui, Add, Checkbox, xs y+8 Checked%ini_IsChannelMin% vnew_IsChannelMin gchkbox_isChannelMin, Use Minimal GUI
 
 	;---- Buttons
 	Gui, Font, Underline
-	Gui, Add, Text, 	y293 x480 cBlue gsettings_open_advanced, See Advanced Settings
+	Gui, Add, Text, 	y303 x480 cBlue gsettings_open_advanced, See Advanced Settings
 	Gui, font, norm
 	Gui, Add, Button,	x186 y318 w75 h23 Default, 	&OK 	;57 in vertical
 	Gui, Add, Button,	x+8 w75 h23,			&Cancel
@@ -91,6 +93,7 @@ gui_Settings()
 	Hotkey,% channel_K, shortcutblocker_settings, On UseErrorLevel
 	Hotkey,% onetime_K, shortcutblocker_settings, On UseErrorLevel
 	Hotkey,% pitswap_K, shortcutblocker_settings, On UseErrorLevel
+	Hotkey,% actionmode_k, shortcutblocker_settings, On UseErrorLevel
 	Hotkey, If
 	#If
 	Hotkey, If
@@ -130,6 +133,7 @@ hotkey_chnl:
 hotkey_ot:
 chkbox_ischannelmin:
 hotkey_pitswp:
+hotkey_actmd:
 	Control, Enable, , &Apply, %PROGNAME% Settings
 	settingsHaveChanged := true
 	return
@@ -219,6 +223,8 @@ WM_MOUSEMOVE()	; From the help file
 
 	static pst_k_TT := "Single character combination to use with Ctrl in activating [PASTE MODE]`nNote that letters  E C X Z S  are reserved."
 						. "`n`nAlso make sure to see ""Copy bypassing Clipjump"" in the help file"
+	static actmd_k_TT := "The shortcut to open Action Mode.`n`nThe Action Mode as you may know provides interface for almost all the functionalites in Clipjump"
+						. "`nIt would be a good idea to disable rarely used shortcuts and instead use Action Mode for them."
 	static chnl_K_TT := "Shortcut to show the <Select Channel> Window`nSet the shortcut to None to disable the key combination"
 	static cfilep_K_TT := "Shortcut to copy selected file's path`nSet the shortcut to None to disable the functionality"
 	static cfolderp_K_TT := "Shortcut to copy selected folder's path`nSet the shortcut to None to disable the functionality"
@@ -282,6 +288,7 @@ load_Settings(all=false)
 	Iniread, channel_K,% CONFIGURATION_FILE, Shortcuts, channel_K
 	Iniread, onetime_K,% CONFIGURATION_FILE, Shortcuts, onetime_K
 	Iniread, paste_K, % CONFIGURATION_FILE, Shortcuts, paste_K
+	Iniread, Actionmode_K, % CONFIGURATION_FILE, Shortcuts, actionmode_k
 
 	Iniread, pitswap_K, % CONFIGURATION_FILE, Channels, pitswap_K
 	Iniread, ini_IsChannelMin,% CONFIGURATION_FILE, Channels, IsChannelMin
@@ -289,6 +296,7 @@ load_Settings(all=false)
 	if (all) {
 		Iniread, history_K,  % CONFIGURATION_FILE, Advanced, history_K
 		history_K := HParse(history_K)
+		history_partial := Ini_read("Clipboard_history_window", "partial") ? 1 : 0 	; Important as the use of the var in History tool is such that false = 0 .
 
 		Iniread, ini_formatting, % CONFIGURATION_FILE, Advanced, Start_with_formatting, %A_space%
 		FORMATTING := ini_formatting ? 1 : 0
@@ -301,6 +309,9 @@ load_Settings(all=false)
 		windows_copy_k := HParse(windows_copy_k) , windows_cut_k := Hparse(windows_cut_k)
 
 		iniread, ini_is_duplicate_copied, % CONFIGURATION_FILE, Advanced, is_duplicate_copied, %A_space%
+		ini_actmd_keys := ini_read("Advanced", "actionmode_keys")
+		if !ini_actmd_keys
+			ini_actmd_keys := "H S C X F D P O E F1"
 	}
 
 }
@@ -326,17 +337,30 @@ save_Settings()
 	Iniwrite, %chnl_K%	  ,% CONFIGURATION_FILE, Shortcuts, channel_K
 	IniWrite, %ot_K% 	  ,% CONFIGURATION_FILE, Shortcuts, onetime_K
 	Iniwrite, %pst_k%	  ,% CONFIGURATION_FILE, Shortcuts, paste_K
+	IniWrite, %actmd_k%   ,% CONFIGURATION_FILE, Shortcuts, actionmode_k
 
 	IniWrite, %pitswp_k%  ,% CONFIGURATION_FILE, Channels, pitswap_K
 	Iniwrite, %new_ischannelMin%, % CONFIGURATION_FILE , Channels, IsChannelMin
 
-	  hkZ( (T := Cfilep_K) ? T : Copyfilepath_K, 	   "CopyFile", T?1:0) 
-	, hkZ( (T := Cfolderp_K) ? T : Copyfolderpath_K, "CopyFolder", T?1:0) 
-	, hkZ( (T := Cfiled_K) ? T : Copyfiledata_K,     "CopyFileData", T?1:0)
-	, hkZ( (T := chnl_K)   ? T : channel_K,			 "channelGUI",  T?1:0)
-	, hkZ( (T := ot_K)	   ? T : onetime_K,			"onetime",		T?1:0)
-	, hkZ( "$^" ( (T := pst_k) ? T : paste_k ), 		"paste", 	T?1:0)
-	, hkZ( (T := pitswp_K) ? T : pitswap_K, 	   "PitSwap", T?1:0)
+	;Disable old shortcuts
+	  hkZ(Copyfilepath_K, 	"CopyFile", 0)
+	, hkZ(Copyfolderpath_K, "CopyFolder", 0) 
+	, hkZ(Copyfiledata_K,   "CopyFileData", 0)
+	, hkZ(channel_K,		"channelGUI",  0)
+	, hkZ(onetime_K,		"onetime",		0)
+	, hkZ(paste_k ? "$^" paste_k : emptyvar, "paste", 	0)
+	, hkZ(pitswap_K, 	   "PitSwap", 0)
+	, hkZ(actionmode_K, 	"actionmode", 0)
+
+	;Re-create shortcuts
+	  hkZ(Cfilep_K, "CopyFile", 1) 
+	, hkZ(Cfolderp_K, "CopyFolder", 1)
+	, hkZ(Cfiled_K,   "CopyFileData", 1)
+	, hkZ(chnl_K, "channelGUI",  1)
+	, hkZ(ot_K,	"onetime",		1)
+	, hkZ(pst_k ? "$^" pst_k : emptyvar, "paste", 	1)
+	, hkZ(pitswp_K, "PitSwap", 1)
+	, hkZ(actmd_k, "actionmode", 1)
 
 	Copyfilepath_K := cfilep_K
 	, Copyfolderpath_K := cfolderp_K
@@ -345,6 +369,7 @@ save_Settings()
 	, onetime_K := ot_K
 	, paste_K := pst_K
 	, pitswap_K := pitswp_k
+	, actionmode_K := actmd_k
 }
 
 save_Default(full=1){
@@ -366,11 +391,12 @@ save_Default(full=1){
 
 	s := "Shortcuts"
 	Ini_Write(s, "Copyfilepath_K", "^!c")
-	Ini_Write(s, "Copyfolderpath_K", "^!x")
+	Ini_Write(s, "Copyfolderpath_K")
 	Ini_Write(s, "Copyfiledata_K", "^!f")
 	Ini_write(s, "channel_K", "^+c")
-	Ini_write(s, "onetime_k", "!s")
+	Ini_write(s, "onetime_k") 			;No default specified
 	ini_write(s, "paste_k", "V")
+	Ini_write(s, "actionmode_k", "^+a")
 
 	ini_write("Channels",  "pitswap_K",  "^+z")
 	Ini_Write("Channels", "IsChannelMin", "0")
@@ -382,10 +408,17 @@ save_Default(full=1){
 	ini_write(s, "windows_copy_shortcut", "")
 	ini_write(s, "windows_cut_shortcut",  "")
 	ini_write(s, "is_duplicate_copied", "1")
+	ini_write(s, "actionmode_keys", "H S C X F D P O E F1")
 }
 
+; Ini keys to save at exit
+save_Exit(){
+	Ini_write("Clipboard_history_window", "partial", history_partial, 0)
+}
 
-Ini_write(section, key, value, ifblank=true){
+Ini_write(section, key, value="", ifblank=true){
+	;ifblank means if the key doesn't exist
+
 	Iniread, v,% CONFIGURATION_FILE,% section,% key
 
 	if ifblank && (v == "ERROR")
@@ -394,6 +427,12 @@ Ini_write(section, key, value, ifblank=true){
 		IniWrite,% value,% CONFIGURATION_FILE,% section,% key
 }
 
+Ini_read(section, key){
+	Iniread, v, % CONFIGURATION_FILE,% section,% key, %A_space%
+	if v = %A_temp%
+		v := ""
+	return v
+}
 
 validate_Settings()
 ; The function validates the settings for Clipjump . 

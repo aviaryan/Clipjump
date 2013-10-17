@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 9.5
+;@Ahk2Exe-SetVersion 0.0
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -36,7 +36,7 @@ ListLines, Off
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "9.5"
+global VERSION := "9.7b1"
 global CONFIGURATION_FILE := "settings.ini"
 global UPDATE_FILE := "https://raw.github.com/avi-aryan/Clipjump/master/version.txt"
 global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/clipjump.html"
@@ -44,7 +44,7 @@ global HELP_PAGE := "http://avi-win-tips.blogspot.com/2013/04/clipjump-online-gu
 global AUTHOR_PAGE := "http://www.avi-win-tips.blogspot.com"
 
 global MSG_TRANSFER_COMPLETE := "Transferred to " PROGNAME
-global MSG_CLIPJUMP_EMPTY := PROGNAME " is empty"
+global MSG_CLIPJUMP_EMPTY := "Clip 0 of 0`n`n" PROGNAME " is empty"
 global MSG_ERROR := "[The preview/path cannot be loaded]"
 global MSG_MORE_PREVIEW := "[More]"
 global MSG_PASTING := "Pasting..."
@@ -57,7 +57,7 @@ global MSG_FILE_PATH_COPIED := "File path(s) copied to " PROGNAME
 global MSG_FOLDER_PATH_COPIED := "Active folder path copied to " PROGNAME
 
 ;History Tool
-global hidden_date_no := 4 , history_w
+global hidden_date_no := 4 , history_w , history_partial
 
 Loop, cache\history\*.hst                 ;Rename old .hst extensions
 {
@@ -82,10 +82,10 @@ FileDelete, % A_temp "/clipjumpcom.txt"
 ;Global Data Holders
 Sysget, temp, MonitorWorkArea
 global WORKINGHT := tempbottom-temptop
-global history_partial := 0 , restoreCaller := 0
+global restoreCaller := 0
 
 ;Global Inits
-global CN := {} , TOTALCLIPS 
+global CN := {} , TOTALCLIPS, ACTIONMODE := {}
 global CURSAVE, TEMPSAVE, LASTCLIP, LASTFORMAT
 global NOINCOGNITO := 1
 
@@ -125,7 +125,7 @@ else if (ini_Version != VERSION)
 
 ;Global Ini declarations
 global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_IsChannelMin := 1 , CopyMessage, FORMATTING
-		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, channel_K, onetime_K, paste_k, ini_is_duplicate_copied, ini_formatting
+		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, channel_K, onetime_K, paste_k, actionmode_k, ini_is_duplicate_copied, ini_formatting, ini_actmd_keys
 global windows_copy_k, windows_cut_k
 
 ;Initialising Clipjump Channels
@@ -159,13 +159,13 @@ IfExist, %A_Startup%/Clipjump.lnk
 {
 	FileDelete, %A_Startup%/Clipjump.lnk
 	FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%/Clipjump.lnk
-	Menu, Tray, Check, Run at startup
+	Menu, Options_Tray, Check, Run at startup
 }
 
 global CLIPS_dir := "cache/clips"
 	, THUMBS_dir := "cache/thumbs"
 	, FIXATE_dir := "cache/fixate"
-	, NUMBER_ADVANCED := 23 + CN.Total + 1 					;the number stores the line number of ADVANCED section
+	, NUMBER_ADVANCED := 25 + CN.Total 					;the number stores the line number of ADVANCED section
 
 ;Setting Up shortcuts
 hkZ( ( paste_k ? "$^" paste_k : emptyvar ) , "Paste")
@@ -176,6 +176,7 @@ hkZ(Copyfiledata_K, "CopyFileData")
 hkZ(channel_K, "channelGUI")
 hkZ(onetime_K, "oneTime")
 hkZ(pitswap_K, "pitswap")
+hkZ(actionmode_K, "actionmode")
 
 ;more shortcuts
 hkZ(windows_copy_k, "windows_copy") , hkZ(windows_cut_k, "windows_cut")
@@ -185,11 +186,13 @@ OnMessage(0x4a, "Receive_WM_COPYDATA")  ; 0x4a is WM_COPYDATA
 
 ;Clean History
 historyCleanup()
+init_actionmode()
 
+OnExit, exit
 EmptyMem()
 return
 
-;Tooltip No 1 is used for Paste Mode tips, 2 is used for notifications , 3 is used for updates , 4 is used in Settings
+;Tooltip No 1 is used for Paste Mode tips, 2 is used for notifications , 3 is used for updates , 4 is used in Settings , 5 is used in Action Mode
 
 ;OLD VERSION COMPATIBILITES TO REMOVE
 ;* History extension coversion
@@ -212,8 +215,8 @@ paste:
 
 	If !FileExist(CLIPS_dir "/" TEMPSAVE ".avc")
 	{
-		Tooltip, %MSG_CLIPJUMP_EMPTY% 			;No Clip Exists
-		sleep, 700
+		Tooltip, % "{" CN.Name "} " MSG_CLIPJUMP_EMPTY 			;No Clip Exists
+		KeyWait, Ctrl
 		Tooltip
 		CALLER := CALLER_STATUS
 	}
@@ -480,8 +483,19 @@ ctrlCheck:
 		}
 		else if ctrlRef = deleteAll
 		{
-			Tooltip, %MSG_ALL_DELETED%
-			clearData()
+			Critical, Off 			;End Critical so that the below function can overlap this thread
+
+			temp21 := TT_Console("WARNING`n`nDo you really want to delete all clips in the current channel?`nPress Y to confirm.`nPress N to cancel.", "Y N")
+			if temp21 = Y
+			{
+				Tooltip, %MSG_ALL_DELETED%
+				clearData()
+			}
+			else
+				Tooltip, %MSG_CANCELLED%
+
+			Critical, On 			;Just in case this may be required.
+
 		}
 		else if ctrlRef = delete
 		{
@@ -511,6 +525,7 @@ ctrlCheck:
 		IN_BACK := false , ctrlRef := "" , is_pstMode_active := 0 , oldclip_exist := 0
 		hkZ_Group(0)
 		restoreCaller := 1 			; Restore CALLER in the ONC label . This a second line of defence wrt to the last line of this label.
+
 		Critical, Off
 		; The below thread will be interrupted when the Clipboard command is executed. The ONC label will exit as CALLER := 0 in the situtaion
 		
@@ -555,6 +570,9 @@ hkZ_Group(mode=0){
 	}
 
 }
+
+
+;--------------------------- CHANNEL FUNCTIONS ----------------------------------------------------------------
 
 channel_up:
 	CN.NG += 2 				;+2 to counter that -1 below
@@ -688,6 +706,44 @@ historyCleanup()
 	}
 }
 
+actionmode:
+	temp_am := TT_Console(ACTIONMODE.text, ACTIONMODE.keys, temp3, temp3, 5, "s8", "Consolas")
+	if ACTIONMODE[temp_am] != ""
+		gosub % ACTIONMODE[temp_am]
+	return
+
+init_actionmode() {
+	;ini_actmd_keys stores user prefs till Help File
+
+	t12 := {}
+	loop, parse, ini_actmd_keys, %A_space%, %A_space%
+		t12.Insert(A_LoopField)
+
+	ACTIONMODE := {(t12.1): "history", (t12.2): "channelGUI", (t12.3): "copyfile", (t12.4): "copyfolder", (t12.5): "CopyFileData", (t12.6): "disable_monitoring"
+			, (t12.7): "pitswap", (t12.8): "onetime", (t12.9): "settings", (t12.10): "hlp"}
+
+	ACTIONMODE.keys := ini_actmd_keys " Esc End Q"
+
+	ACTIONMODE.text := ""
+	.   "ACTION MODE"
+	. "`n-----------"
+	. "`n"
+	. "`nOpen History Tool              -  " t12.1
+	. "`nOpen Channel Selector          -  " t12.2
+	. "`nCopy File Path                 -  " t12.3
+	. "`nCopy Active Folder Path        -  " t12.4
+	. "`nCopy File Data                 -  " t12.5
+	. "`nDisable Monitoring             -  " t12.6
+	. "`nPitSwap                        -  " t12.7
+	. "`nOne Time Stop                  -  " t12.8
+	. "`n"
+	. "`nSettings Editor                -  " t12.9
+	. "`nOpen Help File                 -  " t12.10
+	. "`n"
+	. "`nExit Window                    -  Esc, End, Q"
+
+}
+
 ;****************COPY FILE/FOLDER/DATA***************************************************************************
 
 copyFile:
@@ -741,7 +797,7 @@ hlp:
 	if A_IsCompiled
 		run Clipjump.chm
 	else
-		run chm_files\clipjump.html
+		run % FileExist("Clipjump.chm") ? "Clipjump.chm" : "chm_files\clipjump.html"
 	return
 
 settings:
@@ -762,8 +818,13 @@ main:
 	aboutGUI()
 	return
 
+exit:
+	save_Exit()
+	ExitApp
+	return
+
 strtup:
-	Menu, Tray, Togglecheck, Run at Startup
+	Menu, Options_Tray, Togglecheck, Run at Startup
 	IfExist, %A_Startup%/Clipjump.lnk
 		FileDelete, %A_Startup%/Clipjump.lnk
 	else FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%/Clipjump.lnk
@@ -804,7 +865,12 @@ global
 	if !NOINCOGNITO
 		Menu, Tray, icon, icons\no_history.ico
 	if !CALLER_STATUS or !CALLER
+	{
 		Menu, Tray, icon, icons\no_monitoring.ico
+		Menu, Options_Tray, Check, &Disable Monitoring
+	}
+	else 
+		Menu, Options_Tray, UnCheck, &Disable Monitoring
 }
 
 oneTime:
@@ -815,7 +881,7 @@ oneTime:
 	return
 
 incognito:
-	Menu, Tray, Togglecheck, &Incognito Mode
+	Menu, Options_Tray, Togglecheck, &Incognito Mode
 	NOINCOGNITO := !NOINCOGNITO
 	changeIcon()
 	return
@@ -865,6 +931,14 @@ CopytoVar(clipwait_time=3, send_macro="^c"){
     return var
 }
 
+disable_monitoring:
+	if CALLER_STATUS
+		Act_CjControl(2)
+	else
+		CALLER := CALLER_STATUS := 1
+		, hkZ("$^c", "NativeCopy") , hkZ("$^x", "NativeCut")
+		, changeIcon()
+	return
 
 ;#################### COMMUNICATION ##########################################
 
@@ -946,10 +1020,11 @@ clipjumpcom_delete:
 
 #Include %A_ScriptDir%\lib\multi.ahk
 #Include %A_ScriptDir%\lib\aboutgui.ahk
+#include %A_ScriptDir%\lib\TT_Console.ahk
 #include %A_ScriptDir%\lib\Gdip_All.ahk
+#include %A_ScriptDir%\lib\HotkeyParser.ahk
 #include %A_ScriptDir%\lib\anticj_func_labels.ahk
 #include %A_ScriptDir%\lib\settings gui plug.ahk
 #include %A_ScriptDir%\lib\history gui plug.ahk
-#include %A_ScriptDir%\lib\HotkeyParser.ahk
 
 ;------------------------------------------------------------------- X -------------------------------------------------------------------------------

@@ -69,25 +69,26 @@ trayMenu(){
 	Menu, Tray, Add, About %PROGNAME%, main
 	Menu, Tray, Tip, % PROGNAME " {" CN.Name "}"
 	Menu, Tray, Add		; separator
-	Menu, Tray, Add, &Incognito mode, incognito
+		Menu, Options_Tray, Add, &Incognito mode, incognito
+		Menu, Options_Tray, Add, &Disable Monitoring, disable_monitoring
+		Menu, Options_Tray, Add, Run at startup, strtup
+	Menu, Tray, Add, &Options, :Options_Tray
 	Menu, Tray, Add 	; separator
 	Menu, Tray, Add,% "Clipboard &history`t" Hparse_Rev(history_K), history
 	Menu, Tray, Add,% "Select &Channel`t" Hparse_Rev(channel_K), channelGUI
 	Menu, Tray, Add, &Settings, settings
 	Menu, Tray, Add		; separator
 	Menu, Tray, Add, Check for &updates, updt
-	Menu, Tray, Add, Run at startup, strtup
 	Menu, Tray, Add, H&elp, hlp
 	Menu, Tray, Add		; separator
 	Menu, Tray, Add, &Restart, reload
-	Menu, Tray, Add, &Exit, qt
+	Menu, Tray, Add, &Exit, exit
 	Menu, Tray, Default, About %PROGNAME%
 	return
 
-qt:
-	ExitApp
-
 reload:
+	OnExit
+	save_Exit()
 	Reload
 	return
 }

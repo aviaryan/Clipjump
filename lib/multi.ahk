@@ -28,7 +28,7 @@ channelGUI(){
 			Gui, Font, S12
 			Gui, Add, Text, x4 y+10 w235, Channel &Name
 			Gui, Font, S10
-			Gui, Add, Edit, x+165 yp-2 w150 vcname gedit_cname, % CN.Name
+			Gui, Add, Edit, x+165 yp-2 w150 vcname -Multi gedit_cname, % CN.Name
 
 		if !ini_IsChannelMin
 		{
@@ -133,8 +133,8 @@ changeChannel(cIndex){
 	if ( CN["TEMPSAVE" (cIndex?cIndex:"")] == "" )
 		CN.Total+=1
 
-	Iniread, temp, %CONFIGURATION_FILE%, channels, % cIndex, %A_space%
-	CN.Name := (temp=="") ? (!cIndex ? "Default" : cIndex) : temp
+	Iniread, temp, %CONFIGURATION_FILE%, channels, %cIndex%, %A_space%
+	CN.Name := (temp=="") or (temp==A_temp) ? (!cIndex ? "Default" : cIndex) : temp
 
 	if !cIndex
 		TOTALCLIPS := CN["TOTALCLIPS"]
