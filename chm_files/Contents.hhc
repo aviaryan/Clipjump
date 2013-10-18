@@ -23,12 +23,16 @@
 			</OBJECT>
 		<UL>
 			<LI> <OBJECT type="text/sitemap">
-				<param name="Name" value="Gettting Started">
+				<param name="Name" value="Getting Started">
 				<param name="Local" value="usage/basic_help.html#bu">
 				</OBJECT>
 			<LI> <OBJECT type="text/sitemap">
 				<param name="Name" value="Export Clipboards">
 				<param name="Local" value="USAGE/basic_help.html#export">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Action Mode">
+				<param name="Local" value="USAGE/basic_help.html#actmd">
 				</OBJECT>
 			<LI> <OBJECT type="text/sitemap">
 				<param name="Name" value="Copying file/folder paths">
@@ -43,12 +47,16 @@
 				<param name="Local" value="usage/basic_help.html#paste">
 				</OBJECT>
 			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Disable Clipjump">
+				<param name="Local" value="USAGE/basic_help.html#disable">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
 				<param name="Name" value="Fixate">
 				<param name="Local" value="usage/basic_help.html#fx">
 				</OBJECT>
 			<LI> <OBJECT type="text/sitemap">
 				<param name="Name" value="Copy bypassing Clipjump">
-				<param name="Local" value="usage/basic_help.html#syscopy">
+				<param name="Local" value="usage/ini.html#syscopy">
 				</OBJECT>
 			<LI> <OBJECT type="text/sitemap">
 				<param name="Name" value="Shortcut List">
@@ -107,6 +115,10 @@
 			<param name="Name" value="Clipjump Settings Editor">
 			<param name="Local" value="USAGE/settings.html">
 			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="More Ini based settings">
+			<param name="Local" value="USAGE/ini.html">
+			</OBJECT>
 	</UL>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Clipjump Controller">
@@ -119,6 +131,10 @@
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="FAQ">
 		<param name="Local" value="USAGE\faq.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Screenshots (Online)">
+		<param name="Local" value="http://avi-win-tips.blogspot.in/2013/08/clipjumpscreens.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Contact">

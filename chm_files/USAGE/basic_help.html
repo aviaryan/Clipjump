@@ -13,6 +13,7 @@
 <pre><ul><li><a href="#bu">Basic Usage</a>
 <li><a href="#au">Advanced Usage</a>
 <ul><li><a href="channels.html">Clipjump Channels</a>
+<li><a href=#actmd>Action Mode</a>
 <li><a href=#fx>Fixate Option</a>
 <li><a href=#path>Copying Paths to Clipjump</a>
 <li><a href=#winclip>Selective Windows Clipboard</a>
@@ -22,7 +23,8 @@
 <li><a href=#nof>No formatting mode</a>
 <li><a href=#export>Exporting and sharing clipboards</a>
 <li><a href=#reset>Resetting Clipjump</a>
-<li><a href=#misc>Miscellaneous</a>
+<li><a href=#disable>Disable Clipjump</a>
+<li><a href='ini.html'>More Settings</a>
 <li><a href="../clipjumpcontroller.html">Clipjump Controller</a>
 </ul>
 <li><a href="settings.html">Settings Editor</a>
@@ -61,7 +63,7 @@ Release Ctrl to confirm.<br><br>
 To Delete all Clips, press X thrice in Paste Mode OR twice in Cancel Mode OR once in Delete Mode.
 The tip should change to a Delete All message.This is <b>[Delete All Mode]</b> <br>
 <a href="../images/deleteall.jpg"><img src="../images/deleteall.jpg" border="0"></a><br>
-Release Ctrl to confirm.
+Release Ctrl and then confirm the confirmation tip with <i>Y</i> to proceed. 
 
 
 </ul><br>
@@ -75,6 +77,13 @@ Release Ctrl to confirm.
 <hr><br>
 
 <h2><a name=au>Advanced Usage</a></h2>
+
+<h3><a name=actmd>Action Mode</a></h3>
+Action Mode provides a clean user-friendly interface to execute almost all the other components of Clipjump. Activated with the default configurable shortcut 
+Ctrl+Shift+A , it provides easy keys to run components of Clipjump. <br>
+Action Mode easy keys <a href=ini.html#actmd_keys>can be changed</a> via the Advanced section of the Settings ini file.
+<br><br><br>
+
 <a name="fixate"></a>
 <h3><a name=fx>The Fixate Option</a></h3>
 The Fixate option is meant to hold a current Clipboard at a fixed position while
@@ -95,14 +104,15 @@ will notice a "[FIXED]" written after <b>(Clip x of y)</b>.<br>
 This means the Clip is Fixed there. As said above , <strong class="mild">pressing SPACE again
 on the fixed clip will remove the FIX from it and the "[FIXED]" from the tip will disappear.</strong>
 <br><br>
-<a href="../images/fixate.jpg"><img src="../images/fixate.jpg" border="0"></a><br><br>
+<a href="../images/fixate.jpg"><img src="../images/fixate.png" border="0"></a><br><br>
 <strong class="super">Note that the DeleteAll option will delete FIXED Clips too.</strong><br><hr><br>
 
 <h3><a name=path>Copying Paths to Clipjump</a></h3>
 <ul>
 <li>Pressing the shortcut Ctrl+Alt+C will copy path(s) of selected files in all file managers including Windows Explorer.<br>
 <a href="../images/path.jpg"><img src="../images/path.jpg" border="0"></a>
-<li>Pressing the shortcut Ctrl+Alt+X will copy path of current opened folder in all file managers including Windows Explorer.
+<li>Using Action Mode and then X will copy path of current opened folder in all file managers including Windows Explorer. You can also create an independent shortcut 
+for this function in the Settings Editor. 
 </ul>
 </a><hr><br><br>
 
@@ -122,8 +132,9 @@ Simply open the editor and look for the <code>Paste Mode(Ctrl +..)</code> value 
 <h3><a name=ot>One Time Stop</a></h3>
 Many a times you have applications that use Clipboard's common transfer to extract data from various locations.
 These apps can be a headache when used with as consistent a tool as Clipjump. <br>
-The <b>One Time Stop</b> feature just solves this problem. Available with the configurable shortcut Alt+S, you can call it once to make Clipjump automatically ignore the 
-last data and linked content that is transferred to System Clipboard and so Clipjump.  In this period, what really happens is that the Clipjump Clipboard Monitoring is 
+The <b>One Time Stop</b> feature just solves this problem. Available with a configurable independent shortcut which is by default unassigned, 
+you can call it once to make Clipjump automatically ignore the last data and linked content that is transferred to System Clipboard and so Clipjump. 
+In this period, what really happens is that the Clipjump Clipboard Monitoring is 
 deactivated , a feature which can be controlled via <a href="../clipjumpcontroller.html">Clipjump Controller</a>. <br> 
 <strong class=super>NOTE</strong> - When Clipboard Monitoring is disabled (as in One Time Stop) , Clipjump's tray icon will become dark.  
 <br><br>
@@ -167,22 +178,17 @@ The Clip or Clipboard when exported will be saved in "My Documents" with a name 
 The <code>.cj</code> file extension when used with <a href=#fdata>Copy File Data</a> directs Clipjump to load the file contents into itself.
 <br><br /><br>
 
-<a name=misc><h3>Miscellaneous</a></h3>
-<h4>Showing the Pasting tooltip</h4> - You can make Clipjump show a <code>Pasting..</code> tip when you paste some data. To do so, change the value of <code>Show_pasting_tip</code> in the [Advanced] section of Settings.ini to 1.
-<br><br>
-
-<h4><a name="syscopy">Setting shortcut to copy to system Clipboard (bypassing Clipjump)</a></h4> - You can also create a unique shortcut in Clipjump to copy/cut data only to System Clipboard 
-and not Clipjump. To create these shortcuts, open the [Advanced] section of Settings.ini and write down shortcut values for <code>windows_copy_shortcut</code> and 
-<code>windows_cut_shortcut</code>. As you may have guessed, these shortcuts are disabled by default and by writing shortcut values for them in the ini you create them.
-<br>These shortcuts can be very useful when in need to copy sensitive or crap information of the Clipboard.
-
-<br><br><br>
-
 
 <h3><a name=reset>Resetting Clipjump</a></h3>
 <i>[v9.5+]</i> To reset Clipjump to its default settings and remove <b>all the data</b> created by Clipjump on your computer , use this option . The option can be found in 
 the About window for Clipjump. The data that will be removed includes history items, paste mode clips, extracted icons and the settings file.
 
+<br><br><br>
+
+<a name=disable><h3>Disable Clipjump</h3></a>
+<i>[v9.7+]</i> You can disable Clipjump  ( i.e. Clipboard Monitoring and Paste Mode ) from the Tray Menu as well as Action Mode. In Action Mode, this option is available 
+with the easy key <code>D</code><br>.
+To have more control over Clipjump, see <a href="../clipjumpcontroller.html">Clipjump Controller</a> . 
 <br><br><br>
 
 
@@ -197,12 +203,11 @@ Space - Fix/un-fix a clipboard at its position. <br>
 Z - Toggle Formatting for Clips <br><br>
 
 <b>General</b><br>
+Ctrl+Shift+A - Action Mode<br>
 Win+C - Open Clipjump Clipboard History Tool<br>
 Ctrl+Shift+C - Open Clipjump Channel Selector<br>
-Ctrl+Alt+X - Copy opened Folder Path<br>
 Ctrl+Alt+C - Copy File Path<br>
 Ctrl+Alt+F - Copy file content<br>
-Alt+S - One Time Stop<br>
 Ctrl+Shift+Z - PitSwap<br><br>
 
 

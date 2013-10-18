@@ -1,0 +1,42 @@
+<html>
+<head>
+  <title>Settings.ini Specific Settings</title>
+  <link rel="stylesheet" href="../Blogs.css" type="text/css">
+</head>
+
+<body>
+<h1>Settings.ini Advanced Settings</h1>
+<br>
+
+<h4><a name="syscopy">Setting shortcut to copy to system Clipboard (bypassing Clipjump)</a></h4> - You can also create a unique shortcut in Clipjump to copy/cut data only to System Clipboard 
+and not Clipjump. To create these shortcuts, open the [Advanced] section of Settings.ini and write down shortcut values for <code>windows_copy_shortcut</code> and 
+<code>windows_cut_shortcut</code>. As you may have guessed, these shortcuts are disabled by default and by writing shortcut values for them in the ini you create them.
+<br>These shortcuts can be very useful when in need to copy sensitive or crap information of the Clipboard.
+
+<br><br><br>
+
+<h4><a name=actmd_keys>Changing Action Mode Easy keys</a></h4>
+You can change the Action Mode easy keys from the Advanced section of the Settings.ini file. Navigate to the key <code>actionmode_keys</code> and you will see space 
+separated values. These are the values for easy keys of the components in the following order --
+<pre>
+1. History_Tool
+2. Channel_Selector
+3. Copy_File_Path 
+4. Copy_Active_Folder_Path
+5. Copy File Data        
+6. Toggle Clipjump Status
+7. PitSwap       
+8. One Time Stop
+9. Settings Editor  
+10. Open Help File        
+</pre>
+Note that you cannot disable an easy key for a component i.e. there should always be 10 space-separated keys present. 
+
+<br><br><br>
+
+<h4>Showing the Pasting tooltip</h4> - You can make Clipjump show a <code>Pasting..</code> tip when you paste some data. To do so, change the value of <code>Show_pasting_tip</code> in the [Advanced] section of Settings.ini to 1.
+<br><br><br>
+
+</body>
+
+</html>

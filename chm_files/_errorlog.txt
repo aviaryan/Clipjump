@@ -7,11 +7,12 @@ clipjump.html
 HHC3004: Warning: clipjumpcontroller.html : The HTML tag "\switch" is not a valid HTML tag (it does not begin with an alphanumeric character).
 clipjumpcontroller.html
 contact.html
+changelog.html
 images\cancel.JPG
 images\COPY.jpg
 images\delete.JPG
 images\deleteall.JPG
-images\fixate.JPG
+images\fixate.png
 images\noformat.png
 images\pasting.png
 images\path.jpg
@@ -19,17 +20,17 @@ images\trayicon.jpg
 USAGE\basic_help.html
 USAGE\history.html
 USAGE\settings.html
-USAGE\channels.html
-changelog.html
 USAGE\faq.html
+USAGE\ini.html
+USAGE\channels.html
 images\channelpaste.jpg
 
 Compile time: 0 minutes, 4 seconds
-26	Topics
-68	Local links
-8	Internet links
+30	Topics
+75	Local links
+9	Internet links
 1	Graphic
 
 
-Created s:\Portables\AutoHotkey\My Scripts\ClipStep\chm_files\Clipjump.chm, 77,844 bytes
-Compression decreased file by 14,638 bytes.
+Created s:\Portables\AutoHotkey\My Scripts\ClipStep\chm_files\Clipjump.chm, 79,076 bytes
+Compression decreased file by 14,672 bytes.

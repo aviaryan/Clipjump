@@ -55,6 +55,7 @@ reset:
 				FileDelete, %A_Startup%/Clipjump.lnk
 		}
 		MsgBox, 64, Reset Complete, Clipjump will be closed now.
+		OnExit,
 		ExitApp
 	}
 	return

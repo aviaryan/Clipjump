@@ -99,7 +99,7 @@
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Copy to system Clipboard">
-		<param name="Local" value="usage/basic_help.html#syscopy">
+		<param name="Local" value="usage/ini.html#syscopy">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Change Paste Mode shortcut">
@@ -112,7 +112,11 @@
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Partial Searching">
 		<param name="Local" value="USAGE/history.html#partial">
-				</OBJECT>
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Action Mode">
+		<param name="Local" value="USAGE/basic_help.html#actmd">
+		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Changelog">
 		<param name="Local" value="changelog.html">

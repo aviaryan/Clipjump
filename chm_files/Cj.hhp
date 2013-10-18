@@ -35,11 +35,12 @@ Blogs.css
 clipjump.html
 clipjumpcontroller.html
 contact.html
+changelog.html
 images\cancel.JPG
 images\COPY.jpg
 images\delete.JPG
 images\deleteall.JPG
-images\fixate.JPG
+images\fixate.png
 images\noformat.png
 images\pasting.png
 images\path.jpg
@@ -47,4 +48,5 @@ images\trayicon.jpg
 USAGE\basic_help.html
 USAGE\history.html
 USAGE\settings.html
-
+USAGE\faq.html
+USAGE\ini.html
