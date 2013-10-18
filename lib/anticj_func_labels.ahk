@@ -211,9 +211,9 @@ IsHotkeyControlActive(){
 	return IsActive("msctls_hotkey", "classnn", true)
 }
 
-getLines(str){
-	StringReplace, str, str, `n, `n, UseErrorLevel
-	return ErrorLevel + 1
+getQuant(str, what){
+	StringReplace, str, str,% what,% what, UseErrorLevel
+	return ErrorLevel
 }
 
 /*

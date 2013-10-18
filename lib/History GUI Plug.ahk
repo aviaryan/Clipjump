@@ -22,8 +22,7 @@ gui_History()
 	Gui, Add, Text, x+15 ys+5 					vhistory_SearchText,	Search &Filter:
 	Gui, Add, Checkbox, x+10 ys+5 w65 Checked%history_partial% vhistory_partial ghistory_SearchBox, Pa&rtial
 	Gui, Add, Edit, ys  	ghistory_SearchBox	vhistory_SearchBox
-	;Gui, Font, s9, Courier New
-	;Gui, Font, s9, Lucida Console
+	Gui, Font, s9, Courier New
 	Gui, Font, s9, Consolas
 	Gui, Add, ListView, % "xs+1 HWNDhistoryLV ghistoryLV vhistoryLV LV0x4000 w" (history_w ? history_w-25 : 675) , Clip|Date|Size(B)|Hiddendate
 

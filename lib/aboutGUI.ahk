@@ -6,6 +6,7 @@ aboutGUI(){
 	;About GUI
 	Gui, 2:Destroy
 	Gui, 2:Margin, 0, 0
+	Gui, 2:Font, s18, Courier New
 	Gui, 2:Font, S18, Consolas
 	Gui, 2:Add, Edit, x0 y0 w0 h0,
 	Gui, 2:Add, Link, x188 y5 gupdt, <a href="http://avi-win-tips.blogspot.com/p/clipjump.html">Clipjump</a> v%version%
@@ -27,7 +28,7 @@ aboutGUI(){
 	Gui, 2:Add, Button, x430 yp w117 greset, &Reset Clipjump
 	Gui, 2:Add, Text, y+0 h0,
 
-	Gui, 2:Show, w552, % PROGNAME " [ Channel: " CN.Name " ]"
+	Gui, 2:Show, w552, % PROGNAME " " (!CLIPJUMP_STATUS ? "{Disabled}" : "") " [ Channel: " CN.Name " ]"
 	return
 
 blog:
@@ -70,7 +71,7 @@ trayMenu(){
 	Menu, Tray, Tip, % PROGNAME " {" CN.Name "}"
 	Menu, Tray, Add		; separator
 		Menu, Options_Tray, Add, &Incognito mode, incognito
-		Menu, Options_Tray, Add, &Disable Monitoring, disable_monitoring
+		Menu, Options_Tray, Add, &Disable Clipjump, disable_clipjump
 		Menu, Options_Tray, Add, Run at startup, strtup
 	Menu, Tray, Add, &Options, :Options_Tray
 	Menu, Tray, Add 	; separator

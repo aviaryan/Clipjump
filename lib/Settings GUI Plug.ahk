@@ -309,9 +309,15 @@ load_Settings(all=false)
 		windows_copy_k := HParse(windows_copy_k) , windows_cut_k := Hparse(windows_cut_k)
 
 		iniread, ini_is_duplicate_copied, % CONFIGURATION_FILE, Advanced, is_duplicate_copied, %A_space%
-		ini_actmd_keys := ini_read("Advanced", "actionmode_keys")
+
+		;Action Mode
+		ini_actmd_keys := Trim( ini_read("Advanced", "actionmode_keys") )
 		if !ini_actmd_keys
-			ini_actmd_keys := "H S C X F D P O E F1"
+			ini_actmd_keys := ACTIONMODE_DEF
+		else if (tn1 := getQuant(ACTIONMODE_DEF, " ")+0) > (tn2 := getQuant(ini_actmd_keys, " ")+0)
+			temp := Substr(ACTIONMODE_DEF, Instr(ACTIONMODE_DEF, " ", 0, 1, tn2+1))
+			, ini_actmd_keys .= temp
+			, Ini_Write("Advanced", "actionmode_keys", ini_actmd_keys, 0)
 	}
 
 }
@@ -358,7 +364,7 @@ save_Settings()
 	, hkZ(Cfiled_K,   "CopyFileData", 1)
 	, hkZ(chnl_K, "channelGUI",  1)
 	, hkZ(ot_K,	"onetime",		1)
-	, hkZ(pst_k ? "$^" pst_k : emptyvar, "paste", 	1)
+	, hkZ(pst_k ? "$^" pst_k : emptyvar, "paste", CLIPJUMP_STATUS )
 	, hkZ(pitswp_K, "PitSwap", 1)
 	, hkZ(actmd_k, "actionmode", 1)
 
@@ -408,7 +414,7 @@ save_Default(full=1){
 	ini_write(s, "windows_copy_shortcut", "")
 	ini_write(s, "windows_cut_shortcut",  "")
 	ini_write(s, "is_duplicate_copied", "1")
-	ini_write(s, "actionmode_keys", "H S C X F D P O E F1")
+	ini_write(s, "actionmode_keys", ACTIONMODE_DEF)
 }
 
 ; Ini keys to save at exit

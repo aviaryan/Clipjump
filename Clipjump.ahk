@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 0.0
+;@Ahk2Exe-SetVersion 9.7
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -36,7 +36,7 @@ ListLines, Off
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "9.7b1"
+global VERSION := "9.7"
 global CONFIGURATION_FILE := "settings.ini"
 global UPDATE_FILE := "https://raw.github.com/avi-aryan/Clipjump/master/version.txt"
 global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/clipjump.html"
@@ -85,12 +85,12 @@ global WORKINGHT := tempbottom-temptop
 global restoreCaller := 0
 
 ;Global Inits
-global CN := {} , TOTALCLIPS, ACTIONMODE := {}
+global CN := {} , TOTALCLIPS, ACTIONMODE := {} , ACTIONMODE_DEF := "H S C X F D P O E F1"
 global CURSAVE, TEMPSAVE, LASTCLIP, LASTFORMAT
 global NOINCOGNITO := 1
 
 ;Initailizing Common Variables
-global CALLER_STATUS		; global vars are not declared like the below , without initialising
+global CALLER_STATUS, CLIPJUMP_STATUS := 1		; global vars are not declared like the below , without initialising
 global CALLER := CALLER_STATUS := true
 	, IN_BACK := false
 
@@ -707,7 +707,7 @@ historyCleanup()
 }
 
 actionmode:
-	temp_am := TT_Console(ACTIONMODE.text, ACTIONMODE.keys, temp3, temp3, 5, "s8", "Consolas")
+	temp_am := TT_Console(ACTIONMODE.text, ACTIONMODE.keys, temp3, temp3, 5, "s8", "Consolas|Courier New")
 	if ACTIONMODE[temp_am] != ""
 		gosub % ACTIONMODE[temp_am]
 	else
@@ -721,8 +721,8 @@ init_actionmode() {
 	loop, parse, ini_actmd_keys, %A_space%, %A_space%
 		t12.Insert(A_LoopField)
 
-	ACTIONMODE := {(t12.1): "history", (t12.2): "channelGUI", (t12.3): "copyfile", (t12.4): "copyfolder", (t12.5): "CopyFileData", (t12.6): "disable_monitoring"
-			, (t12.7): "pitswap", (t12.8): "onetime", (t12.9): "settings", (t12.10): "hlp"}
+	ACTIONMODE := {(t12.1): "history", (t12.2): "channelGUI", (t12.3): "copyfile", (t12.4): "copyfolder", (t12.5): "CopyFileData", (t12.6): "disable_clipjump"
+		, (t12.7): "pitswap", (t12.8): "onetime", (t12.9): "settings", (t12.10): "hlp"}
 
 	ACTIONMODE.keys := ini_actmd_keys " Esc End Q"
 
@@ -735,7 +735,7 @@ init_actionmode() {
 	. "`nCopy File Path                 -  " t12.3
 	. "`nCopy Active Folder Path        -  " t12.4
 	. "`nCopy File Data                 -  " t12.5
-	. "`nDisable Monitoring             -  " t12.6
+	. "`nToggle Clipjump Status         -  " t12.6
 	. "`nPitSwap                        -  " t12.7
 	. "`nOne Time Stop                  -  " t12.8
 	. "`n"
@@ -780,7 +780,7 @@ CopyFileData:
 		ClipWait, 1, 1
 		oldclip := ClipboardAll
 		CALLER := CALLER_STATUS
-		try Clipboard := oldclip 
+		try Clipboard := oldclip
 		oldclip := ""           ;The methodology is adopted due to an AHK Bug
 	}
 	else
@@ -867,12 +867,7 @@ global
 	if !NOINCOGNITO
 		Menu, Tray, icon, icons\no_history.ico
 	if !CALLER_STATUS or !CALLER
-	{
 		Menu, Tray, icon, icons\no_monitoring.ico
-		Menu, Options_Tray, Check, &Disable Monitoring
-	}
-	else 
-		Menu, Options_Tray, UnCheck, &Disable Monitoring
 }
 
 oneTime:
@@ -933,13 +928,14 @@ CopytoVar(clipwait_time=3, send_macro="^{vk43}"){
     return var
 }
 
-disable_monitoring:
-	if CALLER_STATUS
-		Act_CjControl(2)
-	else
-		CALLER := CALLER_STATUS := 1
-		, hkZ("$^c", "NativeCopy") , hkZ("$^x", "NativeCut")
-		, changeIcon()
+disable_clipjump:
+	CLIPJUMP_STATUS := !CLIPJUMP_STATUS
+	CALLER := CALLER_STATUS := CLIPJUMP_STATUS
+	, hkZ("$^c", "NativeCopy", CLIPJUMP_STATUS) , hkZ("$^x", "NativeCut", CLIPJUMP_STATUS)
+	changeIcon()
+
+	hkZ( ( paste_k ? "$^" paste_k : emptyvar ) , "Paste", CLIPJUMP_STATUS)
+	Menu, Options_Tray, % !CLIPJUMP_STATUS ? "Check" : "Uncheck", &Disable Clipjump
 	return
 
 ;#################### COMMUNICATION ##########################################
@@ -951,12 +947,13 @@ Act_CjControl(C){
 
 	if C = 1
 	{
-		CALLER := 1 , CALLER_STATUS := 1
+		CALLER := CALLER_STATUS := CLIPJUMP_STATUS := 1
 		, hkZ("$^c", "NativeCopy") , hkZ("$^x", "NativeCut")
 		, hkZ(Copyfilepath_K, "CopyFile") , hkZ(Copyfolderpath_K, "CopyFolder"), hkZ(CopyFileData_K, "CopyFileData") 
 		, hkZ(Channel_K, "channelGUI") , hkZ(onetime_K, "onetime") 
 		, hkZ( ( paste_k ? "$^" paste_k : emptyvar ) , "Paste") , hkZ(history_K, "History")
 		changeIcon()
+		Menu, Options_Tray, UnCheck, &Disable Clipjump
 		return
 	}
 
@@ -989,6 +986,13 @@ Act_CjControl(C){
 			hkZ(Channel_K, "channelGUI", 0)
 		else if A_LoopField = 256
 			hkZ(onetime_K, "onetime", 0)
+
+	if !Instr(d, "2 4")
+	{
+		CLIPJUMP_STATUS := 1
+		Menu, Options_Tray, UnCheck, &Disable Clipjump
+	}
+
 }
 
 Receive_WM_COPYDATA(wParam, lParam)
