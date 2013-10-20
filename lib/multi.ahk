@@ -169,7 +169,7 @@ channel_Pitindex(){
 	Iniread, o, %CONFIGURATION_FILE%, Channels
 	loop, parse, o, `n, `r
 	{
-		if Substr(A_LoopField, -3) == "=pit"
+		if Substr(A_LoopField, -3) = "=pit"
 		{
 			N := Substr(A_LoopField, 1, -4)
 			break
