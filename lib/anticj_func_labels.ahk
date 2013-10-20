@@ -245,3 +245,21 @@ SuperInstr(Hay, Needles, return_min=true, Case=false, Startpoint=1, Occurrence=1
 	}
 	return pos
 }
+
+/*
+Compare Versions
+*/
+
+IsLatestRelease(prog_ver, cur_ver, exclude_keys="beta|alpha") {
+
+	if RegExMatch(prog_ver, "(" exclude_keys ")")
+		return 1
+
+	StringSplit, prog_ver_array, prog_ver,`.
+	StringSplit, cur_ver_array, cur_ver  ,`.
+
+	Loop % cur_ver_array0
+		if !( prog_ver_array%A_index% >= cur_ver_array%A_index% )
+			return 0
+	return 1
+}

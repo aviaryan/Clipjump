@@ -522,20 +522,21 @@ ctrlCheck:
 
 			TEMPSAVE := realActive
 		}
-		IN_BACK := false , ctrlRef := "" , is_pstMode_active := 0 , oldclip_exist := 0
+		IN_BACK := false , is_pstMode_active := 0 , oldclip_exist := 0
 		hkZ_Group(0)
 		restoreCaller := 1 			; Restore CALLER in the ONC label . This a second line of defence wrt to the last line of this label.
 
 		Critical, Off
 		; The below thread will be interrupted when the Clipboard command is executed. The ONC label will exit as CALLER := 0 in the situtaion
 		
-		if !Instr(sleeptime, "100")        ;not pasting
+		if ctrlref in cancel, delete, DeleteAll
 			try Clipboard := oldclip_data       ;The command opens, writes and closes clipboard . The ONCC Label is launched when writing takes place.
-		
+
 		sleep % sleeptime
 		Tooltip
 		
-		restoreCaller := 0 			; make it 0 in case Clipboard was not touched (Pasting was done) 
+		restoreCaller := 0		; make it 0 in case Clipboard was not touched (Pasting was done) 
+		ctrlRef := ""
 		CALLER := CALLER_STATUS , EmptyMem()
 	}
 	return
@@ -837,9 +838,9 @@ updt:
 	URLDownloadToFile, %UPDATE_FILE%, %A_ScriptDir%/cache/latestversion.txt
 	ToolTip, ,,, 3
 	FileRead, latestVersion, %A_ScriptDir%/cache/latestversion.txt
-	if ( (latestVersion+0) > VERSION )
+	if !IsLatestRelease(VERSION, latestversion, "b|a")
 	{
-		MsgBox, 48, % "Update available, Your Version: " VERSION "`nCurrent version = " latestVersion+0 "`n`nGo to website"
+		MsgBox, 48, % "Update available, Your Version: " VERSION "`nCurrent version = " latestVersion "`n`nGo to website"
 		IfMsgBox OK
 			BrowserRun(PRODUCT_PAGE)
 	}
