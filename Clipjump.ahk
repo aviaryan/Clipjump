@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 9.7
+;@Ahk2Exe-SetVersion 9.7.2
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -29,6 +29,7 @@ SetBatchLines,-1
 CoordMode, Mouse
 FileEncoding, UTF-8
 ListLines, Off
+#KeyHistory 0
 #HotkeyInterval 1000
 #MaxHotkeysPerInterval 1000
 
@@ -36,7 +37,7 @@ ListLines, Off
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "9.7"
+global VERSION := "9.7.2"
 global CONFIGURATION_FILE := "settings.ini"
 global UPDATE_FILE := "https://raw.github.com/avi-aryan/Clipjump/master/version.txt"
 global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/clipjump.html"
@@ -840,7 +841,7 @@ updt:
 	FileRead, latestVersion, %A_ScriptDir%/cache/latestversion.txt
 	if !IsLatestRelease(VERSION, latestversion, "b|a")
 	{
-		MsgBox, 48, % "Update available, Your Version: " VERSION "`nCurrent version = " latestVersion "`n`nGo to website"
+		MsgBox, 48, Clipjump Update available, % "Your Version: `t`t" VERSION "`nCurrent version: `t`t" latestVersion "`n`nGo to website."
 		IfMsgBox OK
 			BrowserRun(PRODUCT_PAGE)
 	}

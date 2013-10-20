@@ -27,10 +27,10 @@ images\channelpaste.jpg
 
 Compile time: 0 minutes, 4 seconds
 30	Topics
-75	Local links
-9	Internet links
+77	Local links
+19	Internet links
 1	Graphic
 
 
-Created s:\Portables\AutoHotkey\My Scripts\ClipStep\chm_files\Clipjump.chm, 79,076 bytes
-Compression decreased file by 14,672 bytes.
+Created s:\Portables\AutoHotkey\My Scripts\ClipStep\chm_files\Clipjump.chm, 79,020 bytes
+Compression decreased file by 17,680 bytes.
