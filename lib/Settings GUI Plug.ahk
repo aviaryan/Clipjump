@@ -31,6 +31,7 @@ gui_Settings()
 	Gui, Add, Edit,		xm+225 yp-3 w50 r1 Number vnew_Quality gedit_Quality
 	Gui, Add, UpDown,	Range1-100 gupdown_Quality, %ini_Quality%
 
+	Gui, Add, Checkbox, xs Checked%ini_CopyBeep% 		vnew_copyBeep 			gchkbox_copybeep, 			&Beep when copied
 	Gui, Add, Checkbox, xs Checked%ini_IsMessage%		vnew_IsMessage			gchkbox_IsMessage,			&Show verification ToolTip when copying
 	Gui, Add, Checkbox, xs Checked%ini_KeepSession%		vnew_KeepSession		gchkbox_KeepSession,		&Retain clipboard data upon application restart
 	Gui, Add, Checkbox, % "xs Checked" !ini_formatting " vnew_formatting			gchkbox_formatting",		Start with No &Formatting mode Enabled 
@@ -120,6 +121,7 @@ edit_Threshold:
 updown_Threshold:
 edit_Quality:
 updown_Quality:
+chkbox_copybeep:
 chkbox_KeepSession:
 chkbox_IsMessage:
 chkbox_formatting:
@@ -277,6 +279,7 @@ load_Settings(all=false)
 	IniRead, ini_Threshold,		%CONFIGURATION_FILE%, Main, Threshold
 	IniRead, ini_IsMessage,		%CONFIGURATION_FILE%, Main, Show_Copy_Message
 	IniRead, ini_Quality,		%CONFIGURATION_FILE%, Main, Quality_of_Thumbnail_Previews
+	IniRead, ini_CopyBeep, 		%CONFIGURATION_FILE%, Main, CopyBeep
 	IniRead, ini_KeepSession,	%CONFIGURATION_FILE%, Main, Keep_Session
 	IniRead, ini_Version,		%CONFIGURATION_FILE%, System, Version
 	IniRead, ini_DaysToStore,	%CONFIGURATION_FILE%, Clipboard_History, Days_to_store
@@ -310,14 +313,21 @@ load_Settings(all=false)
 
 		iniread, ini_is_duplicate_copied, % CONFIGURATION_FILE, Advanced, is_duplicate_copied, %A_space%
 
+		beepFrequency := ini_read("Advanced", "beepFrequency")
+		if !beepFrequency
+			beepFrequency := 1500
+
 		;Action Mode
 		ini_actmd_keys := Trim( ini_read("Advanced", "actionmode_keys") )
 		if !ini_actmd_keys
 			ini_actmd_keys := ACTIONMODE_DEF
+		; the below code will add more actionmode keys in the future version if not present in old ini
 		else if (tn1 := getQuant(ACTIONMODE_DEF, " ")+0) > (tn2 := getQuant(ini_actmd_keys, " ")+0)
 			temp := Substr(ACTIONMODE_DEF, Instr(ACTIONMODE_DEF, " ", 0, 1, tn2+1))
 			, ini_actmd_keys .= temp
 			, Ini_Write("Advanced", "actionmode_keys", ini_actmd_keys, 0)
+
+		ignoreWindows := ini_read("Advanced", "ignoreWindows")
 	}
 
 }
@@ -332,6 +342,7 @@ save_Settings()
 	IniWrite, %new_Threshold%,		%CONFIGURATION_FILE%, Main, Threshold
 	IniWrite, %new_IsMessage%,		%CONFIGURATION_FILE%, Main, Show_Copy_Message
 	IniWrite, %new_Quality%,		%CONFIGURATION_FILE%, Main, Quality_of_Thumbnail_Previews
+	IniWrite, %new_copyBeep%,  		%CONFIGURATION_FILE%, Main, CopyBeep
 	IniWrite, %new_KeepSession%,	%CONFIGURATION_FILE%, Main, Keep_Session
 	Iniwrite, % !new_formatting, 	%CONFIGURATION_FILE%, Advanced, Start_with_formatting
 	IniWrite, %new_DaysToStore%,	%CONFIGURATION_FILE%, Clipboard_History, Days_To_Store
@@ -368,14 +379,7 @@ save_Settings()
 	, hkZ(pitswp_K, "PitSwap", 1)
 	, hkZ(actmd_k, "actionmode", 1)
 
-	Copyfilepath_K := cfilep_K
-	, Copyfolderpath_K := cfolderp_K
-	, Copyfilepath_K := cfiled_K
-	, channel_K := chnl_K
-	, onetime_K := ot_K
-	, paste_K := pst_K
-	, pitswap_K := pitswp_k
-	, actionmode_K := actmd_k
+	;Load settings will load correct values for vars
 }
 
 save_Default(full=1){
@@ -415,6 +419,11 @@ save_Default(full=1){
 	ini_write(s, "windows_cut_shortcut",  "")
 	ini_write(s, "is_duplicate_copied", "1")
 	ini_write(s, "actionmode_keys", ACTIONMODE_DEF)
+	ini_write(s, "beepFrequency", 1500)
+	ini_write(s, "ignoreWindows", "")
+
+	;--v9.8.1 added
+	ini_write("Main", "CopyBeep", "0")
 }
 
 ; Ini keys to save at exit

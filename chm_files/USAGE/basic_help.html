@@ -21,9 +21,11 @@
 <li><a href=#paste>Changing Paste-Mode shortcut</a>
 <li><a href=#ot>One Time Stop</a>
 <li><a href=#nof>No formatting mode</a>
+<li><a href=#beep>Sound when copied</a>
 <li><a href=#export>Exporting and sharing clipboards</a>
 <li><a href=#reset>Resetting Clipjump</a>
 <li><a href=#disable>Disable Clipjump</a>
+<li><a href=#ignorew>Disabling Clipjump for certain windows (automatically)</a>
 <li><a href='ini.html'>More Settings</a>
 <li><a href="../clipjumpcontroller.html">Clipjump Controller</a>
 </ul>
@@ -37,10 +39,10 @@
 <li>After Downloading Clipjump, unzip it and run Clipjump.exe .<br>
 It's a portable application so no installation is needed.<br>
 <li>When you run the exe, Clipjump's icon will be seen in SystemTray.<br><br>
-<a href="../images/trayicon.jpg"><img src="../images/trayicon.jpg" border="0"></a><br><br>
+<a href="../images/trayicon.png"><img src="../images/trayicon.png" border="0"></a><br><br>
 <li>Try copying either by Ctrl+C or by Right Click -> Copy or Shift+PrintScreen
 <li>You will notice a Tip, <b>[Transferred to Clipjump]</b>  when you copy something.This will mean that the copy has been succeeded.<br><br>
-<a href="../images/copy.jpg"><img src="../images/copy.jpg" border="0"></a><br><br>
+<a href="../images/copy.png"><img src="../images/copy.png" border="0"></a><br><br>
 <li>Now, press <b>Ctrl+V</b>(paste action), you will see a tip containing the file or text to be copied.<strong class="super">[This is Paste Mode]</strong>.
 If an Image has been copied, a Window showing your image will pop-up.<br>
 You will have to release Ctrl to perform actions. <i>(You will know later)</i><br>
@@ -110,7 +112,7 @@ on the fixed clip will remove the FIX from it and the "[FIXED]" from the tip wil
 <h3><a name=path>Copying Paths to Clipjump</a></h3>
 <ul>
 <li>Pressing the shortcut Ctrl+Alt+C will copy path(s) of selected files in all file managers including Windows Explorer.<br>
-<a href="../images/path.jpg"><img src="../images/path.jpg" border="0"></a>
+<a href="../images/path.png"><img src="../images/path.png" border="0"></a>
 <li>Using Action Mode and then X will copy path of current opened folder in all file managers including Windows Explorer. You can also create an independent shortcut 
 for this function in the Settings Editor. 
 </ul>
@@ -169,7 +171,16 @@ To disable this mode, press "Z" again while in [PASTE MODE] and the [NO-FORMATTI
 <strong class=super>TIP</strong> - To make Clipjump start by default in NO-FORMATTING mode , see the option <code>Start with No Formatting Enabled</code> in the Settings editor. 
 <br><br><br>
 
+<!--- -->
+
+<a name=beep><h3>Sound when copied</a></h3>
+<i>[v9.8.1+]</i> Clipjump can be configured to make system beep when some data is copied to it. The setting can be found in the Settings editor as "Beep when copied.
+<br><BR>
+To change the frequency of the beep played, navigate to the Advanced section of settings.ini and change the value of <code>beepFrequency</code> to your liking.
+<br><br><br>
+
 <!-- EXP -->
+
 
 <a name=export><h3>Export and share Clipboards</a></h3>
 Clipjump supports exporting clipboards as files which can be stored as a record OR send to a friend.<br>
@@ -185,10 +196,28 @@ the About window for Clipjump. The data that will be removed includes history it
 
 <br><br><br>
 
+<!-- DISABLE -->
+
 <a name=disable><h3>Disable Clipjump</h3></a>
 <i>[v9.7+]</i> You can disable Clipjump  ( i.e. Clipboard Monitoring and Paste Mode ) from the Tray Menu as well as Action Mode. In Action Mode, this option is available 
 with the easy key <code>D</code>.<br>
 To have more control over Clipjump, see <a href="../clipjumpcontroller.html">Clipjump Controller</a> . 
+<br><br><br>
+
+<a name=ignorew><h3>Disabling Clipjump for certain windows (automatically)</h3></a>
+Clipjump can be temporarily automatically suspended when a certain window is active with this feature. The feature requires extracting the active window's class which can 
+be very easily extracted with the <b>Class Grab Tool</b> located in the Tray Menu>Tools or in the Action Mode with easy key <code>L</code>. <br>
+The class so obtained from the Class Grab tool should then be pasted to the <code>ignoreWindows</code> key of the Advanced section of settings.ini.<br>
+To add more than one values of active window classes, separate them by spaces as shown below--<br>
+<code>ignoreWindows=XLMAIN CabinetWClass</code><br>
+<br>
+The above two classes <code>XLMAIN</code> and <code>CabinetWClass</code> are separated by a space and denote MS Excel and Windows Explorer respectively. So in this case , 
+Clipjump will not copy and paste data when Excel and Windows Explorer windows are active. 
+<br><br>
+To get class names from Class Grab Tool, start it from the Tray Menu or Action Mode and then activate your desired window with a left click. The Class Grab Tool's text will change to the Class name of window active. Press Space to copy it to Clipboard.
+<br><br>
+Note that you will have to restart Clipjump once you have made changes to the Settings.ini for them to take effect.
+
 <br><br><br>
 
 

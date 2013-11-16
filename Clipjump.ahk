@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 9.7.2
+;@Ahk2Exe-SetVersion 9.8.1
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -37,7 +37,7 @@ ListLines, Off
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "9.7.2"
+global VERSION := "9.8.1"
 global CONFIGURATION_FILE := "settings.ini"
 global UPDATE_FILE := "https://raw.github.com/avi-aryan/Clipjump/master/version.txt"
 global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/clipjump.html"
@@ -60,12 +60,6 @@ global MSG_FOLDER_PATH_COPIED := "Active folder path copied to " PROGNAME
 ;History Tool
 global hidden_date_no := 4 , history_w , history_partial
 
-Loop, cache\history\*.hst                 ;Rename old .hst extensions
-{
-	SplitPath, A_LoopFileName,,,, fileNameNoExt
-	FileMove, %A_LoopFileDir%\%fileNameNoExt%.hst, %A_LoopFileDir%\%fileNameNoExt%.txt, 1
-}
-
 ;*******************************************************************************
 
 ;Creating Storage Directories
@@ -86,7 +80,7 @@ global WORKINGHT := tempbottom-temptop
 global restoreCaller := 0
 
 ;Global Inits
-global CN := {} , TOTALCLIPS, ACTIONMODE := {} , ACTIONMODE_DEF := "H S C X F D P O E F1"
+global CN := {} , TOTALCLIPS, ACTIONMODE := {} , ACTIONMODE_DEF := "H S C X F D P O E F1 L"
 global CURSAVE, TEMPSAVE, LASTCLIP, LASTFORMAT
 global NOINCOGNITO := 1
 
@@ -127,6 +121,8 @@ else if (ini_Version != VERSION)
 ;Global Ini declarations
 global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_IsChannelMin := 1 , CopyMessage, FORMATTING
 		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, channel_K, onetime_K, paste_k, actionmode_k, ini_is_duplicate_copied, ini_formatting, ini_actmd_keys
+		, ini_CopyBeep , beepFrequency , ignoreWindows
+
 global windows_copy_k, windows_cut_k
 
 ;Initialising Clipjump Channels
@@ -166,7 +162,7 @@ IfExist, %A_Startup%/Clipjump.lnk
 global CLIPS_dir := "cache/clips"
 	, THUMBS_dir := "cache/thumbs"
 	, FIXATE_dir := "cache/fixate"
-	, NUMBER_ADVANCED := 25 + CN.Total 					;the number stores the line number of ADVANCED section
+	, NUMBER_ADVANCED := 26 + CN.Total 					;the number stores the line number of ADVANCED section
 
 ;Setting Up shortcuts
 hkZ( ( paste_k ? "$^" paste_k : emptyvar ) , "Paste")
@@ -189,19 +185,30 @@ OnMessage(0x4a, "Receive_WM_COPYDATA")  ; 0x4a is WM_COPYDATA
 historyCleanup()
 init_actionmode()
 
+;create Ignore windows group from Space-separated values
+loop, parse, ignoreWindows, %A_space%
+	GroupAdd, ignoreGroup, ahk_class %A_LoopField%
+;group created
+
 OnExit, exit
 EmptyMem()
 return
 
 ;Tooltip No 1 is used for Paste Mode tips, 2 is used for notifications , 3 is used for updates , 4 is used in Settings , 5 is used in Action Mode
+;6 used in Class Tool
 
 ;OLD VERSION COMPATIBILITES TO REMOVE
-;* History extension coversion
 ;* Communication timer
 ;End Of Auto-Execute================================================================================================================
-
 paste:
 	Critical
+
+	IfWinActive, ahk_group ignoreGroup
+	{
+		Send ^v
+		return
+	}
+
 	Gui, 1:Hide
 	CALLER := 0
 	ctrlRef := "pastemode"
@@ -216,10 +223,16 @@ paste:
 
 	If !FileExist(CLIPS_dir "/" TEMPSAVE ".avc")
 	{
-		Tooltip, % "{" CN.Name "} " MSG_CLIPJUMP_EMPTY 			;No Clip Exists
-		KeyWait, Ctrl
-		Tooltip
-		CALLER := CALLER_STATUS
+		if !oldclip_exist
+		{
+			oldclip_exist := 1
+			try oldclip_data := ClipboardAll
+		}
+
+		Clipboard :=
+		hkZ("^Up", "channel_up") , hkZ("^Down", "channel_down") 		;activate the 2 keys to jump channels
+		Tooltip, % "{" CN.Name "} " MSG_CLIPJUMP_EMPTY 				;No Clip Exists
+		setTimer, ctrlCheck, 50
 	}
 	else
 	{
@@ -261,6 +274,10 @@ paste:
 
 onClipboardChange:
 	Critical, On
+
+	ifwinactive, ahk_group IgnoreGroup
+		return
+
 	If CALLER
 	{
 		try clipboard_copy := makeClipboardAvailable()
@@ -298,7 +315,9 @@ clipChange(ClipErrorlevel, clipboard_copy) {
 			if NOINCOGNITO and ( CN.Name != "pit" )
 				FileAppend, %LASTCLIP%, cache\history\%A_Now%.txt
 
+			BeepAt(ini_CopyBeep, beepFrequency)
 			ToolTip, %copyMessage%
+
 			TEMPSAVE := CURSAVE
 			if ( CURSAVE >= TOTALCLIPS )
 				compacter()
@@ -307,6 +326,8 @@ clipChange(ClipErrorlevel, clipboard_copy) {
 	else If ClipErrorlevel = 2
 	{
 			CURSAVE += 1 , TEMPSAVE := CURSAVE , LASTCLIP := ""
+
+			BeepAt(ini_CopyBeep, beepFrequency)
 			ToolTip, %copyMessage%
 			thumbGenerator()
 
@@ -323,6 +344,10 @@ clipChange(ClipErrorlevel, clipboard_copy) {
 
 moveBack:
 	Critical
+
+	IfWinActive, ahk_group IgnoreGroup
+		return
+
 	Gui, 1:Hide
 	IN_BACK := true
 	TEMPSAVE := realActive + 1
@@ -580,6 +605,11 @@ channel_up:
 	CN.NG += 2 				;+2 to counter that -1 below
 channel_down:
 	CN.NG -= 1
+
+	TEMPSAVE += 1 		;to make active clip index be same when switching channels , counter-effects TEMPSAVE-=1 in paste_mode label.
+	if TEMPSAVE > %CURSAVE%
+		TEMPSAVE := 1
+
 	if Instr(CN.NG, "-")
 		CN.NG := CN.Total-1
 	else if (CN.NG == CN.Total) 		;if no of channels has exceeded
@@ -708,6 +738,10 @@ historyCleanup()
 	}
 }
 
+
+;----------------------- ACTION MODE AND GET CLASS TOOL ----------------------------------------------------
+
+
 actionmode:
 	temp_am := TT_Console(ACTIONMODE.text, ACTIONMODE.keys, temp3, temp3, 5, "s8", "Consolas|Courier New")
 	if ACTIONMODE[temp_am] != ""
@@ -724,7 +758,7 @@ init_actionmode() {
 		t12.Insert(A_LoopField)
 
 	ACTIONMODE := {(t12.1): "history", (t12.2): "channelGUI", (t12.3): "copyfile", (t12.4): "copyfolder", (t12.5): "CopyFileData", (t12.6): "disable_clipjump"
-		, (t12.7): "pitswap", (t12.8): "onetime", (t12.9): "settings", (t12.10): "hlp"}
+		, (t12.7): "pitswap", (t12.8): "onetime", (t12.9): "settings", (t12.10): "hlp", (t12.11): "classTool"}
 
 	ACTIONMODE.keys := ini_actmd_keys " Esc End Q"
 
@@ -741,10 +775,44 @@ init_actionmode() {
 	. "`nPitSwap                        -  " t12.7
 	. "`nOne Time Stop                  -  " t12.8
 	. "`n"
+	. "`nClass Grab Tool                -  " t12.11
 	. "`nSettings Editor                -  " t12.9
 	. "`nOpen Help File                 -  " t12.10
 	. "`n"
 	. "`nExit Window                    -  Esc, End, Q"
+
+}
+
+classTool(){
+
+	classTool_active := 1
+
+	setTimer, classget, 200
+	Hotkey, Esc,  classTool_end, On
+	Hotkey, Space, classTool_copy, On
+
+	while classTool_active
+		sleep 20
+
+	setTimer, classget, Off
+	ToolTip, ,,, 6
+	Hotkey, Esc, classTool_end, Off
+	Hotkey, Space, classTool_copy, Off
+	return
+
+classget:
+	WinGetClass, classtool_cl, A
+	Tooltip, % classtool_cl "`n`nPress Esc to exit Class Grab Tool`nPress Space to copy Class value to Clipboard`n",,, 6
+	return
+
+classTool_copy:
+	Clipboard := classtool_cl
+	classTool_active := 0
+	return
+
+classTool_end:
+	classTool_active := 0
+	return
 
 }
 
@@ -816,6 +884,10 @@ history:
 
 channelGUI:
 	channelGUI()
+	return
+
+classTool:
+	classTool()
 	return
 
 main:

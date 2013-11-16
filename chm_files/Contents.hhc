@@ -43,12 +43,20 @@
 				<param name="Local" value="usage/basic_help.html#winclip">
 				</OBJECT>
 			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Sound when copied">
+				<param name="Local" value="USAGE/basic_help.html#beep">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
 				<param name="Name" value="Change Paste Mode shortcut">
 				<param name="Local" value="usage/basic_help.html#paste">
 				</OBJECT>
 			<LI> <OBJECT type="text/sitemap">
 				<param name="Name" value="Disable Clipjump">
 				<param name="Local" value="USAGE/basic_help.html#disable">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Auto-disable at certain windows">
+				<param name="Local" value="USAGE/basic_help.html#ignorew">
 				</OBJECT>
 			<LI> <OBJECT type="text/sitemap">
 				<param name="Name" value="Fixate">

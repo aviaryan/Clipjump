@@ -2,6 +2,13 @@
 ;SUPER CONSTANT FUNCTIONS
 ;#########################
 
+;BeepAt()
+;SoundBeep function
+BeepAt(value, freq, duration=150){
+	if value
+		SoundBeep, % freq, % duration
+}
+
 ;EmptyMem()
 ;	Emtpties free memory
 

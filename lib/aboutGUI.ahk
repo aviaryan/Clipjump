@@ -70,15 +70,18 @@ trayMenu(){
 	Menu, Tray, NoStandard
 	Menu, Tray, Add, About %PROGNAME%, main
 	Menu, Tray, Tip, % PROGNAME " {" CN.Name "}"
+	Menu, Tray, Add
+	Menu, Tray, Add,% "Action Mode`t" Hparse_Rev(actionmode_k), actionmode
 	Menu, Tray, Add		; separator
 		Menu, Options_Tray, Add, &Incognito mode, incognito
 		Menu, Options_Tray, Add, &Disable Clipjump, disable_clipjump
 		Menu, Options_Tray, Add, Run at startup, strtup
 	Menu, Tray, Add, &Options, :Options_Tray
-	Menu, Tray, Add 	; separator
-	Menu, Tray, Add,% "Clipboard &history`t" Hparse_Rev(history_K), history
-	Menu, Tray, Add,% "Select &Channel`t" Hparse_Rev(channel_K), channelGUI
-	Menu, Tray, Add, &Settings, settings
+		Menu, Tools_Tray, Add,% "Clipboard &history`t" Hparse_Rev(history_K), history
+		Menu, Tools_Tray, Add,% "Select &channel`t" Hparse_Rev(channel_K), channelGUI
+		Menu, Tools_Tray, Add, Class Grab Tool, classTool
+		Menu, Tools_Tray, Add, &Settings editor, settings
+	Menu, Tray, Add, &Tools, :Tools_Tray
 	Menu, Tray, Add		; separator
 	Menu, Tray, Add, Check for &updates, updt
 	Menu, Tray, Add, H&elp, hlp
