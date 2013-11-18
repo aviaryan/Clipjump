@@ -18,17 +18,20 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 9.8.1
+;@Ahk2Exe-SetVersion 9.8.5
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
 SetWorkingDir, %A_ScriptDir%
 SetBatchLines,-1
+#NoEnv
 #SingleInstance, force
 #ClipboardTimeout 0              ;keeping this value low as I already check for OpenClipboard in OnClipboardChange label
 CoordMode, Mouse
 FileEncoding, UTF-8
 ListLines, Off
+#MaxMem 4560
+#ErrorStdOut
 #KeyHistory 0
 #HotkeyInterval 1000
 #MaxHotkeysPerInterval 1000
@@ -37,7 +40,7 @@ ListLines, Off
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "9.8.1"
+global VERSION := "9.8.5"
 global CONFIGURATION_FILE := "settings.ini"
 global UPDATE_FILE := "https://raw.github.com/avi-aryan/Clipjump/master/version.txt"
 global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/clipjump.html"
@@ -81,12 +84,13 @@ global restoreCaller := 0
 
 ;Global Inits
 global CN := {} , TOTALCLIPS, ACTIONMODE := {} , ACTIONMODE_DEF := "H S C X F D P O E F1 L"
+global cut_is_delete_windows := "XLMAIN QWidget" 			;excel , kingsoft office
 global CURSAVE, TEMPSAVE, LASTCLIP, LASTFORMAT
 global NOINCOGNITO := 1
 
 ;Initailizing Common Variables
 global CALLER_STATUS, CLIPJUMP_STATUS := 1		; global vars are not declared like the below , without initialising
-global CALLER := CALLER_STATUS := true
+global CALLER := CALLER_STATUS := true, CLIP_ACTION := ""
 	, IN_BACK := false
 
 ;Init General vars
@@ -254,8 +258,7 @@ paste:
 			showPreview()
 		else
 		{
-			length := strlen(temp_clipboard)
-			IfGreater,length,200
+			If strlen(temp_clipboard) > 200
 			{
 				StringLeft,halfclip,temp_clipboard, 200
 				halfClip := halfClip . "`n`n" MSG_MORE_PREVIEW
@@ -280,11 +283,21 @@ onClipboardChange:
 
 	If CALLER
 	{
-		try clipboard_copy := makeClipboardAvailable()
-		
-		if ( LASTFORMAT != (temp23 := GetClipboardFormat(0)) ) or ( LASTCLIP != clipboard_copy) or ( clipboard_copy == "" )
-			clipChange(A_EventInfo, clipboard_copy)
-		LASTFORMAT := temp23
+		if !WinActive("ahk_class XLMAIN")
+			 try   clipboard_copy := makeClipboardAvailable()
+		else try   clipboard_copy := Clipboard  				;so that Cj doesnt open excel clipboard (for a longer time) and cause problems 
+
+		try eventinfo := A_eventinfo
+
+		if WinActive("ahk_class XLMAIN")
+			isLastFormat_changed := 1                           ;same reason as above
+		else
+			try isLastFormat_changed :=  ( LASTFORMAT != (temp_lastformat := GetClipboardFormat(0)) )   ?   1   :   0
+
+		if isLastFormat_changed or ( LASTCLIP != clipboard_copy) or ( clipboard_copy == "" )
+			clipChange(eventinfo, clipboard_copy)
+
+		LASTFORMAT := temp_lastformat , CLIP_ACTION := returnV ? "" : CLIP_ACTION
 	}
 	else
 	{
@@ -302,14 +315,15 @@ onClipboardChange:
 	}
 	return
 
-clipChange(ClipErrorlevel, clipboard_copy) {
+clipChange(CErrorlevel, clipboard_copy) {
 
-	If ClipErrorlevel = 1
+	If CErrorlevel = 1
 	{
 		if ( clipboard_copy != LASTCLIP )
 		{
 			CURSAVE += 1
 			clipSaver()
+
 			LASTCLIP := clipboard_copy
 
 			if NOINCOGNITO and ( CN.Name != "pit" )
@@ -318,12 +332,21 @@ clipChange(ClipErrorlevel, clipboard_copy) {
 			BeepAt(ini_CopyBeep, beepFrequency)
 			ToolTip, %copyMessage%
 
+			if CLIP_ACTION = CUT
+			{
+				WinGetClass, activeclass, A
+				if Instr(cut_is_delete_windows, activeclass)
+					Send {vk2e}
+			}
+
 			TEMPSAVE := CURSAVE
 			if ( CURSAVE >= TOTALCLIPS )
 				compacter()
+
+			returnV := 1
 		}
 	}
-	else If ClipErrorlevel = 2
+	else If CErrorlevel = 2
 	{
 			CURSAVE += 1 , TEMPSAVE := CURSAVE , LASTCLIP := ""
 
@@ -337,9 +360,12 @@ clipChange(ClipErrorlevel, clipboard_copy) {
 			clipSaver()
 			if ( CURSAVE >= TOTALCLIPS )
 				compacter()
+
+			returnV := 2
 	}
 	SetTimer, TooltipOff, 500
 	emptyMem()
+	return returnV
 }
 
 moveBack:
@@ -363,8 +389,7 @@ moveBack:
 		showPreview()
 	else
 	{
-		length := strlen(temp_clipboard)
-		if length > 200
+		if strlen(temp_clipboard) > 200
 		{
 			StringLeft, halfClip, temp_clipboard, 200
 			halfClip := halfClip "`n`n" MSG_MORE_PREVIEW
@@ -402,6 +427,7 @@ nativeCopy:
 	hkZ("$^c", "nativeCopy", 0) , hkZ("$^c", "keyblocker")
 	if ini_is_duplicate_copied
 		LASTCLIP := "" 
+	CLIP_ACTION := "COPY"
 	Send, ^{vk43}
 	setTimer, ctrlforCopy, 50
 	gosub, ctrlforCopy
@@ -412,6 +438,7 @@ nativeCut:
 	hkZ("$^x", "nativeCut", 0) , hkZ("$^x", "keyblocker")
 	if ini_is_duplicate_copied
 		LASTCLIP := ""
+	CLIP_ACTION := "CUT"
 	Send, ^{vk58}
 	setTimer, ctrlforCopy, 50
 	gosub, ctrlforCopy
@@ -445,18 +472,26 @@ fixate:
 	PasteModeTooltip(temp_clipboard)
 	return
 
+
 clipSaver() {
 
 	FileDelete, %CLIPS_dir%/%CURSAVE%.avc
 
-	makeClipboardAvailable(0)
+	Tooltip, Processing,,, 7
 	while !copied
 		try {
-			FileAppend, %ClipboardAll%, %CLIPS_dir%/%CURSAVE%.avc
+			if WinActive("ahk_class XLMAIN")
+			{
+				foolGUI(1) 										;foolGUI() is a blank gui to get focus over excel [crazy bug- crazy fix]
+				tempC := ClipboardAll
+				FileAppend, %tempC%, %CLIPS_dir%/%CURSAVE%.avc
+				foolGUI(0)
+			}
+			else
+				FileAppend, %ClipboardAll%, %CLIPS_dir%/%CURSAVE%.avc
 			copied := 1
 		}
-		catch
-			copied := 0
+	Tooltip,,,, 7
 
 	Loop, %CURSAVE%
 	{

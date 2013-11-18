@@ -16,6 +16,19 @@ EmptyMem(){
 	return, dllcall("psapi.dll\EmptyWorkingSet", "UInt", -1)
 }
 
+FoolGUI(switch=1){
+
+	if !switch
+	{
+		Gui, foolgui:Destroy
+		return
+	}
+
+	Gui, foolgui: -Caption +E0x80000 +LastFound +OwnDialogs +Owner +AlwaysOnTop
+	Gui, foolgui: Show, NA, foolgui
+	WinActivate, foolgui
+}
+
 ;Checks and makes sure Clipboard is available
 ;Use 0 as the param when for calling the function, the aim is only to free clipboard and not get its contents
 MakeClipboardAvailable(doreturn=1){

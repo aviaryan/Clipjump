@@ -215,6 +215,8 @@ WM_MOUSEMOVE()	; From the help file
 		[TIP] - Threshold = 1 will make Clipjump store an exact number of maximum clipboards.
 	)"
 
+	static NEW_COPYBEEP_TT := "Check to hear a customizable beep when clipboard data is added to Clipjump.`n`nYou can change the Beep Frequency in the [Advanced]"
+				. " section of Settings.ini"
 	static NEW_QUALITY_TT := "The quality of Thumbnail previews you want to have.`nRecommended value is 90`nCan be between 1 - 100"
 	static NEW_KEEPSESSION_TT := "Should Clipjump continue with all the saved clipboards after it's restart"
 	static NEW_ISMESSAGE_TT := "This value determines whether you want to see the ""Transferred to Clipjump"" message or not while copy/cut operations."
@@ -328,6 +330,8 @@ load_Settings(all=false)
 			, Ini_Write("Advanced", "actionmode_keys", ini_actmd_keys, 0)
 
 		ignoreWindows := ini_read("Advanced", "ignoreWindows")
+
+		cut_is_delete_windows := ini_read("Advanced", "cut_equalto_delete")
 	}
 
 }
@@ -424,6 +428,8 @@ save_Default(full=1){
 
 	;--v9.8.1 added
 	ini_write("Main", "CopyBeep", "0")
+
+	ini_write("Advanced", "cut_equalto_delete", cut_is_delete_windows)
 }
 
 ; Ini keys to save at exit
