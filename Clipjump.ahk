@@ -91,7 +91,7 @@ global NOINCOGNITO := 1
 ;Initailizing Common Variables
 global CALLER_STATUS, CLIPJUMP_STATUS := 1		; global vars are not declared like the below , without initialising
 global CALLER := CALLER_STATUS := true, CLIP_ACTION := "", ONCLIPBOARD := 0
-	, IN_BACK := false
+	, IN_BACK := false, ISACTIVEEXCEL := 0
 
 ;Init General vars
 is_pstMode_active := 0
@@ -286,14 +286,14 @@ onClipboardChange:
 	If CALLER
 	{
 		if !WinActive("ahk_class XLMAIN")
-			 try   clipboard_copy := makeClipboardAvailable()
-		else try   clipboard_copy := "z0p10a1#%&(" , LASTCLIP := "" 		;so that Cj doesnt open excel clipboard (for a longer time) and cause problems 
+			 try   clipboard_copy := makeClipboardAvailable() , ISACTIVEEXCEL := 0
+		else try   clipboard_copy := "z0p10a1#%&(" , LASTCLIP := "" , ISACTIVEEXCEL := 1 ;so that Cj doesnt open excel clipboard (for a longer time) and cause problems 
 
 		;debugTip("1") ;DEBUG
 
 		try eventinfo := A_eventinfo
 
-		if WinActive("ahk_class XLMAIN")
+		if ISACTIVEEXCEL
 			isLastFormat_changed := 1                           ;same reason as above
 		else
 			try isLastFormat_changed :=  ( LASTFORMAT != (temp_lastformat := GetClipboardFormat(0)) )   ?   1   :   0
@@ -329,9 +329,10 @@ clipChange(CErrorlevel, clipboard_copy) {
 		{
 			CURSAVE += 1
 			;debugTip("3") ;DEBUG
-			clipSaver()
-
-			LASTCLIP := clipboard_copy
+			if ISACTIVEEXCEL
+				LASTCLIP := clipsaver()
+			else
+				temp := clipSaver() , LASTCLIP := clipboard_copy
 
 			if NOINCOGNITO and ( CN.Name != "pit" )
 				FileAppend, %LASTCLIP%, cache\history\%A_Now%.txt
@@ -487,10 +488,11 @@ clipSaver() {
 	Tooltip, Processing,,, 7
 	while !copied
 		try {
-			if WinActive("ahk_class XLMAIN")
+			if ISACTIVEEXCEL
 			{
 				foolGUI(1) 										;foolGUI() is a blank gui to get focus over excel [crazy bug- crazy fix]
 				tempC := ClipboardAll
+				tempCB := Clipboard
 				;debugTip("4") ;DEBUG
 				FileAppend, %tempC%, %CLIPS_dir%/%CURSAVE%.avc
 				foolGUI(0)
@@ -521,6 +523,7 @@ clipSaver() {
 		}
 	}
 
+	return tempCB
 }
 
 fixCheck() {
