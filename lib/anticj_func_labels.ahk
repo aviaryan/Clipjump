@@ -236,6 +236,11 @@ getQuant(str, what){
 	return ErrorLevel
 }
 
+;Used for Debugging
+debugTip(text, tooltipno=20){
+	Tooltip, % text,,, % tooltipno
+}
+
 /*
 SuperInstr()
 	Returns min/max position for a | separated values of Needle(s)

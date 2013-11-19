@@ -90,7 +90,7 @@ global NOINCOGNITO := 1
 
 ;Initailizing Common Variables
 global CALLER_STATUS, CLIPJUMP_STATUS := 1		; global vars are not declared like the below , without initialising
-global CALLER := CALLER_STATUS := true, CLIP_ACTION := ""
+global CALLER := CALLER_STATUS := true, CLIP_ACTION := "", ONCLIPBOARD := 0
 	, IN_BACK := false
 
 ;Init General vars
@@ -281,11 +281,15 @@ onClipboardChange:
 	ifwinactive, ahk_group IgnoreGroup
 		return
 
+	ONCLIPBOARD := 1 		;used by paste to identify if OnCLipboard has been breached
+
 	If CALLER
 	{
 		if !WinActive("ahk_class XLMAIN")
 			 try   clipboard_copy := makeClipboardAvailable()
-		else try   clipboard_copy := Clipboard  				;so that Cj doesnt open excel clipboard (for a longer time) and cause problems 
+		else try   clipboard_copy := "z0p10a1#%&(" , LASTCLIP := "" 		;so that Cj doesnt open excel clipboard (for a longer time) and cause problems 
+
+		;debugTip("1") ;DEBUG
 
 		try eventinfo := A_eventinfo
 
@@ -294,6 +298,8 @@ onClipboardChange:
 		else
 			try isLastFormat_changed :=  ( LASTFORMAT != (temp_lastformat := GetClipboardFormat(0)) )   ?   1   :   0
 
+		;debugTip("2") ;DEBUG
+
 		if isLastFormat_changed or ( LASTCLIP != clipboard_copy) or ( clipboard_copy == "" )
 			clipChange(eventinfo, clipboard_copy)
 
@@ -301,7 +307,7 @@ onClipboardChange:
 	}
 	else
 	{
-		LASTFORMAT := GetClipboardFormat(0)
+		LASTFORMAT := WinActive("ahk_class XLMAIN") ? "" : GetClipboardFormat(0)
 		if restoreCaller
 			restoreCaller := "" , CALLER := CALLER_STATUS
 		if onetimeOn
@@ -322,6 +328,7 @@ clipChange(CErrorlevel, clipboard_copy) {
 		if ( clipboard_copy != LASTCLIP )
 		{
 			CURSAVE += 1
+			;debugTip("3") ;DEBUG
 			clipSaver()
 
 			LASTCLIP := clipboard_copy
@@ -484,6 +491,7 @@ clipSaver() {
 			{
 				foolGUI(1) 										;foolGUI() is a blank gui to get focus over excel [crazy bug- crazy fix]
 				tempC := ClipboardAll
+				;debugTip("4") ;DEBUG
 				FileAppend, %tempC%, %CLIPS_dir%/%CURSAVE%.avc
 				foolGUI(0)
 			}
@@ -492,6 +500,7 @@ clipSaver() {
 			copied := 1
 		}
 	Tooltip,,,, 7
+	;debugTip(blank) ;DEBUG
 
 	Loop, %CURSAVE%
 	{
@@ -570,14 +579,21 @@ ctrlCheck:
 			if !FORMATTING
 			{
 				if Instr(GetClipboardFormat(), "Text")
+				{
+					Critical, Off 			; off to enable thread overlap
+					ONCLIPBOARD := 0
 					try Clipboard := Rtrim(Clipboard, "`r`n")
+					while !ONCLIPBOARD
+						sleep 20 			; wait for ONC label to be done
+					Critical, On 			; on critical for just the case
+				}
 				Send, ^{vk56}
 
 				sleeptime := 1
 			}
 			else
 			{
-				Send, ^{vk56} 				;vk56
+				Send, ^{vk56}
 				sleeptime := 100
 			}
 
