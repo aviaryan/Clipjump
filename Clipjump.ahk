@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 9.8.5
+;@Ahk2Exe-SetVersion 9.8.5.2
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -31,7 +31,7 @@ CoordMode, Mouse
 FileEncoding, UTF-8
 ListLines, Off
 #MaxMem 4560
-#ErrorStdOut
+;#ErrorStdOut
 #KeyHistory 0
 #HotkeyInterval 1000
 #MaxHotkeysPerInterval 1000
@@ -47,8 +47,8 @@ global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/clipjump.html"
 global HELP_PAGE := "http://avi-win-tips.blogspot.com/2013/04/clipjump-online-guide.html"
 global AUTHOR_PAGE := "http://www.avi-win-tips.blogspot.com"
 
-global MSG_TRANSFER_COMPLETE := "Transferred to " PROGNAME
-global MSG_CLIPJUMP_EMPTY := "Clip 0 of 0`n`n" PROGNAME " is empty"
+global MSG_TRANSFER_COMPLETE := "Transferred to" " " PROGNAME    ;not space
+global MSG_CLIPJUMP_EMPTY := "Clip 0 of 0" "`n`n" PROGNAME " " "is empty"  ;not `n`n
 global MSG_ERROR := "[The preview/path cannot be loaded]"
 global MSG_MORE_PREVIEW := "[More]"
 global MSG_PASTING := "Pasting..."
@@ -57,8 +57,8 @@ global MSG_ALL_DELETED := "All data deleted"
 global MSG_CANCELLED := "Cancelled"
 global MSG_FIXED := "[FIXED]"
 global MSG_HISTORY_PREVIEW_IMAGE := "[Double-click to view image]"
-global MSG_FILE_PATH_COPIED := "File path(s) copied to " PROGNAME
-global MSG_FOLDER_PATH_COPIED := "Active folder path copied to " PROGNAME
+global MSG_FILE_PATH_COPIED := "File path(s) copied to" " " PROGNAME
+global MSG_FOLDER_PATH_COPIED := "Active folder path copied to" " " PROGNAME
 
 ;History Tool
 global hidden_date_no := 4 , history_w , history_partial
@@ -90,8 +90,8 @@ global NOINCOGNITO := 1
 
 ;Initailizing Common Variables
 global CALLER_STATUS, CLIPJUMP_STATUS := 1		; global vars are not declared like the below , without initialising
-global CALLER := CALLER_STATUS := true, CLIP_ACTION := "", ONCLIPBOARD := 0
-	, IN_BACK := false, ISACTIVEEXCEL := 0
+global CALLER := CALLER_STATUS := true, IN_BACK := false
+global CLIP_ACTION := "", ONCLIPBOARD := 0 , ISACTIVEEXCEL := 0 , HASCOPYFAILED := 0 		;specific purpose global vars
 
 ;Init General vars
 is_pstMode_active := 0
@@ -209,7 +209,7 @@ paste:
 
 	IfWinActive, ahk_group ignoreGroup
 	{
-		Send ^v
+		Send ^{vk56}
 		return
 	}
 
@@ -233,7 +233,7 @@ paste:
 			try oldclip_data := ClipboardAll
 		}
 
-		Clipboard :=
+		try Clipboard := ""
 		hkZ("^Up", "channel_up") , hkZ("^Down", "channel_down") 		;activate the 2 keys to jump channels
 		Tooltip, % "{" CN.Name "} " MSG_CLIPJUMP_EMPTY 				;No Clip Exists
 		setTimer, ctrlCheck, 50
@@ -289,16 +289,12 @@ onClipboardChange:
 			 try   clipboard_copy := makeClipboardAvailable() , ISACTIVEEXCEL := 0
 		else try   clipboard_copy := "z0p10a1#%&(" , LASTCLIP := "" , ISACTIVEEXCEL := 1 ;so that Cj doesnt open excel clipboard (for a longer time) and cause problems 
 
-		;debugTip("1") ;DEBUG
-
 		try eventinfo := A_eventinfo
 
 		if ISACTIVEEXCEL
 			isLastFormat_changed := 1                           ;same reason as above
 		else
 			try isLastFormat_changed :=  ( LASTFORMAT != (temp_lastformat := GetClipboardFormat(0)) )   ?   1   :   0
-
-		;debugTip("2") ;DEBUG
 
 		if isLastFormat_changed or ( LASTCLIP != clipboard_copy) or ( clipboard_copy == "" )
 			clipChange(eventinfo, clipboard_copy)
@@ -328,11 +324,17 @@ clipChange(CErrorlevel, clipboard_copy) {
 		if ( clipboard_copy != LASTCLIP )
 		{
 			CURSAVE += 1
-			;debugTip("3") ;DEBUG
+
 			if ISACTIVEEXCEL
 				LASTCLIP := clipsaver()
 			else
 				temp := clipSaver() , LASTCLIP := clipboard_copy
+
+			If HASCOPYFAILED
+			{
+				CURSAVE -= 1 , TEMPSAVE := CURSAVE
+				return
+			}
 
 			if NOINCOGNITO and ( CN.Name != "pit" )
 				FileAppend, %LASTCLIP%, cache\history\%A_Now%.txt
@@ -344,7 +346,7 @@ clipChange(CErrorlevel, clipboard_copy) {
 			{
 				WinGetClass, activeclass, A
 				if Instr(cut_is_delete_windows, activeclass)
-					Send {vk2e}
+					Send {vk2e} 			;del
 			}
 
 			TEMPSAVE := CURSAVE
@@ -358,6 +360,13 @@ clipChange(CErrorlevel, clipboard_copy) {
 	{
 			CURSAVE += 1 , TEMPSAVE := CURSAVE , LASTCLIP := ""
 
+			clipSaver()
+			if HASCOPYFAILED
+			{
+				CURSAVE -= 1 , TEMPSAVE := CURSAVE
+				return
+			}
+
 			BeepAt(ini_CopyBeep, beepFrequency)
 			ToolTip, %copyMessage%
 			thumbGenerator()
@@ -365,7 +374,6 @@ clipChange(CErrorlevel, clipboard_copy) {
 			if NOINCOGNITO and ini_IsImageStored and ( CN.Name != "pit" )
 				FileCopy, %THUMBS_dir%\%CURSAVE%.jpg, cache\history\%A_Now%.jpg
 
-			clipSaver()
 			if ( CURSAVE >= TOTALCLIPS )
 				compacter()
 
@@ -484,9 +492,17 @@ fixate:
 clipSaver() {
 
 	FileDelete, %CLIPS_dir%/%CURSAVE%.avc
+	HASCOPYFAILED := 0
 
 	Tooltip, Processing,,, 7
 	while !copied
+	{
+		if ( A_index=100 ) {
+			HASCOPYFAILED := 1
+			Tooltip,,,, 7
+			return
+		}
+
 		try {
 			if ISACTIVEEXCEL
 			{
@@ -501,8 +517,9 @@ clipSaver() {
 				FileAppend, %ClipboardAll%, %CLIPS_dir%/%CURSAVE%.avc
 			copied := 1
 		}
+	}
+
 	Tooltip,,,, 7
-	;debugTip(blank) ;DEBUG
 
 	Loop, %CURSAVE%
 	{
@@ -1152,6 +1169,7 @@ clipjumpcom_delete:
 
 ;##############################################################################
 
+;#Include %A_ScriptDir%\lib\translations.ahk
 #Include %A_ScriptDir%\lib\multi.ahk
 #Include %A_ScriptDir%\lib\aboutgui.ahk
 #include %A_ScriptDir%\lib\TT_Console.ahk
