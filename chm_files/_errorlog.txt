@@ -32,5 +32,5 @@ Compile time: 0 minutes, 5 seconds
 1	Graphic
 
 
-Created s:\Portables\AutoHotkey\My Scripts\ClipStep\chm_files\Clipjump.chm, 75,012 bytes
-Compression decreased file by 16,481 bytes.
+Created s:\Portables\AutoHotkey\My Scripts\ClipStep\chm_files\Clipjump.chm, 75,162 bytes
+Compression decreased file by 16,558 bytes.

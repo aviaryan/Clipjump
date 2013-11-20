@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 9.8.5.2
+;@Ahk2Exe-SetVersion 9.8.8
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -31,7 +31,6 @@ CoordMode, Mouse
 FileEncoding, UTF-8
 ListLines, Off
 #MaxMem 4560
-;#ErrorStdOut
 #KeyHistory 0
 #HotkeyInterval 1000
 #MaxHotkeysPerInterval 1000
@@ -40,7 +39,7 @@ ListLines, Off
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "9.8.5"
+global VERSION := "9.8.8"
 global CONFIGURATION_FILE := "settings.ini"
 global UPDATE_FILE := "https://raw.github.com/avi-aryan/Clipjump/master/version.txt"
 global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/clipjump.html"
@@ -244,6 +243,9 @@ paste:
 		{
 			oldclip_exist := 1
 			try oldclip_data := ClipboardAll
+			catch temp {
+				makeClipboardAvailable(0)  						; make clipbboard available in case it is blocked
+			}
 		}
 		if !is_pstMode_active
 			hkZ_Group(1) , is_pstMode_active := 1
@@ -287,7 +289,8 @@ onClipboardChange:
 	{
 		if !WinActive("ahk_class XLMAIN")
 			 try   clipboard_copy := makeClipboardAvailable() , ISACTIVEEXCEL := 0
-		else try   clipboard_copy := "z0p10a1#%&(" , LASTCLIP := "" , ISACTIVEEXCEL := 1 ;so that Cj doesnt open excel clipboard (for a longer time) and cause problems 
+		else try   clipboard_copy := LASTCLIP , ISACTIVEEXCEL := 1  	;so that Cj doesnt open excel clipboard (for a longer time) and cause problems 
+		;clipboard_copy = lastclip as to remove duplicate copies in excel , ^x or ^c makes lastclip empty
 
 		try eventinfo := A_eventinfo
 
@@ -321,7 +324,7 @@ clipChange(CErrorlevel, clipboard_copy) {
 
 	If CErrorlevel = 1
 	{
-		if ( clipboard_copy != LASTCLIP )
+		if ( clipboard_copy != LASTCLIP ) or ( clipboard_copy == "" )        ;dont let go if lastclip = clipboard_copy = <empty>
 		{
 			CURSAVE += 1
 

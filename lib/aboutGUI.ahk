@@ -25,7 +25,7 @@ aboutGUI(){
 	
 	Gui, 2:Font, S10 norm, Arial
 	Gui, 2:Add, Button, xp-10 y+50 w70 g2GuiClose Default, OK
-	Gui, 2:Add, Button, x430 yp w117 greset, Reset Clipjump
+	Gui, 2:Add, Button, x430 yp w117 greset, &Reset Clipjump
 	Gui, 2:Add, Text, y+0 h0,
 
 	Gui, 2:Show, w552, % PROGNAME " " (!CLIPJUMP_STATUS ? "{Disabled}" : "") " [ Channel: " CN.Name " ]"
