@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 9.8.8
+;@Ahk2Exe-SetVersion 9.8.8.2
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -189,7 +189,8 @@ historyCleanup()
 init_actionmode()
 
 ;create Ignore windows group from Space-separated values
-loop, parse, ignoreWindows, %A_space%
+temp_delim := !Instr(ignoreWindows, "|") ? " " : "|"
+loop, parse, ignoreWindows, % temp_delim
 	GroupAdd, ignoreGroup, ahk_class %A_LoopField%
 ;group created
 
@@ -201,7 +202,7 @@ return
 ;6 used in Class Tool
 
 ;OLD VERSION COMPATIBILITES TO REMOVE
-;* Communication timer
+; Temp delim
 ;End Of Auto-Execute================================================================================================================
 paste:
 	Critical
@@ -444,8 +445,8 @@ deleteall:
 nativeCopy:
 	Critical
 	hkZ("$^c", "nativeCopy", 0) , hkZ("$^c", "keyblocker")
-	if ini_is_duplicate_copied
-		LASTCLIP := "" 
+	if ini_is_duplicate_copied or WinActive("ahk_class XLMAIN")
+		LASTCLIP := ""
 	CLIP_ACTION := "COPY"
 	Send, ^{vk43}
 	setTimer, ctrlforCopy, 50
@@ -455,7 +456,7 @@ nativeCopy:
 nativeCut:
 	Critical
 	hkZ("$^x", "nativeCut", 0) , hkZ("$^x", "keyblocker")
-	if ini_is_duplicate_copied
+	if ini_is_duplicate_copied or WinActive("ahk_class XLMAIN")
 		LASTCLIP := ""
 	CLIP_ACTION := "CUT"
 	Send, ^{vk58}
@@ -1157,18 +1158,8 @@ Receive_WM_COPYDATA(wParam, lParam)
     while !FileExist(A_temp "\clipjumpcom.txt")
     	FileAppend, a,% A_temp "\clipjumpcom.txt"
 
-    ;-- Backward Compatibility
-    if D=1
-    	setTimer, clipjumpcom_delete, 500
-    ;----
-
     return 1
 }
-
-clipjumpcom_delete:
-	SetTimer, clipjumpcom_delete, Off
-	FileDelete, % A_temp "\clipjumpcom.txt"
-	return
 
 ;##############################################################################
 

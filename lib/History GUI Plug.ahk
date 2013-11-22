@@ -471,9 +471,9 @@ LV_SortArrow(h, c, d="")	; by Solar (http://www.autohotkey.com/forum/viewtopic.p
 	^c::history_clipboard()
 	^e::gosub history_exportclip
 	Del::Send !{vk54}               ;Alt+T - shortcut for Delete
-	!d::Send ^{vk46}  			   ;Alt+F - shortcut for Search
+	!d::GuiControl, History:focus, history_SearchBox
 	^f::GuiControl, History:focus, history_SearchBox
 #if
 #if Winactive("Preview ahk_class AutoHotkeyGUI")
-	^f::Send !{vk44}              ;Alt+D
+	^f::GuiControl, Preview:focus, preview_search             ;Alt+D
 #if
