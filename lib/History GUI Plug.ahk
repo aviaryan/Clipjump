@@ -192,7 +192,7 @@ historyGuiEscape:
 gui_History_Preview(path, history_SearchBox)
 ; Creates and shows a GUI for viewing history items
 {
-	global prev_copybtn, prev_findtxt, prev_handle, preview_search, prev_picture, preview, prev_document
+	global prev_copybtn, prev_findtxt, prev_handle, preview_search, prev_picture, preview
 	static wt := A_ScreenWidth / 2 , ht := A_ScreenHeight / 2 , maxlines = Round(ht / 13)
 	preview := {}
 
@@ -219,6 +219,7 @@ gui_History_Preview(path, history_SearchBox)
 	else
 	{
 		Gui, Add, ActiveX, w%wt% h%ht% vprev_handle, Shell.Explorer
+		ComObjConnect(prev_handle, new ActiveXEvent)
 		prev_handle.Navigate( preview.path )
 	}
 
@@ -427,6 +428,23 @@ history_exportclip:
 	CALLER := CALLER_STATUS
 	return
 
+
+; by Jethrow
+; Helps in copy and paste in Shell Explorer
+class ActiveXEvent {
+	DocumentComplete(prev_handle) {
+		static doc
+		ComObjConnect(doc:=prev_handle.document, new ActiveXEvent)
+	}
+	OnKeyPress(doc) {
+		static keys := {1:"selectall", 3:"copy", 22:"paste", 24:"cut"}
+		keyCode := doc.parentWindow.event.keyCode
+		if keys.HasKey(keyCode)
+			Doc.ExecCommand(keys[keyCode])
+	}
+}
+
+
 LV_SortArrow(h, c, d="")	; by Solar (http://www.autohotkey.com/forum/viewtopic.php?t=69642)
 ; Shows a chevron in a sorted listview column pointing in the direction of sort (like in Explorer)
 ; h = ListView handle (use +hwnd option to store the handle in a variable)
@@ -476,9 +494,4 @@ LV_SortArrow(h, c, d="")	; by Solar (http://www.autohotkey.com/forum/viewtopic.p
 #if
 #if Winactive("Preview ahk_class AutoHotkeyGUI") and ctrlRef != "pastemode"
 	^f::GuiControl, Preview:focus, preview_search             ;Alt+D
-	;^c::
-	;Keywait, Ctrl, U
-	;Keywait, C, U
-	;Send +{vk79}{vk43}
-	;return
 #if
