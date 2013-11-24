@@ -204,22 +204,15 @@ with the easy key <code>D</code>.<br>
 To have more control over Clipjump, see <a href="../clipjumpcontroller.html">Clipjump Controller</a> . 
 <br><br><br>
 
-<a name=ignorew><h3>Disabling Clipjump for certain windows (automatically)</h3></a>
-Clipjump can be temporarily automatically suspended when a certain window is active with this feature. The feature requires extracting the active window's class which can 
-be very easily extracted with the <b>Class Grab Tool</b> located in the Tray Menu>Tools or in the Action Mode with easy key <code>L</code>. <br>
-The class so obtained from the Class Grab tool should then be pasted to the <code>ignoreWindows</code> key of the Advanced section of settings.ini.<br>
-To add more than one values of active window classes, separate them by spaces as shown below--<br>
-<code>ignoreWindows=XLMAIN CabinetWClass</code><br>
-<br>
-The above two classes <code>XLMAIN</code> and <code>CabinetWClass</code> are separated by a space and denote MS Excel and Windows Explorer respectively. So in this case , 
-Clipjump will not copy and paste data when Excel and Windows Explorer windows are active. 
-<br><br>
-To get class names from Class Grab Tool, start it from the Tray Menu or Action Mode and then activate your desired window with a left click. The Class Grab Tool's text will change to the Class name of window active. Press Space to copy it to Clipboard.
-<br><br>
+<a name=ignorew><h3>Ignore(d) Windows Manager</h3></a>
+Clipjump can be temporarily automatically suspended when a certain window is active with this feature. The feature requires the active window's class which can 
+be very easily managed with the <b>Ignore(d) Windows Manager</b> located in the Tray Menu>Tools or in the Action Mode with easy key <code>L</code>. <br>
+Use the Add Class buttton in the manager to start a tooltip application that shows the class of the active window. To make a window active, simply make it foreground 
+by left-clicking on it.<br>
+Use Delete Class button to delete a value.<br><br>
 Note that you will have to restart Clipjump once you have made changes to the Settings.ini for them to take effect.
 
 <br><br><br>
-
 
 <h3><a name=short>Shortcut List</a></h3>
 <b>Ctrl Held/Pressed</b><br>

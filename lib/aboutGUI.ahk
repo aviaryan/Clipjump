@@ -79,7 +79,7 @@ trayMenu(){
 	Menu, Tray, Add, &Options, :Options_Tray
 		Menu, Tools_Tray, Add,% "Clipboard &history`t" Hparse_Rev(history_K), history
 		Menu, Tools_Tray, Add,% "Select &channel`t" Hparse_Rev(channel_K), channelGUI
-		Menu, Tools_Tray, Add, Class Grab Tool, classTool
+		Menu, Tools_Tray, Add, Ignore Windows Manager, classTool
 		Menu, Tools_Tray, Add, &Settings editor, settings
 	Menu, Tray, Add, &Tools, :Tools_Tray
 	Menu, Tray, Add		; separator

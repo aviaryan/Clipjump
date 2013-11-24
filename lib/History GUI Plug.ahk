@@ -192,7 +192,7 @@ historyGuiEscape:
 gui_History_Preview(path, history_SearchBox)
 ; Creates and shows a GUI for viewing history items
 {
-	global prev_copybtn, prev_findtxt, prev_handle, preview_search, prev_picture, preview
+	global prev_copybtn, prev_findtxt, prev_handle, preview_search, prev_picture, preview, prev_document
 	static wt := A_ScreenWidth / 2 , ht := A_ScreenHeight / 2 , maxlines = Round(ht / 13)
 	preview := {}
 
@@ -474,6 +474,11 @@ LV_SortArrow(h, c, d="")	; by Solar (http://www.autohotkey.com/forum/viewtopic.p
 	!d::GuiControl, History:focus, history_SearchBox
 	^f::GuiControl, History:focus, history_SearchBox
 #if
-#if Winactive("Preview ahk_class AutoHotkeyGUI")
+#if Winactive("Preview ahk_class AutoHotkeyGUI") and ctrlRef != "pastemode"
 	^f::GuiControl, Preview:focus, preview_search             ;Alt+D
+	;^c::
+	;Keywait, Ctrl, U
+	;Keywait, C, U
+	;Send +{vk79}{vk43}
+	;return
 #if

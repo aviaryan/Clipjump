@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 9.8.8.2
+;@Ahk2Exe-SetVersion 9.8.9
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -39,7 +39,7 @@ ListLines, Off
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "9.8.8"
+global VERSION := "9.8.9"
 global CONFIGURATION_FILE := "settings.ini"
 global UPDATE_FILE := "https://raw.github.com/avi-aryan/Clipjump/master/version.txt"
 global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/clipjump.html"
@@ -84,7 +84,7 @@ global restoreCaller := 0
 ;Global Inits
 global CN := {} , TOTALCLIPS, ACTIONMODE := {} , ACTIONMODE_DEF := "H S C X F D P O E F1 L"
 global cut_is_delete_windows := "XLMAIN QWidget" 			;excel , kingsoft office
-global CURSAVE, TEMPSAVE, LASTCLIP, LASTFORMAT
+global CURSAVE, TEMPSAVE, LASTCLIP, LASTFORMAT, IScurCBACTIVE := 0
 global NOINCOGNITO := 1
 
 ;Initailizing Common Variables
@@ -240,7 +240,7 @@ paste:
 	}
 	else
 	{
-		if !oldclip_exist
+		if !oldclip_exist 					;will be false when V is pressed for 1st time
 		{
 			oldclip_exist := 1
 			try oldclip_data := ClipboardAll
@@ -248,10 +248,14 @@ paste:
 				makeClipboardAvailable(0)  						; make clipbboard available in case it is blocked
 			}
 		}
+		else
+			IScurCBACTIVE := 0 				;false it when V is pressed for the 2nd time
+
 		if !is_pstMode_active
 			hkZ_Group(1) , is_pstMode_active := 1
 
-		try FileRead, Clipboard, *c %A_ScriptDir%/%CLIPS_dir%/%TEMPSAVE%.avc
+		if !IScurCBACTIVE 				;if the current clipboard is not asked for , then only load from file
+			try FileRead, Clipboard, *c %A_ScriptDir%/%CLIPS_dir%/%TEMPSAVE%.avc
 		try temp_clipboard := Clipboard
 
 		fixStatus := fixCheck()
@@ -301,9 +305,11 @@ onClipboardChange:
 			try isLastFormat_changed :=  ( LASTFORMAT != (temp_lastformat := GetClipboardFormat(0)) )   ?   1   :   0
 
 		if isLastFormat_changed or ( LASTCLIP != clipboard_copy) or ( clipboard_copy == "" )
-			clipChange(eventinfo, clipboard_copy)
+			returnV := clipChange(eventinfo, clipboard_copy)
 
-		LASTFORMAT := temp_lastformat , CLIP_ACTION := returnV ? "" : CLIP_ACTION
+		LASTFORMAT := temp_lastformat , CLIP_ACTION := returnV ? "" : CLIP_ACTION  		;make CLIP_ACTION empty if copy/cut succeeded else let it be so that if window uses
+			;2 transfers like Excel , the demand can be fulfilled
+		IScurCBACTIVE := returnV 									;current clipboard is active after new data copied to clipboard SUCCESSFULLY
 	}
 	else
 	{
@@ -400,6 +406,7 @@ moveBack:
 	if realActive = %CURSAVE%
 		TEMPSAVE := 1
 	realActive := TEMPSAVE
+	IScurCBACTIVE := 0 			;the key will be always pressed after V
 	try FileRead, clipboard, *c %CLIPS_dir%/%TEMPSAVE%.avc
 	try temp_clipboard := Clipboard
 
@@ -631,7 +638,8 @@ ctrlCheck:
 		; The below thread will be interrupted when the Clipboard command is executed. The ONC label will exit as CALLER := 0 in the situtaion
 		
 		if ctrlref in cancel, delete, DeleteAll
-			try Clipboard := oldclip_data       ;The command opens, writes and closes clipboard . The ONCC Label is launched when writing takes place.
+			if !IScurCBACTIVE 						;dont disturb current clipboard if it is already active
+				try Clipboard := oldclip_data       ;The command opens, writes and closes clipboard . The ONCC Label is launched when writing takes place.
 
 		sleep % sleeptime
 		Tooltip
@@ -850,47 +858,13 @@ init_actionmode() {
 	. "`nPitSwap                        -  " t12.7
 	. "`nOne Time Stop                  -  " t12.8
 	. "`n"
-	. "`nClass Grab Tool                -  " t12.11
+	. "`nIgnore Windows Manager         -  " t12.11
 	. "`nSettings Editor                -  " t12.9
 	. "`nOpen Help File                 -  " t12.10
 	. "`n"
 	. "`nExit Window                    -  Esc, End, Q"
 
 }
-
-classTool(){
-
-	classTool_active := 1
-
-	setTimer, classget, 200
-	Hotkey, Esc,  classTool_end, On
-	Hotkey, Space, classTool_copy, On
-
-	while classTool_active
-		sleep 20
-
-	setTimer, classget, Off
-	ToolTip, ,,, 6
-	Hotkey, Esc, classTool_end, Off
-	Hotkey, Space, classTool_copy, Off
-	return
-
-classget:
-	WinGetClass, classtool_cl, A
-	Tooltip, % classtool_cl "`n`nPress Esc to exit Class Grab Tool`nPress Space to copy Class value to Clipboard`n",,, 6
-	return
-
-classTool_copy:
-	Clipboard := classtool_cl
-	classTool_active := 0
-	return
-
-classTool_end:
-	classTool_active := 0
-	return
-
-}
-
 ;****************COPY FILE/FOLDER/DATA***************************************************************************
 
 copyFile:
@@ -962,7 +936,7 @@ channelGUI:
 	return
 
 classTool:
-	classTool()
+	classManager()
 	return
 
 main:
@@ -1164,6 +1138,7 @@ Receive_WM_COPYDATA(wParam, lParam)
 ;##############################################################################
 
 ;#Include %A_ScriptDir%\lib\translations.ahk
+#Include %A_ScriptDir%\lib\classtool.ahk
 #Include %A_ScriptDir%\lib\multi.ahk
 #Include %A_ScriptDir%\lib\aboutgui.ahk
 #include %A_ScriptDir%\lib\TT_Console.ahk

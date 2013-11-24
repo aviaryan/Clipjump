@@ -61,7 +61,7 @@ channelGUI(){
 	Gui, Channel:Default
 	GuiControl,, cIndex, % CN.NG
 	GuiControl,, cName , % CN.Name
-	Gui, Show, , Clipjump Channels
+	Gui, Show, , %PROGNAME% Channels
 
 	SB_SetText("Clips in the Channel :" CN["CURSAVE" CN.N])
 	return
@@ -157,7 +157,7 @@ changeChannel(cIndex){
 	FileCreateDir, %FIXATE_dir%
 	FileCreateDir, %THUMBS_dir%
 
-	LASTCLIP := LASTFORMAT := ""
+	LASTCLIP := LASTFORMAT := IScurCBACTIVE := "" 								;make all false as they are different for other channels
 	CopyMessage := !ini_IsMessage ? "" : MSG_TRANSFER_COMPLETE " {" CN.Name "}"
 
 	Menu, Tray, Tip, % PROGNAME " {" CN.Name "}"
