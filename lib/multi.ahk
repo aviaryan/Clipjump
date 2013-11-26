@@ -12,34 +12,39 @@
 ; 	CN.pit_NG = contains item active before the Pit swap
 ;----------------------------------------------------------------------
 
-channelGUI(){
+channelGUI(destroygui=0){
 	global
 	static local_ini_IsChannelMin
+
+	if (destroygui) {
+		local_ini_IsChannelMin := ""
+		return
+	}
 
 	If ( ini_IsChannelMin != local_ini_IsChannelMin )
 	{
 			Gui, Channel:New  ;Total width ~ 549
 			Gui, Font, S12
-			Gui, Add, Text, x4 y6 w235, &Choose Multi-Clipboard Channel
+			Gui, Add, Text, x4 y6 w235, % TXT.CNL_choose
 			Gui, Font, S10
 			Gui, Add, Edit, x+165 yp-2 +Readonly vcIndex
 			Gui, Add, Updown,% "Wrap Range0-" CN.Total " gChannelupdown vChannelupdown", 0
 
 			Gui, Font, S12
-			Gui, Add, Text, x4 y+10 w235, Channel &Name
+			Gui, Add, Text, x4 y+10 w235, % TXT.CNL_channelname
 			Gui, Font, S10
 			Gui, Add, Edit, x+165 yp-2 w150 vcname -Multi gedit_cname, % CN.Name
 
 		if !ini_IsChannelMin
 		{
 			Gui, Font, S8, Lucida Console
-			Gui, Add, Text, x4 y+25, Channel 0 (Default) is the mainstream channel and should be used normally.
-			Gui, Add, Text, y+5, Channel Name changes are saved automatically.
-			Gui, Add, Text, y+5, Next Channels are available only if the previous one has been activated (used).
+			Gui, Add, Text, x4 y+25, % TXT.CNL_advice1
+			Gui, Add, Text, y+5, % TXT.CNL_advice2
+			Gui, Add, Text, y+5, % TXT.CNL_advice3
 
 			Gui, Font, S10, Arial
-			Gui, Add, Button, x4 y+25 w90 gchannel_Usebutton, &Use Channel
-			Gui, Add, Button, x+385 yp+0 w70 gchannel_Cancelbutton, Cance&l
+			Gui, Add, Button, x4 y+25 w90 gchannel_Usebutton Default, % TXT.CNL_use
+			Gui, Add, Button, x+385 yp+0 w70 gchannel_Cancelbutton, % TXT.CNL_cancel
 			Gui, Add, StatusBar
 
 			Hotkey, Enter, Channel_usebutton, Off
@@ -48,7 +53,7 @@ channelGUI(){
 		{
 			Gui, Add, StatusBar
 
-			Hotkey, IfWinActive, %PROGNAME% Channels
+			Hotkey, IfWinActive, % PROGNAME " " TXT.CNL__name
 			Hotkey, Enter, Channel_usebutton, On
 			Hotkey, IfWinActive
 		}
@@ -61,9 +66,9 @@ channelGUI(){
 	Gui, Channel:Default
 	GuiControl,, cIndex, % CN.NG
 	GuiControl,, cName , % CN.Name
-	Gui, Show, , %PROGNAME% Channels
+	Gui, Show, , % PROGNAME " " TXT.CNL__name
 
-	SB_SetText("Clips in the Channel :" CN["CURSAVE" CN.N])
+	SB_SetText(TXT.CNL_statusbar " - " CN["CURSAVE" CN.N])
 	return
 
 edit_cname:
@@ -95,7 +100,7 @@ channelGUIEscape:
 ChannelUpdown:
 	Gui, Channel:Submit, nohide
 	Gui, Channel:Default
-	SB_SetText("Clips in the Channel :" CN["CURSAVE" (!cIndex?"":cIndex)])
+	SB_SetText(TXT.CNL_statusbar " - " CN["CURSAVE" (!cIndex?"":cIndex)])
 	Iniread, cname, %CONFIGURATION_FILE%, channels,% cIndex, %A_space%
 	GuiControl,, cname, % (cname=="") ? cIndex : cname
 	return
@@ -180,7 +185,7 @@ channel_Pitindex(){
 
 ;-------------------------- ACCESSIBILTY SHORTCUTS ------------------------------------------------
 
-#if IsActive("Clipjump Channels", "window")
+#if IsActive(PROGNAME " " TXT.CNL__name, "window")
 	Up::
 		GuiControl, channel:, ChannelUpdown, +1
 		gosub, ChannelUpdown

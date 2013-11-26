@@ -1,0 +1,173 @@
+;English translation for Clipjump
+;first made by Avi Aryan
+
+; NOTES
+; Comments should only be at the start of the line
+; Add new keys in the future versions at the bottom for easy & consistent development
+; Add version no in comment when adding a new key in the translation file.
+; Most keys have format XXX_ where XXX is the component name
+; Dont translate 'Clipjump'
+; & in &Preview is to create shortcut Alt+P when the window is active. When translating into a non-english language, omit '&' and when in a english type language, use '&'
+; only when you are sure you are right.
+
+;======
+;v9.9
+;======
+
+TIP_text = Text
+TIP_file_folder = File/Folder
+TIP_copied = Transferred to
+TIP_empty1 = Clip 0 of 0
+TIP_empty2 = is empty
+TIP_error = [The preview/path cannot be loaded]
+TIP_more = [More]
+TIP_pasting = Pasting...
+TIP_deleted = Deleted
+TIP_alldeleted = All data deleted
+TIP_cancelled = Cancelled
+TIP_fixed = [FIXED]
+TIP_noformatting = NO-FORMATTING
+TIP_filepath = File path(s) copied to
+TIP_folderpath = Active folder path copied to
+TIP_activated = ACTIVATED
+TIP_deactivated = DEACTIVATED
+TIP_cancelm = Cancel paste operation
+TIP_delm = Delete current
+TIP_delallm = Delete all
+TIP_modem = Release Ctrl to confirm
+          = Press X to switch modes
+
+ABT__name = About
+ABT_reset = Reset &Clipjump
+ABT_resetM = Are you sure you want to reset Clipjump by removing all its clips and settings ?
+ABT_removeStart = A startup entry for Clipjump was found. Do you want to remove it as well ?
+ABT_resetfinal = will be closed now.
+ABT_noupdate = No updates available
+
+HST__name = Clipboard History
+HST_preview = &Preview
+HST_del = Dele&te Item
+HST_clear = Clear &history
+HST_search = Search &Filter
+HST_partial = Pa&rtial
+HST_clip = Clip
+HST_date = Date
+HST_size = Size(B)
+HST_dconsump = Disk Consumption
+HST_viewimage = [Double-click to view image]
+HST_m_prev = &Preview
+HST_m_copy = &Copy 			(Ctrl+C)
+HST_m_insta = &Insta-Paste 	(Space)
+HST_m_export = &Export Clip 	(Ctrl+E)
+HST_m_ref = &Refresh
+HST_m_del = &Delete
+
+PRV__name = Preview
+PRV_copy = Copy to Clipboard
+PRV_find = Fin&d
+
+SET__name = Settings
+SET_main = Main
+SET_limitmaxclips = &Limit the maximum number of active clipboards
+SET_maxclips = &Minimum number of active clipboards
+SET_threshold = Clipboard &threshold
+SET_quality = &Quality of preview thumbnail
+SET_copybeep = &Beep when copied
+SET_ismessage = &Show verification ToolTip when copying
+SET_keepsession = &Retain clipboard data upon application restart
+SET_formatting = Start with No &Formatting mode Enabled
+SET_cb = Clipboard History
+SET_daystostore = Number of days to keep items in &history
+SET_images = Store &images in history
+SET_shortcuts = Shortcuts
+SET_pst = Paste-Mode (Ctrl + ..)
+SET_actmd = Action Mode
+SET_chnl = Select Channel
+SET_channels = Channels
+SET_ischannelmin = Use Minimal GUI
+SET_advanced = See Advanced Settings
+SET_manageignore = Manage Ignore(d) Windows
+SET_cancel = &Cancel
+SET_apply = &Apply
+
+SET_advanced_error = is not able to find the settings file (settings.ini) or Notepad ? Make sure both exist in their respective places.
+                   =
+                   = Try contacting the author if problem persists.
+SET_T_limitmaxclips = Will Clipjump's Clipboards be limited
+                    = Checked = yes
+SET_T_maxclips = It is the minimum no of clipboards that you want simultaneously to be active.
+               = If you want 20, SPECIFY 20.
+SET_T_threshold = Threshold is the extra number of clipboard that will be active other than your minimum limit..
+                = Most recommended value is 10.
+                =
+                = [TIP] - Threshold = 1 will make Clipjump store an exact number of maximum clipboards.
+SET_T_quality = The quality of Thumbnail previews you want to have.
+              = Recommended value is 90
+              = Can be between 1 - 100
+SET_T_copybeep = Check to hear a customizable beep when clipboard data is added to Clipjump.
+               =
+               = You can change the Beep Frequency in the [Advanced] section of Settings.ini
+SET_T_keepsession = Should Clipjump continue with all the saved clipboards after it's restart
+SET_T_ismessage = This value determines whether you want to see the confirmation message or not while copy/cut operations.
+SET_T_formatting = Do you want Clipjump to start with No-Formatting Mode enabled ?
+                 = Tick for Yes.
+SET_T_daystostore = Number of days for which the clipboard record will be stored
+SET_T_images = Should clipboard images be stored in history ?
+SET_T_pst = Single character combination to use with Ctrl in activating [PASTE MODE]
+          = Note that letters  E C X Z S  are reserved.
+          = 
+          = Also make sure to see "Copy bypassing Clipjump" in the help file
+SET_T_actmd = The shortcut to open Action Mode.
+            = The Action Mode as you may know provides interface for almost all the functionalites in Clipjump.
+            = It would be a good idea to disable rarely used shortcuts and instead use Action Mode for them.
+SET_T_chnl = Shortcut to show the <Select Channel> Window
+           = Set the shortcut to None to disable the key combination
+SET_T_cfilep = Shortcut to copy selected file's path
+             = Set the shortcut to None to disable the functionality
+SET_T_cfolderp = Shortcut to copy selected folder's path.
+               = Set the shortcut to None to disable the functionality
+SET_T_cfiled = Shortcut to copy selected file contents to Clipjump.
+             = Set it to None to disable the functionality
+SET_T_ot = Select shortcut for [One Time Stop] feature.
+         = [One Time Stop] feature will make Clipjump ignore the next data that is transferred to the system Clipboards from the time it is activated.
+         = Set the key to None to free the key combination and disable the functionality
+SET_T_pitswp = The shortcut to activate the PitSwap feature.
+             = For more details on the feature refer the Help file.
+SET_T_ischannelmin = Makes the Channel GUI minimal in details and more productive.
+                   = The Minimal GUI will not contain any buttons, you will have to use ENTER to confirm.
+
+CNL__name = Channels
+CNL_choose = &Choose Multi-Clipboard Channel
+CNL_channelname = Channel &Name
+CNL_advice1 = Channel 0 (Default) is the mainstream channel and should be used normally.
+CNL_advice2 = Channel Name changes are saved automatically.
+CNL_advice3 = Next Channels are available only if the previous one has been activated (used).
+CNL_use = &Use Channel
+CNL_cancel = Cance&l
+CNL_statusbar = Clips in the Channel
+
+TRY_incognito = &Incognito mode
+TRY_disable = &Disable
+TRY_startup = Run at startup
+TRY_updates = Check for &updates
+TRY_help = Help
+TRY_restart = &Restart
+TRY_exit = &Exit
+
+ACT__name = ACTION MODE
+ACT_enable = Enable
+ACT_disable = Disable
+ACT_exit = Exit Window
+
+IGN__name = Ignore Windows Manager
+IGN_add = &Add Window's
+IGN_delete = &Delete
+
+LNG_error = English Language file not found in languages/english.txt . If you did it intentionally, please put it back.
+
+_cfilep = Copy File Path(s)
+_cfolderp = Copy Active Folder Path
+_cfiled = Copy File Data
+_ot = One Time Stop
+_pitswp = PitSwap
+_exportedto = exported to

@@ -15,78 +15,78 @@ gui_Settings()
 
 	Gui, Settings:New
 	Gui, Margin, 8, 8
-	Gui, Add, GroupBox,	w289 h207, Main		; for every new checkbox add 18 pixels to the height, and for every new spinner (UpDown control) add 26 pixels
+	Gui, Add, GroupBox,	w289 h207, % TXT.SET_main		; for every new checkbox add 18 pixels to the height, and for every new spinner (UpDown control) add 26 pixels
 	; The total width of the GUI is about 289 x 2
 	
-	Gui, Add, CheckBox, xp+9 yp+22 Section Checked%ini_limitMaxClips% vnew_limitMaxClips gchkbox_limitMaxClips, &Limit the maximum number of active clipboards	; when this is checked the following two controls will be disabled
-	Gui, Add, Text,		xs+16, &Minimum number of active clipboards:
+	Gui, Add, CheckBox, xp+9 yp+22 Section Checked%ini_limitMaxClips% vnew_limitMaxClips gchkbox_limitMaxClips, % TXT.SET_limitmaxclips	; when this is checked the following two controls will be disabled
+	Gui, Add, Text,		xs+16, % TXT.SET_maxclips
 	Gui, Add, Edit,		xm+225 yp-3 w50 r1 Number vnew_MaxClips gedit_MaxClips
 	Gui, Add, UpDown,	Range1-1000 gupdown_MaxClips, %ini_MaxClips%
 	
-	Gui, Add, Text,		xs+16,	Clipboard &threshold:
+	Gui, Add, Text,		xs+16, % TXT.SET_threshold
 	Gui, Add, Edit,		xm+225 yp-3 w50 r1 Number vnew_Threshold gedit_Threshold
 	Gui, Add, UpDown,	Range1-1000 gupdown_Threshold, %ini_Threshold%
 
-	Gui, Add, Text,		xs, &Quality of preview thumbnail:
+	Gui, Add, Text,		xs, % TXT.SET_quality
 	Gui, Add, Edit,		xm+225 yp-3 w50 r1 Number vnew_Quality gedit_Quality
 	Gui, Add, UpDown,	Range1-100 gupdown_Quality, %ini_Quality%
 
-	Gui, Add, Checkbox, xs Checked%ini_CopyBeep% 		vnew_copyBeep 			gchkbox_copybeep, 			&Beep when copied
-	Gui, Add, Checkbox, xs Checked%ini_IsMessage%		vnew_IsMessage			gchkbox_IsMessage,			&Show verification ToolTip when copying
-	Gui, Add, Checkbox, xs Checked%ini_KeepSession%		vnew_KeepSession		gchkbox_KeepSession,		&Retain clipboard data upon application restart
-	Gui, Add, Checkbox, % "xs Checked" !ini_formatting " vnew_formatting			gchkbox_formatting",		Start with No &Formatting mode Enabled 
+	Gui, Add, Checkbox, xs Checked%ini_CopyBeep% 		vnew_copyBeep 			gchkbox_copybeep, 		% TXT.SET_copybeep
+	Gui, Add, Checkbox, xs Checked%ini_IsMessage%		vnew_IsMessage			gchkbox_IsMessage,		% TXT.SET_ismessage
+	Gui, Add, Checkbox, xs Checked%ini_KeepSession%		vnew_KeepSession		gchkbox_KeepSession,	% TXT.SET_keepsession
+	Gui, Add, Checkbox, % "xs Checked" !ini_formatting " vnew_formatting			gchkbox_formatting",	% TXT.SET_formatting
 
 	;---- Clipboard H
-	Gui, Add, GroupBox,	xm y223 w289 h74,	Clipboard History  ;h=169 + 16 ; + 10 in v8.7
+	Gui, Add, GroupBox,	xm y223 w289 h74,	% TXT.SET_cb  ;h=169 + 16 ; + 10 in v8.7
 
-	Gui, Add, Text,		xp+9 yp+22,		Number of days to keep items in &history:
+	Gui, Add, Text,		xp+9 yp+22,		% TXT.SET_daystostore
 	Gui, Add, Edit,		xm+225 yp-3 w50 r1 Number vnew_DaysToStore gedit_DaysToStore
 	Gui, Add, UpDown,	Range0-100000 gupdown_DaysToStore, %ini_DaysToStore%
 
-	Gui, Add, Checkbox,	xs y+8 Checked%ini_IsImageStored% vnew_IsImageStored gchkbox_IsImageStored, Store &images in history
+	Gui, Add, Checkbox,	xs y+8 Checked%ini_IsImageStored% vnew_IsImageStored gchkbox_IsImageStored, % TXT.SET_images
 
 	;---- Shortcuts
 	Gui, Add, GroupBox, ym w289 h207 vshortcutgroupbox,	Shortcuts
-	Gui, Add, Text, 	xp+9 yp+22 section,	Paste-Mode (Ctrl + ..)
+	Gui, Add, Text, 	xp+9 yp+22 section,	% TXT.SET_pst
 	Gui, Add, Edit, 	Limit1 Uppercase -Wantreturn xs+155 yp-3 w120 vpst_K ghotkey_paste, % paste_k
-	Gui, Add, Text, 	xs y+8,		Action Mode
+	Gui, Add, Text, 	xs y+8,		% TXT.SET_actmd
 	Gui, Add, Hotkey, 	xs+155 yp-3 vactmd_K   ghotkey_actmd, % Actionmode_K
-	Gui, Add, Text, 	xs y+8,		Copy File Path(s)
+	Gui, Add, Text, 	xs y+8,		% TXT._cfilep
 	Gui, Add, Hotkey, 	xs+155 yp-3 vcfilep_K   ghotkey_cfilep, % Copyfilepath_K
-	Gui, Add, Text,		xs y+8,		Copy Active Folder Path
+	Gui, Add, Text,		xs y+8,		% TXT._cfolderp
 	Gui, Add, Hotkey,	xs+155 yp-3 vcfolderp_K ghotkey_cfolderp, % Copyfolderpath_K
-	Gui, Add, Text,		xs y+8,		Copy File Data
+	Gui, Add, Text,		xs y+8,		% TXT._cfiled
 	Gui, Add, Hotkey,	xs+155 yp-3 vcfiled_K   ghotkey_cfiled, % Copyfiledata_K
-	Gui, Add, Text,		xs y+8,		Select Channel
+	Gui, Add, Text,		xs y+8,		% TXT.SET_chnl
 	Gui, Add, Hotkey,	xs+155 yp-3 vchnl_K		ghotkey_chnl, % channel_K
-	Gui, Add, Text,		xs y+8,		One Time Stop
+	Gui, Add, Text,		xs y+8,		% TXT._ot
 	Gui, Add, Hotkey,	xs+155 yp-3 vot_K		ghotkey_ot, % onetime_K
 
 	;---- Channels
-	Gui, Add, GroupBox, xs-9 y223 w289 h74, Clipjump Channels 	;h=169 + 16 ; +10 in v8.7 
-	Gui, Add, Text, 	xs yp+22,		PitSwap activation hotkey
+	Gui, Add, GroupBox, xs-9 y223 w289 h74, % PROGNAME " " TXT.SET_channels 	;h=169 + 16 ; +10 in v8.7 
+	Gui, Add, Text, 	xs yp+22,	% TXT._pitswp " Hotkey"
 	Gui, Add, Hotkey,	xs+155 yp-3 vpitswp_K  ghotkey_pitswp, % pitswap_K
-	Gui, Add, Checkbox, xs y+8 Checked%ini_IsChannelMin% vnew_IsChannelMin gchkbox_isChannelMin, Use Minimal GUI
+	Gui, Add, Checkbox, xs y+8 Checked%ini_IsChannelMin% vnew_IsChannelMin gchkbox_isChannelMin, % TXT.SET_ischannelmin
 
 	;---- Buttons
 	Gui, Font, Underline
-	Gui, Add, Text, 	y303 x480 cBlue gsettings_open_advanced, See Advanced Settings
-	Gui, Add, Text, 	x9 yp cBlue gClassTool, Manage Ignore(d) Windows
+	Gui, Add, Text, 	y303 x480 cBlue gsettings_open_advanced, % TXT.SET_advanced
+	Gui, Add, Text, 	x9 yp cBlue gClassTool, % TXT.SET_manageignore
 	Gui, font, norm
 	Gui, Add, Button,	x186 y328 w75 h23 Default, 	&OK 	;57 in vertical
-	Gui, Add, Button,	x+8 w75 h23,			&Cancel
-	Gui, Add, Button,	x+8 w75 h23	Disabled,	&Apply
+	Gui, Add, Button,	x+8 w75 h23,			% TXT.SET_cancel
+	Gui, Add, Button,	x+8 w75 h23	Disabled,	% TXT.SET_apply
 
 	Gui, Settings:Show, , %PROGNAME% Settings
 
 	if ini_limitMaxClips = 0
 	{
-		Control, Disable, , Edit1, %PROGNAME% Settings
-		Control, Disable, , Edit2, %PROGNAME% Settings
+		Control, Disable, , Edit1, % PROGNAME " " TXT.SET__name
+		Control, Disable, , Edit2, % PROGNAME " " TXT.SET__name
 	}
 
 	;disable hotkey keys
-	Hotkey, IfWinActive, %PROGNAME% Settings
+	Hotkey, IfWinActive, % PROGNAME " " TXT.SET__name
 	#If IsHotkeyControlActive()
 	Hotkey, If, IsHotkeyControlActive()
 	Hotkey,% Copyfilepath_K, shortcutblocker_settings, On UseErrorLevel
@@ -106,14 +106,14 @@ chkbox_limitMaxClips:
 	if new_limitMaxClips = 0
 	{
 		GuiControl, , Edit1, 0
-		Control, Disable, , Edit1, %PROGNAME% Settings
-		Control, Disable, , Edit2, %PROGNAME% Settings
+		Control, Disable, , Edit1, % PROGNAME " " TXT.SET__name
+		Control, Disable, , Edit2, % PROGNAME " " TXT.SET__name
 	}
 	else if new_limitMaxClips = 1
 	{
 		GuiControl, , Edit1,% !ini_Maxclips ? 20 : ini_MaxClips
-		Control, Enable, , Edit1, %PROGNAME% Settings
-		Control, Enable, , Edit2, %PROGNAME% Settings
+		Control, Enable, , Edit1, % PROGNAME " " TXT.SET__name
+		Control, Enable, , Edit2, % PROGNAME " " TXT.SET__name
 	}
 	; there isn't a return on purpose
 edit_MaxClips:
@@ -137,7 +137,7 @@ hotkey_ot:
 chkbox_ischannelmin:
 hotkey_pitswp:
 hotkey_actmd:
-	Control, Enable, , &Apply, %PROGNAME% Settings
+	Control, Enable, ,% TXT.SET_apply, % PROGNAME " " TXT.SET__name
 	settingsHaveChanged := true
 	return
 
@@ -146,7 +146,7 @@ hotkey_paste:
 	pst_K := Trim(pst_k, "ESCXZ `t")
 	if pst_k =
 		GuiControl,, pst_k
-	Control, Enable, , &Apply, %PROGNAME% Settings
+	Control, Enable, ,% TXT.SET_apply, % PROGNAME " " TXT.SET__name
 	settingsHaveChanged := true
 	return
 
@@ -179,7 +179,7 @@ settingsButtonApply:
 		load_Settings() , validate_Settings()
 		settingsHaveChanged := false
 	}
-	Control, Disable, , &Apply, %PROGNAME% Settings
+	Control, Disable, , % TXT.SET_apply, % PROGNAME " " TXT.SET__name
 	return
 
 settings_open_advanced:
@@ -191,7 +191,7 @@ settings_open_advanced:
 		Send % NUMBER_ADVANCED "{vk0d}"
 	} 
 	catch {
-		MsgBox, 16, ERROR, %PROGNAME% is not able to find the settings file (settings.ini) or Notepad ? Make sure both exist in their respective places. `n`nTry contacting the author if problem persists.
+		MsgBox, 16, ERROR, % PROGNAME " " TXT.SET_advanced_error
 	}
 	return
 
@@ -205,48 +205,25 @@ WM_MOUSEMOVE()	; From the help file
 	
 	;--- Descriptions --------------
 
-	static NEW_LIMITMAXCLIPS_TT := "Will Clipjump's Clipboards be limited`nChecked = yes"
-	static NEW_MAXCLIPS_TT := "It is the minimum no of clipboards that you want simultaneously to be active.`nIf you want 20, SPECIFY 20."
-
-	static NEW_THRESHOLD_TT := "
-	(Ltrim
-		Threshold is the extra number of clipboard that will be active other than your minimum limit..
-		Most recommended value is 10.
-
-		[TIP] - Threshold = 1 will make Clipjump store an exact number of maximum clipboards.
-	)"
-
-	static NEW_COPYBEEP_TT := "Check to hear a customizable beep when clipboard data is added to Clipjump.`n`nYou can change the Beep Frequency in the [Advanced]"
-				. " section of Settings.ini"
-	static NEW_QUALITY_TT := "The quality of Thumbnail previews you want to have.`nRecommended value is 90`nCan be between 1 - 100"
-	static NEW_KEEPSESSION_TT := "Should Clipjump continue with all the saved clipboards after it's restart"
-	static NEW_ISMESSAGE_TT := "This value determines whether you want to see the ""Transferred to Clipjump"" message or not while copy/cut operations."
-	static NEW_FORMATTING_TT := "Do you want Clipjump to start with No-Formatting Mode enabled ?`nTick for Yes."
-
-	static NEW_DAYSTOSTORE_TT := "Number of days for which the clipboard record will be stored"
-	static NEW_ISIMAGESTORED_TT := "Should clipboard images be stored in history ?"
-
-	static pst_k_TT := "Single character combination to use with Ctrl in activating [PASTE MODE]`nNote that letters  E C X Z S  are reserved."
-						. "`n`nAlso make sure to see ""Copy bypassing Clipjump"" in the help file"
-	static actmd_k_TT := "The shortcut to open Action Mode.`n`nThe Action Mode as you may know provides interface for almost all the functionalites in Clipjump"
-						. "`nIt would be a good idea to disable rarely used shortcuts and instead use Action Mode for them."
-	static chnl_K_TT := "Shortcut to show the <Select Channel> Window`nSet the shortcut to None to disable the key combination"
-	static cfilep_K_TT := "Shortcut to copy selected file's path`nSet the shortcut to None to disable the functionality"
-	static cfolderp_K_TT := "Shortcut to copy selected folder's path`nSet the shortcut to None to disable the functionality"
-	static cfiled_K_TT := "Shortcut to copy selected file contents to Clipjump`nSet it to None to disable the functionality"
-	static OT_K_TT := "
-	(LTrim
-		Select shortcut for [One Time Stop] feature.
-		[One Time Stop] feature will make Clipjump ignore the next data that is transferred to the system Clipboards from the time it is activated.
-		Set the key to None to free the key combination and disable the functionality
-	)"
-
-	static PITSWP_K_TT := "The shortcut to activate the PitSwap feature.`n For more details on the feature refer the Help file."
-	static NEW_ischannelmin_TT := "
-	(LTrim
-		Makes the Channel GUI minimal in details and more productive.
-		The Minimal GUI will not contain any buttons, you will have to use ENTER to confirm.
-	)"
+	NEW_LIMITMAXCLIPS_TT := TXT.SET_T_limitmaxclips
+	NEW_MAXCLIPS_TT := TXT.SET_T_maxclips
+	NEW_THRESHOLD_TT := TXT.SET_T_threshold
+	NEW_COPYBEEP_TT := TXT.SET_T_copybeep
+	NEW_QUALITY_TT := TXT.SET_T_quality
+	NEW_KEEPSESSION_TT := TXT.SET_T_keepsession
+	NEW_ISMESSAGE_TT := TXT.SET_T_ismessage
+	NEW_FORMATTING_TT := TXT.SET_T_formatting
+	NEW_DAYSTOSTORE_TT := TXT.SET_T_daystostore
+	NEW_ISIMAGESTORED_TT := TXT.SET_T_images
+	pst_k_TT := TXT.SET_T_pst
+	actmd_k_TT := TXT.SET_T_actmd
+	chnl_K_TT := TXT.SET_T_chnl
+	cfilep_K_TT := TXT.SET_T_cfilep
+	cfolderp_K_TT := TXT.SET_T_cfolderp
+	cfiled_K_TT := TXT.SET_T_cfiled
+	OT_K_TT := TXT.SET_T_ot
+	PITSWP_K_TT := TXT.SET_T_pitswp
+	NEW_ischannelmin_TT := TXT.SET_T_ischannelmin
 
 	;---------------------------------------------
 

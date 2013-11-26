@@ -16,31 +16,31 @@ gui_History()
 	Iniread, history_w, % CONFIGURATION_FILE, Clipboard_History_window, w, %A_Space%
 	Iniread, h, % CONFIGURATION_FILE, Clipboard_History_window, h, %A_Space%
 
-	Gui, Add, Button, w75 h23 Section Default	vhistory_ButtonPreview	ghistory_ButtonPreview, &Preview
-	Gui, Add, Button, x+6 ys w75 h23			vhistory_ButtonDelete	ghistory_ButtonDelete, Dele&te item
-	Gui, Add, Button, x+6 ys w75 h23 			vhistory_ButtonDeleteAll ghistory_ButtonDeleteAll, Clear &history
-	Gui, Add, Text, x+15 ys+5 					vhistory_SearchText,	Search &Filter:
-	Gui, Add, Checkbox, x+10 ys+5 w65 Checked%history_partial% vhistory_partial ghistory_SearchBox, Pa&rtial
+	Gui, Add, Button, w75 h23 Section Default	vhistory_ButtonPreview	ghistory_ButtonPreview, % TXT.HST_preview
+	Gui, Add, Button, x+6 ys w75 h23			vhistory_ButtonDelete	ghistory_ButtonDelete, % TXT.HST_del
+	Gui, Add, Button, x+6 ys w75 h23 			vhistory_ButtonDeleteAll ghistory_ButtonDeleteAll, % TXT.HST_clear
+	Gui, Add, Text, x+15 ys+5 					vhistory_SearchText, % TXT.HST_search
+	Gui, Add, Checkbox, x+10 ys+5 w65 Checked%history_partial% vhistory_partial ghistory_SearchBox, % TXT.HST_partial
 	Gui, Add, Edit, ys  	ghistory_SearchBox	vhistory_SearchBox
 	Gui, Font, s9, Courier New
 	Gui, Font, s9, Consolas
-	Gui, Add, ListView, % "xs+1 HWNDhistoryLV ghistoryLV vhistoryLV LV0x4000 w" (history_w ? history_w-25 : 675) , Clip|Date|Size(B)|Hiddendate
+	Gui, Add, ListView, % "xs+1 HWNDhistoryLV ghistoryLV vhistoryLV LV0x4000 w" (history_w ? history_w-25 : 675) , % TXT.HST_clip "|" TXT.HST_date "|" TXT.HST_size "|Hiddendate"
 
 	Gui, Add, StatusBar
 	Gui, Font
 	GuiControl, Focus, history_SearchBox
 
 	;History Right-Click Menu
-	Menu, HisMenu, Add, % "&Preview" , history_MenuPreview
+	Menu, HisMenu, Add, % TXT.HST_m_prev , history_MenuPreview
 	Menu, HisMenu, Add
 	;Use a Space and a tab to separate
-	Menu, HisMenu, Add, % "&Copy 			(Ctrl+C)", history_clipboard
-	Menu, HisMenu, Add, % "&Insta-Paste 	(Space)", history_InstaPaste
-	Menu, HisMenu, Add, % "&Export Clip 	(Ctrl+E)", history_exportclip
+	Menu, HisMenu, Add, % TXT.HST_m_copy , history_clipboard
+	Menu, HisMenu, Add, % TXT.HST_m_insta , history_InstaPaste
+	Menu, HisMenu, Add, % TXT.HST_m_export , history_exportclip
 	Menu, HisMenu, Add
-	Menu, HisMenu, Add, % "&Refresh", history_SearchBox
-	Menu, HisMenu, Add, % "&Delete", history_ButtonDelete 
-	Menu, HisMenu, Default, % "&Preview"
+	Menu, HisMenu, Add, % TXT.HST_m_ref, history_SearchBox
+	Menu, HisMenu, Add, % TXT.HST_m_del, history_ButtonDelete 
+	Menu, HisMenu, Default, % TXT.HST_m_prev
 
 	historyUpdate()
 	history_UpdateSTB()
@@ -48,19 +48,19 @@ gui_History()
 
 	if ((h+0) == WORKINGHT)
 	{
-		Gui, History:Show, Maximize, %PROGNAME% Clipboard History
-		WinMinimize, %PROGNAME% Clipboard History
-		WinMaximize, %PROGNAME% Clipboard History
+		Gui, History:Show, Maximize, % PROGNAME " " TXT.HST__name
+		WinMinimize, % PROGNAME " " TXT.HST__name
+		WinMaximize, % PROGNAME " " TXT.HST__name
 		GuiControl, focus, history_SearchBox
 	}
 	else
-		Gui, History:Show,% ( x ? "x" x " y" y : "" ) " w" (history_w?history_w:700) " h" (h?h:500), %PROGNAME% Clipboard History
+		Gui, History:Show,% ( x ? "x" x " y" y : "" ) " w" (history_w?history_w:700) " h" (h?h:500), % PROGNAME " " TXT.HST__name
 
-	WinWaitActive, %PROGNAME% Clipboard History
+	WinWaitActive, % PROGNAME " " TXT.HST__name
 	WinGetPos, x, y
 
 	;create hotkeys
-	Hotkey, IfWinActive, % PROGNAME " Clipboard History"
+	Hotkey, IfWinActive, % PROGNAME " " TXT.HST__name
 	Hotkey, F5, history_SearchBox, On
 	Hotkey, If
 	return
@@ -107,7 +107,7 @@ history_ButtonDelete:
 
 history_ButtonDeleteAll:
 	Gui, +OwnDialogs
-	MsgBox, 257, Clear History, Are you sure you want to permanently clear %PROGNAME%'s clipboard history?
+	MsgBox, 257, Clear History,% "Are you sure you want to permanently clear " PROGNAME "'s " TXT.HST__name " ?" 
 	IfMsgBox, OK
 	{
 		FileDelete, cache\history\*
@@ -155,9 +155,9 @@ historyGuiSize:
 	{
 		gui_w := a_guiwidth , gui_h := a_guiheight
 
-		SendMessage, 0x1000+29, 1,	0, SysListView321, %PROGNAME% Clipboard History
+		SendMessage, 0x1000+29, 1,	0, SysListView321, % PROGNAME " " TXT.HST__name
 		w2 := ErrorLevel
-		SendMessage, 0x1000+29, 2,	0, SysListView321, %PROGNAME% Clipboard History
+		SendMessage, 0x1000+29, 2,	0, SysListView321, % PROGNAME " " TXT.HST__name
 		w3 := ErrorLevel
 
 		GuiControl, Move, historyLV, % "w" (gui_w - 15) " h" (gui_h - 65)     ;+20 H in no STatus Bar
@@ -168,16 +168,16 @@ historyGuiSize:
 
 historyGuiClose:
 historyGuiEscape:
-	Wingetpos, x, y,, h, %PROGNAME% Clipboard History
+	Wingetpos, x, y,, h, % PROGNAME " " TXT.HST__name
 
 	h := h > WORKINGHT ? WORKINGHT : gui_h               ;gui_h and gui_w are function vars created in the historyGUISIze label (above).
 
 	Ini_write(temp_h := "Clipboard_History_window", "w", gui_w, 0)
 	Ini_write(temp_h, "h", h, 0)
 
-	SendMessage, 0x1000+29, 1,	0, SysListView321, %PROGNAME% Clipboard History
+	SendMessage, 0x1000+29, 1,	0, SysListView321, % PROGNAME " " TXT.HST__name
 	w2 := ErrorLevel
-	SendMessage, 0x1000+29, 2,	0, SysListView321, %PROGNAME% Clipboard History
+	SendMessage, 0x1000+29, 2,	0, SysListView321, % PROGNAME " " TXT.HST__name
 	w3 := ErrorLevel
 	Ini_write(temp_h, "w2", w2, 0)
 	Ini_write(temp_h, "w3", w3, 0)
@@ -224,9 +224,9 @@ gui_History_Preview(path, history_SearchBox)
 	}
 
 	Gui, Font, s11
-	Gui, Add, Button, % "x5 y+10 w125 h27 gbutton_Copy_To_Clipboard Default vprev_copybtn Section", Copy to Clipboard
+	Gui, Add, Button, % "x5 y+10 w125 h27 gbutton_Copy_To_Clipboard Default vprev_copybtn Section", % TXT.PRV_copy
 	; button's x till 130 , search's width will 200 p from right
-	Gui, Add, Text, % "x" wt-200 " yp+2 w30 h23 vprev_findtxt", Fin&d 		; +2 to level text
+	Gui, Add, Text, % "x" wt-200 " yp+2 w30 h23 vprev_findtxt", % TXT.PRV_find 		; +2 to level text
 	Gui, Font, norm
 	Gui, Add, Edit, % "x+10 yp-2 w155 h23 vpreview_search gpreviewSearch " ( preview.isimg ? "+ReadOnly" : "" ),  	; -5 margin on right side
 	Gui, Add, Text, x5 y+0 w5 			; white-space just below the button
@@ -234,7 +234,7 @@ gui_History_Preview(path, history_SearchBox)
 	Gui, Preview:+OwnerHistory
 	Gui, History:+Disabled
 	Gui, Preview: +Resize +MaximizeBox -MinimizeBox
-	Gui, Preview:Show, AutoSize, Preview
+	Gui, Preview:Show, AutoSize, % TXT.PRV__name
 
 	if !preview.isimg
 		GuiControl, , preview_search, % history_SearchBox
@@ -254,6 +254,7 @@ previewGuiClose:
 previewGuiEscape:
 	Gui, History:-Disabled
 	Gui, Preview:Destroy
+	ComObjConnect( prev_handle )  		;disconnect , may free memory
 	prev_handle := ""
 	prev_document := ""
 	EmptyMem()
@@ -397,7 +398,7 @@ history_GetSize(I := ""){
 history_UpdateSTB(size=""){
 	; If size is passed, that size is used
 	Gui, History:Default
-	SB_SetText("Disk Consumption : " ( size="" ? history_GetSize() : size ) " KB")
+	SB_SetText(TXT.HST_dconsump " : " ( size="" ? history_GetSize() : size ) " KB")
 }
 
 
@@ -407,22 +408,25 @@ history_InstaPaste:
 		history_clipboard()
 	else
 		CALLER := 0
+		, IScurCBACTIVE := 0  			;cur Clipboard is no longer active
 		, history_clipboard()
 
-	WinClose, %PROGNAME% Clipboard History
-	WinWaitClose, %PROGNAME% Clipboard History
+	WinClose, % PROGNAME " " TXT.HST__name
+	WinWaitClose, % PROGNAME " " TXT.HST__name
 	Send, ^{vk56}
 	CALLER := CALLER_STATUS
 	return
 
 history_exportclip:
-	CALLER := false
+	CALLER := 0 , ONCLIPBOARD := 0
 	history_clipboard()
+	while !ONCLIPBOARD 				;wait for onclibboard to be breached
+		sleep 50
 	ClipWait, ,1
 	loop
 		if !FileExist(temp := A_MyDocuments "\export" A_index ".cj")
 			break
-	Tooltip,% "Selected Clip exported to `n" temp
+	Tooltip,% "Selected Clip " TXT._exportedto "`n" temp
 	SetTimer, TooltipOff, 1000
 	try FileAppend, %ClipboardAll%, %temp%
 	CALLER := CALLER_STATUS
@@ -478,13 +482,13 @@ LV_SortArrow(h, c, d="")	; by Solar (http://www.autohotkey.com/forum/viewtopic.p
 
 ;------------------------------------ ACCESSIBILITY SHORTCUTS -------------------------------
 
-#if IsActive("Edit1", "classnn") and IsActive(PROGNAME " Clipboard History", "window")
+#if IsActive("Edit1", "classnn") and IsActive(PROGNAME " " TXT.HST__name, "window")
 	$Down::
 		Controlfocus, SysListView321, A
 		Send {vk28}
 		return
 #if
-#if ( IsActive("SysListView321", "classnn") and IsActive(PROGNAME " Clipboard History", "window") and ctrlRef!="pastemode" )
+#if ( IsActive("SysListView321", "classnn") and IsActive(PROGNAME " " TXT.HST__name, "window") and ctrlRef!="pastemode" )
 	Space::gosub history_InstaPaste
 	^c::history_clipboard()
 	^e::gosub history_exportclip
@@ -492,6 +496,6 @@ LV_SortArrow(h, c, d="")	; by Solar (http://www.autohotkey.com/forum/viewtopic.p
 	!d::GuiControl, History:focus, history_SearchBox
 	^f::GuiControl, History:focus, history_SearchBox
 #if
-#if Winactive("Preview ahk_class AutoHotkeyGUI") and ctrlRef != "pastemode"
+#if Winactive(TXT.PRV__name " ahk_class AutoHotkeyGUI") and ctrlRef != "pastemode"
 	^f::GuiControl, Preview:focus, preview_search             ;Alt+D
 #if

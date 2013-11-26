@@ -56,9 +56,9 @@ GetClipboardFormat(type=1){		;Thanks nnnik
 
 	if type
   		if Instr(x, ",1") and Instr(x, ",13")
-    		return "[Text]"
+    		return "[" TXT.TIP_text "]"
  		else If Instr(x, ",15")
-    		return "[File/Folder]"
+    		return "[" TXT.TIP_file_folder "]"
     	else
     		return ""
     else
@@ -239,6 +239,12 @@ getQuant(str, what){
 ;Used for Debugging
 debugTip(text, tooltipno=20){
 	Tooltip, % text,,, % tooltipno
+}
+
+fillwithSpaces(text, limit=35){
+	loop % limit-Strlen(text)
+		r .= A_space
+	return text r
 }
 
 /*

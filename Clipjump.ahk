@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 9.8.9
+;@Ahk2Exe-SetVersion 9.9.0.1
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -35,29 +35,35 @@ ListLines, Off
 #HotkeyInterval 1000
 #MaxHotkeysPerInterval 1000
 
+global ini_LANG := ""
+
 ;*********Program Vars**********************************************************
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "9.8.9"
+global VERSION := "9.9.0.1"
 global CONFIGURATION_FILE := "settings.ini"
+
+ini_LANG := ini_read("System", "lang")
+global TXT := Translations_load("languages/" ini_LANG ".txt") 		;Load translations
+
 global UPDATE_FILE := "https://raw.github.com/avi-aryan/Clipjump/master/version.txt"
 global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/clipjump.html"
 global HELP_PAGE := "http://avi-win-tips.blogspot.com/2013/04/clipjump-online-guide.html"
 global AUTHOR_PAGE := "http://www.avi-win-tips.blogspot.com"
 
-global MSG_TRANSFER_COMPLETE := "Transferred to" " " PROGNAME    ;not space
-global MSG_CLIPJUMP_EMPTY := "Clip 0 of 0" "`n`n" PROGNAME " " "is empty"  ;not `n`n
-global MSG_ERROR := "[The preview/path cannot be loaded]"
-global MSG_MORE_PREVIEW := "[More]"
-global MSG_PASTING := "Pasting..."
-global MSG_DELETED := "Deleted"
-global MSG_ALL_DELETED := "All data deleted"
-global MSG_CANCELLED := "Cancelled"
-global MSG_FIXED := "[FIXED]"
-global MSG_HISTORY_PREVIEW_IMAGE := "[Double-click to view image]"
-global MSG_FILE_PATH_COPIED := "File path(s) copied to" " " PROGNAME
-global MSG_FOLDER_PATH_COPIED := "Active folder path copied to" " " PROGNAME
+global MSG_TRANSFER_COMPLETE := TXT.TIP_copied " " PROGNAME    ;not space
+global MSG_CLIPJUMP_EMPTY := TXT.TIP_empty1 "`n`n" PROGNAME " " TXT.TIP_empty2  ;not `n`n
+global MSG_ERROR := TXT.TIP_error
+global MSG_MORE_PREVIEW := TXT.TIP_more
+global MSG_PASTING := TXT.TIP_pasting
+global MSG_DELETED := TXT.TIP_deleted
+global MSG_ALL_DELETED := TXT.TIP_alldeleted
+global MSG_CANCELLED := TXT.TIP_cancelled
+global MSG_FIXED := TXT.TIP_fixed
+global MSG_HISTORY_PREVIEW_IMAGE := TXT.HST_viewimage
+global MSG_FILE_PATH_COPIED := TXT.TIP_filepath " " PROGNAME
+global MSG_FOLDER_PATH_COPIED := TXT.TIP_folderpath " " PROGNAME
 
 ;History Tool
 global hidden_date_no := 4 , history_w , history_partial
@@ -159,7 +165,7 @@ IfExist, %A_Startup%/Clipjump.lnk
 {
 	FileDelete, %A_Startup%/Clipjump.lnk
 	FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%/Clipjump.lnk
-	Menu, Options_Tray, Check, Run at startup
+	Menu, Options_Tray, Check, % TXT.TRY_startup
 }
 
 global CLIPS_dir := "cache/clips"
@@ -288,7 +294,7 @@ onClipboardChange:
 	ifwinactive, ahk_group IgnoreGroup
 		return
 
-	ONCLIPBOARD := 1 		;used by paste to identify if OnCLipboard has been breached
+	ONCLIPBOARD := 1 		;used by paste/or another to identify if OnCLipboard has been breached
 
 	If CALLER
 	{
@@ -314,6 +320,7 @@ onClipboardChange:
 	else
 	{
 		LASTFORMAT := WinActive("ahk_class XLMAIN") ? "" : GetClipboardFormat(0)
+		IScurCBACTIVE := 0 					; clipboard was changed and so this should be zero
 		if restoreCaller
 			restoreCaller := "" , CALLER := CALLER_STATUS
 		if onetimeOn
@@ -321,7 +328,7 @@ onClipboardChange:
 			onetimeOn := 0 ;--- To avoid OnClipboardChange label to open this routine [IMPORTANT]
 			sleep 500 ;--- Allows the restore Clipboard Transfer in apps
 			CALLER := CALLER_STATUS
-			autoTooltip("One Time Stop DEACTIVATED", 600, 2)
+			autoTooltip("One Time Stop " TXT.TIP_deactivated, 600, 2)
 			changeIcon()
 		}
 	}
@@ -430,7 +437,7 @@ moveBack:
 
 cancel:
 	Gui, Hide
-	ToolTip, Cancel paste operation`t(1)`nRelease Ctrl to confirm`nPress X to switch modes
+	ToolTip, % TXT.TIP_cancelm "`t(1)`n" TXT.TIP_modem
 	ctrlref := "cancel"
 	hkZ("^Space", "fixate", 0) , hkZ("^Z", "Formatting", 0)
 	hkZ("^S", "Ssuspnd", 0) , hkZ("^Up", "channel_up", 0) , hkZ("^Down", "channel_down", 0)
@@ -438,13 +445,13 @@ cancel:
 	return
 
 delete:
-	ToolTip, Delete current`t`t(2)`nRelease Ctrl to confirm`nPress X to switch modes
+	ToolTip, % TXT.TIP_delm "`t`t(2)`n" TXT.TIP_modem
 	ctrlref := "delete"
 	hkZ("^x", "Delete", 0) , hkZ("^x", "DeleteAll", 1)
 	return
 
 deleteall:
-	Tooltip, Delete all`t`t(3)`nRelease Ctrl to confirm`nPress X to switch modes
+	Tooltip, % TXT.TIP_delallm "`t`t(3)`n" TXT.TIP_modem
 	ctrlref := "deleteAll"
 	hkZ("^x", "DeleteAll", 0) , hkZ("^x", "Cancel", 1)
 	return
@@ -565,7 +572,7 @@ PasteModeTooltip(temp_clipboard) {
 	if temp_clipboard =
 		ToolTip % "{" CN.Name "} Clip " realclipno " of " CURSAVE "`t" fixStatus (WinExist("Display_Cj") ? "" : "`n`n" MSG_ERROR "`n`n")
 	else
-		ToolTip % "{" CN.Name "} Clip " realclipno " of " CURSAVE "`t" GetClipboardFormat() "`t" fixstatus (!FORMATTING ? "`t[NO-FORMATTING]" : "") "`n`n" halfclip
+		ToolTip % "{" CN.Name "} Clip " realclipno " of " CURSAVE "`t" GetClipboardFormat() "`t" fixstatus (!FORMATTING ? "`t" TXT.TIP_noformatting : "") "`n`n" halfclip
 }
 
 
@@ -845,24 +852,28 @@ init_actionmode() {
 
 	ACTIONMODE.keys := ini_actmd_keys " Esc End Q"
 
+	status_text := !CLIPJUMP_STATUS ? TXT.ACT_enable : TXT.ACT_disable   ;8
+
+	;auto-detect width
+	; max 35
 	ACTIONMODE.text := ""
-	.   "ACTION MODE"
+	.   TXT.ACT__name
 	. "`n-----------"
 	. "`n"
-	. "`nOpen History Tool              -  " t12.1
-	. "`nOpen Channel Selector          -  " t12.2
-	. "`nCopy File Path                 -  " t12.3
-	. "`nCopy Active Folder Path        -  " t12.4
-	. "`nCopy File Data                 -  " t12.5
-	. "`nToggle Clipjump Status         -  " t12.6
-	. "`nPitSwap                        -  " t12.7
-	. "`nOne Time Stop                  -  " t12.8
+	. "`n" fillwithSpaces(TXT.HST__name, 35) " -  " t12.1 		;35 is default
+	. "`n" fillwithSpaces(TXT.CNL__name)     " -  " t12.2
+	. "`n" fillwithSpaces(TXT._cfilep)       " -  " t12.3
+	. "`n" fillwithSpaces(TXT._cfolderp)     " -  " t12.4
+	. "`n" fillwithSpaces(TXT._cfiled)       " -  " t12.5
+	. "`n" fillwithSpaces(status_text " " PROGNAME) " -  " t12.6
+	. "`n" fillwithSpaces(TXT._pitswp)       " -  " t12.7
+	. "`n" fillwithSpaces(TXT._ot)           " -  " t12.8
 	. "`n"
-	. "`nIgnore Windows Manager         -  " t12.11
-	. "`nSettings Editor                -  " t12.9
-	. "`nOpen Help File                 -  " t12.10
+	. "`n" fillwithSpaces(TXT.IGN__name)     " -  " t12.11
+	. "`n" fillwithSpaces(TXT.SET__name)     " -  " t12.9
+	. "`n" fillwithSpaces(TXT.TRY_help)      " -  " t12.10
 	. "`n"
-	. "`nExit Window                    -  Esc, End, Q"
+	. "`n" fillwithSpaces(TXT.ACT_exit)      " -  Esc, End, Q"
 
 }
 ;****************COPY FILE/FOLDER/DATA***************************************************************************
@@ -949,7 +960,7 @@ exit:
 	return
 
 strtup:
-	Menu, Options_Tray, Togglecheck, Run at Startup
+	Menu, Options_Tray, Togglecheck, % TXT.TRY_startup
 	IfExist, %A_Startup%/Clipjump.lnk
 		FileDelete, %A_Startup%/Clipjump.lnk
 	else FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%/Clipjump.lnk
@@ -966,7 +977,7 @@ updt:
 		IfMsgBox OK
 			BrowserRun(PRODUCT_PAGE)
 	}
-	else MsgBox, 64, Clipjump, No updates available
+	else MsgBox, 64, %PROGNAME%, % TXT.ABT_noupdate
 	return
 
 ;************************************** Helper FUNCTIONS ****************************************
@@ -996,12 +1007,12 @@ global
 oneTime:
 	CALLER := false
 	onetimeOn := 1
-	autoTooltip("One Time Stop ACTIVATED", 600, 2)
+	autoTooltip("One Time Stop " TXT.TIP_activated, 600, 2)
 	changeIcon()
 	return
 
 incognito:
-	Menu, Options_Tray, Togglecheck, &Incognito Mode
+	Menu, Options_Tray, Togglecheck, % TXT.TRY_incognito
 	NOINCOGNITO := !NOINCOGNITO
 	changeIcon()
 	return
@@ -1015,7 +1026,7 @@ export:
 	loop
 		if !FileExist(temp := A_MyDocuments "\export" A_index ".cj")
 			break
-	Tooltip % "{" CN.Name "} Clip " realClipNo " exported to `n" temp
+	Tooltip % "{" CN.Name "} Clip " realClipNo " " TXT._exportedto "`n" temp
 	SetTimer, TooltipOff, 1000
 	try FileAppend, %ClipboardAll%, % temp
 	return
@@ -1058,7 +1069,8 @@ disable_clipjump:
 	changeIcon()
 
 	hkZ( ( paste_k ? "$^" paste_k : emptyvar ) , "Paste", CLIPJUMP_STATUS)
-	Menu, Options_Tray, % !CLIPJUMP_STATUS ? "Check" : "Uncheck", &Disable Clipjump
+	Menu, Options_Tray, % !CLIPJUMP_STATUS ? "Check" : "Uncheck", % TXT.TRY_disable " " PROGNAME
+	init_actionmode() 			;refresh enable/disable text in action mode
 	return
 
 ;#################### COMMUNICATION ##########################################
@@ -1076,7 +1088,7 @@ Act_CjControl(C){
 		, hkZ(Channel_K, "channelGUI") , hkZ(onetime_K, "onetime") 
 		, hkZ( ( paste_k ? "$^" paste_k : emptyvar ) , "Paste") , hkZ(history_K, "History")
 		changeIcon()
-		Menu, Options_Tray, UnCheck, &Disable Clipjump
+		Menu, Options_Tray, UnCheck, % TXT.TRY_disable " " PROGNAME
 		return
 	}
 
@@ -1113,7 +1125,7 @@ Act_CjControl(C){
 	if !Instr(d, "2 4")
 	{
 		CLIPJUMP_STATUS := 1
-		Menu, Options_Tray, UnCheck, &Disable Clipjump
+		Menu, Options_Tray, UnCheck, % TXT.TRY_disable " " PROGNAME
 	}
 
 }
@@ -1137,7 +1149,7 @@ Receive_WM_COPYDATA(wParam, lParam)
 
 ;##############################################################################
 
-;#Include %A_ScriptDir%\lib\translations.ahk
+#Include %A_ScriptDir%\lib\translations.ahk
 #Include %A_ScriptDir%\lib\classtool.ahk
 #Include %A_ScriptDir%\lib\multi.ahk
 #Include %A_ScriptDir%\lib\aboutgui.ahk

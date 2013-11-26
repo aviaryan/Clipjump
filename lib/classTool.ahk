@@ -7,9 +7,9 @@ ClassManager() {
    Gui, ClipClass:Color, FFFFFF
    Gui, ClipClass:-MaximizeBox
    Gui, ClipClass:Add, ListView, x0 y0 w300 h260 +BackgroundD9E7FB NoSortHdr +AltSubmit -Multi vClipClass gClipClass HWNDh_LVClass, Classes
-   Gui, ClipClass:Add, Button, x0 y260 w300 h30 gClassDelete, &Delete Class
-   Gui, ClipClass:Add, Button, x0 y290 w300 h30 gAddClass, &Add Window's Class
-   Gui, ClipClass:Show, w300 h325, %PROGNAME% Ignore Windows Manager
+   Gui, ClipClass:Add, Button, x0 y260 w300 h30 gClassDelete, % TXT.IGN_delete " Class"
+   Gui, ClipClass:Add, Button, x0 y290 w300 h30 gAddClass, % TXT.IGN_add " Class"
+   Gui, ClipClass:Show, w300 h325, % PROGNAME " " TXT.IGN__name
    LV_Colors.OnMessage()
    LV_Colors.Attach(h_LVClass, False)
    GoSub FillClassList
@@ -85,7 +85,7 @@ AddClass:
    		GoSub SaveClasses
    		GoSub LVClassColor
    		ClassChange:=1
-         WinActivate, %PROGNAME% Ignore Windows Manager
+         WinActivate, % PROGNAME " " TXT.IGN__name
    	}
    Return
 
