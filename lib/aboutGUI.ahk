@@ -73,10 +73,15 @@ reset:
 	return
 }
 
-trayMenu(){
+trayMenu(destroy=0){
 	global
 
-	Menu, Tray, DeleteAll
+	if destroy
+	{
+		Menu, Tray, DeleteAll
+		Menu, Options_Tray, Delete
+		Menu, Tools_Tray, Delete
+	}
 	;Tray Icon
 	if !A_isCompiled			;Important for showing Cj's icon in the Titlebar of GUI
 		Menu, Tray, Icon, icons\icon.ico

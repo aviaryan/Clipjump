@@ -4,6 +4,7 @@
 ClassManager() {
 
    global ClipClass
+   Gui, ClipClass:New
    Gui, ClipClass:Color, FFFFFF
    Gui, ClipClass:-MaximizeBox
    Gui, ClipClass:Add, ListView, x0 y0 w300 h260 +BackgroundD9E7FB NoSortHdr +AltSubmit -Multi vClipClass gClipClass HWNDh_LVClass, Classes
@@ -64,7 +65,7 @@ ClassDelete:
 ClipClassGuiClose:
    If ClassChange
    {
-      MsgBox, 67, %PROGNAME%, It is required to restart %PROGNAME% for changes to take effect. Do Restart ?
+      MsgBox, 67, %PROGNAME%, % TXT.IGN_RestartMsg
       IfMsgBox, Yes
          Reload
       IfMsgBox, No
@@ -77,6 +78,7 @@ AddClass:
    GoSub LVClassColor
    ClipClassSelection:=""
    classtool_cl := classget_Tool()
+   WinActivate, % PROGNAME " " TXT.IGN__name
    If (classtool_cl="")
    	Return
    else
@@ -85,7 +87,6 @@ AddClass:
    		GoSub SaveClasses
    		GoSub LVClassColor
    		ClassChange:=1
-         WinActivate, % PROGNAME " " TXT.IGN__name
    	}
    Return
 
@@ -122,7 +123,7 @@ classget_Tool(){
 
 classget:
 	WinGetClass, classtool_cl, A
-	Tooltip, % classtool_cl "`n`nPress Esc to exit Class Grab Tool`nPress Space to add Class`n",,, 6
+	Tooltip, % classtool_cl "`n`n" TXT.IGN_tip,,, 6
 	return
 
 classTool_copy:

@@ -218,15 +218,17 @@ gui_History_Preview(path, history_SearchBox)
 	}
 	else
 	{
-		Gui, Add, ActiveX, w%wt% h%ht% vprev_handle, Shell.Explorer
-		ComObjConnect(prev_handle, new ActiveXEvent)
-		prev_handle.Navigate( preview.path )
+		try {
+			Gui, Add, ActiveX, w%wt% h%ht% vprev_handle, Shell.Explorer
+			ComObjConnect(prev_handle, new ActiveXEvent) 				;do this only when the previous one succeeds
+		}
+		try prev_handle.Navigate( preview.path )
 	}
 
 	Gui, Font, s11
 	Gui, Add, Button, % "x5 y+10 w125 h27 gbutton_Copy_To_Clipboard Default vprev_copybtn Section", % TXT.PRV_copy
 	; button's x till 130 , search's width will 200 p from right
-	Gui, Add, Text, % "x" wt-200 " yp+2 w30 h23 vprev_findtxt", % TXT.PRV_find 		; +2 to level text
+	Gui, Add, Text, % "x" wt-200 " yp+2 h23 vprev_findtxt", % TXT.PRV_find 		; +2 to level text
 	Gui, Font, norm
 	Gui, Add, Edit, % "x+10 yp-2 w155 h23 vpreview_search gpreviewSearch " ( preview.isimg ? "+ReadOnly" : "" ),  	; -5 margin on right side
 	Gui, Add, Text, x5 y+0 w5 			; white-space just below the button
@@ -293,7 +295,7 @@ PreviewGuiSize:
 	{
 		gui_w := A_GuiWidth , gui_h := A_GuiHeight
 		GuiControl, move, preview_search, % "x" gui_w-160 " y" gui_h-30
-		GuiControl, move, prev_findtxt, % "x" gui_w-200 " y" gui_h-30
+		GuiControl, move, prev_findtxt, % "x" gui_w-210 " y" gui_h-30
 		GuiControl, move, prev_copybtn, % "y" gui_h-32
 		if !preview.isimg
 			GuiControl, move, prev_handle, % "w" gui_w " h" gui_h-42

@@ -36,7 +36,7 @@ Translations_load(file="languages\english.txt", default_file="languages\english.
 Translations_apply(){
 	;applies the loaded translations in vars to all GUIs and needed places
 	channelGUI(1)
-	trayMenu()
+	trayMenu(1)
 	init_actionmode()
 	Translations_fixglobalvars()
 }
@@ -44,6 +44,8 @@ Translations_apply(){
 Translations_fixglobalvars(){
 	global
 	MSG_TRANSFER_COMPLETE := TXT.TIP_copied " " PROGNAME    ;not space
+	CopyMessage := !ini_IsMessage ? "" : MSG_TRANSFER_COMPLETE " {" CN.Name "}"
+	
 	MSG_CLIPJUMP_EMPTY := TXT.TIP_empty1 "`n`n" PROGNAME " " TXT.TIP_empty2  ;not `n`n
 	MSG_ERROR := TXT.TIP_error
 	MSG_MORE_PREVIEW := TXT.TIP_more

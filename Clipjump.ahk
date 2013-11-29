@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 9.9.0.1
+;@Ahk2Exe-SetVersion 9.9.0.2
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -30,7 +30,7 @@ SetBatchLines,-1
 CoordMode, Mouse
 FileEncoding, UTF-8
 ListLines, Off
-#MaxMem 4560
+;#MaxMem 4560
 #KeyHistory 0
 #HotkeyInterval 1000
 #MaxHotkeysPerInterval 1000
@@ -41,7 +41,7 @@ global ini_LANG := ""
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "9.9.0.1"
+global VERSION := "9.9.0.2"
 global CONFIGURATION_FILE := "settings.ini"
 
 ini_LANG := ini_read("System", "lang")

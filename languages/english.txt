@@ -11,7 +11,7 @@
 ; only when you are sure you are right.
 
 ;======
-;v9.9
+;v9.9.0.1
 ;======
 
 TIP_text = Text
@@ -171,3 +171,12 @@ _cfiled = Copy File Data
 _ot = One Time Stop
 _pitswp = PitSwap
 _exportedto = exported to
+
+
+;============
+;9.9.0.2
+;============
+
+IGN_Restartmsg = It is required to restart Clipjump for changes to take effect. Do Restart ?
+IGN_tip = Press Space to add Class.
+        = Press Esc to exit Class Grab Tool.

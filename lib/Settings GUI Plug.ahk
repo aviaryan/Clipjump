@@ -73,16 +73,17 @@ gui_Settings()
 	Gui, Add, Text, 	y303 x480 cBlue gsettings_open_advanced, % TXT.SET_advanced
 	Gui, Add, Text, 	x9 yp cBlue gClassTool, % TXT.SET_manageignore
 	Gui, font, norm
-	Gui, Add, Button,	x186 y328 w75 h23 Default, 	&OK 	;57 in vertical
-	Gui, Add, Button,	x+8 w75 h23,			% TXT.SET_cancel
-	Gui, Add, Button,	x+8 w75 h23	Disabled,	% TXT.SET_apply
+	Gui, Add, Button,	x186 y328 w75 h23 Default gsettingsButtonOK, 	&OK 	;57 in vertical
+	Gui, Add, Button,	x+8 w75 h23 gsettingsButtonCancel,			% TXT.SET_cancel
+	Gui, Add, Button,	x+8 w75 h23	Disabled vsettingsButtonApply gsettingsButtonApply,	% TXT.SET_apply
+	GuiControl, Disable, settingsButtonApply
 
 	Gui, Settings:Show, , %PROGNAME% Settings
 
 	if ini_limitMaxClips = 0
 	{
-		Control, Disable, , Edit1, % PROGNAME " " TXT.SET__name
-		Control, Disable, , Edit2, % PROGNAME " " TXT.SET__name
+		GuiControl, Disable, new_Maxclips
+		GuiControl, Disable, new_Threshold
 	}
 
 	;disable hotkey keys
@@ -105,15 +106,15 @@ chkbox_limitMaxClips:
 	Gui, Settings:Submit, NoHide
 	if new_limitMaxClips = 0
 	{
-		GuiControl, , Edit1, 0
-		Control, Disable, , Edit1, % PROGNAME " " TXT.SET__name
-		Control, Disable, , Edit2, % PROGNAME " " TXT.SET__name
+		GuiControl, , new_Maxclips, 0
+		GuiControl, Disable, new_Maxclips
+		GuiControl, Disable, new_Threshold
 	}
 	else if new_limitMaxClips = 1
 	{
 		GuiControl, , Edit1,% !ini_Maxclips ? 20 : ini_MaxClips
-		Control, Enable, , Edit1, % PROGNAME " " TXT.SET__name
-		Control, Enable, , Edit2, % PROGNAME " " TXT.SET__name
+		GuiControl, Enable, new_Maxclips
+		GuiControl, Enable, new_Threshold
 	}
 	; there isn't a return on purpose
 edit_MaxClips:
@@ -137,7 +138,7 @@ hotkey_ot:
 chkbox_ischannelmin:
 hotkey_pitswp:
 hotkey_actmd:
-	Control, Enable, ,% TXT.SET_apply, % PROGNAME " " TXT.SET__name
+	GuiControl, Enable, settingsButtonApply
 	settingsHaveChanged := true
 	return
 
@@ -146,7 +147,7 @@ hotkey_paste:
 	pst_K := Trim(pst_k, "ESCXZ `t")
 	if pst_k =
 		GuiControl,, pst_k
-	Control, Enable, ,% TXT.SET_apply, % PROGNAME " " TXT.SET__name
+	GuiControl, Enable, settingsButtonApply
 	settingsHaveChanged := true
 	return
 
@@ -179,7 +180,7 @@ settingsButtonApply:
 		load_Settings() , validate_Settings()
 		settingsHaveChanged := false
 	}
-	Control, Disable, , % TXT.SET_apply, % PROGNAME " " TXT.SET__name
+	GuiControl, Disable, settingsButtonApply
 	return
 
 settings_open_advanced:
