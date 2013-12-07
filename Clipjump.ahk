@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 9.9.0.2
+;@Ahk2Exe-SetVersion 9.9.1
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -30,7 +30,6 @@ SetBatchLines,-1
 CoordMode, Mouse
 FileEncoding, UTF-8
 ListLines, Off
-;#MaxMem 4560
 #KeyHistory 0
 #HotkeyInterval 1000
 #MaxHotkeysPerInterval 1000
@@ -41,16 +40,16 @@ global ini_LANG := ""
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "9.9.0.2"
+global VERSION := "9.9.1"
 global CONFIGURATION_FILE := "settings.ini"
 
 ini_LANG := ini_read("System", "lang")
 global TXT := Translations_load("languages/" ini_LANG ".txt") 		;Load translations
 
 global UPDATE_FILE := "https://raw.github.com/avi-aryan/Clipjump/master/version.txt"
-global PRODUCT_PAGE := "http://avi-win-tips.blogspot.com/p/clipjump.html"
+global PRODUCT_PAGE := "http://avi.uco.im/projects/clipjump/"
 global HELP_PAGE := "http://avi-win-tips.blogspot.com/2013/04/clipjump-online-guide.html"
-global AUTHOR_PAGE := "http://www.avi-win-tips.blogspot.com"
+global AUTHOR_PAGE := "http://avi.uco.im"
 
 global MSG_TRANSFER_COMPLETE := TXT.TIP_copied " " PROGNAME    ;not space
 global MSG_CLIPJUMP_EMPTY := TXT.TIP_empty1 "`n`n" PROGNAME " " TXT.TIP_empty2  ;not `n`n
@@ -316,6 +315,9 @@ onClipboardChange:
 		LASTFORMAT := temp_lastformat , CLIP_ACTION := returnV ? "" : CLIP_ACTION  		;make CLIP_ACTION empty if copy/cut succeeded else let it be so that if window uses
 			;2 transfers like Excel , the demand can be fulfilled
 		IScurCBACTIVE := returnV 									;current clipboard is active after new data copied to clipboard SUCCESSFULLY
+
+		if !ISACTIVEEXCEL 				;excel has known bugs with AHK and manipulating clipboard *infront* of it will cause errors
+			makeClipboardAvailable(0) 						;close clipboard in case it is still opened by clipjump
 	}
 	else
 	{
@@ -527,17 +529,22 @@ clipSaver() {
 				foolGUI(1) 										;foolGUI() is a blank gui to get focus over excel [crazy bug- crazy fix]
 				tempC := ClipboardAll
 				tempCB := Clipboard
-				;debugTip("4") ;DEBUG
 				FileAppend, %tempC%, %CLIPS_dir%/%CURSAVE%.avc
 				foolGUI(0)
 			}
 			else
 				FileAppend, %ClipboardAll%, %CLIPS_dir%/%CURSAVE%.avc
 			copied := 1
+		} catch {
+			if ISACTIVEEXCEL
+				foolGUI(0)
 		}
 	}
-
 	Tooltip,,,, 7
+	; check for empty file
+	FileRead, test, %CLIPS_dir%/%CURSAVE%.avc
+	if test=
+		return (HASCOPYFAILED := 1) * ablankvar 			;actually the return doesnt matter here
 
 	Loop, %CURSAVE%
 	{
@@ -857,7 +864,7 @@ init_actionmode() {
 	;auto-detect width
 	; max 35
 	ACTIONMODE.text := ""
-	.   TXT.ACT__name
+	.  PROGNAME " " TXT.ACT__name
 	. "`n-----------"
 	. "`n"
 	. "`n" fillwithSpaces(TXT.HST__name, 35) " -  " t12.1 		;35 is default

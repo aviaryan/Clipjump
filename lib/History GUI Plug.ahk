@@ -6,7 +6,7 @@ gui_History()
 {
 	global
 	static x, y, how_sort := 2_sort := 3_sort := 0, what_sort := 2
-	local selected_row
+	local selected_row, thisguisize
 	;2_3_sort are the vars storing how cols are sorted , 1 means in Sort ; 0 means SortDesc
 
 	Gui, History:new
@@ -16,11 +16,11 @@ gui_History()
 	Iniread, history_w, % CONFIGURATION_FILE, Clipboard_History_window, w, %A_Space%
 	Iniread, h, % CONFIGURATION_FILE, Clipboard_History_window, h, %A_Space%
 
-	Gui, Add, Button, w75 h23 Section Default	vhistory_ButtonPreview	ghistory_ButtonPreview, % TXT.HST_preview
-	Gui, Add, Button, x+6 ys w75 h23			vhistory_ButtonDelete	ghistory_ButtonDelete, % TXT.HST_del
-	Gui, Add, Button, x+6 ys w75 h23 			vhistory_ButtonDeleteAll ghistory_ButtonDeleteAll, % TXT.HST_clear
-	Gui, Add, Text, x+15 ys+5 					vhistory_SearchText, % TXT.HST_search
-	Gui, Add, Checkbox, x+10 ys+5 w65 Checked%history_partial% vhistory_partial ghistory_SearchBox, % TXT.HST_partial
+	Gui, Add, Button, h23 Section Default	vhistory_ButtonPreview	ghistory_ButtonPreview, % TXT.HST_preview
+	Gui, Add, Button, x+6 ys h23			vhistory_ButtonDelete	ghistory_ButtonDelete, % TXT.HST_del
+	Gui, Add, Button, x+6 ys h23 			vhistory_ButtonDeleteAll ghistory_ButtonDeleteAll, % TXT.HST_clear
+	Gui, Add, Text, x+35 ys+5 					vhistory_SearchText, % TXT.HST_search
+	Gui, Add, Checkbox, x+10 ys+5 Checked%history_partial% vhistory_partial ghistory_SearchBox, % TXT.HST_partial
 	Gui, Add, Edit, ys  	ghistory_SearchBox	vhistory_SearchBox
 	Gui, Font, s9, Courier New
 	Gui, Font, s9, Consolas
@@ -59,6 +59,11 @@ gui_History()
 	WinWaitActive, % PROGNAME " " TXT.HST__name
 	WinGetPos, x, y
 
+	;resize the search box
+	GuiControlGet, history_SearchBox, History:pos 		;extract x for later use
+	WinGetPos,,, thisguisize,, % PROGNAME " " TXT.HST__name
+	GuiControl, Move, history_SearchBox, % "w" (thisguisize- history_Searchboxx - 21) 		;7,7 for outer border, 7 for inner border
+
 	;create hotkeys
 	Hotkey, IfWinActive, % PROGNAME " " TXT.HST__name
 	Hotkey, F5, history_SearchBox, On
@@ -81,33 +86,12 @@ history_ButtonPreview:
 	return
 
 history_ButtonDelete:
-	Gui, History:Default
-
-	temp_row_s := 0 , rows_selected := "" , list_clipfilepath := ""
-	while (temp_row_s := Lv_GetNext(temp_row_s))
-		rows_selected .= temp_row_s ","
-	rows_selected := Substr(rows_selected, 1, -1)     ;get CSV row numbers
-
-	;Get Row names
-	loop, parse, rows_selected,`,
-		LV_GetText(clip_file_path, A_LoopField, hidden_date_no)
-		, list_clipfilepath .= clip_file_path "`n" 	;Important for faster results
-
-	;Delete Rows
-	loop, parse, rows_selected,`,
-		LV_Delete(A_LoopField+1-A_index)
-
-	;Delete items
-	loop, parse, list_clipfilepath, `n
-		FileDelete, % "cache\history\" A_LoopField
-	
-	Guicontrol, History:Focus, history_SearchBox
-	history_UpdateSTB()
+	history_ButtonDelete()
 	return
 
 history_ButtonDeleteAll:
 	Gui, +OwnDialogs
-	MsgBox, 257, Clear History,% "Are you sure you want to permanently clear " PROGNAME "'s " TXT.HST__name " ?" 
+	MsgBox, 257, Clear History,% TXT.HST_delall_msg
 	IfMsgBox, OK
 	{
 		FileDelete, cache\history\*
@@ -162,7 +146,7 @@ historyGuiSize:
 
 		GuiControl, Move, historyLV, % "w" (gui_w - 15) " h" (gui_h - 65)     ;+20 H in no STatus Bar
 		LV_ModifyCol(1, gui_w-15-w2-w3-25) 				;gui_w - x  where   x  =  width of all cols + 25
-		GuiControl, Move, history_SearchBox, % "x400 w" (gui_w - 338 - 70)
+		GuiControl, Move, history_SearchBox, % " w" (gui_w - (history_SearchBoxx ?  history_SearchBoxx : 400)  -7) ; 7 for innermargin
 	}
 	return
 
@@ -192,7 +176,7 @@ historyGuiEscape:
 gui_History_Preview(path, history_SearchBox)
 ; Creates and shows a GUI for viewing history items
 {
-	global prev_copybtn, prev_findtxt, prev_handle, preview_search, prev_picture, preview
+	global prev_copybtn, prev_findtxt, prev_handle, preview_search, prev_picture, preview, prev_findtxtw
 	static wt := A_ScreenWidth / 2 , ht := A_ScreenHeight / 2 , maxlines = Round(ht / 13)
 	preview := {}
 
@@ -226,7 +210,7 @@ gui_History_Preview(path, history_SearchBox)
 	}
 
 	Gui, Font, s11
-	Gui, Add, Button, % "x5 y+10 w125 h27 gbutton_Copy_To_Clipboard Default vprev_copybtn Section", % TXT.PRV_copy
+	Gui, Add, Button, % "x5 y+10 h27 gbutton_Copy_To_Clipboard Default vprev_copybtn Section", % TXT.PRV_copy
 	; button's x till 130 , search's width will 200 p from right
 	Gui, Add, Text, % "x" wt-200 " yp+2 h23 vprev_findtxt", % TXT.PRV_find 		; +2 to level text
 	Gui, Font, norm
@@ -238,6 +222,7 @@ gui_History_Preview(path, history_SearchBox)
 	Gui, Preview: +Resize +MaximizeBox -MinimizeBox
 	Gui, Preview:Show, AutoSize, % TXT.PRV__name
 
+	GuiControlGet, prev_findtxt, Preview:Pos
 	if !preview.isimg
 		GuiControl, , preview_search, % history_SearchBox
 	return
@@ -295,7 +280,7 @@ PreviewGuiSize:
 	{
 		gui_w := A_GuiWidth , gui_h := A_GuiHeight
 		GuiControl, move, preview_search, % "x" gui_w-160 " y" gui_h-30
-		GuiControl, move, prev_findtxt, % "x" gui_w-210 " y" gui_h-30
+		GuiControl, move, prev_findtxt, % "x" gui_w- (prev_findtxtw ? prev_findtxtw+167 : 210) " y" gui_h-30
 		GuiControl, move, prev_copybtn, % "y" gui_h-32
 		if !preview.isimg
 			GuiControl, move, prev_handle, % "w" gui_w " h" gui_h-42
@@ -403,6 +388,31 @@ history_UpdateSTB(size=""){
 	SB_SetText(TXT.HST_dconsump " : " ( size="" ? history_GetSize() : size ) " KB")
 }
 
+;deletes selected rows from histroy
+history_ButtonDelete(){
+	Gui, History:Default
+
+	temp_row_s := 0 , rows_selected := "" , list_clipfilepath := ""
+	while (temp_row_s := Lv_GetNext(temp_row_s))
+		rows_selected .= temp_row_s ","
+	rows_selected := Substr(rows_selected, 1, -1)     ;get CSV row numbers
+
+	;Get Row names
+	loop, parse, rows_selected,`,
+		LV_GetText(clip_file_path, A_LoopField, hidden_date_no)
+		, list_clipfilepath .= clip_file_path "`n" 	;Important for faster results
+
+	;Delete Rows
+	loop, parse, rows_selected,`,
+		LV_Delete(A_LoopField+1-A_index)
+
+	;Delete items
+	loop, parse, list_clipfilepath, `n
+		FileDelete, % "cache\history\" A_LoopField
+	
+	Guicontrol, History:Focus, history_SearchBox
+	history_UpdateSTB()
+}
 
 history_InstaPaste:
 	IniRead, clipboard_instapaste, % CONFIGURATION_FILE, Advanced, Instapaste_write_clipboard, %A_Space%
@@ -494,7 +504,7 @@ LV_SortArrow(h, c, d="")	; by Solar (http://www.autohotkey.com/forum/viewtopic.p
 	Space::gosub history_InstaPaste
 	^c::history_clipboard()
 	^e::gosub history_exportclip
-	Del::Send !{vk54}               ;Alt+T - shortcut for Delete
+	Del::history_ButtonDelete()
 	!d::GuiControl, History:focus, history_SearchBox
 	^f::GuiControl, History:focus, history_SearchBox
 #if

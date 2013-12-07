@@ -294,3 +294,17 @@ IsLatestRelease(prog_ver, cur_ver, exclude_keys="beta|alpha") {
 			return 0
 	return 1
 }
+
+;get width and heights of controls
+getControlInfo(type="button", text="", ret="w", fontsize="", fontmore=""){
+	static test
+	Gui, wasteGUI:New
+	Gui, wasteGUI:Font, % fontsize, % fontmore
+	Gui, wasteGUI:Add, % type, vtest, % text
+	GuiControlGet, test, wasteGUI:pos
+	Gui, wasteGUI:Destroy
+	if ret=w
+		return testw
+	if ret=h
+		return testh
+}

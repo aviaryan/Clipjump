@@ -3,15 +3,18 @@
 aboutGUI(){
 
 	global
+	static w_ofreset
 	;About GUI
+	w_ofreset := getControlinfo("button", TXT.ABT_reset, "w", "s10", "Arial")
+
 	Gui, 2:Destroy
 	Gui, 2:Margin, 0, 0
 	Gui, 2:Font, s18, Courier New
 	Gui, 2:Font, S18, Consolas
 	Gui, 2:Add, Edit, x0 y0 w0 h0,
-	Gui, 2:Add, Link, x188 y5 gupdt, <a href="http://avi-win-tips.blogspot.com/p/clipjump.html">%PROGNAME%</a> v%version%
+	Gui, 2:Add, Link, x188 y5 gupdt, <a href="%PRODUCT_PAGE%">%PROGNAME%</a> v%version%
 	Gui, 2:Font, S12, 
-	Gui, 2:Add, Link, xp+3 y+3 gblog, <a href="http://www.github.com/avi-aryan">Avi Aryan</a> (C) 2013
+	Gui, 2:Add, Link, xp+3 y+3 gblog, <a href="%AUTHOR_PAGE%">Avi Aryan</a> (C) 2013
 
 	Gui, 2:Font, S11 norm, Arial
 	Gui, 2:Add, Text, y+30 x10, Language
@@ -30,7 +33,7 @@ aboutGUI(){
 
 	Gui, 2:Font, S10, Arial
 	Gui, 2:Add, Button, xp-10 y+60 w70 g2GuiClose Default, OK
-	Gui, 2:Add, Button, x430 yp w117 greset, % TXT.ABT_reset
+	Gui, 2:Add, Button, % "x" 552-w_ofreset-5 " yp greset", % TXT.ABT_reset 		;leaving 5 as margin
 	Gui, 2:Add, Text, y+0 h0,
 
 	Gui, 2:Show, w552, % PROGNAME " " (!CLIPJUMP_STATUS ? "{Disabled}" : "") " [ Channel: " CN.Name " ]"
@@ -82,6 +85,7 @@ trayMenu(destroy=0){
 		Menu, Options_Tray, Delete
 		Menu, Tools_Tray, Delete
 	}
+
 	;Tray Icon
 	if !A_isCompiled			;Important for showing Cj's icon in the Titlebar of GUI
 		Menu, Tray, Icon, icons\icon.ico
@@ -94,12 +98,12 @@ trayMenu(destroy=0){
 		Menu, Options_Tray, Add, % TXT.TRY_incognito, incognito
 		Menu, Options_Tray, Add, % TXT.TRY_disable " " PROGNAME, disable_clipjump
 		Menu, Options_Tray, Add, % TXT.TRY_startup, strtup
-	Menu, Tray, Add, &Options, :Options_Tray
+	Menu, Tray, Add, % TXT.TRY_options, :Options_Tray
 		Menu, Tools_Tray, Add, % TXT.HST__name "`t" Hparse_Rev(history_K), history
 		Menu, Tools_Tray, Add, % TXT.SET_chnl "`t" Hparse_Rev(channel_K), channelGUI
 		Menu, Tools_Tray, Add, % TXT.IGN__name, classTool
 		Menu, Tools_Tray, Add, % TXT.SET__name, settings
-	Menu, Tray, Add, &Tools, :Tools_Tray
+	Menu, Tray, Add, % TXT.TRY_tools, :Tools_Tray
 	Menu, Tray, Add		; separator
 	Menu, Tray, Add, % TXT.TRY_updates, updt
 	Menu, Tray, Add, % TXT.TRY_help, hlp

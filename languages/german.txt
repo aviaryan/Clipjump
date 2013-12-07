@@ -1,0 +1,183 @@
+﻿;Deutsche übersetzung für Clipjump
+;erstellt von fump2000
+
+; Hinweise:
+; Kommentare sollten nur am Anfang der Zeile stehen
+; Hinzufügen neuer Schlüssel in künftigen Versionen, erfolgt am Ende für einfache und konsequente Entwicklung
+; Add version no in comment when adding a new key in the translation file.
+; Füge die Versionsnummer einem neuen Schlüssel hinzu.
+; Niemals 'Clipjump' ändern.
+; & in &Vorschau dient dazu den Shortcut Alt+V zu erstellen wenn das Fenster aktiv ist.
+; Bei der Übersetzung in eine andere Sprache als Deutsch lasse das '&' weg. Verwende '&' nur wenn du dir sicher bist das du richtig liegts.
+
+;======
+;v9.9.0.1
+;======
+
+TIP_text = Text
+TIP_file_folder = Datei/Ordner
+TIP_copied = Übertragen an
+TIP_empty1 = Clip 0 von 0
+TIP_empty2 = ist leer
+TIP_error = [Die Vorschau/Pfad konnte nicht geladen werden]
+TIP_more = [Mehr]
+TIP_pasting = Einfügen...
+TIP_deleted = Gelöscht
+TIP_alldeleted = Alle Daten gelöscht
+TIP_cancelled = Abgebrochen
+TIP_fixed = [FIXIERT]
+TIP_noformatting = OHNE-FORMATIERUNG
+TIP_filepath = Dateipfad(e) gesendet an
+TIP_folderpath = Aktiver Ordnerpfad gesendet an
+TIP_activated = AKTIVIERT
+TIP_deactivated = DEAKTIVIERT
+TIP_cancelm = Einfügen abgebrochen
+TIP_delm = Lösche den ausgewählten Clip
+TIP_delallm = Alle Clips löschen?
+TIP_modem = Zum bestätigen STRG loslassen
+          = Drücke X um den Modus zu wechseln
+
+ABT__name = Über
+ABT_reset = &Clipjump zurücksetzen
+ABT_resetM = Sind Sie sicher, dass Sie Clipjump zurücksetzen wollen? Es gehen alle Clips und Einstellungen verloren!
+ABT_removeStart = Clipjump wurde im Autostart gefunden. Möchten Sie dies entfernen?
+ABT_resetfinal = wird nun geschlossen.
+ABT_noupdate = keine Updates verfügbar.
+
+HST__name = Clip Historie
+HST_preview = &Vorschau
+HST_del = Clip &Löschen
+HST_clear = Hist. L&eeren
+HST_search = &Suchfilter
+HST_partial = &Partiell
+HST_clip = Clip
+HST_date = Datum
+HST_size = Größe(B)
+HST_dconsump = Speicherverbrauch
+HST_viewimage = [Doppelklick für Bildvorschau]
+HST_m_prev = &Vorschau
+HST_m_copy = &Kopieren		(Ctrl+C)
+HST_m_insta = &Instant-Einfügen		(Space)
+HST_m_export = &Exportieren		(Ctrl+E)
+HST_m_ref = &Aktualisieren
+HST_m_del = &Löschen
+
+PRV__name = Vorschau
+PRV_copy = Senden an Clipjump
+PRV_find = &Suche
+
+SET__name = Einstellungen
+SET_main = Allgemein
+SET_limitmaxclips = &Clipjump Zwischenablagen limitieren
+SET_maxclips = Mindestanzahl der aktiven &Clips
+SET_threshold = &Threshold
+SET_quality = &Qualität der Vorschaubilder
+SET_copybeep = &Beep beim Kopieren
+SET_ismessage = &Info ToolTip beim kopieren
+SET_keepsession = &Clips auch nach Neustart beibehalten
+SET_formatting = "OHNE-FORMATIERUNG" M&odus starten
+SET_cb = Clip Historie
+SET_daystostore = A&nzahl der Speichertage
+SET_images = Bilder in der &Historie speichern
+SET_shortcuts = Hotkeys
+SET_pst = Einfügen (Ctrl + ..)
+SET_actmd = Actionmenü
+SET_chnl = Channelmenü
+SET_channels = Channels
+SET_ischannelmin = Kleines Menü nutzen
+SET_advanced = Zeige erweiterte Einstellungen
+SET_manageignore = Verwalte ignorierte Fenster
+SET_cancel = &Abbruch
+SET_apply = &Speichern
+
+SET_advanced_error = ist nicht in der Lage die Einstellungsdatei (settings.ini) oder den Editor (notepad.exe) zu finden. Stellen Sie sicher, dass die Dateien in ihren jeweiligen Ordnern existieren.
+                   =
+                   = Wenden Sie sich an den Author falls das Problem weiterhin besteht.
+SET_T_limitmaxclips = Limmitiert Clipjump's Clipanzahl
+                    = Markiert = Limitierung aktiv
+SET_T_maxclips = Die minimale Anzahl der Zwischenablagen, die Sie zur Nutzung aktivieren wollen.
+SET_T_threshold = Threshold bietet eine zusätzliche Anzahl an Zwischenablagen.
+                = Empfohlene Menge = 10.
+                =
+                = [TIPP] - Threshold = 1 und Clipjump speichert exakt die gewünschte minimale Anzahl an Clips.
+SET_T_quality = Die Qualität der Bilder in der Bildvorschau.
+              = Range 1 - 100
+              = Empfohlen = 90
+SET_T_copybeep = Aktivieren Sie diese Option und Sie hören fortan einen Ton wenn Clipjump Daten aufnimmt.
+               =
+               = Sie können die Ton Frequenz in der [Advanced] Sektion der Settings.ini verändern.
+SET_T_keepsession = Clips beibehalten? Aktivieren Sie diese Option gehen die Clips auch nach einen Neustart von Clipjump nicht verloren.
+SET_T_ismessage = Möchten Sie beim Kopieren oder Ausschneiden per ToolTip informiert werden?
+				= Markiert = Aktiv
+SET_T_formatting = Wenn Sie es wünschen kann Clipjump beim Start schon in den OHNE-FORMATIERUNG Modus wechseln.
+                 = Markiert = Aktiv
+SET_T_daystostore = Anzahl der Tage für die Clips in der Historie gespeichert werden sollen.
+				  = Es muss ein Zahl angegeben werden, es ist kein Maximum vorgegeben.
+SET_T_images = Sollen auch Bilder in der Historie gespeichert werden?
+			 = Markiert = Aktiv
+SET_T_pst = Geben Sie hier einen einzelnen Buchstaben an um mit diesem in Verbindung mit STRG Clipjump zu nutzen.
+          = Beachten Sie bitte, die Tasten  E C X Z S  sind reserviert.
+          = 
+          = Lesen Sie bitte außerdem den Teil "Copy bypassing Clipjump" in der Hilfedatei.
+SET_T_actmd = Hotkey um den Aktionsmodus zu starten.
+            = Der Aktionsmodus, bietet eine Schnittstelle für fast alle funktionen in Clipjump.
+            = Eventuell ist es für Sie angenehmer selten verwendete Hotkeys zu deaktivieren und stattdessen den Aktionsmodus zu nutzen.
+SET_T_chnl = Hotkey um das Channel Wählen Fenster zu öffnen.
+           = Geben Sie keinen Buchstaben an wird der Hotkey deaktiviert.
+SET_T_cfilep = Hotkey um den Pfad der ausgewählten Datei zu kopieren.
+             = Geben Sie keinen Buchstaben an wird der Hotkey deaktiviert.
+SET_T_cfolderp = Hotkey um den Pfad des ausgewählten Ordners zu kopieren.
+               = Geben Sie keinen Buchstaben an wird der Hotkey deaktiviert.
+SET_T_cfiled = Hotkey um den Dateiinhalt der ausgewählten Datei an Clipjump zu senden.
+             = Geben Sie keinen Buchstaben an wird der Hotkey deaktiviert.
+SET_T_ot = Hotkey zum auslösen des [One Time Stop].
+         = [One Time Stop] bringt Clipjump dazu, einmalig die folgenden Daten die über die Windows-Zwischenablage gehen zu ignorieren.
+         =  Geben Sie keinen Buchstaben an wird der Hotkey deaktiviert.
+SET_T_pitswp = 	Hotkey um direkt in den PitSwap channel zu wechseln. (Funktioniert nur dann wenn es den Channel bereits gibt.)
+             = Für weitere Einzelheiten über die Funktion lesen Sie den Part in der Hilfedatei.
+SET_T_ischannelmin = Beschrängt das Channel Fenster auf das Wesentliche.
+                   = In diesem Menü gibt es keine Buttons, die Auswahl des Channels wird mit Enter bestätigt.
+
+CNL__name = Channels
+CNL_choose = &Wähle Multi-Clipboard Channel
+CNL_channelname = Channel &Name
+CNL_advice1 = Channel 0 (Default) ist der Mainstream-Channel und sollte in der Regel verwendet werden.
+CNL_advice2 = Channelnamen werden automatisch gespeichert.
+CNL_advice3 = Beachte: Neuer Channel kann ggf. nur erstellt werden wenn der zuletzt erstellte aktiv ist.
+CNL_use = &Channel aktivieren
+CNL_cancel = &Abbruch
+CNL_statusbar = Clips im Channel
+
+TRY_incognito = Incognito Modus
+TRY_disable = Deaktiviere
+TRY_startup = Mit Windows starten
+TRY_updates = Auf Updates prüfen
+TRY_help = Hilfe
+TRY_restart = Neustarten
+TRY_exit = Beenden
+
+ACT__name = AKTIONSMODUS
+ACT_enable = Aktivieren
+ACT_disable = Deaktivieren
+ACT_exit = Fenster schließen
+
+IGN__name = Ignorierte Fenster
+IGN_add = &Fensterclasse hinzufügen Class
+IGN_delete = &Löschen Class
+
+LNG_error = Deutsche Sprachdatei nicht gefunden im Ordner languages/german.txt. Passierte dies absichtlich, füge sie wieder ein
+
+_cfilep = Kopiere Dateipfad(e)
+_cfolderp = Kopiere Aktiven Ordnerpfad
+_cfiled = Kopiere Dateiinhalt
+_ot = One Time Stop
+_pitswp = PitSwap
+_exportedto = Exportiert
+
+;============
+;9.9.0.2
+;============
+
+IGN_Restartmsg = Es ist nötig zur Übernahme und Aktivierung der neuen Einstellunegn Clipjump neu zu starten. Wollen Sie jetzt neustarten?
+IGN_tip = Mit der Leertaste die Fenster-Classe hinzufügen.
+        = Mit Escape die Aktion abbrechen.

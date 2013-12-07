@@ -1,0 +1,193 @@
+﻿;chinese translation for Clipjump
+;first made by tuzi
+
+; NOTES
+; Comments should only be at the start of the line
+; Add new keys in the future versions at the bottom for easy & consistent development
+; Add version no in comment when adding a new key in the translation file.
+; Most keys have format XXX_ where XXX is the component name
+; Dont translate 'Clipjump'
+; & in &Preview is to create shortcut Alt+P when the window is active. When translating into a non-english language, omit '&' and when in a english type language, use '&'
+; only when you are sure you are right.
+
+;======
+;v9.9.0.1
+;======
+
+;**首次启动程序后，切换到中文后托盘右键菜单会多出几项英文
+;*剪贴板历史，预览框中的查找
+;**活动命令常常定位到鼠标所在位置
+;**复制文件路径导致的崩溃
+;双击预览图片后崩溃
+;**设置界面中取消和应用按钮不起作用
+;**多次点击设置界面中的管理忽略窗口
+;设置界面中高级设置只能打开一次
+;**频道1中，剪贴板不遵循最大限制的问题
+;频道1中，有时未松开CTRL 提示信息就消失了
+;**添加忽略窗口后存在延迟
+;忽略窗口管理器，删除空条目后再点选一个条目，再次卡住
+;活动命令存在BUG显示在桌面右上角
+
+TIP_text = 文本
+TIP_file_folder = 文件/文件夹
+TIP_copied = 复制到
+TIP_empty1 = 第 0 总 0
+TIP_empty2 = 没有可粘贴的内容
+TIP_error = [预览/路径 载入失败]
+TIP_more = [更多]
+TIP_pasting = 粘贴中...
+TIP_deleted = 已删除
+TIP_alldeleted = 全部信息已删除
+TIP_cancelled = 已取消
+TIP_fixed = [修正]
+TIP_noformatting = 原始数据
+TIP_filepath = 文件路径复制到
+TIP_folderpath = 文件所在目录复制到
+TIP_activated = 已激活
+TIP_deactivated = 已失效
+TIP_cancelm = 取消粘贴操作
+TIP_delm = 删除最近一条剪贴板信息
+TIP_delallm = 删除全部剪贴板信息
+TIP_modem = 松开 Ctrl 确认
+          = 按 X 切换模式
+
+ABT__name = 关于
+ABT_reset = 重置 &Clipjump
+ABT_resetM = 确定要重置 Clipjump 以便移除所有保存的剪贴板信息并恢复默认设置吗？
+ABT_removeStart = 发现 Clipjump 已设为自启动，想一并移除吗？
+ABT_resetfinal = 将被关闭。
+ABT_noupdate = 已是最新版本。
+
+HST__name = 剪贴板历史
+HST_preview = 预览(&P)
+HST_del = 删除(&T)
+HST_clear = 清空(&H)
+HST_search = 搜索过滤(&F)
+HST_partial = 部分(&R)
+HST_clip = 剪贴板内容
+HST_date = 时间
+HST_size = 大小(B)
+HST_dconsump = 占用硬盘
+HST_viewimage = [双击预览图片]
+HST_m_prev = 预览(&P)
+HST_m_copy = 复制(&C)	(Ctrl+C)
+HST_m_insta = 粘贴(&I)	(Space)
+HST_m_export = 导出(&E)	(Ctrl+E)
+HST_m_ref = 刷新(&R)
+HST_m_del = 删除(&D)
+
+PRV__name = 预览
+PRV_copy = 复制到剪贴板
+PRV_find = 查找(&D)
+
+SET__name = 设置
+SET_main = 主要设置
+SET_limitmaxclips = 限制剪贴板信息最大数量(&L)
+SET_maxclips = 最大数量基础值(&M)
+SET_threshold = 最大数量阈值(&T)
+SET_quality = 用于预览的缩略图质量(&Q)
+SET_copybeep = 复制成功时声音提示(&B)
+SET_ismessage = 复制成功时文字提示(&S)
+SET_keepsession = 保存剪贴板信息以便重启后继续使用(&R)
+SET_formatting = 启动时使用原始数据模式(&F)
+SET_cb = 剪贴板历史
+SET_daystostore = 历史剪贴板信息保留天数(&H)
+SET_images = 在历史剪贴板信息中存储图片(&I)
+SET_shortcuts = 快捷键
+SET_pst = 粘贴 (Ctrl + ..)
+SET_actmd = 活动命令
+SET_chnl = 选择频道
+SET_channels = 频道
+SET_ischannelmin = 使用迷你界面
+SET_advanced = 高级设置
+SET_manageignore = 管理忽略窗口（不想 Clipjump 起作用的窗口）
+SET_cancel = 取消(&C)
+SET_apply = 应用(&A)
+
+SET_advanced_error = 无法找到设置文件(settings.ini) 或 记事本程序？确保它们在各自位置存在。
+                   =
+                   = 如果问题仍然存在，请联系作者。
+SET_T_limitmaxclips = Clipjump 的剪贴板信息数量是否存在最大限制。
+                    = 选中 = 是
+SET_T_maxclips = 最大数量 = 基础值+阈值 比如基础值为10，阈值为5；当 Clipjump 中已存在14条剪贴板信息后，此时再进行一次复制操作，剪贴板数量将变为10而非15。
+               = 如果你想要 20个，指定 20。
+SET_T_threshold = 阈值的详细作用参见基础值的解释；简单理解可视为基础值之上临时增加的数量。
+                = 多数时候推荐值是10。
+                =
+                = [提示] - 阈值 = 1 将使 最大数量 = 基础值。
+SET_T_quality = 你希望用于预览的缩略图的质量。
+              = 推荐值是 90
+              = 可设范围 1 - 100
+SET_T_copybeep = 当复制成功时，可听到一个定制的声响。
+               =
+               = 你可以在 Settings.ini 的 [Advanced] 段中修改声响频率。
+SET_T_keepsession = 选中后 Clipjump 将保存剪贴板信息，使得重启后依然可以使用上次剪贴板中的数据。
+SET_T_ismessage = 这个值决定了当 复制/粘贴 操作成功时，你是否想看到确认消息。
+SET_T_formatting = 想要 Clipjump 以原始数据模式启动吗？所谓 原始数据模式，就是不格式化任何数据。
+                 = 建议选是。
+SET_T_daystostore = 剪贴板信息将被保留的天数。
+SET_T_images = 剪贴板中的图片也要保留在历史信息中吗？
+SET_T_pst = 粘贴时使用 Ctrl + 哪个键
+          = 注意 E C X Z S 是保留的。
+          = 
+          = 详细信息请看帮助中“Copy bypassing Clipjump”一节。
+SET_T_actmd = 这个快捷键用于打开 活动命令。
+            = 活动命令状态下，可快速调用程序提供的几乎所有功能。
+            = 建议使用活动命令代替禁用很少使用的快捷键。
+SET_T_chnl = 这个快捷键用于打开 频道
+           = 设置快捷键为 无 将只能通过 托盘右键菜单 或 活动命令 打开频道
+SET_T_cfilep = 这个快捷键用于 复制选中文件路径
+             = 设置快捷键为 无 将只能通过 活动命令 使用此功能
+SET_T_cfolderp = 这个快捷键用于 复制选中文件所在目录
+               = 设置快捷键为 无 将只能通过 活动命令 使用此功能
+SET_T_cfiled = 这个快捷键用于 复制选中文件内容
+             = 设置快捷键为 无 将只能通过 活动命令 使用此功能
+SET_T_ot = 这个快捷键用于激活 [One Time Stop] 特性
+         = [One Time Stop] 将使 Clipjump 暂时失效，直到完成一次复制操作后。注意，因为 Clipjump 在此期间是失效状态，所以复制内容存在于系统剪贴板中。
+         = 设置快捷键为 无 将只能通过 活动命令 使用此功能
+SET_T_pitswp = 这个快捷键用于激活 PitSwap 特性
+             = 关于此特性的更多细节请看帮助文件。
+SET_T_ischannelmin = 使频道界面细节更少，感觉更好。
+                   = 迷你界面下没有任何按钮，你可以使用回车键确认。
+
+CNL__name = 频道
+CNL_choose = 选择频道(&C)
+CNL_channelname = 频道名(&N)
+CNL_advice1 = 频道 0 (Default) 是通常使用下的主频道。
+CNL_advice2 = 频道名将在改变时自动保存。
+CNL_advice3 = 只有前一个频道被激活(使用)后，下一个频道才可用。
+CNL_use = 使用频道(&U)
+CNL_cancel = 取消(&L)
+CNL_statusbar = 当前频道中剪贴板信息数量
+
+TRY_incognito = 隐身模式(&I)
+TRY_disable = 停用(&D)
+TRY_startup = 开机时启动
+TRY_updates = 检查更新(&U)
+TRY_help = 帮助
+TRY_restart = 重启(&R)
+TRY_exit = 退出(&E)
+
+ACT__name = 活动命令
+ACT_enable = 启用
+ACT_disable = 停用
+ACT_exit = 退出活动命令
+
+IGN__name = 忽略窗口管理器 
+IGN_add = 添加窗口(&A) Class
+IGN_delete = 删除窗口(&D) Class
+
+LNG_error = 没找到简体中文翻译文件 languages/简体中文.txt 。如果你是故意移走或删除的，放回去。
+
+_cfilep = 复制文件路径
+_cfolderp = 复制文件所在目录
+_cfiled = 复制文件内容
+_ot = One Time Stop
+_pitswp = PitSwap
+_exportedto = 导出到
+;============
+;9.9.0.2
+;============
+IGN_Restartmsg = 需要重启 Clipjump 以使更改生效。确认重启？
+IGN_tip = 鼠标点选窗口后，按 空格 即可添加。
+        = 按 Esc 返回。

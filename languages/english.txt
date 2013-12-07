@@ -86,7 +86,7 @@ SET_chnl = Select Channel
 SET_channels = Channels
 SET_ischannelmin = Use Minimal GUI
 SET_advanced = See Advanced Settings
-SET_manageignore = Manage Ignore(d) Windows
+SET_manageignore = Manage Ignored Windows
 SET_cancel = &Cancel
 SET_apply = &Apply
 
@@ -117,21 +117,18 @@ SET_T_pst = Single character combination to use with Ctrl in activating [PASTE M
           = Note that letters  E C X Z S  are reserved.
           = 
           = Also make sure to see "Copy bypassing Clipjump" in the help file
-SET_T_actmd = The shortcut to open Action Mode.
-            = The Action Mode as you may know provides interface for almost all the functionalites in Clipjump.
-            = It would be a good idea to disable rarely used shortcuts and instead use Action Mode for them.
 SET_T_chnl = Shortcut to show the <Select Channel> Window
            = Set the shortcut to None to disable the key combination
 SET_T_cfilep = Shortcut to copy selected file's path
-             = Set the shortcut to None to disable the functionality
+             = Set the shortcut to None to disable the key combination
 SET_T_cfolderp = Shortcut to copy selected folder's path.
-               = Set the shortcut to None to disable the functionality
+               = Set the shortcut to None to disable the key combination
 SET_T_cfiled = Shortcut to copy selected file contents to Clipjump.
-             = Set it to None to disable the functionality
+             = Set it to None to disable the key combination
 SET_T_ot = Select shortcut for [One Time Stop] feature.
          = [One Time Stop] feature will make Clipjump ignore the next data that is transferred to the system Clipboards from the time it is activated.
-         = Set the key to None to free the key combination and disable the functionality
-SET_T_pitswp = The shortcut to activate the PitSwap feature.
+         = Set the key to None to free the key combination
+SET_T_pitswp = The shortcut to activate the PitSwap feature. (also available from Action Mode)
              = For more details on the feature refer the Help file.
 SET_T_ischannelmin = Makes the Channel GUI minimal in details and more productive.
                    = The Minimal GUI will not contain any buttons, you will have to use ENTER to confirm.
@@ -160,8 +157,8 @@ ACT_disable = Disable
 ACT_exit = Exit Window
 
 IGN__name = Ignore Windows Manager
-IGN_add = &Add Window's
-IGN_delete = &Delete
+IGN_add = &Add Window's Class
+IGN_delete = &Delete Class
 
 LNG_error = English Language file not found in languages/english.txt . If you did it intentionally, please put it back.
 
@@ -180,3 +177,15 @@ _exportedto = exported to
 IGN_Restartmsg = It is required to restart Clipjump for changes to take effect. Do Restart ?
 IGN_tip = Press Space to add Class.
         = Press Esc to exit Class Grab Tool.
+
+;===========
+;9.9.1
+;===========
+
+TRY_options = &Options
+TRY_tools = &Tools
+HST_delall_msg = Are you sure you want to permanently clear Clipjump's History ?
+; the following key was modified in v9.9.1 and so you see its entry here
+SET_T_actmd = The shortcut to open Clipjump Action Mode.
+            = The Action Mode as you may know provides interface for almost all the functionalities in Clipjump.
+            = If you want System-Level shortcuts for those functionalities , you can find them here in the Settings Editor.

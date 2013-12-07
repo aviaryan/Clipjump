@@ -9,26 +9,34 @@ gui_Settings()
 {
 	global
 	local settingsHaveChanged := false
+	local size_limitmaxclips, size_keepsession, size_cfolderp, left_size, x_ofhotkeys, size_advanced
+
+	; get max sizes possible of window
+	size_limitmaxclips := getControlInfo("checkbox", TXT.SET_limitmaxclips, "w")
+	size_keepsession := getControlInfo("checkbox", TXT.SET_keepsession, "w")
+	right_size := size_cfolderp := getControlInfo("text", TXT._cfolderp, "w") + 9 + 120 + 50 ;9=max margin ; 120=width of hotkey control, 50 = cstm gap betn controls
+	left_size := ( size_limitmaxclips >= size_keepsession ? size_limitmaxclips : size_keepsession ) + 16 + 50 
+	; 16= max margin of any control (maxlcips)  ,  50 = width of updown
 
 	;enable tooltips
 	OnMessage(0x200, "WM_MOUSEMOVE")
 
 	Gui, Settings:New
 	Gui, Margin, 8, 8
-	Gui, Add, GroupBox,	w289 h207, % TXT.SET_main		; for every new checkbox add 18 pixels to the height, and for every new spinner (UpDown control) add 26 pixels
+	Gui, Add, GroupBox,	% "w" left_size " h207", % TXT.SET_main		; for every new checkbox add 18 pixels to the height, and for every new UpDown control add 26 pixels
 	; The total width of the GUI is about 289 x 2
 	
 	Gui, Add, CheckBox, xp+9 yp+22 Section Checked%ini_limitMaxClips% vnew_limitMaxClips gchkbox_limitMaxClips, % TXT.SET_limitmaxclips	; when this is checked the following two controls will be disabled
 	Gui, Add, Text,		xs+16, % TXT.SET_maxclips
-	Gui, Add, Edit,		xm+225 yp-3 w50 r1 Number vnew_MaxClips gedit_MaxClips
+	Gui, Add, Edit,	%	"x" left_size-55 " yp-3 w50 r1 Number vnew_MaxClips gedit_MaxClips" 		; 55 = 50(widthofupdown) + 5(margin)
 	Gui, Add, UpDown,	Range1-1000 gupdown_MaxClips, %ini_MaxClips%
 	
 	Gui, Add, Text,		xs+16, % TXT.SET_threshold
-	Gui, Add, Edit,		xm+225 yp-3 w50 r1 Number vnew_Threshold gedit_Threshold
+	Gui, Add, Edit,	%	"x" left_size-55 " yp-3 w50 r1 Number vnew_Threshold gedit_Threshold"
 	Gui, Add, UpDown,	Range1-1000 gupdown_Threshold, %ini_Threshold%
 
 	Gui, Add, Text,		xs, % TXT.SET_quality
-	Gui, Add, Edit,		xm+225 yp-3 w50 r1 Number vnew_Quality gedit_Quality
+	Gui, Add, Edit,	%	"x" left_size-55 " yp-3 w50 r1 Number vnew_Quality gedit_Quality"
 	Gui, Add, UpDown,	Range1-100 gupdown_Quality, %ini_Quality%
 
 	Gui, Add, Checkbox, xs Checked%ini_CopyBeep% 		vnew_copyBeep 			gchkbox_copybeep, 		% TXT.SET_copybeep
@@ -37,45 +45,49 @@ gui_Settings()
 	Gui, Add, Checkbox, % "xs Checked" !ini_formatting " vnew_formatting			gchkbox_formatting",	% TXT.SET_formatting
 
 	;---- Clipboard H
-	Gui, Add, GroupBox,	xm y223 w289 h74,	% TXT.SET_cb  ;h=169 + 16 ; + 10 in v8.7
+	Gui, Add, GroupBox, % "xm y223 w" left_size " h74",	% TXT.SET_cb  ;h=169 + 16 ; + 10 in v8.7
 
 	Gui, Add, Text,		xp+9 yp+22,		% TXT.SET_daystostore
-	Gui, Add, Edit,		xm+225 yp-3 w50 r1 Number vnew_DaysToStore gedit_DaysToStore
+	Gui, Add, Edit,	%	"x" left_size-55 " yp-3 w50 r1 Number vnew_DaysToStore gedit_DaysToStore"
 	Gui, Add, UpDown,	Range0-100000 gupdown_DaysToStore, %ini_DaysToStore%
 
 	Gui, Add, Checkbox,	xs y+8 Checked%ini_IsImageStored% vnew_IsImageStored gchkbox_IsImageStored, % TXT.SET_images
 
 	;---- Shortcuts
-	Gui, Add, GroupBox, ym w289 h207 vshortcutgroupbox,	Shortcuts
+	x_ofhotkeys := left_size+right_size+5-120
+	;5 is gap betn two adjacent group boxes , 120 is width of hotkey control
+	Gui, Add, GroupBox, % "ym w" right_size " h207 vshortcutgroupbox",	% TXT.SET_shortcuts
 	Gui, Add, Text, 	xp+9 yp+22 section,	% TXT.SET_pst
-	Gui, Add, Edit, 	Limit1 Uppercase -Wantreturn xs+155 yp-3 w120 vpst_K ghotkey_paste, % paste_k
+	Gui, Add, Edit, %	"Limit1 Uppercase -Wantreturn x" x_ofhotkeys " yp-3 w120 vpst_K ghotkey_paste", % paste_k
 	Gui, Add, Text, 	xs y+8,		% TXT.SET_actmd
-	Gui, Add, Hotkey, 	xs+155 yp-3 vactmd_K   ghotkey_actmd, % Actionmode_K
+	Gui, Add, Hotkey, 	x%x_ofhotkeys% yp-3 vactmd_K   ghotkey_actmd, % Actionmode_K
 	Gui, Add, Text, 	xs y+8,		% TXT._cfilep
-	Gui, Add, Hotkey, 	xs+155 yp-3 vcfilep_K   ghotkey_cfilep, % Copyfilepath_K
+	Gui, Add, Hotkey, 	x%x_ofhotkeys% yp-3 vcfilep_K   ghotkey_cfilep, % Copyfilepath_K
 	Gui, Add, Text,		xs y+8,		% TXT._cfolderp
-	Gui, Add, Hotkey,	xs+155 yp-3 vcfolderp_K ghotkey_cfolderp, % Copyfolderpath_K
+	Gui, Add, Hotkey,	x%x_ofhotkeys% yp-3 vcfolderp_K ghotkey_cfolderp, % Copyfolderpath_K
 	Gui, Add, Text,		xs y+8,		% TXT._cfiled
-	Gui, Add, Hotkey,	xs+155 yp-3 vcfiled_K   ghotkey_cfiled, % Copyfiledata_K
+	Gui, Add, Hotkey,	x%x_ofhotkeys% yp-3 vcfiled_K   ghotkey_cfiled, % Copyfiledata_K
 	Gui, Add, Text,		xs y+8,		% TXT.SET_chnl
-	Gui, Add, Hotkey,	xs+155 yp-3 vchnl_K		ghotkey_chnl, % channel_K
+	Gui, Add, Hotkey,	x%x_ofhotkeys% yp-3 vchnl_K		ghotkey_chnl, % channel_K
 	Gui, Add, Text,		xs y+8,		% TXT._ot
-	Gui, Add, Hotkey,	xs+155 yp-3 vot_K		ghotkey_ot, % onetime_K
+	Gui, Add, Hotkey,	x%x_ofhotkeys% yp-3 vot_K		ghotkey_ot, % onetime_K
 
 	;---- Channels
-	Gui, Add, GroupBox, xs-9 y223 w289 h74, % PROGNAME " " TXT.SET_channels 	;h=169 + 16 ; +10 in v8.7 
+	Gui, Add, GroupBox, % "xs-9 y223 w" right_size " h74", % PROGNAME " " TXT.SET_channels
 	Gui, Add, Text, 	xs yp+22,	% TXT._pitswp " Hotkey"
-	Gui, Add, Hotkey,	xs+155 yp-3 vpitswp_K  ghotkey_pitswp, % pitswap_K
+	Gui, Add, Hotkey,	x%x_ofhotkeys% yp-3 vpitswp_K  ghotkey_pitswp, % pitswap_K
 	Gui, Add, Checkbox, xs y+8 Checked%ini_IsChannelMin% vnew_IsChannelMin gchkbox_isChannelMin, % TXT.SET_ischannelmin
 
 	;---- Buttons
+	size_advanced := getControlInfo("text", TXT.SET_advanced, "w", "Underline")
+	Gui, Settings:Default
 	Gui, Font, Underline
-	Gui, Add, Text, 	y303 x480 cBlue gsettings_open_advanced, % TXT.SET_advanced
+	Gui, Add, Text, 	% "y303 x" left_size+right_size+5-size_advanced " cBlue gsettings_open_advanced", % TXT.SET_advanced 	;+5 for gap betn group boxes
 	Gui, Add, Text, 	x9 yp cBlue gClassTool, % TXT.SET_manageignore
 	Gui, font, norm
-	Gui, Add, Button,	x186 y328 w75 h23 Default gsettingsButtonOK, 	&OK 	;57 in vertical
-	Gui, Add, Button,	x+8 w75 h23 gsettingsButtonCancel,			% TXT.SET_cancel
-	Gui, Add, Button,	x+8 w75 h23	Disabled vsettingsButtonApply gsettingsButtonApply,	% TXT.SET_apply
+	Gui, Add, Button,	% "x" ((left_size+right_size)/2)-60 " y328 Default gsettingsButtonOK", 	&OK 	;57 in vertical
+	Gui, Add, Button,	x+8 gsettingsButtonCancel,			% TXT.SET_cancel
+	Gui, Add, Button,	x+8	Disabled vsettingsButtonApply gsettingsButtonApply,	% TXT.SET_apply
 	GuiControl, Disable, settingsButtonApply
 
 	Gui, Settings:Show, , %PROGNAME% Settings
@@ -383,23 +395,23 @@ save_Default(full=1){
 	IniWrite, %VERSION%,% CONFIGURATION_FILE, System, Version
 
 	s := "Shortcuts"
-	Ini_Write(s, "Copyfilepath_K", "^!c")
+	Ini_Write(s, "Copyfilepath_K")
 	Ini_Write(s, "Copyfolderpath_K")
-	Ini_Write(s, "Copyfiledata_K", "^!f")
-	Ini_write(s, "channel_K", "^+c")
+	Ini_Write(s, "Copyfiledata_K")
+	Ini_write(s, "channel_K")
 	Ini_write(s, "onetime_k") 			;No default specified
 	ini_write(s, "paste_k", "V")
 	Ini_write(s, "actionmode_k", "^+a")
 
-	ini_write("Channels",  "pitswap_K",  "^+z")
+	ini_write("Channels",  "pitswap_K")
 	Ini_Write("Channels", "IsChannelMin", "0")
 	;---- Non GUI
 	Ini_write(s := "Advanced", "history_k", "Win + c")
 	Ini_write(s, "instapaste_write_clipboard", "0")
 	ini_write(s, "Start_with_formatting", "1")
 	ini_write(s, "Show_pasting_tip", "0")
-	ini_write(s, "windows_copy_shortcut", "")
-	ini_write(s, "windows_cut_shortcut",  "")
+	ini_write(s, "windows_copy_shortcut")
+	ini_write(s, "windows_cut_shortcut")
 	ini_write(s, "is_duplicate_copied", "1")
 	ini_write(s, "actionmode_keys", ACTIONMODE_DEF)
 	ini_write(s, "beepFrequency", 1500)

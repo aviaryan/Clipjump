@@ -14,37 +14,48 @@
 
 channelGUI(destroygui=0){
 	global
-	static local_ini_IsChannelMin
+	static local_ini_IsChannelMin, advice3wt, advice1wt, advicewidth, cancelwt
 
 	if (destroygui) {
 		local_ini_IsChannelMin := ""
 		return
 	}
 
+	advice3wt := getControlInfo("text", TXT.CNL_advice3, "w", "s8", "Lucida Console")
+	advice1wt := getControlInfo("text", TXT.CNL_advice1, "w", "s8", "Lucida Console")
+	advicewidth := advice3wt >= advice1wt ? advice3wt : advice1wt
+	advicewidth := advicewidth<450 ? 400 : advicewidth
+	try Gui, Channel:Default 			; just incase no gui exists
+
 	If ( ini_IsChannelMin != local_ini_IsChannelMin )
 	{
 			Gui, Channel:New  ;Total width ~ 549
 			Gui, Font, S12
-			Gui, Add, Text, x4 y6 w235, % TXT.CNL_choose
+			Gui, Add, Text, x4 y6, % TXT.CNL_choose
+
 			Gui, Font, S10
-			Gui, Add, Edit, x+165 yp-2 +Readonly vcIndex
+			Gui, Add, Edit, % "x" advicewidth-150-4 " w150 section yp-2 +Readonly vcIndex"
 			Gui, Add, Updown,% "Wrap Range0-" CN.Total " gChannelupdown vChannelupdown", 0
 
 			Gui, Font, S12
-			Gui, Add, Text, x4 y+10 w235, % TXT.CNL_channelname
+			Gui, Add, Text, x4 y+10, % TXT.CNL_channelname
 			Gui, Font, S10
-			Gui, Add, Edit, x+165 yp-2 w150 vcname -Multi gedit_cname, % CN.Name
+			Gui, Add, Edit, xs yp-2 w150 vcname -Multi gedit_cname, % CN.Name
 
 		if !ini_IsChannelMin
 		{
 			Gui, Font, S8, Lucida Console
-			Gui, Add, Text, x4 y+25, % TXT.CNL_advice1
+			Gui, Add, Text, x4 y+25 section vtxt_cnladvice, % TXT.CNL_advice1
 			Gui, Add, Text, y+5, % TXT.CNL_advice2
 			Gui, Add, Text, y+5, % TXT.CNL_advice3
+			; see top for the width calculation
 
 			Gui, Font, S10, Arial
-			Gui, Add, Button, x4 y+25 w90 gchannel_Usebutton Default, % TXT.CNL_use
-			Gui, Add, Button, x+385 yp+0 w70 gchannel_Cancelbutton, % TXT.CNL_cancel
+			Gui, Add, Button, x4 y+25 gchannel_Usebutton Default, % TXT.CNL_use
+			; get width
+			cancelwt := advicewidth-4-getControlInfo("button", TXT.CNL_cancel, "w", "s10", "Arial")
+			Gui, Channel:Default
+			Gui, Add, Button, % "x" cancelwt " yp+0 gchannel_Cancelbutton", % TXT.CNL_cancel
 			Gui, Add, StatusBar
 
 			Hotkey, Enter, Channel_usebutton, Off
