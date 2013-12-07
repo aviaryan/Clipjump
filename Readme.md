@@ -1,4 +1,4 @@
-## Clipjump
+## [Clipjump](http://avi.uco.im/projects/clipjump)
 A Magical Clipboard Manager  
   
 [Download](http://goo.gl/tUi4K)  

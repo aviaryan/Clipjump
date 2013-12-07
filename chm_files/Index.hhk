@@ -102,6 +102,10 @@
 		<param name="Local" value="USAGE/channels.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Translating Clipjump">
+		<param name="Local" value="USAGE/translate.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="PitSwap">
 		<param name="Local" value="USAGE/channels.html#pitswap">
 		</OBJECT>
