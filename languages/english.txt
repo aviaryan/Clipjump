@@ -189,3 +189,14 @@ HST_delall_msg = Are you sure you want to permanently clear Clipjump's History ?
 SET_T_actmd = The shortcut to open Clipjump Action Mode.
             = The Action Mode as you may know provides interface for almost all the functionalities in Clipjump.
             = If you want System-Level shortcuts for those functionalities , you can find them here in the Settings Editor.
+
+;==========
+;9.9.1.9
+;==========
+
+CNL_delete = &Delete Channel
+CNL_delmsg = Do you really want to delete this channel ? Note that the process is irreversible and you will lose all the clips stored in it.
+CNL_del_default = Deleting default channel (#0) is not allowed.
+TIP_empty3 = Release Ctrl to exit.
+UPD_restart = Clipjump will now restart to apply the updates.
+UPD_automsg = Click Yes to auto update Clipjump or No to go to website.

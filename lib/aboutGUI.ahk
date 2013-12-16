@@ -14,7 +14,7 @@ aboutGUI(){
 	Gui, 2:Add, Edit, x0 y0 w0 h0,
 	Gui, 2:Add, Link, x188 y5 gupdt, <a href="%PRODUCT_PAGE%">%PROGNAME%</a> v%version%
 	Gui, 2:Font, S12, 
-	Gui, 2:Add, Link, xp+3 y+3 gblog, <a href="%AUTHOR_PAGE%">Avi Aryan</a> (C) 2013
+	Gui, 2:Add, Link, xp+3 y+3 gblog, <a href="%AUTHOR_PAGE%">Avi Aryan</a> (C) %A_year%
 
 	Gui, 2:Font, S11 norm, Arial
 	Gui, 2:Add, Text, y+30 x10, Language
@@ -87,7 +87,7 @@ trayMenu(destroy=0){
 	}
 
 	;Tray Icon
-	if !A_isCompiled			;Important for showing Cj's icon in the Titlebar of GUI
+	if !(A_isCompiled) && !(H_COMPILED)			;Important for showing Cj's icon in the Titlebar of GUI
 		Menu, Tray, Icon, icons\icon.ico
 	Menu, Tray, NoStandard
 	Menu, Tray, Add, % TXT.ABT__name " " PROGNAME, main
@@ -114,8 +114,13 @@ trayMenu(destroy=0){
 	return
 
 reload:
-	OnExit
+	OnExit,
 	save_Exit()
-	Reload
+	if H_COMPILED
+	{
+		run % A_AhkPath 		; which is the H exe
+		Exitapp
+	}
+	else Reload
 	return
 }

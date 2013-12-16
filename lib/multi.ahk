@@ -10,11 +10,13 @@
 ;	CN.NG = contains real channel indexes 0,1,2
 ;	CN.Total = Total number of channels
 ; 	CN.pit_NG = contains item active before the Pit swap
+;   
+;   out of these CN.Total and TEMPSAVE,CURSAVE are only permananent var, all others are temporarily created at channel change.
 ;----------------------------------------------------------------------
 
 channelGUI(destroygui=0){
 	global
-	static local_ini_IsChannelMin, advice3wt, advice1wt, advicewidth, cancelwt
+	static local_ini_IsChannelMin, advice3wt, advice1wt, advicewidth, cancelwt, deletewt
 
 	if (destroygui) {
 		local_ini_IsChannelMin := ""
@@ -23,6 +25,9 @@ channelGUI(destroygui=0){
 
 	advice3wt := getControlInfo("text", TXT.CNL_advice3, "w", "s8", "Lucida Console")
 	advice1wt := getControlInfo("text", TXT.CNL_advice1, "w", "s8", "Lucida Console")
+	deletewt := getControlInfo("button", TXT.CNL_delete, "w", "s10", "Arial")
+	cancelwt := getControlInfo("button", TXT.CNL_cancel, "w", "s10", "Arial")
+
 	advicewidth := advice3wt >= advice1wt ? advice3wt : advice1wt
 	advicewidth := advicewidth<450 ? 400 : advicewidth
 	try Gui, Channel:Default 			; just incase no gui exists
@@ -49,13 +54,11 @@ channelGUI(destroygui=0){
 			Gui, Add, Text, y+5, % TXT.CNL_advice2
 			Gui, Add, Text, y+5, % TXT.CNL_advice3
 			; see top for the width calculation
-
 			Gui, Font, S10, Arial
 			Gui, Add, Button, x4 y+25 gchannel_Usebutton Default, % TXT.CNL_use
-			; get width
-			cancelwt := advicewidth-4-getControlInfo("button", TXT.CNL_cancel, "w", "s10", "Arial")
-			Gui, Channel:Default
-			Gui, Add, Button, % "x" cancelwt " yp+0 gchannel_Cancelbutton", % TXT.CNL_cancel
+			; see top for widths
+			Gui, Add, Button, % "x" advicewidth -4 -deletewt -cancelwt " yp+0 gchannel_deleteButton", % TXT.CNL_delete
+			Gui, Add, Button, % "x" advicewidth -cancelwt " yp+0 gchannel_Cancelbutton", % TXT.CNL_cancel
 			Gui, Add, StatusBar
 
 			Hotkey, Enter, Channel_usebutton, Off
@@ -66,6 +69,7 @@ channelGUI(destroygui=0){
 
 			Hotkey, IfWinActive, % PROGNAME " " TXT.CNL__name
 			Hotkey, Enter, Channel_usebutton, On
+			Hotkey, Del, Channel_deletebutton, On
 			Hotkey, IfWinActive
 		}
 
@@ -99,6 +103,23 @@ Channel_cancelbutton:
 	Gui, Channel:hide
 	GuiControl, , cIndex, % CN.NG
 	GuiControl, , cName,  % CN.Name
+	return
+
+;delete routine
+Channel_deletebutton:
+	Gui, Channel:submit, nohide
+	if !cIndex
+		MsgBox, 48, Clipjump Channels, % TXT.CNL_del_default
+	else
+	{
+		MsgBox, 52, % "Clipjump Channel : " cname , % TXT.CNL_delmsg
+		IfMsgBox, Yes
+		{
+			manageChannel(cIndex)
+			GuiControl, channel: , cIndex, % cIndex-1
+			gosub ChannelUpdown
+		}
+	}
 	return
 
 channelGUIClose:
@@ -192,6 +213,53 @@ channel_Pitindex(){
 		}
 	}
 	return N
+}
+
+;--------------------------- Other functions ------------------------------------------------------
+
+; moves a channel or deletes it; in moving dest channel if exists is deleted
+manageChannel(orig, new=""){
+	static l := "clips fixate thumbs"
+	global CN
+
+	if new=
+	{
+		loop, parse, l, % A_space
+			FileRemoveDir, % "cache\" A_LoopField orig, 1
+		try Inidelete,% CONFIGURATION_FILE, Channels, % orig 
+		; move channels on step back
+		loop % CN.Total-orig-1
+		{
+			c := A_index
+			loop, parse, l, % A_space
+				FileMoveDir, % "cache\" A_LoopField orig+c , % "cache\" A_LoopFileName orig+c-1, R
+			ini_write("Channels", orig+c-1, (z:=Ini_read("Channels", orig+c)) ? z : orig+c-1, 0 )
+			CN["CURSAVE" orig+c-1] := CN["CURSAVE" orig+c]
+			CN["TEMPSAVE" orig+c-1] := CN["TEMPSAVE" orig+c]
+		}
+		;done ... final steps
+		if !c 						;if the channel was last-loop not run
+			CN["CURSAVE" orig] := CN["TEMPSAVE" orig] := ""
+
+		CN.Total -= 1
+		Gui, Channel:Default
+		GuiControl, % "+Range0-" CN.Total, ChannelUpdown
+		if CN.NG == orig
+			TEMPSAVE := "" , CURSAVE := "" 		; if delted chnl was active , it is dead now
+			, changeChannel(orig-1)
+	}
+	else
+	{
+		;NOT IMPLEMENTED YET
+		loop, parse, l, % A_space
+			FileRemoveDir, % "cache\" A_LoopField new, 1
+		loop, parse, l, % A_Space
+			FileMoveDir, % "cache\" A_loopfield orig, % "cache\" A_loopfield new, R
+		ini_write("Channels", new, (z:=Ini_read("Channels", orig)) ? z : new, 0 )
+		; final steps
+		if CN.NG == orig
+			changeChannel(new)
+	}
 }
 
 ;-------------------------- ACCESSIBILTY SHORTCUTS ------------------------------------------------

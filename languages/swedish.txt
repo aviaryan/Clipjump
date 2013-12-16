@@ -1,0 +1,186 @@
+﻿;Swedish translation for Clipjump
+;TranslatorName=Åke Engelbrektson
+;TranslatorContact=eson57@gmail.com
+;TranslatorURL=http://svenskasprakfiler.se
+;LastUpdated=09 Dec 2013
+
+;======
+;v9.9.0.1
+;======
+
+TIP_text = Text
+TIP_file_folder = Fil/Mapp
+TIP_copied = Överförd till
+TIP_empty1 = Klipp 0 av 0
+TIP_empty2 = är tom
+TIP_error = [Förhandsgranskning/sökväg kan inte läsas in]
+TIP_more = [Mer]
+TIP_pasting = Klistrar in...
+TIP_deleted = Borttagen
+TIP_alldeleted = All data borttagen
+TIP_cancelled = Avbruten
+TIP_fixed = [FIXED]
+TIP_noformatting = INGEN FORMATERING
+TIP_filepath = Sökväg(ar) kopierad(e) till
+TIP_folderpath = Aktiv mappsökväg kopierad till
+TIP_activated = AKTIVERAD
+TIP_deactivated = INAKTIVERAD
+TIP_cancelm = Avbryt inklistringsprocess
+TIP_delm = Ta bort aktuell
+TIP_delallm = Ta bort alla
+TIP_modem = Släpp Ctrl för att bekräfta
+          = Tryck X för att växla läge
+
+ABT__name = Om
+ABT_reset = Återställ &Clipjump
+ABT_resetM = Vill du verkligen återställa Clipjump genom att ta bort alla klipp och inställningar?
+ABT_removeStart = En autostartpost för Clipjump hittades. Vill du ta bort den också?
+ABT_resetfinal = kommer att stängas nu.
+ABT_noupdate = Inga uppdateringar tillgängliga
+
+HST__name = Urklippshistorik
+HST_preview = &Förhandsgranskning
+HST_del = &Ta bort objekt
+HST_clear = Rensa &historik
+HST_search = Sök&filter
+HST_partial = Pa&rtiell
+HST_clip = Klipp
+HST_date = Datum
+HST_size = Storlek(B)
+HST_dconsump = Diskanvändning
+HST_viewimage = [Dubbelklick för att visa bild]
+HST_m_prev = &Förhandsgranskning
+HST_m_copy = &Kopiera 			(Ctrl+C)
+HST_m_insta = &Snabbinklistring 	(Space)
+HST_m_export = &Exportera klipp 	(Ctrl+E)
+HST_m_ref = &Uppdatera
+HST_m_del = &Ta bort
+
+PRV__name = Förhandsgranska
+PRV_copy = Kopiera till Urklipp
+PRV_find = S&ök
+
+SET__name = Inställningar
+SET_main = Allmänt
+SET_limitmaxclips = &Begränsa det maximala antalet aktiva urklippskanaler
+SET_maxclips = &Minsta antalet aktiva urklippskanaler
+SET_threshold = &Tröskelvärde
+SET_quality = &Kvallitet på förhandsgranskningminiatyrer
+SET_copybeep = &Pip efter kopiering
+SET_ismessage = &Visa verifieringsruta vid kopiering
+SET_keepsession = &Bevara data i Urklipp när programmet startas om
+SET_formatting = Starta med 'Ingen formatering' aktiverad
+SET_cb = Urklippshistorik
+SET_daystostore = Antal dagar att bevara objekt i &historiken
+SET_images = Lagra &bilder i historiken
+SET_shortcuts = Genvägar
+SET_pst = Inklistringsläge (Ctrl + ..)
+SET_actmd = Åtgärdsläge
+SET_chnl = Välj kanal
+SET_channels = Kanaler
+SET_ischannelmin = Använd minimalistiskt utseende
+SET_advanced = Avancerat
+SET_manageignore = Hantera undantagna fönster
+SET_cancel = &Avbryt
+SET_apply = &Verkställ
+
+SET_advanced_error = kan inte hitta inställningsfilen (settings.ini) eller Notepad.exe? Tillse att båda finns på sina respektive platser.
+                   =
+                   = Försök kontakta utvecklaren om problemen kvarstår.
+SET_T_limitmaxclips = Kommer Clipjumps urklippskanaler att vara begränsade
+                    = Ibockad = Ja
+SET_T_maxclips = Det är det minimala antalet urklippskanaler som du vill skall vara aktiva samtidigt.
+               = Om du vill ha 20, ANGE 20.
+SET_T_threshold = Tröskelvärdet är det antal extra urklippskanaler som du vill aktivera utöver minimigränsen..
+                = Högsta rekommenderade värde är 10.
+                =
+                = [TIPS] - Tröskelvärde = 1 gör så att Clipjump lagrar ett exakt maxantal urklippskanaler.
+SET_T_quality = Kvaliteten du vill ha på förhandsgranskningsminiatyrerna.
+              = Rekommenderat värde är 90
+              = Kan vara mellan 1 och 100
+SET_T_copybeep = Aktivera för att höra ett anpassningsbart pip när urklippsdata läggs till i Clipjump.
+               =
+               = Du kan ändra pipets frekvens under [Advanced] i Settings.ini
+SET_T_keepsession = Skall Clipjump fortsätta med alla sparade urklippskanaler efter en omstart
+SET_T_ismessage = Detta värde avgör om bekräftelsemeddelande skall visas eller ej, vid kopierings-/urklippsåtgärder.
+SET_T_formatting = Vill du att Clipjump skall starta med 'Ingen formatering' aktiverad?
+                 = Bocka i för 'Ja'.
+SET_T_daystostore = Antal dagar som urklippsinnehållet skall lagras
+SET_T_images = Skall urklippta bilder lagras i historiken?
+SET_T_pst = Enkel teckenkombination att använda tillsammans med Ctrl för att aktivera [INKLISTRINGSLÄGE]
+          = Notera att bokstäverna E C X Z S är reserverade.
+          = 
+          = Läs också "Copy bypassing Clipjump" i hjälpfilen
+SET_T_chnl = Genväg för att visa dialogen 'Välj kanal'.
+           = Ange genvägen som 'Inget' för att inaktivera tangentkombinationen
+SET_T_cfilep = Genväg för att kopiera sökvägen till markerad fil.
+             = Ange genvägen som 'Inget' för att inaktivera tangentkombinationen
+SET_T_cfolderp = Genväg för att kopiera sökvägen till markerad mapp.
+               = Ange genvägen som 'Inget' för att inaktivera tangentkombinationen
+SET_T_cfiled = Genväg för att kopiera markerat filinnehåll till Clipjump.
+             = Ange genvägen som 'Inget' för att inaktivera tangentkombinationen
+SET_T_ot = Välj genväg för 'Engångsstopp'.
+         = 'Engångsstopp' gör så att Clipjump hoppar över nästa dataöverföring till Urklipp, räknat från den tidpunkt då funktionen aktiveras.
+         = Ange genvägen som 'Inget' för att frigöra tangentkombinationen
+SET_T_pitswp = Genväg för att aktivera 'PitSwap'. (tillgänglig även från Åtgärdsläge)
+             = För mer information om funktionen, hänvisas till hjälpfilen.
+SET_T_ischannelmin = Gör 'Kanaldialogen' mindre detaljerad och mer produktiv.
+                   = Minimalistiskt utseende innehåller inga knappar, utan du använder [Enter] för att bekräfta ändringar.
+
+CNL__name = Kanaler
+CNL_choose = &Välj Urklippskanal
+CNL_channelname = Kanal&namn
+CNL_advice1 = Kanal 0 (Standard) är huvudkanalen och bör användas normalt.
+CNL_advice2 = Kanalnamnändringar sparas automatiskt.
+CNL_advice3 = Nästa kanal är tillgängliga endast om den föregående har aktiverats (används).
+CNL_use = &Använd kanal
+CNL_cancel = Avbr&yt
+CNL_statusbar = Klipp i kanalen
+
+TRY_incognito = &Inkognitoläge
+TRY_disable = &Inaktivera
+TRY_startup = Starta vid systemstart
+TRY_updates = Sök efter &uppdateringar
+TRY_help = Hjälp
+TRY_restart = &Starta om Clipjump
+TRY_exit = &Avsluta
+
+ACT__name = ÅTGÄRDSLÄGE
+ACT_enable = Aktivera
+ACT_disable = Inaktivera
+ACT_exit = Stäng detta fönster
+
+IGN__name = Hantera undantagna fönster
+IGN_add = &Lägg till fönsterklass
+IGN_delete = &Ta bort klass
+
+LNG_error = Engelsk språkfil kan inte hittas i ./languages/english.txt . Vänligen, lägg tillbaka den om du tagit bort den medvetet.
+
+_cfilep = Kopiera sökväg(ar)
+_cfolderp = Kopiera aktiv mappsökväg
+_cfiled = Kopiera fildata
+_ot = Engångsstopp
+_pitswp = PitSwap
+_exportedto = exporterad till
+
+
+;============
+;9.9.0.2
+;============
+
+IGN_Restartmsg = Du måste starta om Clipjump för ändringarna skall få effekt. Vill du starta om nu?
+IGN_tip = Tryck Mellanslag för att lägga till en klass.
+        = Tryck Esc för att avsluta klassinhämtningsverktyget.
+
+;===========
+;9.9.1
+;===========
+
+TRY_options = &Alternativ
+TRY_tools = &Verktyg
+HST_delall_msg = Vill du verkligen rensa Clipjumps historik permanent?
+; the following key was modified in v9.9.1 and so you see its entry here
+SET_T_actmd = Genväg för att öppna Clipjump Åtgärdsläge.
+            = Åtgärdsläget tillhandahåller ett grafiskt gränssnitt för nästan alla funktioner i Clipjump.
+            = Vill du ha genvägar på systemnivå för dessa funktioner, hittar du dem här i 'Inställningar'.
+			

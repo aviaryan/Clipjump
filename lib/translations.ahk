@@ -46,7 +46,7 @@ Translations_fixglobalvars(){
 	MSG_TRANSFER_COMPLETE := TXT.TIP_copied " " PROGNAME    ;not space
 	CopyMessage := !ini_IsMessage ? "" : MSG_TRANSFER_COMPLETE " {" CN.Name "}"
 	
-	MSG_CLIPJUMP_EMPTY := TXT.TIP_empty1 "`n`n" PROGNAME " " TXT.TIP_empty2  ;not `n`n
+	MSG_CLIPJUMP_EMPTY := TXT.TIP_empty1 "`n`n" PROGNAME " " TXT.TIP_empty2 "`n`n" TXT.TIP_empty3 ;not `n`n
 	MSG_ERROR := TXT.TIP_error
 	MSG_MORE_PREVIEW := TXT.TIP_more
 	MSG_PASTING := TXT.TIP_pasting
@@ -65,7 +65,4 @@ Translations_loadlist(){
 		r .= Substr(A_LoopFileName, 1, -4) "|"
 		, r .= ( Substr(A_LoopFileName, 1, -4) == ini_Lang ) ? "|" : ""
 	GuiControl, 2:, ini_Lang, % "|" r
-}
-
-;------------ Translation Extractor -------------------------
-;extracts translatable text from language files 
+} 

@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 9.9.1
+;@Ahk2Exe-SetVersion 9.9.1.9
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -40,19 +40,19 @@ global ini_LANG := ""
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "9.9.1"
+global VERSION := "9.9.1.9"
 global CONFIGURATION_FILE := "settings.ini"
 
 ini_LANG := ini_read("System", "lang")
 global TXT := Translations_load("languages/" ini_LANG ".txt") 		;Load translations
 
 global UPDATE_FILE := "https://raw.github.com/avi-aryan/Clipjump/master/version.txt"
-global PRODUCT_PAGE := "http://avi.uco.im/projects/clipjump/"
+global PRODUCT_PAGE := "http://clipjump.sourceforge.net"
 global HELP_PAGE := "http://avi-win-tips.blogspot.com/2013/04/clipjump-online-guide.html"
 global AUTHOR_PAGE := "http://avi.uco.im"
 
 global MSG_TRANSFER_COMPLETE := TXT.TIP_copied " " PROGNAME    ;not space
-global MSG_CLIPJUMP_EMPTY := TXT.TIP_empty1 "`n`n" PROGNAME " " TXT.TIP_empty2  ;not `n`n
+global MSG_CLIPJUMP_EMPTY := TXT.TIP_empty1 "`n`n" PROGNAME " " TXT.TIP_empty2 "`n`n" TXT.TIP_empty3 ;not `n`n
 global MSG_ERROR := TXT.TIP_error
 global MSG_MORE_PREVIEW := TXT.TIP_more
 global MSG_PASTING := TXT.TIP_pasting
@@ -142,7 +142,7 @@ trayMenu()
 validate_Settings()
 
 loop
-{
+{	
 	IfNotExist, cache/Clips/%A_Index%.avc
 	{
 		CURSAVE := A_Index - 1 , TEMPSAVE := CURSAVE
@@ -163,7 +163,7 @@ gui, add, picture,x0 y0 w400 h300 vimagepreview,
 IfExist, %A_Startup%/Clipjump.lnk
 {
 	FileDelete, %A_Startup%/Clipjump.lnk
-	FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%/Clipjump.lnk
+	FileCreateShortcut, % H_Compiled ? A_ScriptDir "\Clipjump.exe" : A_ScriptFullPath, %A_Startup%/Clipjump.lnk
 	Menu, Options_Tray, Check, % TXT.TRY_startup
 }
 
@@ -289,7 +289,6 @@ paste:
 
 onClipboardChange:
 	Critical, On
-
 	ifwinactive, ahk_group IgnoreGroup
 		return
 
@@ -650,7 +649,7 @@ ctrlCheck:
 
 		Critical, Off
 		; The below thread will be interrupted when the Clipboard command is executed. The ONC label will exit as CALLER := 0 in the situtaion
-		
+
 		if ctrlref in cancel, delete, DeleteAll
 			if !IScurCBACTIVE 						;dont disturb current clipboard if it is already active
 				try Clipboard := oldclip_data       ;The command opens, writes and closes clipboard . The ONCC Label is launched when writing takes place.
@@ -970,7 +969,7 @@ strtup:
 	Menu, Options_Tray, Togglecheck, % TXT.TRY_startup
 	IfExist, %A_Startup%/Clipjump.lnk
 		FileDelete, %A_Startup%/Clipjump.lnk
-	else FileCreateShortcut, %A_ScriptFullPath%, %A_Startup%/Clipjump.lnk
+	else FileCreateShortcut, % H_Compiled ? A_ScriptDir "\Clipjump.exe" : A_ScriptFullPath, %A_Startup%/Clipjump.lnk
 	return
 
 updt:
@@ -978,14 +977,48 @@ updt:
 	URLDownloadToFile, %UPDATE_FILE%, %A_ScriptDir%/cache/latestversion.txt
 	ToolTip, ,,, 3
 	FileRead, latestVersion, %A_ScriptDir%/cache/latestversion.txt
+
+	if Instr(latestVersion, "z") 										; z in the update file is a version which is non-auto updatable
+		latestVersion := Substr(latestVersion, 2) , noautoupdate := 1
+	else noautoupdate := 0
+
 	if !IsLatestRelease(VERSION, latestversion, "b|a")
 	{
-		MsgBox, 48, Clipjump Update available, % "Your Version: `t`t" VERSION "`nCurrent version: `t`t" latestVersion "`n`nGo to website."
-		IfMsgBox OK
-			BrowserRun(PRODUCT_PAGE)
+		if noautoupdate {
+			MsgBox, 48, Clipjump Update available, % "Your Version: `t`t" VERSION "`nCurrent version: `t`t" latestVersion "`n`nGo to website to download newer version" 
+			. " as auto-update facility is not available."
+			IfMsgBox OK
+				BrowserRun(PRODUCT_PAGE)
+		}
+		else {
+			MsgBox, 67, Clipjump Update Available, % "The latest version is " latestVersion ". `n" TXT.UPD_automsg
+			IfMsgBox, Yes
+				AutoUpdate(latestVersion)
+			else IfMsgBox, No
+				BrowserRun(PRODUCT_PAGE)
+		}
 	}
 	else MsgBox, 64, %PROGNAME%, % TXT.ABT_noupdate
 	return
+
+AutoUpdate(v){
+	loop, cache\clipjumpupdate*.exe 		; old files
+		FileDelete, % A_LoopFileFullPath
+
+	Tooltip, % "Downloading Update file for version " v,,, 3
+	URLDownloadToFile, % "https://sourceforge.net/projects/clipjump/files/clipjumpupdate_" v ".exe/download", % "cache\" v ".exe"
+	if ErrorLevel=1
+		return autoTooltip("Update was not downloaded", 4, 3)
+	Tooltip,,,, 3
+	while !FileExist("cache\" v ".exe")
+		sleep 20
+
+	MsgBox, 64, Clipjump Update, % TXT.UPD_restart
+	OnExit
+	save_Exit()
+	run % "cache\" v ".exe"
+	Exitapp
+}
 
 ;************************************** Helper FUNCTIONS ****************************************
 
@@ -1001,7 +1034,7 @@ addToWinClip(lastEntry, extraTip)
 changeIcon(){
 global
 
-	if A_IsCompiled
+	if A_IsCompiled or H_Compiled 		; H_Compiled is a user var created if compiled with ahk_h
 		Menu, tray, icon,*
 	else
 		Menu, tray, icon, icons\icon.ico
@@ -1156,6 +1189,7 @@ Receive_WM_COPYDATA(wParam, lParam)
 
 ;##############################################################################
 
+;#Include %A_ScriptDir%\lib\API.ahk
 #Include %A_ScriptDir%\lib\translations.ahk
 #Include %A_ScriptDir%\lib\classtool.ahk
 #Include %A_ScriptDir%\lib\multi.ahk
