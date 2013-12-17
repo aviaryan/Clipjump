@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 9.9.1.9
+;@Ahk2Exe-SetVersion 9.9.3
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -40,7 +40,7 @@ global ini_LANG := ""
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "9.9.1.9"
+global VERSION := "9.9.3"
 global CONFIGURATION_FILE := "settings.ini"
 
 ini_LANG := ini_read("System", "lang")
@@ -978,47 +978,48 @@ updt:
 	ToolTip, ,,, 3
 	FileRead, latestVersion, %A_ScriptDir%/cache/latestversion.txt
 
-	if Instr(latestVersion, "z") 										; z in the update file is a version which is non-auto updatable
-		latestVersion := Substr(latestVersion, 2) , noautoupdate := 1
-	else noautoupdate := 0
+	;if Instr(latestVersion, "z") 										; z in the update file is a version which is non-auto updatable
+	;	latestVersion := Substr(latestVersion, 2) , noautoupdate := 1
+	;else noautoupdate := 0
+	noautoupdate := 1
 
 	if !IsLatestRelease(VERSION, latestversion, "b|a")
 	{
 		if noautoupdate {
 			MsgBox, 48, Clipjump Update available, % "Your Version: `t`t" VERSION "`nCurrent version: `t`t" latestVersion "`n`nGo to website to download newer version" 
-			. " as auto-update facility is not available."
+			;. " as auto-update facility is not available."
 			IfMsgBox OK
 				BrowserRun(PRODUCT_PAGE)
 		}
-		else {
-			MsgBox, 67, Clipjump Update Available, % "The latest version is " latestVersion ". `n" TXT.UPD_automsg
-			IfMsgBox, Yes
-				AutoUpdate(latestVersion)
-			else IfMsgBox, No
-				BrowserRun(PRODUCT_PAGE)
-		}
+		;else {
+		;	MsgBox, 67, Clipjump Update Available, % "The latest version is " latestVersion ". `n" TXT.UPD_automsg
+		;	IfMsgBox, Yes
+		;		AutoUpdate(latestVersion)
+		;	else IfMsgBox, No
+		;		BrowserRun(PRODUCT_PAGE)
+		;}
 	}
 	else MsgBox, 64, %PROGNAME%, % TXT.ABT_noupdate
 	return
 
-AutoUpdate(v){
-	loop, cache\clipjumpupdate*.exe 		; old files
-		FileDelete, % A_LoopFileFullPath
+;AutoUpdate(v){
+;	loop, cache\clipjumpupdate*.exe 		; old files
+;		FileDelete, % A_LoopFileFullPath
 
-	Tooltip, % "Downloading Update file for version " v,,, 3
-	URLDownloadToFile, % "https://sourceforge.net/projects/clipjump/files/clipjumpupdate_" v ".exe/download", % "cache\" v ".exe"
-	if ErrorLevel=1
-		return autoTooltip("Update was not downloaded", 4, 3)
-	Tooltip,,,, 3
-	while !FileExist("cache\" v ".exe")
-		sleep 20
+;	Tooltip, % "Downloading Update file for version " v,,, 3
+;	URLDownloadToFile, % "https://sourceforge.net/projects/clipjump/files/clipjumpupdate_" v ".exe/download", % "cache\" v ".exe"
+;	if ErrorLevel=1
+;		return autoTooltip("Update was not downloaded", 4, 3)
+;	Tooltip,,,, 3
+;	while !FileExist("cache\" v ".exe")
+;		sleep 20
 
-	MsgBox, 64, Clipjump Update, % TXT.UPD_restart
-	OnExit
-	save_Exit()
-	run % "cache\" v ".exe"
-	Exitapp
-}
+;	MsgBox, 64, Clipjump Update, % TXT.UPD_restart
+;	OnExit
+;	save_Exit()
+;	run % "cache\" v ".exe"
+;	Exitapp
+;}
 
 ;************************************** Helper FUNCTIONS ****************************************
 
@@ -1174,12 +1175,15 @@ Receive_WM_COPYDATA(wParam, lParam)
 {
 	global
     Local D
+    static k := "API:" , apif := "Act_API"
 
-    D := StrGet( NumGet(lParam + 2*A_PtrSize) ) + 0  ;unicode transfer
+   D := StrGet( NumGet(lParam + 2*A_PtrSize) )  ;unicode transfer
     if D is not Integer
-    	D := StrGet( NumGet(lParam + 2*A_PtrSize), 8, "UTF-8")  ;ansi conversion
-
-    Act_CjControl(D)
+    	if !Instr(D, k)
+    		D := StrGet( NumGet(lParam + 2*A_PtrSize), 8, "UTF-8")  ;ansi conversion
+    if Instr(D, k)
+    	%apif%(D, k)
+    else Act_CjControl(D)
 
     while !FileExist(A_temp "\clipjumpcom.txt")
     	FileAppend, a,% A_temp "\clipjumpcom.txt"

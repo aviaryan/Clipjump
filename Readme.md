@@ -14,14 +14,14 @@ It's fast , it's easy, it's magic.
 1. Get [AutoHotkey](http://www.autohotkey.com) and install it.
 2. Then double-click `Clipjump.ahk` to run it with AutoHotkey.exe
   
-#### Compiling the Source
+#### Compiling the Source (Current Method)
 1. Use [Ahk2Exe](https://github.com/fincs/Ahk2Exe) Compiler included in the AHK_L distribution to compile `Clipjump.ahk` with icon `iconx.ico`.
 2. Use a suitable version of `Unicode` as the Base File.  
   
-**AND (new method)**  
+~~**AND (new method)**  
 1. Run `_compile_genfiles.ahk` to generate `clipjump_code.ahk`  
 2. Use Ahk_H Compiler to compile `ClipjumpHexe.ahk` using a unicode AutoHotkey.exe as the base file.  
-3. ResHack the file to add icons natively into it i.e. don't use icons/icon.ico.  
+3. ResHack the file to add icons natively into it i.e. don't use icons/icon.ico.~~  
   
   
 #### Setting up the Installer
