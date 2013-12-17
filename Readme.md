@@ -1,7 +1,7 @@
 ## [Clipjump](http://clipjump.sourceforge.net)
 A Magical Clipboard Manager  
   
-[Download](http://goo.gl/tUi4K)  
+[Download](https://sourceforge.net/projects/clipjump/files/ClipjumpSetup.exe/download)  
 [Online Manual](http://avi-win-tips.blogspot.com/2013/04/clipjump-online-guide.html)
   
 A Multiple-Clipboard management utility for Windows.  
