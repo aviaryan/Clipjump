@@ -4,7 +4,7 @@
 ;returns object
 
 ;REGIONS
-;TIP , ABT , HST , PRV ,  SET , CNL , TRY , ACT , IGN , LNG, _ (used for independent names)
+;TIP , ABT , HST , PRV ,  SET , CNL , TRY , ACT , IGN , LNG, CHC _ (used for independent names)
 
 
 Translations_load(file="languages\english.txt", default_file="languages\english.txt"){

@@ -14,12 +14,21 @@
 		<param name="Local" value="clipjump.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="USAGE">
+		<param name="Name" value="Changelog">
+		<param name="Local" value="changelog.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Screenshots (Online)">
+		<param name="Local" value="http://avi-win-tips.blogspot.in/2013/08/clipjumpscreens.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Help Index">
+		<param name="Local" value="USAGE/index.html">
 		</OBJECT>
 	<UL>
 		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Guide">
-			<param name="Local" value="USAGE/basic_help.html">
+			<param name="Name" value="Main">
+			<param name="Local" value="USAGE/index.html">
 			</OBJECT>
 		<UL>
 			<LI> <OBJECT type="text/sitemap">
@@ -137,16 +146,8 @@
 		<param name="Local" value="clipjumpcontroller.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Changelog">
-		<param name="Local" value="changelog.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="FAQ">
 		<param name="Local" value="USAGE\faq.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Screenshots (Online)">
-		<param name="Local" value="http://avi-win-tips.blogspot.in/2013/08/clipjumpscreens.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Contact">

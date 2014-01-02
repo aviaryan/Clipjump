@@ -156,7 +156,7 @@ hotkey_actmd:
 
 hotkey_paste:
 	GuiControlGet, pst_k
-	pst_K := Trim(pst_k, "ESCXZ `t")
+	pst_K := Trim(pst_k, "ESCXZA `t")
 	if pst_k =
 		GuiControl,, pst_k
 	GuiControl, Enable, settingsButtonApply
@@ -323,6 +323,10 @@ load_Settings(all=false)
 		ignoreWindows := ini_read("Advanced", "ignoreWindows")
 
 		cut_is_delete_windows := ini_read("Advanced", "cut_equalto_delete")
+
+		;change priority once
+		priority := ini_read("System", "Priority")
+		try Process, Priority,, % Priority
 	}
 
 }
@@ -393,6 +397,7 @@ save_Default(full=1){
 	}
 
 	IniWrite, %VERSION%,% CONFIGURATION_FILE, System, Version
+	ini_write("System", "Priority", "N")
 
 	s := "Shortcuts"
 	Ini_Write(s, "Copyfilepath_K")

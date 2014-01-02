@@ -1,5 +1,5 @@
 ;History Gui labels and functions
-;A lot Thanks to chaz
+;A lot Thanks to chaz who first made it
 
 gui_History()
 ; Creates and shows a GUI for managing and viewing the clipboard history
@@ -241,7 +241,6 @@ previewGuiClose:
 previewGuiEscape:
 	Gui, History:-Disabled
 	Gui, Preview:Destroy
-	ComObjConnect( prev_handle )  		;disconnect , may free memory
 	prev_handle := ""
 	prev_document := ""
 	EmptyMem()
@@ -401,11 +400,9 @@ history_ButtonDelete(){
 	loop, parse, rows_selected,`,
 		LV_GetText(clip_file_path, A_LoopField, hidden_date_no)
 		, list_clipfilepath .= clip_file_path "`n" 	;Important for faster results
-
 	;Delete Rows
 	loop, parse, rows_selected,`,
 		LV_Delete(A_LoopField+1-A_index)
-
 	;Delete items
 	loop, parse, list_clipfilepath, `n
 		FileDelete, % "cache\history\" A_LoopField
@@ -496,12 +493,14 @@ LV_SortArrow(h, c, d="")	; by Solar (http://www.autohotkey.com/forum/viewtopic.p
 
 #if IsActive("Edit1", "classnn") and IsActive(PROGNAME " " TXT.HST__name, "window")
 	$Down::
-		Controlfocus, SysListView321, A
-		Send {vk28}
+		Gui, History:Default
+		GuiControl, focus, historyLV
+		LV_Modify(1, "Select Focus")
 		return
 #if
 #if ( IsActive("SysListView321", "classnn") and IsActive(PROGNAME " " TXT.HST__name, "window") and ctrlRef!="pastemode" )
 	Space::gosub history_InstaPaste
+	MButton::gosub history_InstaPaste
 	^c::history_clipboard()
 	^e::gosub history_exportclip
 	Del::history_ButtonDelete()

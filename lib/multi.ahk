@@ -200,19 +200,56 @@ changeChannel(cIndex){
 	Menu, Tray, Tip, % PROGNAME " {" CN.Name "}"
 }
 
-;--------------------------- Pit ------------------------------------------------------------------
+;--------------------------- select channel box --------------------------------------------------------------
 
-channel_Pitindex(){
+choosechannelgui(){
+	global channel_list
+	Gui, choosech:New
+	Gui, choosech: +ToolWindow -MaximizeBox
+	Gui, Add, Text, x7 y7, % TXT.CNL_choose
+	lst := channel_find()
+	StringReplace, lst, lst, |, ``|, All
+	StringReplace, lst, lst, `n, |, All
+	Gui, Add, Listbox, x+20 vchannel_list h150, % lst
+	Gui, Add, button, x7 y+10 gchoosechbuttonok, OK
+	Gui, Add, button, x+10 yp gchoosechbuttoncancel, % TXT.SET_cancel
+	Gui, Show,, % TXT.CHC_name
+	WinWaitActive, % TXT.CHC_name
+	WinWaitClose, % TXT.CHC_name
+	channel_list := Trim( Substr(channel_list, 1, Instr(channel_list, "-")-1) )
+	return is_notcancel channel_list
+
+chooseChButtonOK:
+	Gui, choosech:submit, nohide
+	if channel_list
+		Gui, choosech:Destroy
+	return
+
+chooseChButtoncancel:
+choosechGuiClose:
+	is_notcancel := "-"
+	Gui, choosech:Destroy
+	return
+}
+
+;--------------------------- find a channel ------------------------------------------------------------------
+
+channel_find(name=""){
+	; returns list of channels if name is empty
 	Iniread, o, %CONFIGURATION_FILE%, Channels
 	loop, parse, o, `n, `r
 	{
-		if Substr(A_LoopField, -3) = "=pit"
+		k := Trim( Substr(A_LoopField, 1, p:=Instr(A_LoopField, "=")-1) )
+		v := Trim( Substr(A_LoopField, p+2) )
+		if k is Integer
 		{
-			N := Substr(A_LoopField, 1, -4)
-			break
+			if name=
+				str .= k " - " v "`n"
+			if v = %name%
+				return k
 		}
 	}
-	return N
+	return Rtrim( str, "`n" )
 }
 
 ;--------------------------- Other functions ------------------------------------------------------

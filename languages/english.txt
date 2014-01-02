@@ -113,10 +113,6 @@ SET_T_formatting = Do you want Clipjump to start with No-Formatting Mode enabled
                  = Tick for Yes.
 SET_T_daystostore = Number of days for which the clipboard record will be stored
 SET_T_images = Should clipboard images be stored in history ?
-SET_T_pst = Single character combination to use with Ctrl in activating [PASTE MODE]
-          = Note that letters  E C X Z S  are reserved.
-          = 
-          = Also make sure to see "Copy bypassing Clipjump" in the help file
 SET_T_chnl = Shortcut to show the <Select Channel> Window
            = Set the shortcut to None to disable the key combination
 SET_T_cfilep = Shortcut to copy selected file's path
@@ -200,3 +196,17 @@ CNL_del_default = Deleting default channel (#0) is not allowed.
 TIP_empty3 = Release Ctrl to exit.
 UPD_restart = Clipjump will now restart to apply the updates.
 UPD_automsg = Click Yes to auto update Clipjump or No to go to website.
+
+;=========
+;10
+;=========
+
+SET_T_pst = Single character combination to use with Ctrl in activating [PASTE MODE]
+          = Note that letters  E C X Z S A  are reserved.
+          = 
+          = Also make sure to see "Copy bypassing Clipjump" in the help file
+CHC_name = Select Channel
+TIP_done = Done
+TIP_copycutfailed = Copy/Move Not Done
+TIP_copy = Copy current Clip
+TIP_move = Move current Clip

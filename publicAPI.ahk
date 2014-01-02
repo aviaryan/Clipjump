@@ -42,6 +42,11 @@ class Clipjump
 		else return ""
 	}
 
+	; copy cut clips from one ch to another
+	manageClip(new_channel=0, channel="", clip="", flag=0){ ; 0 = cut , 1 = copy
+		return CjControl(this.k "manageClip`n" new_channel "`n" channel "`n" clip "`n" flag)
+	}
+	
 	; p=1 turns on Incongito mode
 	IncognitoMode(p=1){
 		return CjControl(this.k "IncognitoMode`n" p)

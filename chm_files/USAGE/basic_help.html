@@ -7,33 +7,7 @@
   <link rel="stylesheet" href="../Blogs.css" type="text/css">
 </head>
 <body>
-<h1>Guide</h1>
 <br>
-<strong class="mild"><center>TABLE</center></strong>
-<pre><ul><li><a href="#bu">Basic Usage</a>
-<li><a href="#au">Advanced Usage</a>
-<ul><li><a href="channels.html">Clipjump Channels</a>
-<li><a href=#actmd>Action Mode</a>
-<li><a href=#fx>Fixate Option</a>
-<li><a href=#path>Copying Paths to Clipjump</a>
-<li><a href=#winclip>Selective Windows Clipboard</a>
-<li><a href=#fdata>Copying file content to Clipjump</a>
-<li><a href=#paste>Changing Paste-Mode shortcut</a>
-<li><a href=#ot>One Time Stop</a>
-<li><a href=#nof>No formatting mode</a>
-<li><a href=#beep>Sound when copied</a>
-<li><a href=#export>Exporting and sharing clipboards</a>
-<li><a href=#reset>Resetting Clipjump</a>
-<li><a href=#disable>Disable Clipjump</a>
-<li><a href=#ignorew>Disabling Clipjump for certain windows (automatically)</a>
-<li><a href='ini.html'>More Settings</a>
-<li><a href="../clipjumpcontroller.html">Clipjump Controller</a>
-</ul>
-<li><a href="translate.html">Clipjump in other languages</a>
-<li><a href="settings.html">Settings Editor</a>
-<li><a href="history.html">History Tool</a>
-<li><a href=#short>Shortcuts List</a>
-</ul></pre><br>
 
 <h4><a name=bu>Basic Usage</a></h4><br>
 <ul>
@@ -47,7 +21,7 @@ It's a portable application so no installation is needed.<br>
 <li>Now, press <b>Ctrl+V</b>(paste action), you will see a tip containing the file or text to be copied.<strong class="super">[This is Paste Mode]</strong>.
 If an Image has been copied, a Window showing your image will pop-up.<br>
 You will have to release Ctrl to perform actions. <i>(You will know later)</i><br>
-Here, Release Ctrl to paste.<br> <br>
+Here, Release Ctrl to paste.<br><br>
 
 <a href="../images/pasting.png"><img src="../images/pasting.png" border="0"></a><br><br>
 <li>To move through Multiple Clipboards, press V again while holding Ctrl. [while in Paste Mode]<br>
@@ -56,26 +30,29 @@ Release Ctrl to Paste.Tap C while holding Ctrl to move backwards.
 The tip should change to a Cancel Message. This is <strong class="mild">[Cancel Mode]</strong><br>
 Release Ctrl to confirm.<br>
 
-<a href="../images/cancel.jpg"><img src="../images/cancel.jpg" border="0"></a><br><br>
+<a href="../images/cancel.png"><img src="../images/cancel.png" border="0"></a><br><br>
 <li>To Delete Current Clipboard, press X twice in Paste Mode or once in Cancel Mode.
 The tip should now change to a Delete Message. This is <b>[Delete Mode]</b><br>
 Release Ctrl to confirm.<br><br>
-<a href="../images/delete.jpg"><img src="../images/delete.jpg" border="0"></a><br><br>
+<a href="../images/delete.png"><img src="../images/delete.png" border="0"></a><br><br>
 
-<a name=delete_all></a>
-To Delete all Clips, press X thrice in Paste Mode OR twice in Cancel Mode OR once in Delete Mode.
-The tip should change to a Delete All message.This is <b>[Delete All Mode]</b> <br>
-<a href="../images/deleteall.jpg"><img src="../images/deleteall.jpg" border="0"></a><br>
+<li>Press X now to go to the Move mode and Copy mode. You can learn more about them <a href=#copycutclip>here.</a><br>
+<img src="../images/copyclip.png">
+<br>
+
+<li><a name="delete_all"></a>To Delete all Clips, press X 5 times in Paste Mode OR 4 times in Cancel Mode OR thrice in Delete Mode.
+The tip should change to a Delete All message.This is <b>[Delete All Mode]</b> <br><br>
 Release Ctrl and then confirm the confirmation tip with <i>Y</i> to proceed. 
 
 
 </ul><br>
-<h3>Notes</H3>
+<h3>Notes</h3>
 <ul>
 	<li>As you can see, Releasing Ctrl is the basis of performing actions in Clipjump.
-	<li>Also, note that Cancel Mode,Delete Mode and Delete All Mode are inter-related.
+	<li>Also, note that Cancel Mode,Delete Mode, Move Mode, Copy Mode and Delete All Mode are inter-related.
 	<strong class="mild">The program cycles through these modes when you press X while holding Ctrl.</strong><br>
 	<b>So, pressing X while holding Ctrl in Delete All Mode will switch back to Cancel Mode.</b>
+	<li>TIP - Use A in <b>Paste Mode</b> to directly jump to the first clip.
 </ul><br>
 <hr><br>
 
@@ -99,8 +76,8 @@ go in Paste Mode using Ctrl+V. <br>
 
 <strong class="super">Please note</strong> that Clipjump remembers last pasted clip's position. So, if you have just pasted [Clip 5], Clipjump will
 <b>start from [Clip 5]</b> the next time you press Ctrl and then V [Paste Mode].<br>
-A workaround to go to [Clip 1] quickly can be going into [Cancel Mode] after pressing Ctrl+V and canceling and then again pressing Ctrl+V.
-Clipjump will now start from [Clip 1]<br><br>
+Use the A key in Paste Mode to go back to the first clip and thus change the clip pointer permanently.<br>
+<br>
 
 <strong class="super">Using Fixate</strong><br>
 Pressing SPACE while in [Paste Mode] toggles the Fixed status of a Clip.<br>
@@ -119,7 +96,7 @@ on the fixed clip will remove the FIX from it and the "[FIXED]" from the tip wil
 <li>Using Action Mode and then X will copy path of current opened folder in all file managers including Windows Explorer. You can also create an independent shortcut 
 for this function in the Settings Editor. 
 </ul>
-</a><hr><br><br>
+<hr><br><br>
 
 <h3><a name=fdata>Copying File content to Clipjump</a></h3>
 <ul>
@@ -160,7 +137,7 @@ will paste the Clip you had choose like it is  currently stored in System Clipbo
 
 <!-- NOF -->
 
-<a name=nof><h3>No-Formatting Mode</h3>
+<a name=nof><h3>No-Formatting Mode</h3></a>
 No formatting mode truncates formatting from Clipjump clips when they are pasted.<br>
 To access this mode, use the "Z" key as the toggle when in <strong class=super>[PASTE MODE]</strong><br>
 Press "Z" once while in [PASTE MODE] and you will see a <strong class="super">[NO-FORMATTING]</strong> in the Tip.<br>
@@ -182,6 +159,12 @@ To disable this mode, press "Z" again while in [PASTE MODE] and the [NO-FORMATTI
 To change the frequency of the beep played, navigate to the Advanced section of settings.ini and change the value of <code>beepFrequency</code> to your liking.
 <br><br><br>
 
+<a name=copycutclip><h3>Copying and Cutting Clip</h3></a>
+<i>[v10+]</i> Clips can be copied and moved from one channel to another from the Paste Mode.<br>
+To do so, press X when in Paste Mode to change to Cancel Mode. While still holding Ctrl, press X again and again till you reach to Move Clip and Copy Clip mode.<br>
+Release Ctrl to confirm.<br>
+You will see a list of <a href="channels.html">channels</a> to copy/cut clip to. Select a channel and click OK.<br>
+<br><br>
 <!-- EXP -->
 
 
@@ -224,6 +207,7 @@ C - Move backwards through Multiple Clipboards (from 3 to 2 , 2 to 1) <br>
 S - Add current Clip to Windows Clipboard [Selective Windows Clipboard Option] <br>
 X - Toggle between, Cancel,Delete,Delete All MODE <br>
 E - Export current clip<br>
+A - Jump to first clip<br>
 Space - Fix/un-fix a clipboard at its position. <br>
 Z - Toggle Formatting for Clips <br><br>
 

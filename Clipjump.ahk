@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 9.9.3
+;@Ahk2Exe-SetVersion 10.0.0
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -40,7 +40,7 @@ global ini_LANG := ""
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "9.9.3"
+global VERSION := "10"
 global CONFIGURATION_FILE := "settings.ini"
 
 ini_LANG := ini_read("System", "lang")
@@ -49,7 +49,7 @@ global TXT := Translations_load("languages/" ini_LANG ".txt") 		;Load translatio
 global UPDATE_FILE := "https://raw.github.com/avi-aryan/Clipjump/master/version.txt"
 global PRODUCT_PAGE := "http://clipjump.sourceforge.net"
 global HELP_PAGE := "http://avi-win-tips.blogspot.com/2013/04/clipjump-online-guide.html"
-global AUTHOR_PAGE := "http://avi.uco.im"
+global AUTHOR_PAGE := "http://aviaryan.sourceforge.net"
 
 global MSG_TRANSFER_COMPLETE := TXT.TIP_copied " " PROGNAME    ;not space
 global MSG_CLIPJUMP_EMPTY := TXT.TIP_empty1 "`n`n" PROGNAME " " TXT.TIP_empty2 "`n`n" TXT.TIP_empty3 ;not `n`n
@@ -170,7 +170,7 @@ IfExist, %A_Startup%/Clipjump.lnk
 global CLIPS_dir := "cache/clips"
 	, THUMBS_dir := "cache/thumbs"
 	, FIXATE_dir := "cache/fixate"
-	, NUMBER_ADVANCED := 26 + CN.Total 					;the number stores the line number of ADVANCED section
+	, NUMBER_ADVANCED := 29 + CN.Total 					;the number stores the line number of ADVANCED section
 
 ;Setting Up shortcuts
 hkZ( ( paste_k ? "$^" paste_k : emptyvar ) , "Paste")
@@ -222,13 +222,7 @@ paste:
 	CALLER := 0
 	ctrlRef := "pastemode"
 	if IN_BACK
-	{
-		IN_BACK := false
-		If (TEMPSAVE == 1)
-			TEMPSAVE := CURSAVE
-		else
-			TEMPSAVE -= 1
-	}
+		IN_BACK_correction()
 
 	If !FileExist(CLIPS_dir "/" TEMPSAVE ".avc")
 	{
@@ -433,14 +427,24 @@ moveBack:
 	}
 	PasteModeTooltip(temp_clipboard)
 	SetTimer, ctrlCheck, 50
-
 	return
+
+IN_BACK_correction(){ 	; corrects TEMPSAVE value when C (backwards) is used in paste mode
+	global
+	IN_BACK := false
+	If (TEMPSAVE == 1)
+		TEMPSAVE := CURSAVE
+	else
+		TEMPSAVE -= 1
+}
+
+;-------------- paste mode tips ------------------------
 
 cancel:
 	Gui, Hide
 	ToolTip, % TXT.TIP_cancelm "`t(1)`n" TXT.TIP_modem
 	ctrlref := "cancel"
-	hkZ("^Space", "fixate", 0) , hkZ("^Z", "Formatting", 0)
+	hkZ("^Space", "fixate", 0) , hkZ("^Z", "Formatting", 0) , hkZ("^a", "navigate_to_first", 0)
 	hkZ("^S", "Ssuspnd", 0) , hkZ("^Up", "channel_up", 0) , hkZ("^Down", "channel_down", 0)
 	hkZ("^x", "Cancel", 0) , hkZ("^x", "Delete", 1)
 	return
@@ -448,11 +452,23 @@ cancel:
 delete:
 	ToolTip, % TXT.TIP_delm "`t`t(2)`n" TXT.TIP_modem
 	ctrlref := "delete"
-	hkZ("^x", "Delete", 0) , hkZ("^x", "DeleteAll", 1)
+	hkZ("^x", "Delete", 0) , hkZ("^x", "cutclip", 1)
+	return
+
+cutclip:
+	Tooltip, % TXT.TIP_move "`t`t(3)`n" TXT.TIP_modem
+	ctrlref := "cut"
+	hkZ("^x", "cutclip", 0) , hkZ("^x", "copyclip", 1)
+	return
+
+copyclip:
+	Tooltip, % TXT.TIP_copy "`t`t(4)`n" TXT.TIP_modem
+	ctrlref := "copy"
+	hkZ("^x", "copyclip", 0) , hkZ("^x", "DeleteAll", 1)
 	return
 
 deleteall:
-	Tooltip, % TXT.TIP_delallm "`t`t(3)`n" TXT.TIP_modem
+	Tooltip, % TXT.TIP_delallm "`t`t(5)`n" TXT.TIP_modem
 	ctrlref := "deleteAll"
 	hkZ("^x", "DeleteAll", 0) , hkZ("^x", "Cancel", 1)
 	return
@@ -507,6 +523,10 @@ fixate:
 	PasteModeTooltip(temp_clipboard)
 	return
 
+navigate_to_first: 		; navigates clip pos to the first in paste mode
+	TEMPSAVE := CURSAVE 		; make tempsave 29 if total clips (cursave) is 29 . so load the first (latest) clip
+	gosub paste
+	return
 
 clipSaver() {
 
@@ -588,16 +608,18 @@ ctrlCheck:
 		Critical
 		SetTimer, ctrlCheck, Off
 		CALLER := false , sleeptime := 300
+		TEMPSAVE := realActive 				; keep the current clip pos saved
 
 		Gui, 1:Hide
 		if ctrlRef = cancel
 		{
 			ToolTip, %MSG_CANCELLED%
-			TEMPSAVE := CURSAVE , sleeptime := 200
+			sleeptime := 200
 		}
 		else if ctrlRef = deleteAll
 		{
 			Critical, Off 			;End Critical so that the below function can overlap this thread
+			IScurCBACTIVE := 0 		; now not active in clipjump
 
 			temp21 := TT_Console("WARNING`n`nDo you really want to delete all clips in the current channel?`nPress Y to confirm.`nPress N to cancel.", "Y N")
 			if temp21 = Y
@@ -613,8 +635,22 @@ ctrlCheck:
 		}
 		else if ctrlRef = delete
 		{
+			IScurCBACTIVE := 0
 			ToolTip, %MSG_DELETED%
 			clearClip(realActive)
+		}
+		else if ctrlRef in cut,copy
+		{
+			Tooltip
+			Critical, Off
+			temp21 := choosechannelgui()
+			if Instr(temp21, "-") != 1
+			{
+				API.manageClip( temp21 , empty, empty, ( ctrlref == "cut" ) ? 0 : 1 )
+				Tooltip, % TXT.TIP_done
+			}
+			else Tooltip, % TXT.TIP_copycutfailed
+			Critical, On
 		}
 		else
 		{
@@ -640,8 +676,6 @@ ctrlCheck:
 				Send, ^{vk56}
 				sleeptime := 100
 			}
-
-			TEMPSAVE := realActive
 		}
 		IN_BACK := false , is_pstMode_active := 0 , oldclip_exist := 0
 		hkZ_Group(0)
@@ -683,11 +717,12 @@ hkZ_Group(mode=0){
 
 	hkZ("^c", "MoveBack", mode) , hkZ("^x", "Cancel", mode) , hkZ("^Z", "Formatting", mode)
 	hkZ("^Space", "Fixate", mode) , hkZ("^S", "Ssuspnd", mode) , hkZ("^e", "export", mode)
-	hkZ("^Up", "channel_up", mode) , hkZ("^Down", "channel_down", mode)
+	hkZ("^Up", "channel_up", mode) , hkZ("^Down", "channel_down", mode) , hkZ("^a", "navigate_to_first", mode)
 
 	if !mode        ;init Cj
 	{
 		hkZ("^x", "DeleteAll", 0) , hkZ("^x", "Delete", 0)
+		hkZ("^x", "cutclip", 0) , hkZ("^x", "copyclip", 0)
 		hkZ("$^x", "keyblocker", 0) , hkZ("$^c", "keyblocker", 0) 			;taken as a preventive step
 		hkZ("$^c", "NativeCopy") , hkZ("$^x", "NativeCut")
 	}
@@ -703,6 +738,8 @@ channel_down:
 	CN.NG -= 1
 
 	TEMPSAVE += 1 		;to make active clip index be same when switching channels , counter-effects TEMPSAVE-=1 in paste_mode label.
+	if in_back
+		IN_BACK_correction()
 	if TEMPSAVE > %CURSAVE%
 		TEMPSAVE := 1
 
@@ -721,7 +758,7 @@ pitSwap:
 		, autoTooltip("PitSwap Deactivated", 500)
 		return
 	}
-	if (temp := channel_Pitindex()) == ""
+	if (temp := channel_find("pit")) == ""
 		autoTooltip("""Pit"" channel not found !", 800, 2)
 	else
 		CN.pit_NG := CN.NG , changeChannel(temp)
@@ -1182,7 +1219,7 @@ Receive_WM_COPYDATA(wParam, lParam)
     	if !Instr(D, k)
     		D := StrGet( NumGet(lParam + 2*A_PtrSize), 8, "UTF-8")  ;ansi conversion
     if Instr(D, k)
-    	%apif%(D, k)
+    	%apif%(D, k) 	; done to not cause error if no lib is included
     else Act_CjControl(D)
 
     while !FileExist(A_temp "\clipjumpcom.txt")
@@ -1193,13 +1230,13 @@ Receive_WM_COPYDATA(wParam, lParam)
 
 ;##############################################################################
 
-;#Include %A_ScriptDir%\lib\API.ahk
+#Include %A_ScriptDir%\lib\API.ahk
 #Include %A_ScriptDir%\lib\translations.ahk
 #Include %A_ScriptDir%\lib\classtool.ahk
 #Include %A_ScriptDir%\lib\multi.ahk
 #Include %A_ScriptDir%\lib\aboutgui.ahk
 #include %A_ScriptDir%\lib\TT_Console.ahk
-#include %A_ScriptDir%\lib\Gdip_All.ahk
+#include %A_ScriptDir%\lib\Gdip_min.ahk
 #include %A_ScriptDir%\lib\HotkeyParser.ahk
 #include %A_ScriptDir%\lib\anticj_func_labels.ahk
 #include %A_ScriptDir%\lib\settings gui plug.ahk
