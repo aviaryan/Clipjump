@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 10.0.0
+;@Ahk2Exe-SetVersion 10.4.9.9
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -40,7 +40,7 @@ global ini_LANG := ""
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "10"
+global VERSION := "10.4.9.9"
 global CONFIGURATION_FILE := "settings.ini"
 
 ini_LANG := ini_read("System", "lang")
@@ -78,8 +78,8 @@ FileCreateDir, cache/history
 FileSetAttrib, +H, %A_ScriptDir%\cache
 
 ;Init Non-Ini Configurations
-try Clipboard := ""
 FileDelete, % A_temp "/clipjumpcom.txt"
+try Clipboard := ""
 
 ;Global Data Holders
 Sysget, temp, MonitorWorkArea
@@ -87,7 +87,7 @@ global WORKINGHT := tempbottom-temptop
 global restoreCaller := 0
 
 ;Global Inits
-global CN := {} , TOTALCLIPS, ACTIONMODE := {} , ACTIONMODE_DEF := "H S C X F D P O E F1 L"
+global CN := {} , CUSTOMS := {} , TOTALCLIPS, ACTIONMODE := {} , ACTIONMODE_DEF := "H S C X F D P O E F1 L"
 global cut_is_delete_windows := "XLMAIN QWidget" 			;excel , kingsoft office
 global CURSAVE, TEMPSAVE, LASTCLIP, LASTFORMAT, IScurCBACTIVE := 0
 global NOINCOGNITO := 1
@@ -131,18 +131,26 @@ global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_IsCh
 		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, channel_K, onetime_K, paste_k, actionmode_k, ini_is_duplicate_copied, ini_formatting, ini_actmd_keys
 		, ini_CopyBeep , beepFrequency , ignoreWindows
 
+; paste mode keys
+global pastemodekey := {}
+temp_keys := "a|c|s|z|space|x|e|up|down"
+loop, parse, temp_keys,|
+	pastemodekey[A_LoopField] := "^" A_LoopField
+
 global windows_copy_k, windows_cut_k
 
 ;Initialising Clipjump Channels
 initChannels()
-
 ;loading Settings
 load_Settings(1)
-trayMenu()
 validate_Settings()
+;load custom settings
+loadCustomizations()
+
+trayMenu()
 
 loop
-{	
+{
 	IfNotExist, cache/Clips/%A_Index%.avc
 	{
 		CURSAVE := A_Index - 1 , TEMPSAVE := CURSAVE
@@ -204,7 +212,7 @@ EmptyMem()
 return
 
 ;Tooltip No 1 is used for Paste Mode tips, 2 is used for notifications , 3 is used for updates , 4 is used in Settings , 5 is used in Action Mode
-;6 used in Class Tool
+;6 used in Class Tool, 7.........., 8 used in Customizer
 
 ;OLD VERSION COMPATIBILITES TO REMOVE
 ; Temp delim
@@ -233,7 +241,7 @@ paste:
 		}
 
 		try Clipboard := ""
-		hkZ("^Up", "channel_up") , hkZ("^Down", "channel_down") 		;activate the 2 keys to jump channels
+		hkZ(pastemodekey.up, "channel_up") , hkZ(pastemodekey.down, "channel_down") 		;activate the 2 keys to jump channels
 		Tooltip, % "{" CN.Name "} " MSG_CLIPJUMP_EMPTY 				;No Clip Exists
 		setTimer, ctrlCheck, 50
 	}
@@ -444,33 +452,33 @@ cancel:
 	Gui, Hide
 	ToolTip, % TXT.TIP_cancelm "`t(1)`n" TXT.TIP_modem
 	ctrlref := "cancel"
-	hkZ("^Space", "fixate", 0) , hkZ("^Z", "Formatting", 0) , hkZ("^a", "navigate_to_first", 0)
-	hkZ("^S", "Ssuspnd", 0) , hkZ("^Up", "channel_up", 0) , hkZ("^Down", "channel_down", 0)
-	hkZ("^x", "Cancel", 0) , hkZ("^x", "Delete", 1)
+	hkZ(pastemodekey.space, "fixate", 0) , hkZ(pastemodekey.z, "Formatting", 0) , hkZ(pastemodekey.a, "navigate_to_first", 0)
+	hkZ(pastemodekey.s, "Ssuspnd", 0) , hkZ(pastemodekey.up, "channel_up", 0) , hkZ(pastemodekey.down, "channel_down", 0)
+	hkZ(pastemodekey.x, "Cancel", 0) , hkZ(pastemodekey.x, "Delete", 1)
 	return
 
 delete:
 	ToolTip, % TXT.TIP_delm "`t`t(2)`n" TXT.TIP_modem
 	ctrlref := "delete"
-	hkZ("^x", "Delete", 0) , hkZ("^x", "cutclip", 1)
+	hkZ(pastemodekey.x, "Delete", 0) , hkZ(pastemodekey.x, "cutclip", 1)
 	return
 
 cutclip:
 	Tooltip, % TXT.TIP_move "`t`t(3)`n" TXT.TIP_modem
 	ctrlref := "cut"
-	hkZ("^x", "cutclip", 0) , hkZ("^x", "copyclip", 1)
+	hkZ(pastemodekey.x, "cutclip", 0) , hkZ(pastemodekey.x, "copyclip", 1)
 	return
 
 copyclip:
 	Tooltip, % TXT.TIP_copy "`t`t(4)`n" TXT.TIP_modem
 	ctrlref := "copy"
-	hkZ("^x", "copyclip", 0) , hkZ("^x", "DeleteAll", 1)
+	hkZ(pastemodekey.x, "copyclip", 0) , hkZ(pastemodekey.x, "DeleteAll", 1)
 	return
 
 deleteall:
 	Tooltip, % TXT.TIP_delallm "`t`t(5)`n" TXT.TIP_modem
 	ctrlref := "deleteAll"
-	hkZ("^x", "DeleteAll", 0) , hkZ("^x", "Cancel", 1)
+	hkZ(pastemodekey.x, "DeleteAll", 0) , hkZ(pastemodekey.x, "Cancel", 1)
 	return
 
 nativeCopy:
@@ -524,6 +532,8 @@ fixate:
 	return
 
 navigate_to_first: 		; navigates clip pos to the first in paste mode
+	if IN_BACK
+		IN_BACK_correction()
 	TEMPSAVE := CURSAVE 		; make tempsave 29 if total clips (cursave) is 29 . so load the first (latest) clip
 	gosub paste
 	return
@@ -598,7 +608,8 @@ PasteModeTooltip(temp_clipboard) {
 	if temp_clipboard =
 		ToolTip % "{" CN.Name "} Clip " realclipno " of " CURSAVE "`t" fixStatus (WinExist("Display_Cj") ? "" : "`n`n" MSG_ERROR "`n`n")
 	else
-		ToolTip % "{" CN.Name "} Clip " realclipno " of " CURSAVE "`t" GetClipboardFormat() "`t" fixstatus (!FORMATTING ? "`t" TXT.TIP_noformatting : "") "`n`n" halfclip
+		ToolTip % "{" CN.Name "} Clip " realclipno " of " CURSAVE "`t" GetClipboardFormat() "`t" fixstatus (!FORMATTING ? "`t[" TXT.TIP_noformatting "]" : "") 
+		. "`n`n" halfclip
 }
 
 
@@ -621,7 +632,7 @@ ctrlCheck:
 			Critical, Off 			;End Critical so that the below function can overlap this thread
 			IScurCBACTIVE := 0 		; now not active in clipjump
 
-			temp21 := TT_Console("WARNING`n`nDo you really want to delete all clips in the current channel?`nPress Y to confirm.`nPress N to cancel.", "Y N")
+			temp21 := TT_Console(TXT.TIP_delallprompt, "Y N")
 			if temp21 = Y
 			{
 				Tooltip, %MSG_ALL_DELETED%
@@ -652,7 +663,7 @@ ctrlCheck:
 			else Tooltip, % TXT.TIP_copycutfailed
 			Critical, On
 		}
-		else
+		else if ctrlRef = pastemode
 		{
 			ToolTip, %MSG_PASTING%
 
@@ -715,18 +726,17 @@ hkZ_Group(mode=0){
 ; mode=1 is for init Paste Mode
 	Critical
 
-	hkZ("^c", "MoveBack", mode) , hkZ("^x", "Cancel", mode) , hkZ("^Z", "Formatting", mode)
-	hkZ("^Space", "Fixate", mode) , hkZ("^S", "Ssuspnd", mode) , hkZ("^e", "export", mode)
-	hkZ("^Up", "channel_up", mode) , hkZ("^Down", "channel_down", mode) , hkZ("^a", "navigate_to_first", mode)
+	hkZ(pastemodekey.c, "MoveBack", mode) , hkZ(pastemodekey.x, "Cancel", mode) , hkZ(pastemodekey.z, "Formatting", mode)
+	hkZ(pastemodekey.space, "Fixate", mode) , hkZ(pastemodekey.s, "Ssuspnd", mode) , hkZ(pastemodekey.e, "export", mode)
+	hkZ(pastemodekey.up, "channel_up", mode) , hkZ(pastemodekey.down, "channel_down", mode) , hkZ(pastemodekey.a, "navigate_to_first", mode)
 
 	if !mode        ;init Cj
 	{
-		hkZ("^x", "DeleteAll", 0) , hkZ("^x", "Delete", 0)
-		hkZ("^x", "cutclip", 0) , hkZ("^x", "copyclip", 0)
+		hkZ(pastemodekey.x, "DeleteAll", 0) , hkZ(pastemodekey.x, "Delete", 0)
+		hkZ(pastemodekey.x, "cutclip", 0) , hkZ(pastemodekey.x, "copyclip", 0)
 		hkZ("$^x", "keyblocker", 0) , hkZ("$^c", "keyblocker", 0) 			;taken as a preventive step
 		hkZ("$^c", "NativeCopy") , hkZ("$^x", "NativeCut")
 	}
-
 }
 
 
@@ -1230,6 +1240,7 @@ Receive_WM_COPYDATA(wParam, lParam)
 
 ;##############################################################################
 
+#Include %A_ScriptDir%\lib\Customizer.ahk
 #Include %A_ScriptDir%\lib\API.ahk
 #Include %A_ScriptDir%\lib\translations.ahk
 #Include %A_ScriptDir%\lib\classtool.ahk

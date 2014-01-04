@@ -2,7 +2,7 @@
 ;TranslatorName=Åke Engelbrektson
 ;TranslatorContact=eson57@gmail.com
 ;TranslatorURL=http://svenskasprakfiler.se
-;LastUpdated=09 Dec 2013
+;LastUpdated=02 Jan 2014
 
 ;======
 ;v9.9.0.1
@@ -107,10 +107,6 @@ SET_T_formatting = Vill du att Clipjump skall starta med 'Ingen formatering' akt
                  = Bocka i för 'Ja'.
 SET_T_daystostore = Antal dagar som urklippsinnehållet skall lagras
 SET_T_images = Skall urklippta bilder lagras i historiken?
-SET_T_pst = Enkel teckenkombination att använda tillsammans med Ctrl för att aktivera [INKLISTRINGSLÄGE]
-          = Notera att bokstäverna E C X Z S är reserverade.
-          = 
-          = Läs också "Copy bypassing Clipjump" i hjälpfilen
 SET_T_chnl = Genväg för att visa dialogen 'Välj kanal'.
            = Ange genvägen som 'Inget' för att inaktivera tangentkombinationen
 SET_T_cfilep = Genväg för att kopiera sökvägen till markerad fil.
@@ -183,4 +179,28 @@ HST_delall_msg = Vill du verkligen rensa Clipjumps historik permanent?
 SET_T_actmd = Genväg för att öppna Clipjump Åtgärdsläge.
             = Åtgärdsläget tillhandahåller ett grafiskt gränssnitt för nästan alla funktioner i Clipjump.
             = Vill du ha genvägar på systemnivå för dessa funktioner, hittar du dem här i 'Inställningar'.
-			
+
+;==========
+;9.9.1.9
+;==========
+
+CNL_delete = &Ta bort kanal
+CNL_delmsg = Vill du verkligen ta bort den här kanalen? Notera att åtgärden inte kan ångras och du kommer att förlora alla klipp som är lagrade i den.
+CNL_del_default = Standardkanalen (#0) får inte tas bort.
+TIP_empty3 = Släpp Ctrl för att avsluta.
+UPD_restart = Clipjump kommer nu att starta om för att verkställa uppdateringarna.
+UPD_automsg = Tryck Ja för att uppdatera Clipjump automatiskt, eller Nej för att gå till webbsidan.
+
+;=========
+;10
+;=========
+
+SET_T_pst = Enkel teckenkombination att använda tillsammans med Ctrl för att aktivera [INKLISTRINGSLÄGE]
+          = Notera att bokstäverna E C X Z S är reserverade.
+          = 
+          = Läs också "Copy bypassing Clipjump" i hjälpfilen
+CHC_name = Välj kanal
+TIP_done = Klar
+TIP_copycutfailed = Kopiera/Flytta, misslyckades
+TIP_copy = Kopiera aktuellt klipp
+TIP_move = Flytta aktuellt klipp

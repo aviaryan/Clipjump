@@ -210,3 +210,12 @@ TIP_done = Done
 TIP_copycutfailed = Copy/Move Not Done
 TIP_copy = Copy current Clip
 TIP_move = Move current Clip
+
+;========
+;10.5
+;========
+
+TIP_delallprompt = WARNING
+                 = Do you really want to delete all clips in the current channel?
+                 = Press Y to confirm.
+                 = Press N to cancel.

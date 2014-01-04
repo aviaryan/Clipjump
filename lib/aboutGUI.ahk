@@ -113,6 +113,8 @@ trayMenu(destroy=0){
 	Menu, Tray, Default, % TXT.ABT__name " " PROGNAME
 	return
 
+}
+
 reload:
 	OnExit,
 	save_Exit()
@@ -123,4 +125,3 @@ reload:
 	}
 	else Reload
 	return
-}

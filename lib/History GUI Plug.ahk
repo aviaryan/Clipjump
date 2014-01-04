@@ -500,7 +500,6 @@ LV_SortArrow(h, c, d="")	; by Solar (http://www.autohotkey.com/forum/viewtopic.p
 #if
 #if ( IsActive("SysListView321", "classnn") and IsActive(PROGNAME " " TXT.HST__name, "window") and ctrlRef!="pastemode" )
 	Space::gosub history_InstaPaste
-	MButton::gosub history_InstaPaste
 	^c::history_clipboard()
 	^e::gosub history_exportclip
 	Del::history_ButtonDelete()
@@ -509,4 +508,12 @@ LV_SortArrow(h, c, d="")	; by Solar (http://www.autohotkey.com/forum/viewtopic.p
 #if
 #if Winactive(TXT.PRV__name " ahk_class AutoHotkeyGUI") and ctrlRef != "pastemode"
 	^f::GuiControl, Preview:focus, preview_search             ;Alt+D
+#if
+#if ( IsActive(PROGNAME " " TXT.HST__name, "window") and ctrlRef!="pastemode" )
+	MButton::
+	KeyWait, Mbutton
+	Click
+	sleep 50
+	gosub history_InstaPaste
+	return
 #if

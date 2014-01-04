@@ -217,12 +217,17 @@ TooltipOff4:
 TooltipOff5:
 TooltipOff6:
 TooltipOff7:
+TooltipOff8:
 	SetTimer, % A_ThisLabel, Off
 	ToolTip,,,, % ( Substr(A_ThisLabel, 0) == "f" ) ? 1 : Substr(A_ThisLabel, 0) 
 	return
 
 
 keyblocker:
+	return
+
+simplePaste: 		; simple lable to paste CURRENT content on cb.
+	Send ^{vk56}
 	return
 
 shortcutblocker_settings:

@@ -10,6 +10,8 @@
 ; & in &Vorschau dient dazu den Shortcut Alt+V zu erstellen wenn das Fenster aktiv ist.
 ; Bei der Übersetzung in eine andere Sprache als Deutsch lasse das '&' weg. Verwende '&' nur wenn du dir sicher bist das du richtig liegts.
 
+; 02.01.2014 - Updates an einigen Stellen durchgeführt und bis v10 erweitert.
+
 ;======
 ;v9.9.0.1
 ;======
@@ -115,13 +117,6 @@ SET_T_daystostore = Anzahl der Tage für die Clips in der Historie gespeichert w
 				  = Es muss ein Zahl angegeben werden, es ist kein Maximum vorgegeben.
 SET_T_images = Sollen auch Bilder in der Historie gespeichert werden?
 			 = Markiert = Aktiv
-SET_T_pst = Geben Sie hier einen einzelnen Buchstaben an um mit diesem in Verbindung mit STRG Clipjump zu nutzen.
-          = Beachten Sie bitte, die Tasten  E C X Z S  sind reserviert.
-          = 
-          = Lesen Sie bitte außerdem den Teil "Copy bypassing Clipjump" in der Hilfedatei.
-SET_T_actmd = Hotkey um den Aktionsmodus zu starten.
-            = Der Aktionsmodus, bietet eine Schnittstelle für fast alle funktionen in Clipjump.
-            = Eventuell ist es für Sie angenehmer selten verwendete Hotkeys zu deaktivieren und stattdessen den Aktionsmodus zu nutzen.
 SET_T_chnl = Hotkey um das Channel Wählen Fenster zu öffnen.
            = Geben Sie keinen Buchstaben an wird der Hotkey deaktiviert.
 SET_T_cfilep = Hotkey um den Pfad der ausgewählten Datei zu kopieren.
@@ -162,8 +157,8 @@ ACT_disable = Deaktivieren
 ACT_exit = Fenster schließen
 
 IGN__name = Ignorierte Fenster
-IGN_add = &Fensterclasse hinzufügen Class
-IGN_delete = &Löschen Class
+IGN_add = &Fensterclasse hinzufügen
+IGN_delete = &Fensterclasse löschen
 
 LNG_error = Deutsche Sprachdatei nicht gefunden im Ordner languages/german.txt. Passierte dies absichtlich, füge sie wieder ein
 
@@ -181,3 +176,42 @@ _exportedto = Exportiert
 IGN_Restartmsg = Es ist nötig zur Übernahme und Aktivierung der neuen Einstellunegn Clipjump neu zu starten. Wollen Sie jetzt neustarten?
 IGN_tip = Mit der Leertaste die Fenster-Classe hinzufügen.
         = Mit Escape die Aktion abbrechen.
+
+;===========
+;9.9.1
+;===========
+
+TRY_options = &Optionen
+TRY_tools = &Tools
+HST_delall_msg = Sind Sie sicher, dass Sie alle Einträge der Historie löschen wollen?
+; the following key was modified in v9.9.1 and so you see its entry here
+SET_T_actmd = Hotkey um den Aktionsmodus zu starten.
+            = Der Aktionsmodus, bietet eine Schnittstelle für fast alle funktionen in Clipjump.
+            = Eventuell ist es für Sie angenehmer selten verwendete Hotkeys zu deaktivieren und stattdessen den Aktionsmodus zu nutzen.
+
+;==========
+;9.9.1.9
+;==========
+
+CNL_delete = &Lösche Channel
+CNL_delmsg = Sind Sie sicher, dass Sie diesen Channel löschen wollen?
+           = Der Vorgang kann nicht rückgängig gemacht werden.
+CNL_del_default = Löschen des Channel 0 (Default) ist nicht erlaubt.
+TIP_empty3 = Zum verlassen STRG loslassen.
+UPD_restart = Clipjump wird nun neustarten um die Updates zu aktivieren.
+UPD_automsg = Klicke auf Ja um ein Autoupdate durchzuführen oder klicke auf Nein um die Webseite zu öffnen.
+
+;=========
+;10
+;=========
+
+; the following key was modified in v10 and so you see its entry here
+SET_T_pst = Geben Sie hier einen einzelnen Buchstaben an um mit diesem in Verbindung mit STRG Clipjump zu nutzen.
+          = Beachten Sie bitte, die Tasten  E C X Z S A  sind reserviert.
+          = 
+          = Lesen Sie bitte außerdem den Teil "Copy bypassing Clipjump" in der Hilfedatei.
+CHC_name = Wähle Channel
+TIP_done = Erledigt
+TIP_copycutfailed = Kopieren/Verschieben nicht erfolgreich
+TIP_copy = Kopiere aktuellen Clip
+TIP_move = Verschiebe aktuellen Clip

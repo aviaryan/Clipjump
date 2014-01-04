@@ -150,11 +150,11 @@ initChannels(){
 					break
 				}
 			}
-			CN["Total"] := A_index
+			CN.Total := A_index
 		}
 		Else
 			break
-	CN.NG := 0 
+	CN.NG := 0 , CN.N := ""
 
 	Iniread, temp, %CONFIGURATION_FILE%, channels, % CN.NG, %A_space%
 	CN.Name := (temp=="") or (temp==A_temp) ? "Default" : temp
@@ -164,10 +164,10 @@ initChannels(){
 }
 
 
-changeChannel(cIndex){
+changeChannel(cIndex, backup_old:=1){
 	global
 
-	if ( CN["TEMPSAVE" (cIndex?cIndex:"")] == "" )
+	if ( cIndex >= CN.Total )
 		CN.Total+=1
 
 	Iniread, temp, %CONFIGURATION_FILE%, channels, %cIndex%, %A_space%
@@ -179,7 +179,8 @@ changeChannel(cIndex){
 	else
 		TOTALCLIPS := 999999999999
 
-	CN["TEMPSAVE" CN.N] := TEMPSAVE , CN["CURSAVE" CN.N] := CURSAVE		;Saving Old
+	if backup_old
+		CN["TEMPSAVE" CN.N] := TEMPSAVE , CN["CURSAVE" CN.N] := CURSAVE		;Saving Old
 	CN.N := cIndex , CN.NG := !CN.N?0:CN.N 				;note that cIndex has been emptied if 0
 
 	TEMPSAVE := CN["TEMPSAVE" cIndex] + 0 , CURSAVE := CN["CURSAVE" cIndex] + 0		;Restoring current
@@ -193,6 +194,7 @@ changeChannel(cIndex){
 	FileCreateDir, %CLIPS_dir%
 	FileCreateDir, %FIXATE_dir%
 	FileCreateDir, %THUMBS_dir%
+	GuiControl, % "Channel:+Range0-" CN.Total, ChannelUpdown 		; refresh up-down limits
 
 	LASTCLIP := LASTFORMAT := IScurCBACTIVE := "" 								;make all false as they are different for other channels
 	CopyMessage := !ini_IsMessage ? "" : MSG_TRANSFER_COMPLETE " {" CN.Name "}"
@@ -257,33 +259,31 @@ channel_find(name=""){
 ; moves a channel or deletes it; in moving dest channel if exists is deleted
 manageChannel(orig, new=""){
 	static l := "clips fixate thumbs"
-	global CN
+	;global CN
 
 	if new=
 	{
 		loop, parse, l, % A_space
 			FileRemoveDir, % "cache\" A_LoopField orig, 1
-		try Inidelete,% CONFIGURATION_FILE, Channels, % orig 
-		; move channels on step back
+		try Inidelete,% CONFIGURATION_FILE, Channels, % orig
+		; move channels one step back
+		c := 0
 		loop % CN.Total-orig-1
 		{
 			c := A_index
 			loop, parse, l, % A_space
-				FileMoveDir, % "cache\" A_LoopField orig+c , % "cache\" A_LoopFileName orig+c-1, R
+				FileMoveDir, % "cache\" A_LoopField orig+c , % "cache\" A_LoopField orig+c-1, R
 			ini_write("Channels", orig+c-1, (z:=Ini_read("Channels", orig+c)) ? z : orig+c-1, 0 )
-			CN["CURSAVE" orig+c-1] := CN["CURSAVE" orig+c]
-			CN["TEMPSAVE" orig+c-1] := CN["TEMPSAVE" orig+c]
 		}
 		;done ... final steps
-		if !c 						;if the channel was last-loop not run
-			CN["CURSAVE" orig] := CN["TEMPSAVE" orig] := ""
+		ini_write("Channels", orig+c, orig+c, 0) 			; delete any custom name to avoid confusion
 
-		CN.Total -= 1
+		bk := CN.NG
+		initChannels()
 		Gui, Channel:Default
 		GuiControl, % "+Range0-" CN.Total, ChannelUpdown
-		if CN.NG == orig
-			TEMPSAVE := "" , CURSAVE := "" 		; if delted chnl was active , it is dead now
-			, changeChannel(orig-1)
+		if ( bk >= orig )
+			changeChannel(bk-1, 0)
 	}
 	else
 	{
