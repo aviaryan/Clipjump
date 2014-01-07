@@ -1,6 +1,34 @@
 ﻿;#########################
-;SUPER CONSTANT FUNCTIONS
+;LESS CHANGEABLE LABES AND FUNCTIONS
 ;#########################
+
+; Used Labels
+
+settings:
+	gui_Settings()
+	return
+	
+history:
+	gui_History()
+	return
+
+channelGUI:
+	channelGUI()
+	return
+
+classTool:
+	classManager()
+	return
+
+main:
+	aboutGUI()
+	return
+
+exit:
+	save_Exit()
+	ExitApp
+	return
+
 
 ;BeepAt()
 ;SoundBeep function
@@ -54,7 +82,7 @@ GetClipboardFormat(type=1){		;Thanks nnnik
 		x .= "," c
 	DllCall("CloseClipboard")
 
-	if type
+	if type=1
   		if Instr(x, ",1") and Instr(x, ",13")
     		return "[" TXT.TIP_text "]"
  		else If Instr(x, ",15")

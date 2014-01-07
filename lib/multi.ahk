@@ -139,6 +139,7 @@ ChannelUpdown:
 
 initChannels(){
 	global
+	CN := {}
 	loop,
 		if FileExist("cache\clips" (T := (A_index-1)?A_index-1:"" ) )
 		{
@@ -180,7 +181,7 @@ changeChannel(cIndex, backup_old:=1){
 		TOTALCLIPS := 999999999999
 
 	if backup_old
-		CN["TEMPSAVE" CN.N] := TEMPSAVE , CN["CURSAVE" CN.N] := CURSAVE		;Saving Old
+		CN["TEMPSAVE" CN.N] := TEMPSAVE , CN["CURSAVE" CN.N] := CURSAVE		;Saving Old - TEMPSAVE is auto-corrected at the end of paste mode and so no need to fix it.
 	CN.N := cIndex , CN.NG := !CN.N?0:CN.N 				;note that cIndex has been emptied if 0
 
 	TEMPSAVE := CN["TEMPSAVE" cIndex] + 0 , CURSAVE := CN["CURSAVE" cIndex] + 0		;Restoring current
@@ -266,6 +267,7 @@ manageChannel(orig, new=""){
 		loop, parse, l, % A_space
 			FileRemoveDir, % "cache\" A_LoopField orig, 1
 		try Inidelete,% CONFIGURATION_FILE, Channels, % orig
+		CDS[orig] := {}
 		; move channels one step back
 		c := 0
 		loop % CN.Total-orig-1
@@ -273,21 +275,23 @@ manageChannel(orig, new=""){
 			c := A_index
 			loop, parse, l, % A_space
 				FileMoveDir, % "cache\" A_LoopField orig+c , % "cache\" A_LoopField orig+c-1, R
-			ini_write("Channels", orig+c-1, (z:=Ini_read("Channels", orig+c)) ? z : orig+c-1, 0 )
+			CDS[orig+c-1] := CDS[orig+c]
+			ini_write("Channels", orig+c-1, (z:=Ini_read("Channels", orig+c)) && (z != orig+c) ? z : orig+c-1, 0 )
 		}
 		;done ... final steps
-		ini_write("Channels", orig+c, orig+c, 0) 			; delete any custom name to avoid confusion
+		ini_delete("Channels", orig+c) , CDS[orig+c] := {} 			; delete any name to avoid confusion
 
 		bk := CN.NG
 		initChannels()
 		Gui, Channel:Default
 		GuiControl, % "+Range0-" CN.Total, ChannelUpdown
 		if ( bk >= orig )
-			changeChannel(bk-1, 0)
+			changeChannel(bk-1, 0) 		; change the channel using proper methodology as initchannels() disturbs it
+		else changeChannel(bk, 0)
 	}
 	else
 	{
-		;NOT IMPLEMENTED YET
+		;NOT IMPLEMENTED YET - implement CDS also
 		loop, parse, l, % A_space
 			FileRemoveDir, % "cache\" A_LoopField new, 1
 		loop, parse, l, % A_Space

@@ -28,6 +28,7 @@ Act_API(D, k){
 class API
 {
 	; pastes clips from certain postion in certain channel
+	; if both are blank, paste 1st clip from currently active channel
 	paste(channel="", clipno=""){
 		this.blockMonitoring(1)
 		if  (channel="") && (clipno="")
@@ -67,23 +68,31 @@ class API
 		if channel=
 			channel := CN.NG
 		c_info := this.getChInfo(channel)
-		if clip=
-			clip := c_info.realCURSAVE - c_info.realTEMPSAVE + 1
-		f := "cache\clips" c_info.p "\" c_info.realTEMPSAVE ".avc"
+		if clip =
+			clip := c_info.realTEMPSAVE
+		else clip := c_info.realCURSAVE - clip + 1
+
+		f := "cache\clips" c_info.p "\" clip ".avc"
 
 		nc_info := this.getChInfo(new_channel)
 		; process
 		if flag
+		{
 			FileCopy, % f, % "cache\clips" nc_info.p "\" nc_info.realCURSAVE + 1 ".avc", 1
+			CDS[new_channel][nc_info.realCURSAVE+1] := CDS[channel][clip]
+		}
 		else
 		{
 			Filemove, % f, % "cache\clips" nc_info.p "\" nc_info.realCURSAVE + 1 ".avc", 1
+			CDS[new_channel][nc_info.realCURSAVE+1] := CDS[channel][clip] , CDS[channel][clip] := ""
+
 			c_Folder1 := "cache\clips" c_info.p "\" , c_Folder2 := "cache\fixate" c_info.p "\" , c_Folder3 := "cache\thumbs" c_info.p "\"
-			loop % c_info.realCURSAVE-c_info.realTEMPSAVE
+			loop % c_info.realCURSAVE-clip
 			{
-				FileMove, % c_Folder1 c_info.realTEMPSAVE+A_Index ".avc", % c_Folder1 c_info.realTEMPSAVE+A_Index-1 ".avc"
-				FileMove, % c_Folder2 c_info.realTEMPSAVE+A_Index ".txt", % c_Folder2 c_info.realTEMPSAVE+A_index-1 ".txt"
-				FileMove, % c_Folder3 c_info.realTEMPSAVE+A_Index ".jpg", % c_Folder3 c_info.realTEMPSAVE+A_index-1 ".jpg" 
+				FileMove, % c_Folder1 clip+A_Index ".avc", % c_Folder1 clip+A_Index-1 ".avc", 1
+				FileMove, % c_Folder2 clip+A_Index ".txt", % c_Folder2 clip+A_index-1 ".txt", 1
+				FileMove, % c_Folder3 clip+A_Index ".jpg", % c_Folder3 clip+A_index-1 ".jpg", 1
+				CDS[channel][clip+A_index-1] := CDS[channel][clip+A_index] , CDS[channel][clip+A_index] := ""
 			}
 		}
 		; fix vars
@@ -108,7 +117,11 @@ class API
 	}
 
 	; get Clips file location wrt Clipjump's directory
-	getClipLoc(channel=0, clipno=1){
+	getClipLoc(channel="", clipno=""){
+		if channel=
+			channel := CN.NG
+		if clipno=
+			clipno := 1
 		p := !channel ? "" : channel
 		z := (CN.NG==channel) ? CURSAVE : CN["CURSAVE" p] 		;chnl CURSAVE is not updated everytime but when channel is changed. 
 		f := A_ScriptDir "\cache\clips" p "\" z-clipno+1 ".avc"

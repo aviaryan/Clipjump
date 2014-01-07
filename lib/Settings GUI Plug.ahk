@@ -451,6 +451,10 @@ Ini_read(section, key){
 	return v
 }
 
+Ini_delete(section, key){
+	IniDelete, % CONFIGURATION_FILE, % section, % key
+}
+
 validate_Settings()
 ; The function validates the settings for Clipjump . 
 ; The reason validate_Settings() is not inside load_Settings() is conflicts with Ini_MaxClips and its unlimited value (0).

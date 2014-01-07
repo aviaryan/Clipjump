@@ -71,7 +71,9 @@ customization_Run(obj){
 		else if RegExMatch(k, "[0-9]+tip$")
 			autoTooltip(v, 1000, 8)
 		else if RegExMatch(k, "[0-9]+send$")
-			SendInput, % HParse(v) 				; parse keys like Ctrl+Alt+k
+			SendInput, % RegExMatch( g:=HParse(v), "[#!\^\+]" ) = 1 ? g : v				; parse keys like Ctrl+Alt+k
+		else if RegExMatch(k, "[0-9]+sleep$")
+			sleep % v
 		else if k != "bind"
 		{
 			k := Ltrim(k, "0123456789")

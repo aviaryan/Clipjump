@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 10.4.9.9
+;@Ahk2Exe-SetVersion 10.5.9.8
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -28,6 +28,7 @@ SetBatchLines,-1
 #SingleInstance, force
 #ClipboardTimeout 0              ;keeping this value low as I already check for OpenClipboard in OnClipboardChange label
 CoordMode, Mouse
+CoordMode, Tooltip
 FileEncoding, UTF-8
 ListLines, Off
 #KeyHistory 0
@@ -40,7 +41,7 @@ global ini_LANG := ""
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "10.4.9.9"
+global VERSION := "10.5.9.8"
 global CONFIGURATION_FILE := "settings.ini"
 
 ini_LANG := ini_read("System", "lang")
@@ -87,15 +88,15 @@ global WORKINGHT := tempbottom-temptop
 global restoreCaller := 0
 
 ;Global Inits
-global CN := {} , CUSTOMS := {} , TOTALCLIPS, ACTIONMODE := {} , ACTIONMODE_DEF := "H S C X F D P O E F1 L"
+global CN := {} , CUSTOMS := {} , CDS := {} , SEARCHOBJ := {} , TOTALCLIPS, ACTIONMODE := {} , ACTIONMODE_DEF := "H S C X F D P O E F1 L"
 global cut_is_delete_windows := "XLMAIN QWidget" 			;excel , kingsoft office
 global CURSAVE, TEMPSAVE, LASTCLIP, LASTFORMAT, IScurCBACTIVE := 0
-global NOINCOGNITO := 1
+global NOINCOGNITO := 1, SPM := {}
 
 ;Initailizing Common Variables
 global CALLER_STATUS, CLIPJUMP_STATUS := 1		; global vars are not declared like the below , without initialising
 global CALLER := CALLER_STATUS := true, IN_BACK := false
-global CLIP_ACTION := "", ONCLIPBOARD := 0 , ISACTIVEEXCEL := 0 , HASCOPYFAILED := 0 		;specific purpose global vars
+global CLIP_ACTION := "", ONCLIPBOARD := 0 , ISACTIVEEXCEL := 0 , HASCOPYFAILED := 0 , ctrlRef		;specific purpose global vars
 
 ;Init General vars
 is_pstMode_active := 0
@@ -131,11 +132,14 @@ global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_IsCh
 		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, channel_K, onetime_K, paste_k, actionmode_k, ini_is_duplicate_copied, ini_formatting, ini_actmd_keys
 		, ini_CopyBeep , beepFrequency , ignoreWindows
 
-; paste mode keys
-global pastemodekey := {}
-temp_keys := "a|c|s|z|space|x|e|up|down"
+; (search) paste mode keys 
+global pastemodekey := {} , spmkey := {}
+temp_keys := "a|c|s|z|space|x|e|up|down|f"
 loop, parse, temp_keys,|
 	pastemodekey[A_LoopField] := "^" A_LoopField
+temp_keys := "Enter|Up|Down|Home"
+loop, parse, temp_keys, |
+	spmkey[A_LoopField] := A_LoopField
 
 global windows_copy_k, windows_cut_k
 
@@ -190,13 +194,10 @@ hkZ(channel_K, "channelGUI")
 hkZ(onetime_K, "oneTime")
 hkZ(pitswap_K, "pitswap")
 hkZ(actionmode_K, "actionmode")
-
 ;more shortcuts
 hkZ(windows_copy_k, "windows_copy") , hkZ(windows_cut_k, "windows_cut")
-
 ;Environment
 OnMessage(0x4a, "Receive_WM_COPYDATA")  ; 0x4a is WM_COPYDATA
-
 ;Clean History
 historyCleanup()
 init_actionmode()
@@ -207,6 +208,7 @@ loop, parse, ignoreWindows, % temp_delim
 	GroupAdd, ignoreGroup, ahk_class %A_LoopField%
 ;group created
 
+loadClipboardDataS()
 OnExit, exit
 EmptyMem()
 return
@@ -217,8 +219,30 @@ return
 ;OLD VERSION COMPATIBILITES TO REMOVE
 ; Temp delim
 ;End Of Auto-Execute================================================================================================================
+
+loadClipboardDataS(){
+	API.blockMonitoring(1)
+	loop % CN.Total
+	{
+		fp := "cache\clips" ( A_index-1 ? A_index-1 : "" )
+		CDS[R:=A_index-1] := {}
+		loop, % fp "\*.avc"
+		{
+			ONCLIPBOARD:=""
+			FileRead, Clipboard, % "*c " A_LoopFileFullPath
+			Z := Clipboard
+			while !ONCLIPBOARD
+				sleep 1
+			if Z !=
+				CDS[R][Substr(A_LoopFileName,1,-4)] := Z
+				;, CDS[R][y "f"] := GetClipboardFormat()		; extenstion .avc is removed
+		}
+	}
+	API.blockMonitoring(0)
+}
+
 paste:
-	Critical
+	Critical, On
 
 	IfWinActive, ahk_group ignoreGroup
 	{
@@ -259,11 +283,12 @@ paste:
 			IScurCBACTIVE := 0 				;false it when V is pressed for the 2nd time
 
 		if !is_pstMode_active
-			hkZ_Group(1) , is_pstMode_active := 1
+			hkZ_pasteMode(1) , is_pstMode_active := 1
 
 		if !IScurCBACTIVE 				;if the current clipboard is not asked for , then only load from file
 			try FileRead, Clipboard, *c %A_ScriptDir%/%CLIPS_dir%/%TEMPSAVE%.avc
 		try temp_clipboard := Clipboard
+		;temp_clipboard := CDS[CN.NG][TEMPSAVE]
 
 		fixStatus := fixCheck()
 		realclipno := CURSAVE - TEMPSAVE + 1
@@ -291,10 +316,15 @@ paste:
 
 onClipboardChange:
 	Critical, On
+	if ONCLIPBOARD=
+	{
+		ONCLIPBOARD:=1
+		return
+	}
+	ONCLIPBOARD := 1 		;used by paste/or another to identify if OnCLipboard has been breached
+
 	ifwinactive, ahk_group IgnoreGroup
 		return
-
-	ONCLIPBOARD := 1 		;used by paste/or another to identify if OnCLipboard has been breached
 
 	If CALLER
 	{
@@ -323,7 +353,7 @@ onClipboardChange:
 	else
 	{
 		LASTFORMAT := WinActive("ahk_class XLMAIN") ? "" : GetClipboardFormat(0)
-		IScurCBACTIVE := 0 					; clipboard was changed and so this should be zero
+		;IScurCBACTIVE := 0 					; clipboard was changed and so this should be zero
 		if restoreCaller
 			restoreCaller := "" , CALLER := CALLER_STATUS
 		if onetimeOn
@@ -419,6 +449,7 @@ moveBack:
 	IScurCBACTIVE := 0 			;the key will be always pressed after V
 	try FileRead, clipboard, *c %CLIPS_dir%/%TEMPSAVE%.avc
 	try temp_clipboard := Clipboard
+	;temp_clipboard := CDS[CN.NG][TEMPSAVE]
 
 	fixStatus := fixCheck()
 	realClipNo := CURSAVE - TEMPSAVE + 1
@@ -452,9 +483,11 @@ cancel:
 	Gui, Hide
 	ToolTip, % TXT.TIP_cancelm "`t(1)`n" TXT.TIP_modem
 	ctrlref := "cancel"
+	if SPM.ACTIVE
+		gosub SPM_dispose 	; dispose it if There - Note that this step ends the label as ctrlCheck dies so ctrlRef is kept upwards to be updated
 	hkZ(pastemodekey.space, "fixate", 0) , hkZ(pastemodekey.z, "Formatting", 0) , hkZ(pastemodekey.a, "navigate_to_first", 0)
 	hkZ(pastemodekey.s, "Ssuspnd", 0) , hkZ(pastemodekey.up, "channel_up", 0) , hkZ(pastemodekey.down, "channel_down", 0)
-	hkZ(pastemodekey.x, "Cancel", 0) , hkZ(pastemodekey.x, "Delete", 1)
+	hkZ(pastemodekey.f, "searchpm", 0) , hkZ(pastemodekey.x, "Cancel", 0) , hkZ(pastemodekey.x, "Delete", 1)
 	return
 
 delete:
@@ -563,6 +596,7 @@ clipSaver() {
 			}
 			else
 				FileAppend, %ClipboardAll%, %CLIPS_dir%/%CURSAVE%.avc
+			CDS[CN.NG][CURSAVE] := ISACTIVEEXCEL ? tempCB : Clipboard ;, CDS[CN.NG][CURSAVE "f"] := GetClipboardFormat()
 			copied := 1
 		} catch {
 			if ISACTIVEEXCEL
@@ -578,12 +612,13 @@ clipSaver() {
 	Loop, %CURSAVE%
 	{
 		tempNo := CURSAVE - A_Index + 1
-		IfExist, %FIXATE_dir%\%tempNo%.fxt
+		IfExist, %FIXATE_dir%\%tempNo%.fxt 		; manage the fixed clips so they stay intact
 		{
 			t_TempNo := tempNo + 1
 			FileMove, %CLIPS_dir%\%t_TempNo%.avc,	%CLIPS_dir%\%t_TempNo%_a.avc
 			FileMove, %CLIPS_dir%\%tempNo%.avc,		%CLIPS_dir%\%t_TempNo%.avc
 			FileMove, %CLIPS_dir%\%t_TempNo%_a.avc,	%CLIPS_dir%\%tempNo%.avc
+			z := CDS[CN.NG][t_TempNo] , CDS[CN.NG][t_TempNo] := CDS[CN.NG][tempNo] , CDS[CN.NG][tempNo] := z
 			IfExist, %THUMBS_dir%\%tempNo%.jpg
 			{
 				FileMove, %THUMBS_dir%\%t_TempNo%.jpg,	%THUMBS_dir%\%t_TempNo%_a.jpg
@@ -606,15 +641,15 @@ fixCheck() {
 PasteModeTooltip(temp_clipboard) {
 	global
 	if temp_clipboard =
-		ToolTip % "{" CN.Name "} Clip " realclipno " of " CURSAVE "`t" fixStatus (WinExist("Display_Cj") ? "" : "`n`n" MSG_ERROR "`n`n")
+		ToolTip % "{" CN.Name "} Clip " realclipno " of " CURSAVE "`t" fixStatus (WinExist("Display_Cj") ? "" : "`n`n" MSG_ERROR "`n`n"), % SPM.X, % SPM.Y
 	else
 		ToolTip % "{" CN.Name "} Clip " realclipno " of " CURSAVE "`t" GetClipboardFormat() "`t" fixstatus (!FORMATTING ? "`t[" TXT.TIP_noformatting "]" : "") 
-		. "`n`n" halfclip
+		. "`n`n" halfclip, % SPM.X, % SPM.Y
 }
 
 
 ctrlCheck:
-	if !GetKeyState("Ctrl")
+	if (!GetKeyState("Ctrl")) && (!SPM.ACTIVE)
 	{
 		Critical
 		SetTimer, ctrlCheck, Off
@@ -666,7 +701,6 @@ ctrlCheck:
 		else if ctrlRef = pastemode
 		{
 			ToolTip, %MSG_PASTING%
-
 			if !FORMATTING
 			{
 				if Instr(GetClipboardFormat(), "Text")
@@ -675,7 +709,7 @@ ctrlCheck:
 					ONCLIPBOARD := 0
 					try Clipboard := Rtrim(Clipboard, "`r`n")
 					while !ONCLIPBOARD
-						sleep 20 			; wait for ONC label to be done
+						sleep 5 			; wait for ONC label to be done
 					Critical, On 			; on critical for just the case
 				}
 				Send, ^{vk56}
@@ -688,8 +722,9 @@ ctrlCheck:
 				sleeptime := 100
 			}
 		}
+
 		IN_BACK := false , is_pstMode_active := 0 , oldclip_exist := 0
-		hkZ_Group(0)
+		hkZ_pasteMode(0)
 		restoreCaller := 1 			; Restore CALLER in the ONC label . This a second line of defence wrt to the last line of this label.
 
 		Critical, Off
@@ -713,7 +748,7 @@ Ssuspnd:
 	ctrlRef := ""
 	TEMPSAVE := realActive
 
-	hkZ_Group(0)
+	hkZ_pasteMode(0)
 
 	IN_BACK := CALLER := 0
 	addToWinClip(realactive , "has Clip " realclipno)
@@ -721,7 +756,7 @@ Ssuspnd:
 	Gui, 1:Hide
 	return
 
-hkZ_Group(mode=0){
+hkZ_pasteMode(mode=0){
 ; mode=0 is for initialising Clipjump
 ; mode=1 is for init Paste Mode
 	Critical
@@ -729,6 +764,7 @@ hkZ_Group(mode=0){
 	hkZ(pastemodekey.c, "MoveBack", mode) , hkZ(pastemodekey.x, "Cancel", mode) , hkZ(pastemodekey.z, "Formatting", mode)
 	hkZ(pastemodekey.space, "Fixate", mode) , hkZ(pastemodekey.s, "Ssuspnd", mode) , hkZ(pastemodekey.e, "export", mode)
 	hkZ(pastemodekey.up, "channel_up", mode) , hkZ(pastemodekey.down, "channel_down", mode) , hkZ(pastemodekey.a, "navigate_to_first", mode)
+	hkZ(pastemodekey.f, "searchpm", mode)
 
 	if !mode        ;init Cj
 	{
@@ -739,20 +775,19 @@ hkZ_Group(mode=0){
 	}
 }
 
+;changeCDS(nc, nx, ){
+;	if nc=
+;		nc := oc
+;	CDS[nc][nx] := CDS[oc][ox]
+;	CDS[nc][nx "f"] := CDS[oc][ox "f"]
+;}
 
 ;--------------------------- CHANNEL FUNCTIONS ----------------------------------------------------------------
 
 channel_up:
 	CN.NG += 2 				;+2 to counter that -1 below
 channel_down:
-	CN.NG -= 1
-
-	TEMPSAVE += 1 		;to make active clip index be same when switching channels , counter-effects TEMPSAVE-=1 in paste_mode label.
-	if in_back
-		IN_BACK_correction()
-	if TEMPSAVE > %CURSAVE%
-		TEMPSAVE := 1
-
+	CN.NG -= 1 , correctTEMPSAVE()
 	if Instr(CN.NG, "-")
 		CN.NG := CN.Total-1
 	else if (CN.NG == CN.Total) 		;if no of channels has exceeded
@@ -777,9 +812,18 @@ pitSwap:
 
 ;---------------     Clips management based functions       ------------------
 
+correctTEMPSAVE(){
+	TEMPSAVE += 1 		;to make active clip index be same when switching channels , counter-effects TEMPSAVE-=1 in paste_mode label.
+	if in_back
+		IN_BACK_correction()
+	if TEMPSAVE > %CURSAVE%
+		TEMPSAVE := 1
+}
+
 compacter() {
 	loop, %ini_Threshold%
 	{
+		CDS[CN.NG][A_index] := ""
 		FileDelete, %A_ScriptDir%\%CLIPS_dir%\%A_Index%.avc
 		FileDelete, %A_ScriptDir%\%THUMBS_dir%\%A_Index%.jpg
 		FileDelete, %A_ScriptDir%\%FIXATE_dir%\%A_Index%.fxt
@@ -787,15 +831,17 @@ compacter() {
 	loop % CURSAVE-ini_Threshold
 	{
 		avcNumber := A_Index + ini_Threshold
-		FileMove, %A_ScriptDir%/%CLIPS_dir%/%avcnumber%.avc, %A_ScriptDir%/%CLIPS_dir%/%A_Index%.avc
-		FileMove, %A_ScriptDir%/%THUMBS_dir%/%avcnumber%.jpg, %A_ScriptDir%/%THUMBS_dir%/%A_Index%.jpg
-		FileMove, %A_ScriptDir%/%FIXATE_dir%/%avcnumber%.fxt, %A_ScriptDir%/%FIXATE_dir%/%A_Index%.fxt
+		CDS[CN.NG][A_index] := CDS[CN.NG][avcNumber] , CDS[CN.NG][avcNumber] := ""
+		FileMove, %A_ScriptDir%/%CLIPS_dir%/%avcnumber%.avc, %A_ScriptDir%/%CLIPS_dir%/%A_Index%.avc, 1
+		FileMove, %A_ScriptDir%/%THUMBS_dir%/%avcnumber%.jpg, %A_ScriptDir%/%THUMBS_dir%/%A_Index%.jpg, 1
+		FileMove, %A_ScriptDir%/%FIXATE_dir%/%avcnumber%.fxt, %A_ScriptDir%/%FIXATE_dir%/%A_Index%.fxt, 1
 	}
 	TEMPSAVE := CURSAVE := ini_MaxClips
 }
 
 clearData() {
 	LASTCLIP := ""
+	CDS[CN.NG] := {}
 	FileDelete, %CLIPS_dir%\*.avc
 	FileDelete, %THUMBS_dir%\*.jpg
 	FileDelete, %FIXATE_dir%\*.fxt
@@ -805,6 +851,7 @@ clearData() {
 
 clearClip(realActive) {
 	LASTCLIP := ""
+	CDS[CN.NG][realActive] := ""
 	FileDelete, %CLIPS_dir%\%realactive%.avc
 	FileDelete, %THUMBS_dir%\%realactive%.jpg
 	FileDelete, %FIXATE_dir%\%realactive%.fxt
@@ -823,9 +870,10 @@ renameCorrect(realActive) {
 		{
 			newName := realActive
 			realActive += 1
-			FileMove, %CLIPS_dir%/%realactive%.avc,	 %CLIPS_dir%/%newname%.avc
-			FileMove, %THUMBS_dir%/%realactive%.jpg, %THUMBS_dir%/%newname%.jpg
-			FileMove, %FIXATE_dir%/%realactive%.fxt, %FIXATE_dir%/%newname%.fxt
+			CDS[CN.NG][newname] := CDS[CN.NG][realactive] , CDS[CN.NG][realActive] := ""
+			FileMove, %CLIPS_dir%/%realactive%.avc,	 %CLIPS_dir%/%newname%.avc, 1
+			FileMove, %THUMBS_dir%/%realactive%.jpg, %THUMBS_dir%/%newname%.jpg, 1
+			FileMove, %FIXATE_dir%/%realactive%.fxt, %FIXATE_dir%/%newname%.fxt, 1
 		}
 	}
 }
@@ -985,33 +1033,6 @@ hlp:
 		run % FileExist("Clipjump.chm") ? "Clipjump.chm" : "chm_files\clipjump.html"
 	return
 
-settings:
-	Gui, 2:Hide
-	gui_Settings()
-	return
-	
-history:
-	Gui, 2:Hide
-	gui_History()
-	return
-
-channelGUI:
-	channelGUI()
-	return
-
-classTool:
-	classManager()
-	return
-
-main:
-	aboutGUI()
-	return
-
-exit:
-	save_Exit()
-	ExitApp
-	return
-
 strtup:
 	Menu, Options_Tray, Togglecheck, % TXT.TRY_startup
 	IfExist, %A_Startup%/Clipjump.lnk
@@ -1023,8 +1044,12 @@ updt:
 	Tooltip, Checking for Updates ...... , , , 3
 	URLDownloadToFile, %UPDATE_FILE%, %A_ScriptDir%/cache/latestversion.txt
 	ToolTip, ,,, 3
-	FileRead, latestVersion, %A_ScriptDir%/cache/latestversion.txt
-
+	FileRead, temp, %A_ScriptDir%/cache/latestversion.txt
+	lversion_changes := "`n`nChanges`n"
+	loop, parse, temp, `n, `r
+		if A_index=1
+			latestVersion := A_LoopField
+		else lversion_changes .= "`n" A_LoopField
 	;if Instr(latestVersion, "z") 										; z in the update file is a version which is non-auto updatable
 	;	latestVersion := Substr(latestVersion, 2) , noautoupdate := 1
 	;else noautoupdate := 0
@@ -1034,6 +1059,7 @@ updt:
 	{
 		if noautoupdate {
 			MsgBox, 48, Clipjump Update available, % "Your Version: `t`t" VERSION "`nCurrent version: `t`t" latestVersion "`n`nGo to website to download newer version" 
+			. lversion_changes
 			;. " as auto-update facility is not available."
 			IfMsgBox OK
 				BrowserRun(PRODUCT_PAGE)
@@ -1109,7 +1135,7 @@ export:
 	Gui, 1:Hide
 	SetTimer, ctrlCheck, Off
 	ctrlRef := "" , TEMPSAVE := realActive
-	hkZ_Group(0) , CALLER := CALLER_STATUS
+	hkZ_pasteMode(0) , CALLER := CALLER_STATUS
 
 	loop
 		if !FileExist(temp := A_MyDocuments "\export" A_index ".cj")
@@ -1240,6 +1266,7 @@ Receive_WM_COPYDATA(wParam, lParam)
 
 ;##############################################################################
 
+#Include %A_ScriptDir%\lib\Searchpastemode.ahk
 #Include %A_ScriptDir%\lib\Customizer.ahk
 #Include %A_ScriptDir%\lib\API.ahk
 #Include %A_ScriptDir%\lib\translations.ahk

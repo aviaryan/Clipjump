@@ -215,3 +215,12 @@ TIP_done = Erledigt
 TIP_copycutfailed = Kopieren/Verschieben nicht erfolgreich
 TIP_copy = Kopiere aktuellen Clip
 TIP_move = Verschiebe aktuellen Clip
+
+;========
+;10.5
+;========
+
+TIP_delallprompt = WARNUNG
+                 = Wollen Sie wirklich alle Clips aus diesem Channel löschen?
+                 = Drücke Y zum bestätigen.
+                 = Drücke N zum abbrechen.
