@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 10.5.9.8
+;@Ahk2Exe-SetVersion 10.6
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -41,7 +41,7 @@ global ini_LANG := ""
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "10.5.9.8"
+global VERSION := "10.6"
 global CONFIGURATION_FILE := "settings.ini"
 
 ini_LANG := ini_read("System", "lang")
@@ -113,15 +113,12 @@ If !FileExist(CONFIGURATION_FILE)
 {
 	save_default(1)
 	
-	MsgBox, 52, Recommended, Do you want to see the Clipjump help ?
+	MsgBox, 52, Recommended, % TXT.ABT_seehelp
 	IfMsgBox, Yes
 		gosub, hlp
-
 	if !A_IsAdmin
-		MsgBox, 16, WARNING, Clipjump is not running as Administrator`nThis (may) cause improper functioning of the program.`n`n[This message will be shown only once]
-
-	try TrayTip, Clipjump, Hi!`nClipjump is now activated.`nTry doing some quick copy and pastes..., 10, 1
-
+		MsgBox, 16, WARNING, % TXT.ABT_runadmin
+	try TrayTip, Clipjump, % TXT.ABT_cjready , 10, 1
 }
 else if (ini_Version != VERSION)
 	save_default(0) 			;0 corresponds to selective save
@@ -572,32 +569,42 @@ navigate_to_first: 		; navigates clip pos to the first in paste mode
 	return
 
 clipSaver() {
-
 	FileDelete, %CLIPS_dir%/%CURSAVE%.avc
 	HASCOPYFAILED := 0
 
 	Tooltip, Processing,,, 7
 	while !copied
 	{
-		if ( A_index=100 ) {
+		if ( A_index=100 ) or HASCOPYFAILED {
 			HASCOPYFAILED := 1
 			Tooltip,,,, 7
 			return
 		}
-
 		try {
 			if ISACTIVEEXCEL
 			{
 				foolGUI(1) 										;foolGUI() is a blank gui to get focus over excel [crazy bug- crazy fix]
 				tempC := ClipboardAll
 				tempCB := Clipboard
-				FileAppend, %tempC%, %CLIPS_dir%/%CURSAVE%.avc
 				foolGUI(0)
 			}
 			else
-				FileAppend, %ClipboardAll%, %CLIPS_dir%/%CURSAVE%.avc
-			CDS[CN.NG][CURSAVE] := ISACTIVEEXCEL ? tempCB : Clipboard ;, CDS[CN.NG][CURSAVE "f"] := GetClipboardFormat()
-			copied := 1
+				tempC := ClipboardAll
+
+			if Substr(CN.Name, 1, 1) = "_" 		; protected channels
+			{
+				Critical, Off
+				temp21 := TT_Console("{" CN.Name "} " TXT.TIP_confirmcopy, "Y N")
+				Critical, On
+			}
+			if (temp21 = "Y") or (temp21 = "")
+			{
+				FileAppend, %tempC%, %CLIPS_dir%/%CURSAVE%.avc
+				CDS[CN.NG][CURSAVE] := ISACTIVEEXCEL ? tempCB : Clipboard  ;, CDS[CN.NG][CURSAVE "f"] := GetClipboardFormat()
+				copied := 1
+			}
+			else HASCOPYFAILED := 1
+
 		} catch {
 			if ISACTIVEEXCEL
 				foolGUI(0)

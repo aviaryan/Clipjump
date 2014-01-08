@@ -24,8 +24,8 @@ searchPasteMode(x, y, h){
 
 searchpm_edit:
 	Gui, searchpm:submit, nohide
-	searchpm_search(searchpm)
-	searchpm_jumptomatch(SPM.CHANNEL, SPM.TEMPSAVE+1, 1, searchpm="" ? 1 : 0)
+	spm_ct := searchpm_search(searchpm)
+	searchpm_jumptomatch(SPM.CHANNEL, SPM.TEMPSAVE+1, 1, (searchpm="") or (spm_ct=0) ? 1 : 0)
 	return
 
 spm_paste:
@@ -87,6 +87,7 @@ searchpm_search(term){
 	}
 	SEARCHOBJ.pointer := c?1:0
 	SEARCHOBJ.rescount := c
+	return c
 }
 
 searchpm_jumptomatch(ich, iclip, f, default=0){
@@ -108,6 +109,10 @@ searchpm_jumptomatch(ich, iclip, f, default=0){
 	}
 	else {
 		GuiControl, searchpm:, Edit2, % "0/0"
+		changeChannel(nextch, 0)
+		IN_BACK := 0 , TEMPSAVE := nextclip
+		gosub paste
+		return 0
 	}
 }
 

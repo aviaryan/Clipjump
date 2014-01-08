@@ -212,10 +212,27 @@ TIP_copy = Copy current Clip
 TIP_move = Move current Clip
 
 ;========
-;10.5
+;10.5 beta
 ;========
 
 TIP_delallprompt = WARNING
                  = Do you really want to delete all clips in the current channel?
                  = Press Y to confirm.
                  = Press N to cancel.
+
+;=======
+;10.6
+;=======
+
+TIP_confirmcopy = You see this confirmation because this is a protected channel.
+                = Do you approve this copy to the channel ?
+                = Press Y for Yes
+                = Press N for No
+ABT_seehelp = Do you want to see the Clipjump help ?
+ABT_runadmin = Clipjump is not running as Administrator
+             = This (may) cause improper functioning of the program.
+             = 
+             = [This message will be shown only once]
+ABT_cjready = Hi!
+            = Clipjump is now activated.
+            = Try doing some quick copy and pastes...

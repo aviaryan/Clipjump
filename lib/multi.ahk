@@ -110,7 +110,7 @@ Channel_deletebutton:
 	Gui, Channel:submit, nohide
 	if !cIndex
 		MsgBox, 48, Clipjump Channels, % TXT.CNL_del_default
-	else
+	else if (cIndex<CN.Total) 	; filter out cases when a not created channel is deleted	
 	{
 		MsgBox, 52, % "Clipjump Channel : " cname , % TXT.CNL_delmsg
 		IfMsgBox, Yes
@@ -181,7 +181,8 @@ changeChannel(cIndex, backup_old:=1){
 		TOTALCLIPS := 999999999999
 
 	if backup_old
-		CN["TEMPSAVE" CN.N] := TEMPSAVE , CN["CURSAVE" CN.N] := CURSAVE		;Saving Old - TEMPSAVE is auto-corrected at the end of paste mode and so no need to fix it.
+		CN["TEMPSAVE" CN.N] := TEMPSAVE , CN["CURSAVE" CN.N] := CURSAVE	, CN.prevCh := CN.NG	;Saving Old - TEMPSAVE is auto-corrected at 
+		;the end of paste mode and so no need to fix it.
 	CN.N := cIndex , CN.NG := !CN.N?0:CN.N 				;note that cIndex has been emptied if 0
 
 	TEMPSAVE := CN["TEMPSAVE" cIndex] + 0 , CURSAVE := CN["CURSAVE" cIndex] + 0		;Restoring current
@@ -266,7 +267,7 @@ manageChannel(orig, new=""){
 	{
 		loop, parse, l, % A_space
 			FileRemoveDir, % "cache\" A_LoopField orig, 1
-		try Inidelete,% CONFIGURATION_FILE, Channels, % orig
+		ini_delete("Channels", orig)
 		CDS[orig] := {}
 		; move channels one step back
 		c := 0
