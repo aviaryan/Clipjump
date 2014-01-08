@@ -15,11 +15,11 @@
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Help Contents">
-		<param name="Local" value="USAGE\index.html">
+		<param name="Local" value="docs/index.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="FAQ">
-		<param name="Local" value="USAGE\faq.html">
+		<param name="Local" value="docs/faq.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Index">
@@ -27,7 +27,7 @@
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Clipjump Channels">
-		<param name="Local" value="USAGE/channels.html">
+		<param name="Local" value="docs/channels.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Clipjump Controller">
@@ -35,107 +35,119 @@
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Disable history with the Pit channel">
-		<param name="Local" value="USAGE/channels.html#pit">
+		<param name="Local" value="docs/channels.html#pit">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="The Pit channel">
-		<param name="Local" value="USAGE/channels.html#pit">
+		<param name="Local" value="docs/channels.html#pit">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Clipjump History Tool">
-		<param name="Local" value="USAGE/history.html">
+		<param name="Local" value="docs/history.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Clipjump Settings Editor">
-		<param name="Local" value="USAGE/settings.html">
+		<param name="Local" value="docs/settings.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Guide">
-		<param name="Local" value="USAGE/basic_help.html">
+		<param name="Local" value="docs/basic_help.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Changing Channels in Paste Mode">
-		<param name="Local" value="USAGE/channels.html#chnljumps">
+		<param name="Local" value="docs/channels.html#chnljumps">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Customizing Clipjump">
+		<param name="Local" value="docs/custom.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Search in Paste mode">
+		<param name="Local" value="docs/basic_help.html#spm.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Protected Channels">
+		<param name="Local" value="docs/channels.html#protected">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Copying file/folder paths">
-		<param name="Local" value="usage/basic_help.html#path">
+		<param name="Local" value="docs/basic_help.html#path">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Sound when copied">
-		<param name="Local" value="USAGE/basic_help.html#beep">
+		<param name="Local" value="docs/basic_help.html#beep">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Auto-disable at certain windows">
-		<param name="Local" value="USAGE/basic_help.html#ignorew">
+		<param name="Local" value="docs/basic_help.html#ignorew">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Class Grab Tool">
-		<param name="Local" value="USAGE/basic_help.html#ignorew">
+		<param name="Local" value="docs/basic_help.html#ignorew">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Selective Windows Clipboard">
-		<param name="Local" value="usage/basic_help.html#winclip">
+		<param name="Local" value="docs/basic_help.html#winclip">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Shortcuts">
-		<param name="Local" value="usage/basic_help.html#short">
+		<param name="Local" value="docs/basic_help.html#short">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Fixate">
-		<param name="Local" value="usage/basic_help.html#fx">
+		<param name="Local" value="docs/basic_help.html#fx">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Insta-Paste (History GUI)">
-		<param name="Local" value="USAGE/history.html#ipaste">
+		<param name="Local" value="docs/history.html#ipaste">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Modify/Disable History tool shortcut">
-		<param name="Local" value="USAGE/history.html#his_short">
+		<param name="Local" value="docs/history.html#his_short">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Disable History keeping">
-		<param name="Local" value="USAGE/history.html#dis_his">
+		<param name="Local" value="docs/history.html#dis_his">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Export and share Clipboards">
-		<param name="Local" value="USAGE/basic_help.html#export">
+		<param name="Local" value="docs/basic_help.html#export">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Set names to Channels">
-		<param name="Local" value="USAGE/channels.html">
+		<param name="Local" value="docs/channels.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Translating Clipjump">
-		<param name="Local" value="USAGE/translate.html">
+		<param name="Local" value="docs/translate.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="PitSwap">
-		<param name="Local" value="USAGE/channels.html#pitswap">
+		<param name="Local" value="docs/channels.html#pitswap">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Resetting Clipjump">
-		<param name="Local" value="USAGE/basic_help.html#reset">
+		<param name="Local" value="docs/basic_help.html#reset">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Copy to system Clipboard">
-		<param name="Local" value="usage/ini.html#syscopy">
+		<param name="Local" value="docs/ini.html#syscopy">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Change Paste Mode shortcut">
-		<param name="Local" value="usage/basic_help.html#paste">
+		<param name="Local" value="docs/basic_help.html#paste">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Preview Window">
-		<param name="Local" value="USAGE/history.html#preview">
+		<param name="Local" value="docs/history.html#preview">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Partial Searching">
-		<param name="Local" value="USAGE/history.html#partial">
+		<param name="Local" value="docs/history.html#partial">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Action Mode">
-		<param name="Local" value="USAGE/basic_help.html#actmd">
+		<param name="Local" value="docs/basic_help.html#actmd">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Changelog">

@@ -1165,22 +1165,45 @@ editclip:
 	try temp_clipboard := Clipboard
 	gosub endPastemode
 	if temp_clipboard =
+	{
+		autoTooltip(TXT.TIP_editnotdone, 800, 1)
 		return
+	}
 	Tooltip, % TXT.TIP_editing
+	hkZ("Esc", "editclip_cancel", 1)
 	FileDelete, cache\edit.txt
 	FileAppend, % temp_clipboard , cache\edit.txt
-	runwait, % ini_defEditor " """ A_ScriptDir "\cache\edit.txt" """"
-	Fileread, temp_clipboard, cache\edit.txt
+	Critical, Off
+	run, % ini_defEditor " """ A_ScriptDir "\cache\edit.txt" """",,, editclip_pid
+	loop {
+		Process, Exist, % editclip_pid
+		if !ErrorLevel
+			break
+		sleep 100
+	}
+	if editclip_cancel
+	{
+		editclip_cancel := "" , autoTooltip(TXT.TIP_editnotdone, 800, 1)
+		return
+	}
+	Fileread, temp_clipboard2, cache\edit.txt
 	API.blockMonitoring(1)
 	try oldclip := ClipboardAll
-	try Clipboard := temp_clipboard
+	try Clipboard := temp_clipboard2
 	API.blockMonitoring(0) , API.blockMonitoring(1)
 	try temp_clipboardall := ClipboardAll
 	try Clipboard := oldclip
 	FileAppend, % temp_clipboardall, %CLIPS_dir%/%TEMPSAVE%.avc
-	CDS[CN.NG][TEMPSAVE] := temp_clipboard
+	CDS[CN.NG][TEMPSAVE] := temp_clipboard2
 	autoTooltip(TXT.TIP_editdone, 800, 1)
 	API.blockMonitoring(0)
+	return
+
+editclip_cancel:
+	Critical, On
+	editclip_cancel := 1
+	hkZ("Esc", "editclip_cancel", 0)
+	Process, Close, % editclip_pid
 	return
 
 windows_copy:

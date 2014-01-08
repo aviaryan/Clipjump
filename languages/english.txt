@@ -237,4 +237,6 @@ ABT_cjready = Hi!
             = Clipjump is now activated.
             = Try doing some quick copy and pastes...
 TIP_editing = Editing....
+            = Press Esc to cancel
 TIP_editdone = Clip has been edited
+TIP_editnotdone = Clip NOT edited !

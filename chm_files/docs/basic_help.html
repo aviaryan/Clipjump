@@ -9,7 +9,7 @@
 <body>
 <br>
 
-<h4><a name=bu>Basic Usage</a></h4><br>
+<h4><a name=bu>Getting Started</a></h4><br>
 <ul>
 <li>After Downloading Clipjump, unzip it and run Clipjump.exe .<br>
 It's a portable application so no installation is needed.<br>
@@ -26,7 +26,7 @@ Here, Release Ctrl to paste.<br><br>
 <a href="../images/pasting.png"><img src="../images/pasting.png" border="0"></a><br><br>
 <li>To move through Multiple Clipboards, press V again while holding Ctrl. [while in Paste Mode]<br>
 Release Ctrl to Paste.Tap C while holding Ctrl to move backwards.
-<li>To Cancel Copy, press X while in Paste mode <b>[Ctrl Pressed]</b>.<br>
+<li>To Cancel paste operation, press X while in Paste mode <b>[Ctrl Pressed]</b>.<br>
 The tip should change to a Cancel Message. This is <strong class="mild">[Cancel Mode]</strong><br>
 Release Ctrl to confirm.<br>
 
@@ -36,14 +36,21 @@ The tip should now change to a Delete Message. This is <b>[Delete Mode]</b><br>
 Release Ctrl to confirm.<br><br>
 <a href="../images/delete.png"><img src="../images/delete.png" border="0"></a><br><br>
 
-<li>Press X now to go to the Move mode and Copy mode. You can learn more about them <a href=#copycutclip>here.</a><br>
+<li>While holding Press X now to go to the Move mode(3) and Copy mode(4). 
+	Release Ctrl here to copy and move clips to a different <a href="channels.html">channel</a>.Detailed info about these features can be found 
+	<a href=#copycutclip>here.</a><br>
 <img src="../images/copyclip.png">
 <br>
 
 <li><a name="delete_all"></a>To Delete all Clips, press X 5 times in Paste Mode OR 4 times in Cancel Mode OR thrice in Delete Mode.
-The tip should change to a Delete All message.This is <b>[Delete All Mode]</b> <br><br>
+The tip should change to a Delete All message.This is <b>[Delete All Mode]</b> <br>
 Release Ctrl and then confirm the confirmation tip with <i>Y</i> to proceed. 
+<br><br>
 
+Use F when holding Ctrl in <b>Paste mode</b> to find a clip. When you press F, a box appears where you can type some text (after releasing Ctrl) to 
+find clips containing that text. Use Up and Down keys to jump through the results, Enter to paste and Esc/Home to cancel. More in-depth info of 
+this feature can be found <a href=#spm>later</a>. 
+<br><br>
 
 </ul><br>
 <h3>Notes</h3>
@@ -73,12 +80,10 @@ positions of all other Clipboards change.<br>Thus, if a Clipboard is fixed at [C
 will stay there at Clip 1 even after numerous Copies and Cuts.<br>
 This can be useful if you want a Clipboard entry to be easily accessible every time you
 go in Paste Mode using Ctrl+V. <br>
-
 <strong class="super">Please note</strong> that Clipjump remembers last pasted clip's position. So, if you have just pasted [Clip 5], Clipjump will
 <b>start from [Clip 5]</b> the next time you press Ctrl and then V [Paste Mode].<br>
 Use the A key in Paste Mode to go back to the first clip and thus change the clip pointer permanently.<br>
 <br>
-
 <strong class="super">Using Fixate</strong><br>
 Pressing SPACE while in [Paste Mode] toggles the Fixed status of a Clip.<br>
 If you reach the clip of your choice and want to fix it, press SPACE and you
@@ -86,8 +91,9 @@ will notice a "[FIXED]" written after <b>(Clip x of y)</b>.<br>
 This means the Clip is Fixed there. As said above , <strong class="mild">pressing SPACE again
 on the fixed clip will remove the FIX from it and the "[FIXED]" from the tip will disappear.</strong>
 <br><br>
-<a href="../images/fixate.jpg"><img src="../images/fixate.png" border="0"></a><br><br>
+<a href="../images/fixate.png"><img src="../images/fixate.png" border="0"></a><br><br>
 <strong class="super">Note that the DeleteAll option will delete FIXED Clips too.</strong><br><hr><br>
+
 
 <h3><a name=path>Copying Paths to Clipjump</a></h3>
 <ul>
@@ -142,7 +148,7 @@ No formatting mode truncates formatting from Clipjump clips when they are pasted
 To access this mode, use the "Z" key as the toggle when in <strong class=super>[PASTE MODE]</strong><br>
 Press "Z" once while in [PASTE MODE] and you will see a <strong class="super">[NO-FORMATTING]</strong> in the Tip.<br>
 This will mean all the clipboard data pasted from now onwards will have Formatting truncated.<br>
-To disable this mode, press "Z" again while in [PASTE MODE] and the [NO-FORMATTING] text will dissappear.<br><br>
+To disable this mode, press "Z" again while in [PASTE MODE] and the [NO-FORMATTING] text will disappear.<br><br>
 
 <strong class=super><a name="nof_notes">Note that</a></strong> that the No-Formatting setting doesn't mean that clips copied will not have any formatting, this means that the formatting will be removed from them <b>temporarily</b> when they are pasted.<br><br>
 <img src="../images/noformat.png" border="0">
@@ -150,6 +156,47 @@ To disable this mode, press "Z" again while in [PASTE MODE] and the [NO-FORMATTI
 <br><br>
 <strong class=super>TIP</strong> - To make Clipjump start by default in NO-FORMATTING mode , see the option <code>Start with No Formatting Enabled</code> in the Settings editor. 
 <br><br><br>
+
+<h3><a name=editclip>Edit Clips in Paste Mode</a></h3>
+<i>[v10.6+]</i> Press H in Paste mode to start editing a clip. <br> The Paste mode will end and your default_editor will open the clip.
+The default_editor can be configured from the System section of settings.ini. <br> 
+Once the editor comes up, change the clip according to needs, save the changes and then <b>exit the editor</b>. <br>
+Clipjump will respond to the exit and update the clip. Alternatively press Esc anytime to exit. 
+<br>Note that this feature is meant for text-only clips and all formatting in updated clips will be lost.
+<br><br><br>
+
+<!-- spm -->
+<h3><a name=spm>Search in Paste mode</a></h3>
+<i>[v10.6+]</i> Press F to activate the Search feature in Paste mode. A box should come above the tip.<br>
+From here, you can search for specific text among all the clips in all the channels. Here are the key points-
+<ul>
+<li>When Search box is active, leave Ctrl and type your query . Don't worry paste will not be invoked.
+<li>As you type, you will see the tip jump to the first matched point. First it searches the currently active channel and then goes in ascending order to the next channels. Use Up and down to move Up and down the results
+<li>Use Enter to paste if your result is in the underlying tip.
+<li>Use Home/Esc to cancel paste operation.
+<li>To later hide the box, hold Ctrl again and press F. Keep holding Ctrl now, you are in Paste mode.
+</ul>
+The search follows the partial search methodology <a href="history.html#partial">as seen</a> in the History Tool.<br>
+<br>
+<strong class="super">Important INFO</strong><BR>
+When using Search-Paste mode, the clip pointer will not be affected provided you end the activity with Search Paste Mode. That is you use 
+either Enter to paste or Home/Esc to cancel.
+<br>
+<b>Example</b> - The active clip will stay as it is (eg > Clip 4 of channel 0 ) even if you search something and that is in 5th clip of {6} channel. Use Enter to 
+paste it and you will find that the active clip in paste mode is still clip 4 of channel {0} if you reopen it with Ctrl+v. 
+<br>
+Clip pointer is not kept (updated) if you press Ctrl+F in Search-paste mode to close the search window. 
+<br>
+All other Paste mode shortcuts, Ctrl+E for export, Ctrl+Space for fixate are still valid in Search paste mode.
+<br>
+While searching if you arrive at a tip you want to paste without formatting, you can use Ctrl+Z and then Enter instead of Ctrl+F to close search window, then Ctrl+Z to no-formatting and then release of Ctrl.
+<br>
+The former method here will keep the clip pointer preserved as it ends with an action of the Search Paste Mode.
+<br><br>
+<strong class="mild">Tip</strong> - You can change shortcuts in Search paste mode through <a href=custom.html#2>ClipjumpCustom.ini</a>.
+<br><br><br>
+<!-- -->
+
 
 <!--- -->
 
@@ -193,7 +240,7 @@ To have more control over Clipjump, see <a href="../clipjumpcontroller.html">Cli
 <a name=ignorew><h3>Ignore(d) Windows Manager</h3></a>
 Clipjump can be temporarily automatically suspended when a certain window is active with this feature. The feature requires the active window's class which can 
 be very easily managed with the <b>Ignore(d) Windows Manager</b> located in the Tray Menu>Tools or in the Action Mode with easy key <code>L</code>. <br>
-Use the Add Class buttton in the manager to start a tooltip application that shows the class of the active window. To make a window active, simply make it foreground 
+Use the Add Class button in the manager to start a tooltip application that shows the class of the active window. To make a window active, simply make it foreground 
 by left-clicking on it.<br>
 Use Delete Class button to delete a value.<br><br>
 Note that you will have to restart Clipjump once you have made changes to the Settings.ini for them to take effect.
@@ -201,23 +248,27 @@ Note that you will have to restart Clipjump once you have made changes to the Se
 <br><br><br>
 
 <h3><a name=short>Shortcut List</a></h3>
-<b>Ctrl Held/Pressed</b><br>
+<b>Paste Mode (Ctrl Held)</b><br>
+See <a href=custom.html#2>ClipjumpCustom.ini</a> example to change these keys<br><br>
+
 V - Activate PASTE-MODE and move forward through Multiple Clipboards (from 1 to 2 , 2 to 3)<br>
 C - Move backwards through Multiple Clipboards (from 3 to 2 , 2 to 1) <br>
 S - Add current Clip to Windows Clipboard [Selective Windows Clipboard Option] <br>
 X - Toggle between, Cancel,Delete,Delete All MODE <br>
 E - Export current clip<br>
 A - Jump to first clip<br>
+F - Activate Search<br>
+H - Edit Clip<br>
 Space - Fix/un-fix a clipboard at its position. <br>
 Z - Toggle Formatting for Clips <br><br>
 
-<b>General</b><br>
+<b>General (System Wide)</b><br>
 Ctrl+Shift+A - Action Mode<br>
 Win+C - Open Clipjump Clipboard History Tool<br><br>
 
 <hr noshade=noshade size=5 color=yellow>
 <br>
-<a href="http://translate.google.com/translate?hl=en&sl=en&u=rawgithub.com/avi-aryan/Clipjump/master/chm_files/USAGE/basic_help.html" id="translate">Translate</a>
+<a href="http://translate.google.com/translate?hl=en&sl=en&u=clipjump.sourceforge.net/docs/basic_help.html" id="translate">Translate</a>
 <br><br>
 
 </body>

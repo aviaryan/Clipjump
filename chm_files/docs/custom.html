@@ -1,0 +1,197 @@
+<html>
+<head>
+  <title>Clipjump Customizer</title>
+  <link rel="stylesheet" href="../Blogs.css" type="text/css">
+
+  <link type="text/css" rel="stylesheet" href="../s/syntaxhl/styles/shCore.css"/>
+   <link type="text/css" rel="stylesheet" href="../s/syntaxhl/styles/shThemeZenburn-A.css"/>
+
+    <!-- Brushes -->
+    <script type="text/javascript" src="../s/syntaxhl/scripts/shCore.js"></script>
+    <script type="text/javascript" src="../s/syntaxhl/scripts/shBrushIni.js"></script>
+
+   <!-- <script type="text/javascript">
+        SyntaxHighlighter.all();
+    </script> -->
+</head>
+
+<body>
+<i>[v10.6+]</i>
+<font size=+1><b>ClipjumpCustom.ini</b></font> can be configured to change hidden variables in Clipjump to make Clipjump totally custom for a user.<br>
+The file is created and loaded when you start Clipjump.<br>
+It gives power to-
+<ul>
+	<li>Change previously unchangeable shortcuts
+	<li>bind a hotkey to an action (like a hotkey to toggle Incognito Mode)
+	<li>run coded <i>labels</i> and <i>functions</i> to tailor-make any complex user function. (you may need my help here and I am here to help)
+	<li>send key-presses to facilitate scripting/macro
+</ul><br>
+
+<h3>Basic commands</h3>
+The Ini can contain multiple sections ([....]) which may use the following commands in needed order to execute them one by one.
+<ul>
+	<li>run - run a label or function
+	<li>bind - bind a hotkey (shortcut) to a section
+	<li>tip - show a tooltip with text
+	<li>send - sends or stimulates text
+	<li>sleep - wait for time in milliseconds
+</ul>
+Besides this you can also change the inner variables of Clipjump just by using a variable = value syntax.<br>
+Some of the most common variables needed to work highly requested features have been given below.<br><br>
+
+<h4>Example 1 (Shortcut to toggle Incognito Mode)</h4>
+<pre class="brush: ini;">
+[toggle_incognito]
+bind=Win+Alt+I
+run=incognito
+tip=Incognito Mode toggled
+</pre>
+The above code uses 3 commands, bind, run and tip.<br>
+<ol>
+	<li>Bind creates a shortcut for the section meaning that the section will not <b>auto-execute at Clipjump start.</b> Here that shortcut is <code>Win + Alt + I</code>.
+	<li>run runs the label 'incognito' inside Clipjump which is responsible for toggling incognito mode.
+	<li>tip shows a tooltip when this custom function is run. Here the tip shown will contain the text 'Incognito Mode toggled'.
+</ol>
+<br><br>
+
+
+<h4><a name=2>Example 2 (changing NO-FORMATTING key to Y)</a></h4>
+<pre class="brush: ini;">
+[AutoRun]
+pastemodekey.z=^y
+</pre>
+The above code changes the inbuilt variable <code>pastemodekey.z</code> to '^y' i.e. y . <br>
+If you remember, z is the default easy key for No-Formatting in Paste Mode. The above code runs at Clipjump start (as the section has no 'bind') and changes the PasteMode 
+inbuilt variable.<br>
+<ul>
+	<li>The Pastemode group has all variables as pastemodekey.(key) where '(key)' is the original key. Same is for Search in paste mode. It has all variables as 
+		spmkey.(key). So the following code will also change Channel up, Channel down and cancel in Search Paste mode shortcuts.
+		shortcuts in pastemode from Up and Down arrow keys to some other.
+		<pre class="brush: ini;">
+		[AutoRun]
+		pastemodekey.z=^y
+		pastemodekey.up=^q
+		pastemodekey.down=^d
+		spmkey.home=PgDn</pre>
+	<li>The key names are according to the <a href="http://www.autohotkey.com/docs/KeyList.htm">AutoHotkey key list</a>. 
+</ul>
+<br><br>
+
+
+<h4>Example 3 (Shortcut to check for updates)</h4>
+<pre class="brush: ini;">
+[section_name_can_be_anything]
+run=updt
+bind=Win+Alt+U
+</pre>
+<ul>
+	<li>'updt' is label used in Clipjump to update and the 'run' command runs it.
+	<li>As you see, it is not necessary to keep 'bind' at the first line of the section. It can be anywhere.
+</ul>
+<br><br>
+
+<h4>Example 4 (Shortcut to paste current content on system clipboard instantly)</h4>
+<pre class="brush: ini;">
+[paste_current]
+bind=Ctrl+Shift+V
+run=simplePaste
+</pre>
+<ul>
+	<li>'simplePaste' is label in Clipjump to paste current content on Clipboard.
+	<li>Press Ctrl+Shift+V and the current Clipboard will be pasted instantly.
+</ul>
+<br><br>
+
+<h4>Example 5 (Instantly switching to your fav channel)</h4>
+Suppose you fav channel is #4 as it stores some important web links. We will use the inbuilt changeChannel function in Clipjump to do the purpose.
+<pre class="brush: ini;">
+[changeto_4]
+bind=Win+4
+run=changeChannel(4)
+tip=Channel changed to 4
+</pre>
+<br><br>
+
+<h4>Example 6 (Restart Clipjump - Use it a lot while testing)</h4>
+<pre class="brush: ini;">
+[restart]
+bind=Ctrl+Shift+F12
+run=reload
+</pre>
+<br><br>
+
+<h4>Example 7 (Paste Signature)</h4>
+So you have your signature "FIXED" in the Clip 1 position of 2nd channel as you use it always. <br>
+Here is an awesome customization for you-
+<pre class="brush: ini;">
+[paste_sig]
+bind=Ctrl+F8
+run=API.paste(2,1)
+</pre>
+API.Paste(channel_number, clip_number) is a function that paste clip_number from channel_number in Clipjump. Pressing Ctrl+F8 will automatically paste your signature now.
+<br><br>
+
+<h4>Example 8 [SEND] (Filling Form)</h4>
+The first example using Send. As briefed above, the command sends or stimulates a key press.<br>
+So to get started, know that 'Send' has some rules which must be noted.<br>
+<ul>
+	<li>To stimulate key combination press like Win+C, use <code>send=Win+C</code>. When pressing key combination using send, keep it in a single line.
+	<li>To stimulate a key press like Tab or PageDown, use <code>send={Tab}</code> or <code>send={Enter}</code> or <code>send={tab}{enter}</code> if you want both.
+	<li>To write text using send command like 'Hi there', use <code>send=Hi there</code>.
+</ul>
+<br>
+<b>Situation</b> - Suppose you want to fill a web form with 4 fields and the fields focus can be switched with TAB, here is the customization to use -
+<pre class="brush: ini;">
+[fill_that_form]
+bind=Ctrl+Shift+F9
+run=API.paste(,1)
+send={tab}
+run=API.paste(,2)
+send={tab}
+run=API.paste(,3)
+send={tab}
+run=API.paste(,4)
+</pre>
+<ul>
+	<li>Keep focus on the first of the 4 fields and press Ctrl+Shift+F9 and watch all the other 4 fields filled automatically.
+	<li>As you may have read in example 7, API.paste() pastes clipno from channelno. If channelno is blank (like here), it defaults to the current active channel.
+	<li>You may use <code>sleep=500</code> to wait for a particular time in milliseconds.
+</ul>
+<br><br>
+
+<h4>Example 9 (moving clips)</h4>
+We will use the <code>API.manageClip(new_channel, channel, clip, flag)</code> function here. 'channel' and 'clip' default to teh current active ones if no value for them 
+is passed. <br>
+<b>Situation</b> - Suppose you copied a trash/incorrect information in the current protected/normal channel accidently. Here is the code to move it to 
+<a href="channels.html#Pit">Pit</a> channel which is say at Chno. 2<br>
+<pre class="brush: ini;">
+[trash_clip]
+bind=Ctrl+Win+Del
+run=API.manageClip(2,,,0)
+tip=The current active clip was gvdlfe off!
+</pre>
+The last paramter 'flag' is 0 for move and 1 for copy. Here we are moving the clip.
+<br><br>
+<br>
+
+<h4>Other useful labels, functions and variables</h4>
+<ul>
+	<li><code>run=disable_clipjump</code> - Toggle Clipjump Status (disable/enable)
+	<li><code>Clipboard=some_text</code> - Clipboard is an inner variable that holds Clipboard data. Chnange it like above to add custom text to Clipboard. 
+	This Clipboard change <b>will be captured</b> by Clipjump.
+	<li><code>run=BeepAt(1, 1000, 500)</code> - Make a beep sound. The First parameter should be 1 but the second and third are frequency of the beep and 
+	duration in milliseconds respectively. A good alternative to <code>tip</code>.
+</ul>
+
+<br><br>
+<a href="examples/ClipjumpCustom.ini">Example ClipjumpCustom.ini File</a><br>
+If you need help on Customizations, you can ask in comments on the <a href="http://clipjump.sourceforge.net">main site</a> or from any of links in the 
+<a href="../contact.html">contact</a> page.
+<br><br>
+<hr noshade=noshade size=5 color=yellow>
+<br>
+<a href="http://translate.google.com/translate?hl=en&sl=en&u=clipjump.sourceforge.net/docs/custom.html" id="translate">Translate</a>
+<br><br>
+</body>
+
+</html>
