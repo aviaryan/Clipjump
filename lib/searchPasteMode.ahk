@@ -33,6 +33,7 @@ spm_paste:
 	gosub SPM_dispose
 	return
 
+searchpmGuiEscape:
 spm_cancel:
 	ctrlref := "cancel" , SPM.KEEP := 1
 	gosub SPM_dispose

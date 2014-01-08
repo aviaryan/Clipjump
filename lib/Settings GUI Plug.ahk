@@ -321,9 +321,8 @@ load_Settings(all=false)
 			, Ini_Write("Advanced", "actionmode_keys", ini_actmd_keys, 0)
 
 		ignoreWindows := ini_read("Advanced", "ignoreWindows")
-
 		cut_is_delete_windows := ini_read("Advanced", "cut_equalto_delete")
-
+		ini_defEditor := (t:=ini_read("System", "default_editor")) ? t : "Notepad.exe"
 		;change priority once
 		priority := ini_read("System", "Priority")
 		try Process, Priority,, % Priority
@@ -398,7 +397,7 @@ save_Default(full=1){
 
 	IniWrite, %VERSION%,% CONFIGURATION_FILE, System, Version
 	ini_write("System", "Priority", "N")
-
+	ini_write("System", "default_editor", "Notepad.exe")
 	s := "Shortcuts"
 	Ini_Write(s, "Copyfilepath_K")
 	Ini_Write(s, "Copyfolderpath_K")

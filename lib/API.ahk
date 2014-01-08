@@ -129,16 +129,20 @@ class API
 	}
 
 	;blocks CB monitoring
-	blockMonitoring(yes=1){
+	blockMonitoring(yes=1, sleeptime=10){
 		Critical, Off 		; necessary to let onclipboard break process if needed
 		if yes
 		{
-			CALLER := 0 , ONCLIPBOARD := 0
+			CALLER := 0 , ONCLIPBOARD := ""
 			while CALLER
-				sleep 10
+				sleep % sleeptime
 		} else {
 			while !ONCLIPBOARD
-				sleep 20
+			{
+				sleep % sleeptime
+				if (sleeptime*A_index) > 1000
+					break
+			}
 			CALLER := CALLER_STATUS
 		}
 	}

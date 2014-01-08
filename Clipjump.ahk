@@ -50,7 +50,7 @@ global TXT := Translations_load("languages/" ini_LANG ".txt") 		;Load translatio
 global UPDATE_FILE := "https://raw.github.com/avi-aryan/Clipjump/master/version.txt"
 global PRODUCT_PAGE := "http://clipjump.sourceforge.net"
 global HELP_PAGE := "http://avi-win-tips.blogspot.com/2013/04/clipjump-online-guide.html"
-global AUTHOR_PAGE := "http://aviaryan.sourceforge.net"
+global AUTHOR_PAGE := "http://avi.uco.im"
 
 global MSG_TRANSFER_COMPLETE := TXT.TIP_copied " " PROGNAME    ;not space
 global MSG_CLIPJUMP_EMPTY := TXT.TIP_empty1 "`n`n" PROGNAME " " TXT.TIP_empty2 "`n`n" TXT.TIP_empty3 ;not `n`n
@@ -76,7 +76,7 @@ FileCreateDir, cache/clips
 FileCreateDir, cache/thumbs
 FileCreateDir, cache/fixate
 FileCreateDir, cache/history
-FileSetAttrib, +H, %A_ScriptDir%\cache
+FileSetAttrib, -H, %A_ScriptDir%\cache
 
 ;Init Non-Ini Configurations
 FileDelete, % A_temp "/clipjumpcom.txt"
@@ -112,10 +112,12 @@ Iniread, ini_Version, %CONFIGURATION_FILE%, System, Version
 If !FileExist(CONFIGURATION_FILE)
 {
 	save_default(1)
-	
-	MsgBox, 52, Recommended, % TXT.ABT_seehelp
-	IfMsgBox, Yes
-		gosub, hlp
+	if !Instr(VERSION, ".", 0, 1, 3) 		; betas have format x.y.a.b that is 4 numbers and so the instr is true for them.
+	{
+		MsgBox, 52, Recommended, % TXT.ABT_seehelp
+		IfMsgBox, Yes
+			gosub, hlp
+	}
 	if !A_IsAdmin
 		MsgBox, 16, WARNING, % TXT.ABT_runadmin
 	try TrayTip, Clipjump, % TXT.ABT_cjready , 10, 1
@@ -127,11 +129,11 @@ else if (ini_Version != VERSION)
 ;Global Ini declarations
 global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_IsChannelMin := 1 , CopyMessage, FORMATTING
 		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, channel_K, onetime_K, paste_k, actionmode_k, ini_is_duplicate_copied, ini_formatting, ini_actmd_keys
-		, ini_CopyBeep , beepFrequency , ignoreWindows
+		, ini_CopyBeep , beepFrequency , ignoreWindows, ini_defEditor
 
 ; (search) paste mode keys 
 global pastemodekey := {} , spmkey := {}
-temp_keys := "a|c|s|z|space|x|e|up|down|f"
+temp_keys := "a|c|s|z|space|x|e|up|down|f|h"
 loop, parse, temp_keys,|
 	pastemodekey[A_LoopField] := "^" A_LoopField
 temp_keys := "Enter|Up|Down|Home"
@@ -315,7 +317,7 @@ onClipboardChange:
 	Critical, On
 	if ONCLIPBOARD=
 	{
-		ONCLIPBOARD:=1
+		ONCLIPBOARD:=1 	; if let blank, the label ends quickly
 		return
 	}
 	ONCLIPBOARD := 1 		;used by paste/or another to identify if OnCLipboard has been breached
@@ -484,7 +486,7 @@ cancel:
 		gosub SPM_dispose 	; dispose it if There - Note that this step ends the label as ctrlCheck dies so ctrlRef is kept upwards to be updated
 	hkZ(pastemodekey.space, "fixate", 0) , hkZ(pastemodekey.z, "Formatting", 0) , hkZ(pastemodekey.a, "navigate_to_first", 0)
 	hkZ(pastemodekey.s, "Ssuspnd", 0) , hkZ(pastemodekey.up, "channel_up", 0) , hkZ(pastemodekey.down, "channel_down", 0)
-	hkZ(pastemodekey.f, "searchpm", 0) , hkZ(pastemodekey.x, "Cancel", 0) , hkZ(pastemodekey.x, "Delete", 1)
+	hkZ(pastemodekey.f, "searchpm", 0) , hkZ(pastemodekey.h, "editclip", 0) , hkZ(pastemodekey.x, "Cancel", 0) , hkZ(pastemodekey.x, "Delete", 1)
 	return
 
 delete:
@@ -544,7 +546,8 @@ ctrlForCopy:
 
 Formatting:
 	FORMATTING := !FORMATTING
-	PasteModeTooltip(temp_clipboard)
+	if ctrlRef = pastemode
+		PasteModeTooltip(temp_clipboard)
 	return
 
 fixate:
@@ -750,17 +753,25 @@ ctrlCheck:
 	}
 	return
 
-Ssuspnd:
-	SetTimer, ctrlCheck, Off
-	ctrlRef := ""
-	TEMPSAVE := realActive
-
-	hkZ_pasteMode(0)
-
-	IN_BACK := CALLER := 0
-	addToWinClip(realactive , "has Clip " realclipno)
-	CALLER := CALLER_STATUS
+endPastemode:
+	; ends the paste abruptly - as required by export and suspend
 	Gui, 1:Hide
+	Tooltip
+	SetTimer, ctrlCheck, Off
+	if SPM.ACTIVE
+		gosub SPM_dispose
+	API.blockMonitoring(1)
+	if !IScurCBACTIVE
+		try Clipboard := oldclip_data
+	API.blockMonitoring(0)
+	ctrlRef := "" , TEMPSAVE := realActive, restoreCaller := 0, is_pstMode_active := 0, IN_BACK := 0, oldclip_exist := 0
+	hkZ_pasteMode(0) , CALLER := CALLER_STATUS
+	EmptyMem()
+	return
+
+Ssuspnd:
+	gosub endPastemode
+	addToWinClip(realactive , "has Clip " realclipno)
 	return
 
 hkZ_pasteMode(mode=0){
@@ -771,7 +782,7 @@ hkZ_pasteMode(mode=0){
 	hkZ(pastemodekey.c, "MoveBack", mode) , hkZ(pastemodekey.x, "Cancel", mode) , hkZ(pastemodekey.z, "Formatting", mode)
 	hkZ(pastemodekey.space, "Fixate", mode) , hkZ(pastemodekey.s, "Ssuspnd", mode) , hkZ(pastemodekey.e, "export", mode)
 	hkZ(pastemodekey.up, "channel_up", mode) , hkZ(pastemodekey.down, "channel_down", mode) , hkZ(pastemodekey.a, "navigate_to_first", mode)
-	hkZ(pastemodekey.f, "searchpm", mode)
+	hkZ(pastemodekey.f, "searchpm", mode) , hkZ(pastemodekey.h, "editclip", mode)
 
 	if !mode        ;init Cj
 	{
@@ -1013,11 +1024,11 @@ CopyFileData:
 
 	else if temp_extension in cj,avc
 	{
-		CALLER := 0
+		API.blockMonitoring(1)
 		try Fileread, Clipboard, *c %selectedFile%
 		ClipWait, 1, 1
 		oldclip := ClipboardAll
-		CALLER := CALLER_STATUS
+		API.blockMonitoring(0)
 		try Clipboard := oldclip
 		oldclip := ""           ;The methodology is adopted due to an AHK Bug
 	}
@@ -1105,11 +1116,13 @@ updt:
 
 addToWinClip(lastEntry, extraTip)
 {
+	API.blockMonitoring()
 	ToolTip, System Clipboard %extraTip%
 	if CURSAVE
 		try FileRead, Clipboard, *c %A_ScriptDir%/%CLIPS_dir%/%lastentry%.avc
 	Sleep, 1000
 	ToolTip
+	API.blockMonitoring(0)
 }
 
 changeIcon(){
@@ -1139,17 +1152,35 @@ incognito:
 	return
 
 export:
-	Gui, 1:Hide
-	SetTimer, ctrlCheck, Off
-	ctrlRef := "" , TEMPSAVE := realActive
-	hkZ_pasteMode(0) , CALLER := CALLER_STATUS
-
+	gosub endPastemode
 	loop
 		if !FileExist(temp := A_MyDocuments "\export" A_index ".cj")
 			break
 	Tooltip % "{" CN.Name "} Clip " realClipNo " " TXT._exportedto "`n" temp
 	SetTimer, TooltipOff, 1000
 	try FileAppend, %ClipboardAll%, % temp
+	return
+
+editclip:
+	try temp_clipboard := Clipboard
+	gosub endPastemode
+	if temp_clipboard =
+		return
+	Tooltip, % TXT.TIP_editing
+	FileDelete, cache\edit.txt
+	FileAppend, % temp_clipboard , cache\edit.txt
+	runwait, % ini_defEditor " """ A_ScriptDir "\cache\edit.txt" """"
+	Fileread, temp_clipboard, cache\edit.txt
+	API.blockMonitoring(1)
+	try oldclip := ClipboardAll
+	try Clipboard := temp_clipboard
+	API.blockMonitoring(0) , API.blockMonitoring(1)
+	try temp_clipboardall := ClipboardAll
+	try Clipboard := oldclip
+	FileAppend, % temp_clipboardall, %CLIPS_dir%/%TEMPSAVE%.avc
+	CDS[CN.NG][TEMPSAVE] := temp_clipboard
+	autoTooltip(TXT.TIP_editdone, 800, 1)
+	API.blockMonitoring(0)
 	return
 
 windows_copy:
