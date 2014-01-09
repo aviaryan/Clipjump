@@ -69,10 +69,12 @@
 	
 	<h2><a name=protected>Protected Channels</a></h2>
 	Protected Channels are user defined special channels that require confirmation before each copy of clipboard data to them. <br>
-	If you copy some text while a protected channel is active, you will see a confirmation tip to proceed further. This can be very useful and should 
+	If you copy some text while a protected channel is active, you will see a confirmation tip with a sharp beep to proceed further. This can be very useful and should 
 	be used a check to store data in a <i>precious</i> channel that is damn meant to store single kind of data.<br>
 	To create a protected channel, precede it's name with _ i.e. a underscore . Any channel whose name starts with an underscore is a protected 
-	channel.
+	channel.<br>
+	<strong class="mild">Tip</strong> - To remove the beep, change the variable <code>protected_DoBeep</code> to 0 from <a href="custom.html">ClipjumpCustom.ini</a>.<br>
+	The code is <code>protected_DoBeep = 0</code>. Add it in a section with no 'bind', one which is auto-executed at Clipjump start.
 	<br><br><br>
 
 	<h2><a name=pitswap>PitSwap</a></h2>

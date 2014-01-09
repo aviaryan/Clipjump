@@ -162,6 +162,10 @@
 		<param name="Local" value="clipjumpcontroller.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="TroubleShooting">
+		<param name="Local" value="docs/troubleshooting.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="FAQ">
 		<param name="Local" value="docs/faq.html">
 		</OBJECT>
