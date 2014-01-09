@@ -6,7 +6,6 @@ introduced in v10.6
 searchPasteMode(x, y, h){
 	static searchpm, searchpm_ct
 	hkZ("^" pastemodekey.f, "SPM_dispose")
-
 	; oopp CapsLock
 	Gui, searchpm:New
 	Gui, searchpm:+LastFound +AlwaysOnTop -Caption +ToolWindow
@@ -20,12 +19,14 @@ searchPasteMode(x, y, h){
 	hkZ(spmkey.up, "spm_nextres", 1)
 	hkZ(spmkey.down, "spm_prevres", 1)
 	Hotkey, IfWinActive
+
+	gosub searchpm_edit
 	return
 
 searchpm_edit:
 	Gui, searchpm:submit, nohide
-	spm_ct := searchpm_search(searchpm)
-	searchpm_jumptomatch(SPM.CHANNEL, SPM.TEMPSAVE+1, 1, (searchpm="") or (spm_ct=0) ? 1 : 0)
+	SPM.count := searchpm_search(searchpm)
+	searchpm_jumptomatch(SPM.CHANNEL, SPM.TEMPSAVE+1, 1, (searchpm="") or (SPM.count=0) ? 1 : 0)
 	return
 
 spm_paste:
@@ -40,15 +41,19 @@ spm_cancel:
 	return
 
 spm_nextres:
-	correctTEMPSAVE()
-	++SEARCHOBJ.pointer
-	searchpm_jumptomatch(CN.NG, TEMPSAVE, 1)
+	if SPM.count {
+		correctTEMPSAVE()
+		++SEARCHOBJ.pointer
+		searchpm_jumptomatch(CN.NG, TEMPSAVE, 1)
+	}
 	return
 
 spm_prevres:
-	correctTEMPSAVE()
-	--SEARCHOBJ.pointer
-	searchpm_jumptomatch(CN.NG, TEMPSAVE, -1)
+	if SPM.count {
+		correctTEMPSAVE()
+		--SEARCHOBJ.pointer
+		searchpm_jumptomatch(CN.NG, TEMPSAVE, -1)
+	}
 	return
 }
 
