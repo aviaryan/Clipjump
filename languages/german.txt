@@ -224,3 +224,24 @@ TIP_delallprompt = WARNUNG
                  = Wollen Sie wirklich alle Clips aus diesem Channel löschen?
                  = Drücke Y zum bestätigen.
                  = Drücke N zum abbrechen.
+
+;=======
+;10.6
+;=======
+
+TIP_confirmcopy = Dies ist ein geschützer Channel.
+                = Soll der neue Clip in diesem Channel gespeichert werden?
+                = Drücke Y für Ja
+                = Drücke N für Nein
+ABT_seehelp = Soll die Clipjump Hilfe geöffnet werden?
+ABT_runadmin = Clipjump läuft nicht mit Administratorrechten.
+             = Dies kann zu Fehlfunktionen führen.
+             = 
+             = [Dieser Hinweis erscheint nur einmal]
+ABT_cjready = Hi!
+            = Clipjump ist nun aktiv.
+            = Testen Sie ein paar Copy&Paste aktionen...
+TIP_editing = Bearbeiten....
+            = Drücke Esc zum abbrechen.
+TIP_editdone = Clip wurde bearbeitet!
+TIP_editnotdone = Clip wurde NICHT bearbeitet!

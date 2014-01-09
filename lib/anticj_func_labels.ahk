@@ -164,7 +164,20 @@ else
 
 hkZ(HotKey, Label, Status=1) {
 	if Hotkey !=
-		Hotkey,% HotKey,% Label,% Status ? "On" : "Off"
+	{
+		try
+			Hotkey,% HotKey,% Label,% Status ? "On" : "Off"
+		catch {
+			t := ""
+			loop, parse, hotkey
+				if A_LoopField is alpha
+					t .= "vk" GetVKList(A_LoopField)[1]
+				else t .= A_LoopField
+			Hotkey, % t,% Label,% (Status ? "On" : "Off") " UseErrorLevel"
+			if ErrorLevel = 2
+				MsgBox, 16, Clipjump Warning, It looks like the hotkey %t% doesn't exist ? `nRefer to troubleshooting page in help file.
+		}
+	}
 }
 
 ;Gdip_SetImagetoClipboard()
@@ -344,3 +357,40 @@ getControlInfo(type="button", text="", ret="w", fontsize="", fontmore=""){
 	if ret=h
 		return testh
 }
+
+; Code by deo http://www.autohotkey.com/board/topic/74348-send-command-when-switching-to-russian-input-language/#entry474543
+
+GetVKList( letter )
+{
+	SetFormat, Integer, Hex
+	vk_list := Array()
+	for i, hkl in KeyboardLayoutList()
+	{
+		retVK := DllCall("VkKeyScanExW","UShort",Asc(letter),"Ptr",hkl,"Short")
+		if (retVK = -1)
+			continue
+		vk := retVK & 0xFF
+		StringTrimLeft,vk,vk,2
+		if !instr(_list,"|" vk "|")
+		{
+			_list .= "|" vk "|"
+			vk_list.insert(vk)
+		}
+	}
+	SetFormat, Integer, D
+	return vk_list
+}
+
+KeyboardLayoutList()
+{
+	hkl_num := 20
+	VarSetCapacity(hHkls,hkl_num*A_PtrSize,0)
+	num := DllCall("GetKeyboardLayoutList","Uint",hkl_num,"Ptr",&hHkls)
+	hkl_list := Array()
+	loop,% num
+		hkl_list.Insert(NumGet(hHkls,(A_index-1)*A_PtrSize,"UPtr"))
+	hHkls =
+	return hkl_list
+}
+
+; !Code by deo

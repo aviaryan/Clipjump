@@ -65,8 +65,18 @@ gui_History()
 	GuiControl, Move, history_SearchBox, % "w" (thisguisize- history_Searchboxx - 21) 		;7,7 for outer border, 7 for inner border
 
 	;create hotkeys
+	; BUG in AHK - Non-Eng computers show error if hks like ^c and so are used normally. Hotkey command on the other hand works fine.
 	Hotkey, IfWinActive, % PROGNAME " " TXT.HST__name
 	Hotkey, F5, history_SearchBox, On
+	Hotkey, If
+	Hotkey, If, IsHisListViewActive()
+	hkZ("^c", "history_clipboard")
+	hkZ("^e", "history_exportclip")
+	hkZ("!d", "historySearchfocus")
+	hkZ("^f", "historySearchfocus")
+	Hotkey, If
+	Hotkey, If, IsPrevActive()
+	hkZ("^f", "prevSearchfocus")
 	Hotkey, If
 	return
 
@@ -491,6 +501,20 @@ LV_SortArrow(h, c, d="")	; by Solar (http://www.autohotkey.com/forum/viewtopic.p
 
 ;------------------------------------ ACCESSIBILITY SHORTCUTS -------------------------------
 
+historySearchfocus:
+	GuiControl, History:focus, history_SearchBox
+	return
+prevSearchfocus:
+	GuiControl, Preview:focus, preview_search
+	return
+; Using these function so that #if is created properly and hotkey command works and so no errors in non-eng computers
+IsHisListViewActive(){
+	return IsActive("SysListView321", "classnn") && IsActive(PROGNAME " " TXT.HST__name, "window") && ctrlRef!="pastemode"
+}
+IsPrevActive(){
+	return Winactive(TXT.PRV__name " ahk_class AutoHotkeyGUI") && ctrlRef != "pastemode"
+}
+
 #if IsActive("Edit1", "classnn") and IsActive(PROGNAME " " TXT.HST__name, "window")
 	$Down::
 		Gui, History:Default
@@ -498,16 +522,11 @@ LV_SortArrow(h, c, d="")	; by Solar (http://www.autohotkey.com/forum/viewtopic.p
 		LV_Modify(1, "Select Focus")
 		return
 #if
-#if ( IsActive("SysListView321", "classnn") and IsActive(PROGNAME " " TXT.HST__name, "window") and ctrlRef!="pastemode" )
+#if IsHisListViewActive()
 	Space::gosub history_InstaPaste
-	^c::history_clipboard()
-	^e::gosub history_exportclip
 	Del::history_ButtonDelete()
-	!d::GuiControl, History:focus, history_SearchBox
-	^f::GuiControl, History:focus, history_SearchBox
 #if
-#if Winactive(TXT.PRV__name " ahk_class AutoHotkeyGUI") and ctrlRef != "pastemode"
-	^f::GuiControl, Preview:focus, preview_search             ;Alt+D
+#if IsPrevActive()
 #if
 #if ( IsActive(PROGNAME " " TXT.HST__name, "window") and ctrlRef!="pastemode" )
 	MButton::

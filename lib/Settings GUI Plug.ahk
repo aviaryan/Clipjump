@@ -102,13 +102,13 @@ gui_Settings()
 	Hotkey, IfWinActive, % PROGNAME " " TXT.SET__name
 	#If IsHotkeyControlActive()
 	Hotkey, If, IsHotkeyControlActive()
-	Hotkey,% Copyfilepath_K, shortcutblocker_settings, On UseErrorLevel
-	Hotkey,% Copyfolderpath_K, shortcutblocker_settings, On UseErrorLevel
-	Hotkey,% Copyfiledata_K, shortcutblocker_settings, On UseErrorLevel
-	Hotkey,% channel_K, shortcutblocker_settings, On UseErrorLevel
-	Hotkey,% onetime_K, shortcutblocker_settings, On UseErrorLevel
-	Hotkey,% pitswap_K, shortcutblocker_settings, On UseErrorLevel
-	Hotkey,% actionmode_k, shortcutblocker_settings, On UseErrorLevel
+	hkZ(Copyfilepath_K, "shortcutblocker_settings", 1)
+	hkZ(Copyfolderpath_K, "shortcutblocker_settings", 1)
+	hkZ(Copyfiledata_K, "shortcutblocker_settings", 1)
+	hkZ(channel_K, "shortcutblocker_settings", 1)
+	hkZ(onetime_K, "shortcutblocker_settings", 1)
+	hkZ(pitswap_K, "shortcutblocker_settings", 1)
+	hkZ(actionmode_k, "shortcutblocker_settings", 1)
 	Hotkey, If
 	#If
 	Hotkey, If
@@ -489,7 +489,7 @@ validate_Settings()
 		NOINCOGNITO := false
 		if CALLER_STATUS
 			Menu, tray, icon, icons\no_history.ico
-		Menu, Tray, check, &Incognito Mode
+		Menu, Tray, check, % TXT.TRY_incognito
 	}
 
 	if paste_K = ERROR

@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 10.6
+;@Ahk2Exe-SetVersion 10.6.2
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -41,7 +41,7 @@ global ini_LANG := ""
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "10.6"
+global VERSION := "10.6.2" ;ADD CHANGES IN VERSION FILE FROM NOW
 global CONFIGURATION_FILE := "settings.ini"
 
 ini_LANG := ini_read("System", "lang")
@@ -90,8 +90,8 @@ global restoreCaller := 0
 ;Global Inits
 global CN := {} , CUSTOMS := {} , CDS := {} , SEARCHOBJ := {} , TOTALCLIPS, ACTIONMODE := {} , ACTIONMODE_DEF := "H S C X F D P O E F1 L"
 global cut_is_delete_windows := "XLMAIN QWidget" 			;excel , kingsoft office
-global CURSAVE, TEMPSAVE, LASTCLIP, LASTFORMAT, IScurCBACTIVE := 0
-global NOINCOGNITO := 1, SPM := {}
+global CURSAVE, TEMPSAVE, LASTCLIP, LASTFORMAT, Islastformat_Changed := 1, IScurCBACTIVE := 0
+global NOINCOGNITO := 1, SPM := {}, protected_DoBeep := 1
 
 ;Initailizing Common Variables
 global CALLER_STATUS, CLIPJUMP_STATUS := 1		; global vars are not declared like the below , without initialising
@@ -338,14 +338,13 @@ onClipboardChange:
 			isLastFormat_changed := 1                           ;same reason as above
 		else
 			try isLastFormat_changed :=  ( LASTFORMAT != (temp_lastformat := GetClipboardFormat(0)) )   ?   1   :   0
-
 		if isLastFormat_changed or ( LASTCLIP != clipboard_copy) or ( clipboard_copy == "" )
 			returnV := clipChange(eventinfo, clipboard_copy)
-
 		LASTFORMAT := temp_lastformat , CLIP_ACTION := returnV ? "" : CLIP_ACTION  		;make CLIP_ACTION empty if copy/cut succeeded else let it be so that if window uses
 			;2 transfers like Excel , the demand can be fulfilled
 		IScurCBACTIVE := returnV 									;current clipboard is active after new data copied to clipboard SUCCESSFULLY
-
+		if FileExist(FIXATE_dir "\" CURSAVE ".fxt") 	; not active if the first clip is FIXED
+			IScurCBACTIVE := 0
 		if !ISACTIVEEXCEL 				;excel has known bugs with AHK and manipulating clipboard *infront* of it will cause errors
 			makeClipboardAvailable(0) 						;close clipboard in case it is still opened by clipjump
 	}
@@ -377,7 +376,7 @@ clipChange(CErrorlevel, clipboard_copy) {
 			if ISACTIVEEXCEL
 				LASTCLIP := clipsaver()
 			else
-				temp := clipSaver() , LASTCLIP := clipboard_copy
+				LASTCLIP := clipboard_copy , temp := clipSaver()
 
 			If HASCOPYFAILED
 			{
@@ -484,6 +483,7 @@ cancel:
 	ctrlref := "cancel"
 	if SPM.ACTIVE
 		gosub SPM_dispose 	; dispose it if There - Note that this step ends the label as ctrlCheck dies so ctrlRef is kept upwards to be updated
+	hkZ(pastemodekey.c, "moveback", 0)
 	hkZ(pastemodekey.space, "fixate", 0) , hkZ(pastemodekey.z, "Formatting", 0) , hkZ(pastemodekey.a, "navigate_to_first", 0)
 	hkZ(pastemodekey.s, "Ssuspnd", 0) , hkZ(pastemodekey.up, "channel_up", 0) , hkZ(pastemodekey.down, "channel_down", 0)
 	hkZ(pastemodekey.f, "searchpm", 0) , hkZ(pastemodekey.h, "editclip", 0) , hkZ(pastemodekey.x, "Cancel", 0) , hkZ(pastemodekey.x, "Delete", 1)
@@ -597,6 +597,7 @@ clipSaver() {
 			if Substr(CN.Name, 1, 1) = "_" 		; protected channels
 			{
 				Critical, Off
+				BeepAt(protected_DoBeep, 2000, 200)
 				temp21 := TT_Console("{" CN.Name "} " TXT.TIP_confirmcopy, "Y N")
 				Critical, On
 			}
@@ -606,7 +607,7 @@ clipSaver() {
 				CDS[CN.NG][CURSAVE] := ISACTIVEEXCEL ? tempCB : Clipboard  ;, CDS[CN.NG][CURSAVE "f"] := GetClipboardFormat()
 				copied := 1
 			}
-			else HASCOPYFAILED := 1
+			else LASTCLIP := "" , LASTFORMAT := "" , HASCOPYFAILED := 1 	; lastclip was not captured by cj
 
 		} catch {
 			if ISACTIVEEXCEL
@@ -716,10 +717,9 @@ ctrlCheck:
 				if Instr(GetClipboardFormat(), "Text")
 				{
 					Critical, Off 			; off to enable thread overlap
-					ONCLIPBOARD := 0
+					API.blockMonitoring(1)
 					try Clipboard := Rtrim(Clipboard, "`r`n")
-					while !ONCLIPBOARD
-						sleep 5 			; wait for ONC label to be done
+					API.blockMonitoring(0, 5)
 					Critical, On 			; on critical for just the case
 				}
 				Send, ^{vk56}
@@ -1063,7 +1063,7 @@ updt:
 	URLDownloadToFile, %UPDATE_FILE%, %A_ScriptDir%/cache/latestversion.txt
 	ToolTip, ,,, 3
 	FileRead, temp, %A_ScriptDir%/cache/latestversion.txt
-	lversion_changes := "`n`nChanges`n"
+	lversion_changes := "`n`nCHANGES`n"
 	loop, parse, temp, `n, `r
 		if A_index=1
 			latestVersion := A_LoopField
@@ -1076,7 +1076,7 @@ updt:
 	if !IsLatestRelease(VERSION, latestversion, "b|a")
 	{
 		if noautoupdate {
-			MsgBox, 48, Clipjump Update available, % "Your Version: `t`t" VERSION "`nCurrent version: `t`t" latestVersion "`n`nGo to website to download newer version" 
+			MsgBox, 48, Clipjump Update available, % "Your Version: `t`t" VERSION "`nCurrent version: `t`t" latestVersion 
 			. lversion_changes
 			;. " as auto-update facility is not available."
 			IfMsgBox OK

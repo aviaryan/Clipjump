@@ -15,10 +15,10 @@ searchPasteMode(x, y, h){
 	Gui, searchpm:show, % "x" x " y" y " w" 220+2+5+40 " h" h+2, Clipjump_SPM
 
 	Hotkey, IfWinActive, Clipjump_SPM ahk_class AutoHotkeyGUI
-	Hotkey, % spmkey.enter, spm_paste, On
-	Hotkey, % spmkey.home, spm_cancel, on
-	Hotkey, % spmkey.up, spm_nextres, on
-	Hotkey, % spmkey.down, spm_prevres, on
+	hkZ(spmkey.enter, "spm_paste", 1)
+	hkZ(spmkey.home, "spm_cancel", 1)
+	hkZ(spmkey.up, "spm_nextres", 1)
+	hkZ(spmkey.down, "spm_prevres", 1)
 	Hotkey, IfWinActive
 	return
 
