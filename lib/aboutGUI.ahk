@@ -3,18 +3,19 @@
 aboutGUI(){
 
 	global
-	static w_ofreset
+	static w_ofreset, w_versiontxt, versiontxt
 	;About GUI
 	w_ofreset := getControlinfo("button", TXT.ABT_reset, "w", "s10", "Arial")
+	w_versiontxt := getControlinfo("Link", versiontxt := "<a href=""" PRODUCT_PAGE """>" PROGNAME "</a> v" version, "w", "s18", "Consolas")
 
 	Gui, 2:Destroy
 	Gui, 2:Margin, 0, 0
 	Gui, 2:Font, s18, Courier New
 	Gui, 2:Font, S18, Consolas
 	Gui, 2:Add, Edit, x0 y0 w0 h0,
-	Gui, 2:Add, Link, x188 y5 gupdt, <a href="%PRODUCT_PAGE%">%PROGNAME%</a> v%version%
+	Gui, 2:Add, Link, % "x" (522-w_versiontxt)/2 " y5 gupdt", % versiontxt
 	Gui, 2:Font, S12, 
-	Gui, 2:Add, Link, xp+3 y+3 gblog, <a href="%AUTHOR_PAGE%">Avi Aryan</a> (C) %A_year%
+	Gui, 2:Add, Link, x180 y+3 gblog, <a href="%AUTHOR_PAGE%">Avi Aryan</a> (C) %A_year%
 
 	Gui, 2:Font, S11 norm, Arial
 	Gui, 2:Add, Text, y+30 x10, Language
@@ -28,7 +29,7 @@ aboutGUI(){
 	
 	Gui, 2:Add, Text, xp+10 y160 wp-10, % "
 	(LTrim`t , Join`s
-		Clipjump is a Windows only Clipboard Manager created in AutoHotkey. `nIt inhibits the very basic ideas from Skrommel's ClipStep but adds many new features and critical bug fixes.
+		Clipjump is a Windows only Clipboard Manager created in AutoHotkey. `nIt was inspired from Skrommel's application ClipStep.
 	)"
 
 	Gui, 2:Font, S10, Arial

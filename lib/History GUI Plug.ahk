@@ -1,5 +1,5 @@
 ;History Gui labels and functions
-;A lot Thanks to chaz who first made it
+;A lot Thanks to chaz who first improved it
 
 gui_History()
 ; Creates and shows a GUI for managing and viewing the clipboard history

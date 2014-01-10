@@ -178,7 +178,7 @@ changeChannel(cIndex, backup_old:=1){
 		TOTALCLIPS := CN["TOTALCLIPS"]
 		, cIndex := ""
 	else
-		TOTALCLIPS := 999999999999
+		TOTALCLIPS := CN["TOTALCLIPS" cIndex] ? CN["TOTALCLIPS" cIndex] : 999999999999 			;if exist, use it
 
 	if backup_old
 		CN["TEMPSAVE" CN.N] := TEMPSAVE , CN["CURSAVE" CN.N] := CURSAVE	, CN.prevCh := CN.NG	;Saving Old - TEMPSAVE is auto-corrected at 

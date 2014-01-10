@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 10.6.2
+;@Ahk2Exe-SetVersion 10.6.3
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -41,7 +41,7 @@ global ini_LANG := ""
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "10.6.2" ;ADD CHANGES IN VERSION FILE FROM NOW
+global VERSION := "10.6.3"
 global CONFIGURATION_FILE := "settings.ini"
 
 ini_LANG := ini_read("System", "lang")
@@ -112,7 +112,7 @@ Iniread, ini_Version, %CONFIGURATION_FILE%, System, Version
 If !FileExist(CONFIGURATION_FILE)
 {
 	save_default(1)
-	if !Instr(VERSION, ".", 0, 1, 3) 		; betas have format x.y.a.b that is 4 numbers and so the instr is true for them.
+	if !Instr(VERSION, "b") 		; betas have b
 	{
 		MsgBox, 52, Recommended, % TXT.ABT_seehelp
 		IfMsgBox, Yes
@@ -201,9 +201,8 @@ OnMessage(0x4a, "Receive_WM_COPYDATA")  ; 0x4a is WM_COPYDATA
 historyCleanup()
 init_actionmode()
 
-;create Ignore windows group from Space-separated values
-temp_delim := !Instr(ignoreWindows, "|") ? " " : "|"
-loop, parse, ignoreWindows, % temp_delim
+;create Ignore windows group from | separated values
+loop, parse, ignoreWindows,|
 	GroupAdd, ignoreGroup, ahk_class %A_LoopField%
 ;group created
 
@@ -216,7 +215,7 @@ return
 ;6 used in Class Tool, 7.........., 8 used in Customizer
 
 ;OLD VERSION COMPATIBILITES TO REMOVE
-; Temp delim
+;NONE
 ;End Of Auto-Execute================================================================================================================
 
 loadClipboardDataS(){
@@ -1048,7 +1047,7 @@ hlp:
 	if A_IsCompiled
 		run Clipjump.chm
 	else
-		run % FileExist("Clipjump.chm") ? "Clipjump.chm" : "chm_files\clipjump.html"
+		run % FileExist("Clipjump.chm") ? "Clipjump.chm" : "chm_files\docs\index.html"
 	return
 
 strtup:

@@ -1,5 +1,3 @@
-10.6.2
-Minor fix: bug when number of days in history was set to 0
-Minor fix: a clip was FIXED at pos 1
-Major fix: invalid hotkey error when used in Russian systems
-Added: A sound beep in protected channels
+10.6.3
+Fixed issue with Action mode in Russian systems
+Minor: fixed about gui title centering

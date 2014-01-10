@@ -49,7 +49,8 @@ TT_Console( msg, keys, x="", y="", whichtooltip=1, font_options="", font_face=""
 
 	;create hotkeys
 	loop, parse, keys, %A_space%, %a_space%
-		Hotkey, % A_LoopField, TT_Console_Check, On
+		hkZ(A_LoopField, "TT_Console_Check", 1)
+		;Hotkey, % A_LoopField, TT_Console_Check, On
 
 	while !is_TTkey_pressed
 		sleep 20
@@ -57,7 +58,8 @@ TT_Console( msg, keys, x="", y="", whichtooltip=1, font_options="", font_face=""
 	ToolTip,,,, % whichtooltip
 
 	loop, parse, keys, %A_space%, %a_space%
-		Hotkey, % A_LoopField, TT_Console_Check, Off
+		hkZ(A_LoopField, "TT_Console_Check", 0)
+		;Hotkey, % A_LoopField, TT_Console_Check, Off
 
 	return what_pressed
 

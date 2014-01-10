@@ -24,7 +24,7 @@ It gives power to-
 	<li>Change previously unchangeable shortcuts
 	<li>bind a hotkey to an action (like a hotkey to toggle Incognito Mode)
 	<li>run coded <i>labels</i> and <i>functions</i> to tailor-make any complex user function. (you may need my help here and I am here to help)
-	<li>send key-presses to facilitate scripting/macro
+	<li>send key-presses to facilitate scripting / macro
 </ul><br>
 
 <h3>Basic commands</h3>
@@ -160,9 +160,9 @@ run=API.paste(,4)
 <br><br>
 
 <h4>Example 9 (moving clips)</h4>
-We will use the <code>API.manageClip(new_channel, channel, clip, flag)</code> function here. 'channel' and 'clip' default to teh current active ones if no value for them 
+We will use the <code>API.manageClip(new_channel, channel, clip, flag)</code> function here. 'channel' and 'clip' default to the current active ones if no value for them 
 is passed. <br>
-<b>Situation</b> - Suppose you copied a trash/incorrect information in the current protected/normal channel accidently. Here is the code to move it to 
+<b>Situation</b> - Suppose you copied a trash/incorrect information in the current protected / normal channel accidental. Here is the code to move it to 
 <a href="channels.html#Pit">Pit</a> channel which is say at Chno. 2<br>
 <pre class="brush: ini;">
 [trash_clip]
@@ -170,14 +170,26 @@ bind=Ctrl+Win+Del
 run=API.manageClip(2,,,0)
 tip=The current active clip was gvdlfe off!
 </pre>
-The last paramter 'flag' is 0 for move and 1 for copy. Here we are moving the clip.
+The last parameter 'flag' is 0 for move and 1 for copy. Here we are moving the clip.
 <br><br>
 <br>
+<h4>Example 10 (paste mode with search enabled; no need to hold Ctrl)</h4>
+If you don't like holding down Ctrl to navigate clips, this if for you. This Customization will bind 'Win+V' to open paste mode with Search enabled so 
+you will be able to use Up/Down keys to navigate through the clips.
+<pre class="brush: ini;">
+[paste_with_search]
+bind=Win+V
+spm.active=1
+run=paste
+run=searchpm
+</pre>
+<br><br>
 
+<br>
 <h4>Other useful labels, functions and variables</h4>
 <ul>
 	<li><code>run=disable_clipjump</code> - Toggle Clipjump Status (disable/enable)
-	<li><code>Clipboard=some_text</code> - Clipboard is an inner variable that holds Clipboard data. Chnange it like above to add custom text to Clipboard. 
+	<li><code>Clipboard=some_text</code> - Clipboard is an inner variable that holds Clipboard data. Change it like above to add custom text to Clipboard. 
 	This Clipboard change <b>will be captured</b> by Clipjump.
 	<li><code>run=BeepAt(1, 1000, 500)</code> - Make a beep sound. The First parameter should be 1 but the second and third are frequency of the beep and 
 	duration in milliseconds respectively. A good alternative to <code>tip</code>.

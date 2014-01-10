@@ -26,7 +26,7 @@ loadCustomizations(){
 		if tobj.bind = ""
 			customization_Run(tobj)
 		else {
-			hkZ( tobj.bind := Hparse(tobj.bind), "CustomHotkey", 1 ) ; create hotkey
+			hkZ( tobj.bind := "$" Hparse(tobj.bind), "CustomHotkey", 1 ) ; create hotkey
 			CUSTOMS[tobj.bind] := {}
 			for k,v in tobj
 				CUSTOMS[tobj.bind][k] := v
