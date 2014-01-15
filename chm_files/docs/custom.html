@@ -37,7 +37,9 @@ The Ini can contain multiple sections ([....]) which may use the following comma
 	<li>sleep - wait for time in milliseconds
 </ul>
 Besides this you can also change the inner variables of Clipjump just by using a variable = value syntax.<br>
-Some of the most common variables needed to work highly requested features have been given below.<br><br>
+Some of the most common variables needed to work highly requested features have been given below.<br>
+Go through them as a tutorial as they contain important information about the correct syntax and usage.<br>
+<strong class=super>Note</strong> - Restart Clipjump after making changes in ClipjumpCustom.ini to take them into effect.<br><br>
 
 <h4>Example 1 (Shortcut to toggle Incognito Mode)</h4>
 <pre class="brush: ini;">
@@ -173,6 +175,7 @@ tip=The current active clip was gvdlfe off!
 The last parameter 'flag' is 0 for move and 1 for copy. Here we are moving the clip.
 <br><br>
 <br>
+
 <h4>Example 10 (paste mode with search enabled; no need to hold Ctrl)</h4>
 If you don't like holding down Ctrl to navigate clips, this if for you. This Customization will bind 'Win+V' to open paste mode with Search enabled so 
 you will be able to use Up/Down keys to navigate through the clips.
@@ -183,6 +186,19 @@ spm.active=1
 run=paste
 run=searchpm
 </pre>
+<br><br>
+
+<h4>Example 11 (emptying a channel)</h4>
+<pre class="brush: ini;">
+[empty_pit]
+bind=Win+Alt+E
+run=API.emptyChannel(pit)
+tip=Pit Channel is now empty
+</pre>
+The above uses the <code>API.emptyChannel(channel_no)</code> function. If <code>channel_no</code> is empty ( like API.emptyChannel() ), the current 
+active channel is taken into account. 
+If <code>channel_no</code> is not number, a channel with name as <code>channel_no</code> is taken into account. If <code>channel_no</code> is 
+number, it is supposed that <code>channel_no</code> contains a channel number to be used.
 <br><br>
 
 <br>

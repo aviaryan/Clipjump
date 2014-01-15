@@ -4,12 +4,15 @@ Act_API(D, k){
 	static cbF := A_temp "\cjcb.txt"
 	static rFuncs := "|getClipAt|getClipLoc|"
 
-	fname := Substr(D, Strlen(k)+1, Instr(D, "`n")-Strlen(k)-1)
-	p := Substr(D, Instr(D, "`n")+1) , ps := {}
+	fname := Substr(  D, l := Strlen(k)+1, ( Instr(D, "`n")?Instr(D, "`n"):Strlen(D)+1 ) -l  )
+	p := Substr( D, Instr(D, "`n") ? Instr(D, "`n")+1 : 200 )
+	ps := {}
 	loop, parse, p, `n
 		ps.Insert(A_LoopField)
 	n := ps.MaxIndex()
 
+	if !n
+		r := API[fname]()
 	if n=1
 		r := API[fname](ps.1)
 	else if n=2
@@ -21,7 +24,7 @@ Act_API(D, k){
 
 	if Instr(rFuncs, "|" fname "|")
 		FileAppend, % r, % cbF
-	return
+	return r
 }
 
 
@@ -108,6 +111,23 @@ class API
 				CURSAVE -= 1 , TEMPSAVE -= (TEMPSAVE > CURSAVE) ? 1 : 0
 		}
 		return
+	}
+
+	; if channel no is empty, it DEFAULTS to current channel
+	; you can also use name of a channel > like API.emptyChannel("web")
+	emptyChannel(chno=""){
+		if chno =
+			chno := CN.NG
+		if chno is not Integer
+			chno := channel_find(chno)
+		CDS[chno] := {}
+		f := this.getChInfo(chno)
+		FileDelete, % "cache\clips" f.p "\*.avc"
+		FileDelete, % "cache\thumbs" f.p "\*.jpg"
+		FileDelete, % "cache\fixate" f.p "\*.fxt"
+		CN["CURSAVE" f.p] := CN["TEMPSAVE" f.p] := 0
+		if f.isactive
+			CURSAVE := TEMPSAVE := 0 , LASTCLIP := ""
 	}
 
 	; p=1 enable incognito mode

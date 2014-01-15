@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 10.6.3
+;@Ahk2Exe-SetVersion 10.6.4
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -41,7 +41,7 @@ global ini_LANG := ""
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "10.6.3"
+global VERSION := "10.6.4"
 global CONFIGURATION_FILE := "settings.ini"
 
 ini_LANG := ini_read("System", "lang")
@@ -226,9 +226,13 @@ loadClipboardDataS(){
 		CDS[R:=A_index-1] := {}
 		loop, % fp "\*.avc"
 		{
-			ONCLIPBOARD:=""
-			FileRead, Clipboard, % "*c " A_LoopFileFullPath
-			Z := Clipboard
+			ONCLIPBOARD:="" , DONE := 0
+			while !DONE
+				try {
+					FileRead, Clipboard, % "*c " A_LoopFileFullPath
+					Z := Clipboard
+					DONE := 1
+				}
 			while !ONCLIPBOARD
 				sleep 1
 			if Z !=
@@ -350,7 +354,6 @@ onClipboardChange:
 	else
 	{
 		LASTFORMAT := WinActive("ahk_class XLMAIN") ? "" : GetClipboardFormat(0)
-		;IScurCBACTIVE := 0 					; clipboard was changed and so this should be zero
 		if restoreCaller
 			restoreCaller := "" , CALLER := CALLER_STATUS
 		if onetimeOn
@@ -478,7 +481,7 @@ IN_BACK_correction(){ 	; corrects TEMPSAVE value when C (backwards) is used in p
 
 cancel:
 	Gui, Hide
-	ToolTip, % TXT.TIP_cancelm "`t(1)`n" TXT.TIP_modem
+	PasteModeTooltip(TXT.TIP_cancelm "`t(1)`n" TXT.TIP_modem, 1)
 	ctrlref := "cancel"
 	if SPM.ACTIVE
 		gosub SPM_dispose 	; dispose it if There - Note that this step ends the label as ctrlCheck dies so ctrlRef is kept upwards to be updated
@@ -489,49 +492,55 @@ cancel:
 	return
 
 delete:
-	ToolTip, % TXT.TIP_delm "`t`t(2)`n" TXT.TIP_modem
+	PasteModeTooltip(TXT.TIP_delm "`t`t(2)`n" TXT.TIP_modem, 1)
 	ctrlref := "delete"
 	hkZ(pastemodekey.x, "Delete", 0) , hkZ(pastemodekey.x, "cutclip", 1)
 	return
 
 cutclip:
-	Tooltip, % TXT.TIP_move "`t`t(3)`n" TXT.TIP_modem
+	PasteModeTooltip(TXT.TIP_move "`t`t(3)`n" TXT.TIP_modem, 1)
 	ctrlref := "cut"
 	hkZ(pastemodekey.x, "cutclip", 0) , hkZ(pastemodekey.x, "copyclip", 1)
 	return
 
 copyclip:
-	Tooltip, % TXT.TIP_copy "`t`t(4)`n" TXT.TIP_modem
+	PasteModeTooltip(TXT.TIP_copy "`t`t(4)`n" TXT.TIP_modem, 1)
 	ctrlref := "copy"
 	hkZ(pastemodekey.x, "copyclip", 0) , hkZ(pastemodekey.x, "DeleteAll", 1)
 	return
 
 deleteall:
-	Tooltip, % TXT.TIP_delallm "`t`t(5)`n" TXT.TIP_modem
+	PasteModeTooltip(TXT.TIP_delallm "`t`t(5)`n" TXT.TIP_modem, 1)
 	ctrlref := "deleteAll"
 	hkZ(pastemodekey.x, "DeleteAll", 0) , hkZ(pastemodekey.x, "Cancel", 1)
 	return
 
 nativeCopy:
 	Critical
-	hkZ("$^c", "nativeCopy", 0) , hkZ("$^c", "keyblocker")
-	if ini_is_duplicate_copied or WinActive("ahk_class XLMAIN")
+	if WinActive("ahk_class XLMAIN")
+	{
+		hkZ("$^c", "nativeCopy", 0) , hkZ("$^c", "keyblocker")
+		LASTCLIP := ""
+		setTimer, ctrlforCopy, 50
+	}
+	if ini_is_duplicate_copied
 		LASTCLIP := ""
 	CLIP_ACTION := "COPY"
 	Send, ^{vk43}
-	setTimer, ctrlforCopy, 50
-	gosub, ctrlforCopy
 	return
 
 nativeCut:
 	Critical
-	hkZ("$^x", "nativeCut", 0) , hkZ("$^x", "keyblocker")
-	if ini_is_duplicate_copied or WinActive("ahk_class XLMAIN")
+	if WinActive("ahk_class XLMAIN")
+	{
+		hkZ("$^x", "nativeCut", 0) , hkZ("$^x", "keyblocker")
+		LASTCLIP := ""
+		setTimer, ctrlforCopy, 50
+	}
+	if ini_is_duplicate_copied
 		LASTCLIP := ""
 	CLIP_ACTION := "CUT"
 	Send, ^{vk58}
-	setTimer, ctrlforCopy, 50
-	gosub, ctrlforCopy
 	return
 
 ctrlForCopy:
@@ -647,14 +656,19 @@ fixCheck() {
 		Return "[FIXED]"
 }
 
-;Shows the Clipjump Paste Mode tooltip
-PasteModeTooltip(temp_clipboard) {
+;Shows tooltips in Clipjump Paste Modes
+PasteModeTooltip(cText, notpaste=0) {
 	global
-	if temp_clipboard =
+	if notpaste {
+		Tooltip, % cText, % SPM.X, % SPM.Y
+	}
+	else {
+		if cText =
 		ToolTip % "{" CN.Name "} Clip " realclipno " of " CURSAVE "`t" fixStatus (WinExist("Display_Cj") ? "" : "`n`n" MSG_ERROR "`n`n"), % SPM.X, % SPM.Y
-	else
+		else
 		ToolTip % "{" CN.Name "} Clip " realclipno " of " CURSAVE "`t" GetClipboardFormat() "`t" fixstatus (!FORMATTING ? "`t[" TXT.TIP_noformatting "]" : "") 
 		. "`n`n" halfclip, % SPM.X, % SPM.Y
+	}
 }
 
 
@@ -719,10 +733,10 @@ ctrlCheck:
 					API.blockMonitoring(1)
 					try Clipboard := Rtrim(Clipboard, "`r`n")
 					API.blockMonitoring(0, 5)
+					CALLER := 0 	; make it 0 again to avoid any interference with apps like Excel
 					Critical, On 			; on critical for just the case
 				}
 				Send, ^{vk56}
-
 				sleeptime := 1
 			}
 			else
@@ -745,7 +759,7 @@ ctrlCheck:
 
 		sleep % sleeptime
 		Tooltip
-		
+
 		restoreCaller := 0		; make it 0 in case Clipboard was not touched (Pasting was done) 
 		ctrlRef := ""
 		CALLER := CALLER_STATUS , EmptyMem()
@@ -853,17 +867,11 @@ compacter() {
 		FileMove, %A_ScriptDir%/%THUMBS_dir%/%avcnumber%.jpg, %A_ScriptDir%/%THUMBS_dir%/%A_Index%.jpg, 1
 		FileMove, %A_ScriptDir%/%FIXATE_dir%/%avcnumber%.fxt, %A_ScriptDir%/%FIXATE_dir%/%A_Index%.fxt, 1
 	}
-	TEMPSAVE := CURSAVE := ini_MaxClips
+	TEMPSAVE := CURSAVE := TOTALCLIPS - ini_Threshold
 }
 
 clearData() {
-	LASTCLIP := ""
-	CDS[CN.NG] := {}
-	FileDelete, %CLIPS_dir%\*.avc
-	FileDelete, %THUMBS_dir%\*.jpg
-	FileDelete, %FIXATE_dir%\*.fxt
-	CURSAVE := 0
-	TEMPSAVE := 0
+	API.emptyChannel(CN.NG)
 }
 
 clearClip(realActive) {

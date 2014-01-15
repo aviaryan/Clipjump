@@ -65,7 +65,6 @@ gui_History()
 	GuiControl, Move, history_SearchBox, % "w" (thisguisize- history_Searchboxx - 21) 		;7,7 for outer border, 7 for inner border
 
 	;create hotkeys
-	; BUG in AHK - Non-Eng computers show error if hks like ^c and so are used normally. Hotkey command on the other hand works fine.
 	Hotkey, IfWinActive, % PROGNAME " " TXT.HST__name
 	Hotkey, F5, history_SearchBox, On
 	Hotkey, If

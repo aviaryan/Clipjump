@@ -330,7 +330,7 @@ SuperInstr(Hay, Needles, return_min=true, Case=false, Startpoint=1, Occurrence=1
 Compare Versions
 */
 
-IsLatestRelease(prog_ver, cur_ver, exclude_keys="beta|alpha") {
+IsLatestRelease(prog_ver, cur_ver, exclude_keys="b|a") {
 
 	if RegExMatch(prog_ver, "(" exclude_keys ")")
 		return 1

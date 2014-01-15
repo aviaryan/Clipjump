@@ -1,3 +1,5 @@
-10.6.3
-Fixed issue with Action mode in Russian systems
-Minor: fixed about gui title centering
+10.6.4
+Fixed bug with more than 9 lines in a section in ClipjumpCustom.ini
+Added: a new function API.emptyChannel() for ClipjumpCustomizer
+Tried to fix bugs with Emacs-org-mode
+Minor: little more enhancements in ClipjumpCustomizer
