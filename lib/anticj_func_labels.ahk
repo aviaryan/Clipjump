@@ -25,10 +25,9 @@ main:
 	return
 
 exit:
-	save_Exit()
+	routines_Exit()
 	ExitApp
 	return
-
 
 ;BeepAt()
 ;SoundBeep function
@@ -356,6 +355,12 @@ getControlInfo(type="button", text="", ret="w", fontsize="", fontmore=""){
 		return testw
 	if ret=h
 		return testh
+}
+
+;inputbox function for use with customizer...
+inputBox(title, text){
+	Inputbox, o, % title, % text
+	return o
 }
 
 ; Code by deo http://www.autohotkey.com/board/topic/74348-send-command-when-switching-to-russian-input-language/#entry474543

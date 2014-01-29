@@ -427,11 +427,6 @@ save_Default(full=1){
 	ini_write("Advanced", "cut_equalto_delete", cut_is_delete_windows)
 }
 
-; Ini keys to save at exit
-save_Exit(){
-	Ini_write("Clipboard_history_window", "partial", history_partial, 0)
-}
-
 Ini_write(section, key, value="", ifblank=true){
 	;ifblank means if the key doesn't exist
 

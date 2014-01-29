@@ -47,10 +47,10 @@ global CONFIGURATION_FILE := "settings.ini"
 ini_LANG := ini_read("System", "lang")
 global TXT := Translations_load("languages/" ini_LANG ".txt") 		;Load translations
 
-global UPDATE_FILE := "https://raw.github.com/avi-aryan/Clipjump/master/version.txt"
+global UPDATE_FILE := "https://raw.github.com/aviaryan/Clipjump/master/version.txt"
 global PRODUCT_PAGE := "http://clipjump.sourceforge.net"
 global HELP_PAGE := "http://avi-win-tips.blogspot.com/2013/04/clipjump-online-guide.html"
-global AUTHOR_PAGE := "http://avi.uco.im"
+global AUTHOR_PAGE := "http://aviaryan.github.io"
 
 global MSG_TRANSFER_COMPLETE := TXT.TIP_copied " " PROGNAME    ;not space
 global MSG_CLIPJUMP_EMPTY := TXT.TIP_empty1 "`n`n" PROGNAME " " TXT.TIP_empty2 "`n`n" TXT.TIP_empty3 ;not `n`n
@@ -66,7 +66,7 @@ global MSG_FILE_PATH_COPIED := TXT.TIP_filepath " " PROGNAME
 global MSG_FOLDER_PATH_COPIED := TXT.TIP_folderpath " " PROGNAME
 
 ;History Tool
-global hidden_date_no := 4 , history_w , history_partial
+global hidden_date_no := 4 , history_w , history_partial := 1 ;start off with partial=1 <> much better
 
 ;*******************************************************************************
 
@@ -76,7 +76,7 @@ FileCreateDir, cache/clips
 FileCreateDir, cache/thumbs
 FileCreateDir, cache/fixate
 FileCreateDir, cache/history
-FileSetAttrib, -H, %A_ScriptDir%\cache
+FileSetAttrib, -H, %A_WorkingDir%\cache
 
 ;Init Non-Ini Configurations
 FileDelete, % A_temp "/clipjumpcom.txt"
@@ -288,7 +288,7 @@ paste:
 			hkZ_pasteMode(1) , is_pstMode_active := 1
 
 		if !IScurCBACTIVE 				;if the current clipboard is not asked for , then only load from file
-			try FileRead, Clipboard, *c %A_ScriptDir%/%CLIPS_dir%/%TEMPSAVE%.avc
+			try FileRead, Clipboard, *c %A_WorkingDir%/%CLIPS_dir%/%TEMPSAVE%.avc
 		try temp_clipboard := Clipboard
 		;temp_clipboard := CDS[CN.NG][TEMPSAVE]
 
@@ -562,12 +562,12 @@ fixate:
 	IfExist, %FIXATE_dir%\%realActive%.fxt
 	{
 		fixStatus := ""
-		FileDelete, %A_ScriptDir%\%FIXATE_dir%\%realactive%.fxt
+		FileDelete, %A_WorkingDir%\%FIXATE_dir%\%realactive%.fxt
 	}
 	else
 	{
 		fixStatus := MSG_FIXED
-		FileAppend, , %A_ScriptDir%\%FIXATE_dir%\%realActive%.fxt
+		FileAppend, , %A_WorkingDir%\%FIXATE_dir%\%realActive%.fxt
 	}
 	PasteModeTooltip(temp_clipboard)
 	return
@@ -855,17 +855,17 @@ compacter() {
 	loop, %ini_Threshold%
 	{
 		CDS[CN.NG][A_index] := ""
-		FileDelete, %A_ScriptDir%\%CLIPS_dir%\%A_Index%.avc
-		FileDelete, %A_ScriptDir%\%THUMBS_dir%\%A_Index%.jpg
-		FileDelete, %A_ScriptDir%\%FIXATE_dir%\%A_Index%.fxt
+		FileDelete, %A_WorkingDir%\%CLIPS_dir%\%A_Index%.avc
+		FileDelete, %A_WorkingDir%\%THUMBS_dir%\%A_Index%.jpg
+		FileDelete, %A_WorkingDir%\%FIXATE_dir%\%A_Index%.fxt
 	}
 	loop % CURSAVE-ini_Threshold
 	{
 		avcNumber := A_Index + ini_Threshold
 		CDS[CN.NG][A_index] := CDS[CN.NG][avcNumber] , CDS[CN.NG][avcNumber] := ""
-		FileMove, %A_ScriptDir%/%CLIPS_dir%/%avcnumber%.avc, %A_ScriptDir%/%CLIPS_dir%/%A_Index%.avc, 1
-		FileMove, %A_ScriptDir%/%THUMBS_dir%/%avcnumber%.jpg, %A_ScriptDir%/%THUMBS_dir%/%A_Index%.jpg, 1
-		FileMove, %A_ScriptDir%/%FIXATE_dir%/%avcnumber%.fxt, %A_ScriptDir%/%FIXATE_dir%/%A_Index%.fxt, 1
+		FileMove, %A_WorkingDir%/%CLIPS_dir%/%avcnumber%.avc, %A_WorkingDir%/%CLIPS_dir%/%A_Index%.avc, 1
+		FileMove, %A_WorkingDir%/%THUMBS_dir%/%avcnumber%.jpg, %A_WorkingDir%/%THUMBS_dir%/%A_Index%.jpg, 1
+		FileMove, %A_WorkingDir%/%FIXATE_dir%/%avcnumber%.fxt, %A_WorkingDir%/%FIXATE_dir%/%A_Index%.fxt, 1
 	}
 	TEMPSAVE := CURSAVE := TOTALCLIPS - ini_Threshold
 }
@@ -906,7 +906,7 @@ renameCorrect(realActive) {
 thumbGenerator() {
 	Critical
 	ClipWait, 3, 1 				;Dont need a Clipwait here , but just for special cases I put a wait of 3 secs
-	Gdip_CaptureClipboard( A_ScriptDir "\" THUMBS_dir "\" CURSAVE ".jpg", ini_Quality)
+	Gdip_CaptureClipboard( A_WorkingDir "\" THUMBS_dir "\" CURSAVE ".jpg", ini_Quality)
 }
 
 ;~ ;**************** GUI Functions ***************************************************************************
@@ -914,7 +914,7 @@ thumbGenerator() {
 showPreview(){
 	static scrnhgt := A_ScreenHeight / 2 , scrnwdt := A_ScreenWidth / 2
 
-	if FileExist( (img := A_ScriptDir "\" THUMBS_dir "\" TEMPSAVE ".jpg") )
+	if FileExist( (img := A_WorkingDir "\" THUMBS_dir "\" TEMPSAVE ".jpg") )
 	{
 		Gdip_getLengths(img, widthOfThumb, heightOfThumb)
 
@@ -1067,9 +1067,9 @@ strtup:
 
 updt:
 	Tooltip, Checking for Updates ...... , , , 3
-	URLDownloadToFile, %UPDATE_FILE%, %A_ScriptDir%/cache/latestversion.txt
+	URLDownloadToFile, %UPDATE_FILE%, %A_WorkingDir%/cache/latestversion.txt
 	ToolTip, ,,, 3
-	FileRead, temp, %A_ScriptDir%/cache/latestversion.txt
+	FileRead, temp, %A_WorkingDir%/cache/latestversion.txt
 	lversion_changes := "`n`nCHANGES`n"
 	loop, parse, temp, `n, `r
 		if A_index=1
@@ -1126,7 +1126,7 @@ addToWinClip(lastEntry, extraTip)
 	API.blockMonitoring()
 	ToolTip, System Clipboard %extraTip%
 	if CURSAVE
-		try FileRead, Clipboard, *c %A_ScriptDir%/%CLIPS_dir%/%lastentry%.avc
+		try FileRead, Clipboard, *c %A_WorkingDir%/%CLIPS_dir%/%lastentry%.avc
 	Sleep, 1000
 	ToolTip
 	API.blockMonitoring(0)
@@ -1181,7 +1181,7 @@ editclip:
 	FileDelete, cache\edit.txt
 	FileAppend, % temp_clipboard , cache\edit.txt
 	Critical, Off
-	run, % ini_defEditor " """ A_ScriptDir "\cache\edit.txt" """",,, editclip_pid
+	run, % ini_defEditor " """ A_WorkingDir "\cache\edit.txt" """",,, editclip_pid
 	loop {
 		Process, Exist, % editclip_pid
 		if !ErrorLevel
@@ -1231,7 +1231,6 @@ windows_cut:
 
 ;Copies text to a var in the script without invoking Clipjump
 CopytoVar(clipwait_time=3, send_macro="^{vk43}"){
-
 	CALLER := 0
     try oldclip := ClipboardAll
     try Clipboard := ""
@@ -1240,7 +1239,6 @@ CopytoVar(clipwait_time=3, send_macro="^{vk43}"){
     try var := Clipboard
     try Clipboard := oldclip
     CALLER := CALLER_STATUS
-
     return var
 }
 
@@ -1254,6 +1252,10 @@ disable_clipjump:
 	Menu, Options_Tray, % !CLIPJUMP_STATUS ? "Check" : "Uncheck", % TXT.TRY_disable " " PROGNAME
 	init_actionmode() 			;refresh enable/disable text in action mode
 	return
+
+routines_Exit(){
+	Ini_write("Clipboard_history_window", "partial", history_partial, 0)
+}
 
 ;#################### COMMUNICATION ##########################################
 

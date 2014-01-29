@@ -43,7 +43,7 @@ FillClassList:
    LV_Delete()
    LV_ModifyCol()
    LV_ModifyCol(1, 295)
-   IniRead,OutVar,%A_ScriptDir%\settings.ini,Advanced,ignoreWindows
+   IniRead,OutVar,%A_WorkingDir%\settings.ini,Advanced,ignoreWindows
    Loop, parse, OutVar, |
    	{
    		If A_LoopField =
@@ -97,7 +97,7 @@ SaveClasses:
    		LV_GetText(ClassHelper, A_Index)
    		ClipClasses:=ClipClasses . ClassHelper "|"
    	}
-   IniWrite,%ClipClasses%,%A_ScriptDir%\settings.ini,Advanced,ignoreWindows
+   IniWrite,%ClipClasses%,%A_WorkingDir%\settings.ini,Advanced,ignoreWindows
    Return
 
 }

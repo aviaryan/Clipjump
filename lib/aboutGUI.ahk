@@ -118,7 +118,7 @@ trayMenu(destroy=0){
 
 reload:
 	OnExit,
-	save_Exit()
+	routines_Exit()
 	if H_COMPILED
 	{
 		run % A_AhkPath 		; which is the H exe

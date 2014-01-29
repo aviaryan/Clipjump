@@ -41,7 +41,16 @@ loadCustomizations(){
 customization_Run(obj){
 	for k,v in obj
 	{
-		k := Ltrim(k, "0123456789")
+		k := Ltrim(k, "0123456789") 	; correct key
+		loop { 			; change %..% vars to keys
+			if !($op1 := Instr(v, "%", 0, 1, 1)) || !($op2 := Instr(v, "%", 0, 1, 2))
+				break
+			$match := Substr(v, $op1, $op2-$op1+1)
+			$var := Substr($match,2,-1)
+			$var := %$var%
+			StringReplace, v, v, % $match, % $var
+		}
+
 		if k = run
 		{
 			if !Instr(v, "(")
@@ -86,6 +95,7 @@ RunFunc(v){
 			str .= "`n" ps[A_index]
 		return r := Act_API(str, "API:")
 	}
+
 	; else normal function
 	if !n
 		r := %fn%()

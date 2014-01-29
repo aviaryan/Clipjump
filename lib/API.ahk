@@ -37,7 +37,7 @@ class API
 		if  (channel="") && (clipno="")
 		{
 			if !IsCurCBActive
-				try FileRead, Clipboard, *c %A_ScriptDir%\%CLIPS_dir%\%TEMPSAVE%.avc
+				try FileRead, Clipboard, *c %A_WorkingDir%\%CLIPS_dir%\%TEMPSAVE%.avc
 		}
 		else {
 			r := this.getClipLoc(channel, clipno)
@@ -144,7 +144,7 @@ class API
 			clipno := 1
 		p := !channel ? "" : channel
 		z := (CN.NG==channel) ? CURSAVE : CN["CURSAVE" p] 		;chnl CURSAVE is not updated everytime but when channel is changed. 
-		f := A_ScriptDir "\cache\clips" p "\" z-clipno+1 ".avc"
+		f := A_WorkingDir "\cache\clips" p "\" z-clipno+1 ".avc"
 		return FileExist(f) ? f : ""
 	}
 

@@ -190,7 +190,7 @@ gui_History_Preview(path, history_SearchBox)
 	preview := {}
 
 	preview.isimg := Instr(Substr(path, -2), "jpg") ? 1 : 0
-	preview.path := A_scriptdir "\cache\history\" path
+	preview.path := A_WorkingDir "\cache\history\" path
 
 	Gui, Preview:New
 	Gui, Margin, 0, 0
