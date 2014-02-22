@@ -2,7 +2,7 @@
 ;TranslatorName=Åke Engelbrektson
 ;TranslatorContact=eson57@gmail.com
 ;TranslatorURL=http://svenskasprakfiler.se
-;LastUpdated=02 Jan 2014
+;LastUpdated=10 Jan 2014
 
 ;======
 ;v9.9.0.1
@@ -204,3 +204,33 @@ TIP_done = Klar
 TIP_copycutfailed = Kopiera/Flytta, misslyckades
 TIP_copy = Kopiera aktuellt klipp
 TIP_move = Flytta aktuellt klipp
+
+;========
+;10.5 beta
+;========
+
+TIP_delallprompt = VARNING!
+                 = Vill du verkligen ta bort alla klipp i den aktuella kanalen?
+                 = Tryck Y för att bekräfta.
+                 = Tryck N för att avbryta.
+
+;=======
+;10.6
+;=======
+
+TIP_confirmcopy = Du måste bekräfta eftersom detta är en skyddad kanal.
+                = Godkänner du denna kopiering till kanalen?
+                = Tryck Y för Ja
+                = Tryck N för Nej
+ABT_seehelp = Vill du se Clipjump-hjälpen?
+ABT_runadmin = Clipjump körs inte som Administratör
+             = Detta kan orsaka felaktiga funktioner i programmet.
+             = 
+             = [Detta meddelande visas endast en gång]
+ABT_cjready = Hej!
+            = Clipjump är nu aktiverat.
+            = Prova att göra ett par snabba kopiera/klistra in...
+TIP_editing = Redigerar....
+            = Tryck Esc för att avbryta
+TIP_editdone = Klippet har redigerats
+TIP_editnotdone = Klippet har INTE redigerats!

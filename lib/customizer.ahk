@@ -70,10 +70,10 @@ customization_Run(obj){
 			if Instr(k,".")
 			{
 				loop, parse, k,`.
-					j%A_index% := Trim(A_LoopField) , n := A_index-1
-				if n=1
+					j%A_index% := Trim(A_LoopField) , $n := A_index-1
+				if $n=1
 					%j1%[j2] := v
-				if n=2
+				if $n=2
 					%j1%[j2][j3] := v
 			}
 			else %k% := v

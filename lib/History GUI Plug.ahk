@@ -36,6 +36,7 @@ gui_History()
 	;Use a Space and a tab to separate
 	Menu, HisMenu, Add, % TXT.HST_m_copy , history_clipboard
 	Menu, HisMenu, Add, % TXT.HST_m_insta , history_InstaPaste
+	Menu, HisMenu, Add, % TXT.HST_m_edit , history_EditClip
 	Menu, HisMenu, Add, % TXT.HST_m_export , history_exportclip
 	Menu, HisMenu, Add
 	Menu, HisMenu, Add, % TXT.HST_m_ref, history_SearchBox
@@ -71,6 +72,7 @@ gui_History()
 	Hotkey, If, IsHisListViewActive()
 	hkZ("^c", "history_clipboard")
 	hkZ("^e", "history_exportclip")
+	hkZ("^h", "history_EditClip")
 	hkZ("!d", "historySearchfocus")
 	hkZ("^f", "historySearchfocus")
 	Hotkey, If
@@ -82,6 +84,14 @@ gui_History()
 history_MenuPreview:
 ; Invoking the prev. button . 
 	Send {vk0d}
+	return
+
+history_SearchBox:
+	Critical, On
+	Gui, History:Default
+	Gui, History:Submit, NoHide
+	historyUpdate(history_SearchBox, 0, history_partial)
+	LV_ModifyCol(what_sort, how_sort ? "Sort" : "SortDesc") 		;sort column correctly
 	return
 
 history_ButtonPreview:
@@ -109,14 +119,6 @@ history_ButtonDeleteAll:
 	}
 	return
 
-history_SearchBox:
-	Critical, On
-	Gui, History:Default
-	Gui, History:Submit, NoHide
-	historyUpdate(history_SearchBox, 0, history_partial)
-	LV_ModifyCol(what_sort, how_sort ? "Sort" : "SortDesc") 		;sort column correctly
-	return
-
 historyLV:
 	Gui, History:Default
 
@@ -134,6 +136,14 @@ historyLV:
 
 history_clipboard:
 	history_clipboard()
+	return
+
+history_EditClip: 		; label inside to call history_searchbox which uses local func variables
+	Gui, History:Default
+	LV_GetText(clip_file_path, LV_GetNext(0), hidden_date_no)
+	runwait % ini_defEditor " """ A_WorkingDir "\cache\history\" clip_file_path """"
+	HISTORYOBJ[clip_file_path "_data"] := HISTORYOBJ[clip_file_path "_date"] := ""  	; free to rebuild them
+	gosub history_SearchBox
 	return
 
 historyGuiContextMenu:
@@ -180,7 +190,6 @@ historyGuiEscape:
 	EmptyMem() 				;Free memory
 	return
 }
-
 
 gui_History_Preview(path, history_SearchBox)
 ; Creates and shows a GUI for viewing history items
@@ -308,12 +317,11 @@ PreviewGuiSize:
 
 }
 
-
-history_clipboard(){
+history_clipboard(sTartRow=0){
 ; Transfers the selected item from Listview to Clipboard
 ; -
 	Gui, History:Default
-	row_selected := LV_GetNext(0)
+	row_selected := LV_GetNext(sTartRow)
 	LV_GetText(clip_file_path, row_selected, hidden_date_no)
 	if !Instr(clip_file_path, ".jpg")
 	{
@@ -322,6 +330,7 @@ history_clipboard(){
 	}
 	else
 		Gdip_SetImagetoClipboard("cache\history\" clip_file_path)
+	return row_selected
 }
 
 
@@ -329,7 +338,6 @@ historyUpdate(crit="", create=true, partial=false)
 ; Update the history GUI listview
 ; create=false will prevent re-drawing of Columns , useful when the function is called in the SearchBox label and Gui Size is customized.
 {
-	static his_obj := {}
 	local totalSize := 0
 
 	LV_Delete()
@@ -339,31 +347,31 @@ historyUpdate(crit="", create=true, partial=false)
 		; Filling Text data in obj
 		if Instr(A_LoopFileFullPath, ".txt")
 		{
-			if !his_obj[A_LoopFileName "_data"]
+			if !HISTORYOBJ[A_LoopFileName "_data"]
 			{
 				Fileread, lv_temp, %A_LoopFileFullPath%
-				data := his_obj[A_LoopFileName "_data"] := lv_temp
+				data := HISTORYOBJ[A_LoopFileName "_data"] := lv_temp
 			}
 			else
-				data := his_obj[A_LoopFileName "_data"]
+				data := HISTORYOBJ[A_LoopFileName "_data"]
 		}
 		else if Instr(A_LoopFileFullPath, ".jpg")
-			data := his_obj[A_LoopFileName "_data"] := MSG_HISTORY_PREVIEW_IMAGE
+			data := HISTORYOBJ[A_LoopFileName "_data"] := MSG_HISTORY_PREVIEW_IMAGE
 		else Continue
 		
 		func := partial ? "Superinstr" : "Instr" 		;too smart - The third param 0 has diff meanings in both cases
 		;  Searching
 		if %func%(data, crit, partial ? 1 :0)
 		{
-			if !his_obj[A_LoopFileName "_date"]
+			if !HISTORYOBJ[A_LoopFileName "_date"]
 			{
-				his_obj[A_LoopFileName "_date"] := Substr(A_LoopFileName,1,4) "-" Substr(A_LoopFileName,5,2) "-" Substr(A_LoopFileName,7,2) "  "
+				HISTORYOBJ[A_LoopFileName "_date"] := Substr(A_LoopFileName,1,4) "-" Substr(A_LoopFileName,5,2) "-" Substr(A_LoopFileName,7,2) "  "
 						. Substr(A_LoopFileName,9,2) ":" Substr(A_LoopFileName,11,2) ":" Substr(A_LoopFileName, 13, 2)
 				FileGetSize, O,% A_LoopFileFullPath
-				his_obj[A_LoopFileName "_size"] := O
+				HISTORYOBJ[A_LoopFileName "_size"] := O
 			}
 
-			LV_Add("", data, his_obj[A_LoopFileName "_date"], t := his_obj[A_LoopFileName "_size"], A_LoopFileName)
+			LV_Add("", data, HISTORYOBJ[A_LoopFileName "_date"], t := HISTORYOBJ[A_LoopFileName "_size"], A_LoopFileName)
 			totalSize += t 				; speed factor
 		}
 	}
@@ -422,17 +430,23 @@ history_ButtonDelete(){
 
 history_InstaPaste:
 	IniRead, clipboard_instapaste, % CONFIGURATION_FILE, Advanced, Instapaste_write_clipboard, %A_Space%
-	if clipboard_instapaste
-		history_clipboard()
-	else
-		CALLER := 0
-		, IScurCBACTIVE := 0  			;cur Clipboard is no longer active
-		, history_clipboard()
-
+	WinHide, % PROGNAME " " TXT.HST__name
+	temp_curRow := 0
+	loop {
+		if clipboard_instapaste
+			temp_curRow := history_clipboard(temp_curRow)
+		else
+			API.blockMonitoring(1)
+			, IScurCBACTIVE := 0  			;cur Clipboard is no longer active
+			, temp_curRow := history_clipboard(temp_curRow)
+		if !temp_curRow
+			break
+		Send, % ( A_index>1 ? "{Enter}" : "" ) "^{vk56}"
+		sleep 110
+	}
+	API.blockMonitoring(0)
 	WinClose, % PROGNAME " " TXT.HST__name
 	WinWaitClose, % PROGNAME " " TXT.HST__name
-	Send, ^{vk56}
-	CALLER := CALLER_STATUS
 	return
 
 history_exportclip:
@@ -444,8 +458,7 @@ history_exportclip:
 	loop
 		if !FileExist(temp := A_MyDocuments "\export" A_index ".cj")
 			break
-	Tooltip,% "Selected Clip " TXT._exportedto "`n" temp
-	SetTimer, TooltipOff, 1000
+	autoTooltip("Selected Clip " TXT._exportedto "`n" temp, 1000, 9)
 	try FileAppend, %ClipboardAll%, %temp%
 	CALLER := CALLER_STATUS
 	return
@@ -508,10 +521,10 @@ prevSearchfocus:
 	return
 ; Using these function so that #if is created properly and hotkey command works and so no errors in non-eng computers
 IsHisListViewActive(){
-	return IsActive("SysListView321", "classnn") && IsActive(PROGNAME " " TXT.HST__name, "window") && ctrlRef!="pastemode"
+	return IsActive("SysListView321", "classnn") && IsActive(PROGNAME " " TXT.HST__name, "window") && ctrlRef==""
 }
 IsPrevActive(){
-	return Winactive(TXT.PRV__name " ahk_class AutoHotkeyGUI") && ctrlRef != "pastemode"
+	return Winactive(TXT.PRV__name " ahk_class AutoHotkeyGUI") && ctrlRef==""
 }
 
 #if IsActive("Edit1", "classnn") and IsActive(PROGNAME " " TXT.HST__name, "window")
@@ -527,7 +540,7 @@ IsPrevActive(){
 #if
 #if IsPrevActive()
 #if
-#if ( IsActive(PROGNAME " " TXT.HST__name, "window") and ctrlRef!="pastemode" )
+#if ( IsActive(PROGNAME " " TXT.HST__name, "window") and ctrlRef=="" )
 	MButton::
 	KeyWait, Mbutton
 	Click

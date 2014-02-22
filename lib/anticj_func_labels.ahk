@@ -258,8 +258,10 @@ TooltipOff5:
 TooltipOff6:
 TooltipOff7:
 TooltipOff8:
+TooltipOff9:
+TooltipOff10:
 	SetTimer, % A_ThisLabel, Off
-	ToolTip,,,, % ( Substr(A_ThisLabel, 0) == "f" ) ? 1 : Substr(A_ThisLabel, 0) 
+	ToolTip,,,, % ( Substr(A_ThisLabel, 0) == "f" ) ? 1 : RegExReplace(A_ThisLabel, "TooltipOff")
 	return
 
 

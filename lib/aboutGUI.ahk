@@ -90,6 +90,8 @@ trayMenu(destroy=0){
 	;Tray Icon
 	if !(A_isCompiled) && !(H_COMPILED)			;Important for showing Cj's icon in the Titlebar of GUI
 		Menu, Tray, Icon, icons\icon.ico
+	if H_COMPILED
+		Menu, Tray, Icon, % A_AhkPath
 	Menu, Tray, NoStandard
 	Menu, Tray, Add, % TXT.ABT__name " " PROGNAME, main
 	Menu, Tray, Tip, % PROGNAME " {" CN.Name "}"
@@ -119,10 +121,5 @@ trayMenu(destroy=0){
 reload:
 	OnExit,
 	routines_Exit()
-	if H_COMPILED
-	{
-		run % A_AhkPath 		; which is the H exe
-		Exitapp
-	}
-	else Reload
+	Reload
 	return

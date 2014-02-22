@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 10.6.4
+;@Ahk2Exe-SetVersion 10.7
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -35,13 +35,13 @@ ListLines, Off
 #HotkeyInterval 1000
 #MaxHotkeysPerInterval 1000
 
-global ini_LANG := ""
+global ini_LANG := "" , H_Compiled := (Substr(A_AhkPath, Instr(A_AhkPath, "\", 0, 0)+1) == "Clipjump.exe") && (!A_IsCompiled) ? 1 : 0
 
 ;*********Program Vars**********************************************************
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "10.6.4"
+global VERSION := "10.7"
 global CONFIGURATION_FILE := "settings.ini"
 
 ini_LANG := ini_read("System", "lang")
@@ -49,7 +49,7 @@ global TXT := Translations_load("languages/" ini_LANG ".txt") 		;Load translatio
 
 global UPDATE_FILE := "https://raw.github.com/aviaryan/Clipjump/master/version.txt"
 global PRODUCT_PAGE := "http://clipjump.sourceforge.net"
-global HELP_PAGE := "http://avi-win-tips.blogspot.com/2013/04/clipjump-online-guide.html"
+global HELP_PAGE := "http://clipjump.sourceforge.net/docs"
 global AUTHOR_PAGE := "http://aviaryan.github.io"
 
 global MSG_TRANSFER_COMPLETE := TXT.TIP_copied " " PROGNAME    ;not space
@@ -88,8 +88,8 @@ global WORKINGHT := tempbottom-temptop
 global restoreCaller := 0
 
 ;Global Inits
-global CN := {} , CUSTOMS := {} , CDS := {} , SEARCHOBJ := {} , TOTALCLIPS, ACTIONMODE := {} , ACTIONMODE_DEF := "H S C X F D P O E F1 L"
-global cut_is_delete_windows := "XLMAIN QWidget" 			;excel , kingsoft office
+global CN := {}, CUSTOMS := {}, CDS := {}, SEARCHOBJ := {}, HISTORYOBJ := {}, TOTALCLIPS, ACTIONMODE := {}, PLUGINS := {}, ACTIONMODE_DEF := "H S C X F D P O E F1 L"
+global cut_is_delete_windows := "XLMAIN QWidget" 			;excel, kingsoft office
 global CURSAVE, TEMPSAVE, LASTCLIP, LASTFORMAT, Islastformat_Changed := 1, IScurCBACTIVE := 0
 global NOINCOGNITO := 1, SPM := {}, protected_DoBeep := 1
 
@@ -137,7 +137,7 @@ temp_keys := "a|c|s|z|space|x|e|up|down|f|h"
 loop, parse, temp_keys,|
 	pastemodekey[A_LoopField] := "^" A_LoopField
 temp_keys := "Enter|Up|Down|Home"
-loop, parse, temp_keys, |
+loop, parse, temp_keys,|
 	spmkey[A_LoopField] := A_LoopField
 
 global windows_copy_k, windows_cut_k
@@ -147,6 +147,8 @@ initChannels()
 ;loading Settings
 load_Settings(1)
 validate_Settings()
+;load plugins
+;loadPlugins()        ;<--- INACTIVE
 ;load custom settings
 loadCustomizations()
 
@@ -174,7 +176,7 @@ gui, add, picture,x0 y0 w400 h300 vimagepreview,
 IfExist, %A_Startup%/Clipjump.lnk
 {
 	FileDelete, %A_Startup%/Clipjump.lnk
-	FileCreateShortcut, % H_Compiled ? A_ScriptDir "\Clipjump.exe" : A_ScriptFullPath, %A_Startup%/Clipjump.lnk
+	FileCreateShortcut, % H_Compiled ? A_AhkPath : A_ScriptFullPath, %A_Startup%/Clipjump.lnk
 	Menu, Options_Tray, Check, % TXT.TRY_startup
 }
 
@@ -212,7 +214,7 @@ EmptyMem()
 return
 
 ;Tooltip No 1 is used for Paste Mode tips, 2 is used for notifications , 3 is used for updates , 4 is used in Settings , 5 is used in Action Mode
-;6 used in Class Tool, 7.........., 8 used in Customizer
+;6 used in Class Tool, 7.........., 8 used in Customizer, 9 used in history tool, 10 in edit clips
 
 ;OLD VERSION COMPATIBILITES TO REMOVE
 ;NONE
@@ -1052,7 +1054,7 @@ CopyFileData:
 ;**********       Extra Functions and Labels            *******************************************************
 
 hlp:
-	if A_IsCompiled
+	if A_IsCompiled or H_Compiled
 		run Clipjump.chm
 	else
 		run % FileExist("Clipjump.chm") ? "Clipjump.chm" : "chm_files\docs\index.html"
@@ -1062,7 +1064,7 @@ strtup:
 	Menu, Options_Tray, Togglecheck, % TXT.TRY_startup
 	IfExist, %A_Startup%/Clipjump.lnk
 		FileDelete, %A_Startup%/Clipjump.lnk
-	else FileCreateShortcut, % H_Compiled ? A_ScriptDir "\Clipjump.exe" : A_ScriptFullPath, %A_Startup%/Clipjump.lnk
+	else FileCreateShortcut, % H_Compiled ? A_AhkPath : A_ScriptFullPath, %A_Startup%/Clipjump.lnk
 	return
 
 updt:
@@ -1075,49 +1077,15 @@ updt:
 		if A_index=1
 			latestVersion := A_LoopField
 		else lversion_changes .= "`n" A_LoopField
-	;if Instr(latestVersion, "z") 										; z in the update file is a version which is non-auto updatable
-	;	latestVersion := Substr(latestVersion, 2) , noautoupdate := 1
-	;else noautoupdate := 0
-	noautoupdate := 1
 
 	if !IsLatestRelease(VERSION, latestversion, "b|a")
 	{
-		if noautoupdate {
-			MsgBox, 48, Clipjump Update available, % "Your Version: `t`t" VERSION "`nCurrent version: `t`t" latestVersion 
-			. lversion_changes
-			;. " as auto-update facility is not available."
-			IfMsgBox OK
-				BrowserRun(PRODUCT_PAGE)
-		}
-		;else {
-		;	MsgBox, 67, Clipjump Update Available, % "The latest version is " latestVersion ". `n" TXT.UPD_automsg
-		;	IfMsgBox, Yes
-		;		AutoUpdate(latestVersion)
-		;	else IfMsgBox, No
-		;		BrowserRun(PRODUCT_PAGE)
-		;}
+		MsgBox, 48, Clipjump Update available, % "Your Version: `t`t" VERSION "`nCurrent version: `t`t" latestVersion . lversion_changes
+		IfMsgBox OK
+			BrowserRun(PRODUCT_PAGE)
 	}
 	else MsgBox, 64, %PROGNAME%, % TXT.ABT_noupdate
 	return
-
-;AutoUpdate(v){
-;	loop, cache\clipjumpupdate*.exe 		; old files
-;		FileDelete, % A_LoopFileFullPath
-
-;	Tooltip, % "Downloading Update file for version " v,,, 3
-;	URLDownloadToFile, % "https://sourceforge.net/projects/clipjump/files/clipjumpupdate_" v ".exe/download", % "cache\" v ".exe"
-;	if ErrorLevel=1
-;		return autoTooltip("Update was not downloaded", 4, 3)
-;	Tooltip,,,, 3
-;	while !FileExist("cache\" v ".exe")
-;		sleep 20
-
-;	MsgBox, 64, Clipjump Update, % TXT.UPD_restart
-;	OnExit
-;	save_Exit()
-;	run % "cache\" v ".exe"
-;	Exitapp
-;}
 
 ;************************************** Helper FUNCTIONS ****************************************
 
@@ -1136,7 +1104,7 @@ changeIcon(){
 global
 
 	if A_IsCompiled or H_Compiled 		; H_Compiled is a user var created if compiled with ahk_h
-		Menu, tray, icon,*
+		Menu, tray, icon, % A_AhkPath
 	else
 		Menu, tray, icon, icons\icon.ico
 	if !NOINCOGNITO
@@ -1173,10 +1141,10 @@ editclip:
 	gosub endPastemode
 	if temp_clipboard =
 	{
-		autoTooltip(TXT.TIP_editnotdone, 800, 1)
+		autoTooltip(TXT.TIP_editnotdone, 800, 10)
 		return
 	}
-	Tooltip, % TXT.TIP_editing
+	Tooltip, % TXT.TIP_editing,,, 10
 	hkZ("Esc", "editclip_cancel", 1)
 	FileDelete, cache\edit.txt
 	FileAppend, % temp_clipboard , cache\edit.txt
@@ -1190,7 +1158,7 @@ editclip:
 	}
 	if editclip_cancel
 	{
-		editclip_cancel := "" , autoTooltip(TXT.TIP_editnotdone, 800, 1)
+		editclip_cancel := "" , autoTooltip(TXT.TIP_editnotdone, 800, 10)
 		return
 	}
 	Fileread, temp_clipboard2, cache\edit.txt
@@ -1202,7 +1170,7 @@ editclip:
 	try Clipboard := oldclip
 	FileAppend, % temp_clipboardall, %CLIPS_dir%/%TEMPSAVE%.avc
 	CDS[CN.NG][TEMPSAVE] := temp_clipboard2
-	autoTooltip(TXT.TIP_editdone, 800, 1)
+	autoTooltip(TXT.TIP_editdone, 800, 10)
 	API.blockMonitoring(0)
 	return
 
@@ -1253,8 +1221,9 @@ disable_clipjump:
 	init_actionmode() 			;refresh enable/disable text in action mode
 	return
 
-routines_Exit(){
+routines_Exit() {
 	Ini_write("Clipboard_history_window", "partial", history_partial, 0)
+	;updatePluginList() - ;ENABLE WHEN PLUGINS ARE INCORPORATED
 }
 
 ;#################### COMMUNICATION ##########################################
@@ -1322,7 +1291,7 @@ Receive_WM_COPYDATA(wParam, lParam)
 
    D := StrGet( NumGet(lParam + 2*A_PtrSize) )  ;unicode transfer
     if D is not Integer
-    	if !Instr(D, k)
+    	if !Instr(D, k) 	; if both are false and so the input is garbled (chinese)
     		D := StrGet( NumGet(lParam + 2*A_PtrSize), 8, "UTF-8")  ;ansi conversion
     if Instr(D, k)
     	%apif%(D, k) 	; done to not cause error if no lib is included
@@ -1349,5 +1318,7 @@ Receive_WM_COPYDATA(wParam, lParam)
 #include %A_ScriptDir%\lib\anticj_func_labels.ahk
 #include %A_ScriptDir%\lib\settings gui plug.ahk
 #include %A_ScriptDir%\lib\history gui plug.ahk
+;#include %A_ScriptDir%\lib\pluginManager.ahk
+;#include %A_ScriptDir%\plugins\_registry.ahk
 
 ;------------------------------------------------------------------- X -------------------------------------------------------------------------------
