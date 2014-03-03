@@ -130,6 +130,67 @@ class API
 			CURSAVE := TEMPSAVE := 0 , LASTCLIP := ""
 	}
 
+	runPlugin(filename, parameters*){
+		for k,v in PLUGINS["<>"]
+		{
+			if ( v["plugin_path"] == filename )
+			{
+				fpath := v["*"] , plugin_displayname := v["name"] , dirNum := v["#"]
+				break
+			}
+		}
+		; run
+		if FileExist(fpath) {
+			if !parameters.maxIndex() {
+				loop 3
+					If PLUGINS["<>"][dirNum].hasKey("param" A_index) {
+						Inputbox, param, % "Plugin " plugin_displayname, % PLUGINS["<>"][dirNum]["param" A_index],, 500
+						if ErrorLevel=0
+							params .= " """ param """" 	;if OK
+					}
+				else break
+			} else {
+				for k,v in parameters
+					; DECIDE Blank paramter = nothing or a parameter
+					params .= " """ v """"
+			}
+
+			try Run % A_AhkPath " """ A_WorkingDir "\" fpath """" params
+			catch 
+				MsgBox, 16, Error, % API.extPlugMiss . "`n" fpath
+		}
+		else {
+			if !IsFunc(fpath)
+			{
+				MsgBox, 16, Error, % API.plugCorrupt "`n" plugin_displayname
+				return
+			}
+			; else execture
+			if !parameters.maxIndex() {
+				funcobj := Func(fpath) , funcps := ""
+				loop % funcobj.maxParams
+				{
+					prompt := ""
+					prompt := PLUGINS["<>"][dirNum]["param" A_index]
+					if prompt=
+						prompt := "#" A_index " " TXT.PLG_fetchparam
+					InputBox, param, % "Plugin " plugin_displayname, % prompt,, 500
+					if ErrorLevel=0
+						funcps .= param ","
+				}
+			} else {
+				for k,v in parameters
+					funcps .= v ","
+			}
+			return runfunc(fpath "(" RTrim(funcps, ",") ")")
+		}
+	}
+
+	; EXecute a section in the ClipjumpCustom.ini
+	ExecuteSection(secName){
+		customization_Run( CUSTOMS["_" secName] )
+	}
+	
 	; p=1 enable incognito mode
 	IncognitoMode(p=1){
 		NOINCOGNITO := p  		; make it the opp as incognito: will change the sign

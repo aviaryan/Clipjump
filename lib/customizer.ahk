@@ -1,7 +1,11 @@
-; Cutomizer FUNCTIONS for Clipjump
-; bind, run, tip
-; not () is label
-; for bind , create object containing other vals , executed by a_thishotkey
+; Cutomizer
+/*
+What is supported?
+	k = %func()%
+	a.b = %func()%
+	a.b = some_string is supported (Obviously)
+	a.b = %c.d%
+*/
 
 loadCustomizations(){
 	if !FileExist("ClipjumpCustom.ini") {
@@ -13,11 +17,11 @@ loadCustomizations(){
 	IniRead, o, % f 	; load sections
 	loop, parse, o,`n, %A_space%
 	{
-		Iniread, s, % f, % A_LoopField
+		Iniread, s, % f, % A_LoopField 	; read that section
 		tobj := {}
 
 		loop, parse, s,`n, %A_Space%
-		{
+		{	; read each key
 			a := ""
 			loop % 3-Strlen(A_index)
 				a .= "0"
@@ -25,16 +29,17 @@ loadCustomizations(){
 			k := Trim( Substr(A_LoopField, 1, p:=Instr(A_LoopField, "=")-1) ) , v := Trim( Substr(A_LoopField, p+2) )
 			if k=bind
 				tobj.bind := v
+			else if k=noautorun
+				tobj.noautorun := v
 			else tobj[a k] := v
 		}
-		if tobj.bind = ""
+		if !(tobj.noautorun) && (tobj.bind = "")
 			customization_Run(tobj)
-		else {
+		else
 			hkZ( tobj.bind := "$" Hparse(tobj.bind), "CustomHotkey", 1 ) ; create hotkey
-			CUSTOMS[tobj.bind] := {}
-			for k,v in tobj
-				CUSTOMS[tobj.bind][k] := v
-		}
+			, CUSTOMS[tobj.bind] := {}
+			, CUSTOMS[tobj.bind] := tobj.Clone()
+		CUSTOMS["_" A_LoopField] := tobj.Clone() 	; store section object for use later
 	}
 }
 
@@ -47,7 +52,19 @@ customization_Run(obj){
 				break
 			$match := Substr(v, $op1, $op2-$op1+1)
 			$var := Substr($match,2,-1)
-			$var := %$var%
+
+			if RegExMatch($var, "iU)^[^ `t]+\(.*\)$")
+				$var := RunFunc($var)
+			else if Instr($var, ".")
+			{
+				loop, parse, $var,`.
+					$j%A_index% := Trim(A_LoopField) , $n := A_index-1
+				if $n=1
+					$var := %$j1%[$j2]
+				if $n=2
+					$var := %$j1%[$j2][$j3]
+			}
+			else $var := %$var%
 			StringReplace, v, v, % $match, % $var
 		}
 
@@ -63,18 +80,16 @@ customization_Run(obj){
 			SendInput, % RegExMatch( g:=HParse(v), "[#!\^\+]" ) = 1 ? g : v				; parse keys like Ctrl+Alt+k
 		else if k = sleep
 			sleep % v
-		else if k != "bind"
+		else if (k != "bind") or (k != "noautorun")
 		{
-			if RegExMatch(v, "iU)^[^ `t]+\(.*\)$")
-				v := RunFunc(v)
 			if Instr(k,".")
 			{
 				loop, parse, k,`.
-					j%A_index% := Trim(A_LoopField) , $n := A_index-1
+					$j%A_index% := Trim(A_LoopField) , $n := A_index-1
 				if $n=1
-					%j1%[j2] := v
+					%$j1%[$j2] := v
 				if $n=2
-					%j1%[j2][j3] := v
+					%$j1%[$j2][$j3] := v
 			}
 			else %k% := v
 		}
@@ -113,3 +128,5 @@ RunFunc(v){
 CustomHotkey:
 	customization_Run( CUSTOMS[A_ThisHotkey] )
 	return
+
+F9::Exitapp

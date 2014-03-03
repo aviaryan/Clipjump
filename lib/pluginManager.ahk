@@ -2,14 +2,166 @@
 Plugin management Routines
 */
 
-updatePluginList() {
+pluginManager_GUI(){
+	static wt, ht
+	static searchTerm, pluginMLV
+	wt := 600 ;(A_ScreenWidth/2.5) - 14
+	ht := 400
+	DidDelete := 0
+
+	Gui, PluginM:New
+	Gui, Margin, 7, 7
+	Gui, +ToolWindow -MaximizeBox
+	Gui, Font,, Consolas
+	Gui, Add, Edit, % "x7 y7 w" wt " vsearchTerm gpluginMSearch", 
+	Gui, Font,, Courier New
+	Gui, Add, ListView, % "xp y+10 h" ht-40 " -LV0X10 vpluginMLV gpluginMLV -Multi w" wt, % TXT._name "|" TXT._tags "|" TXT._author "|hidden"
+	Gui, PluginM:Default
+	LV_ModifyCol(1, 5*wt/12) , LV_ModifyCol(2, 4*wt/12-4) , LV_ModifyCol(3, wt/4) , LV_ModifyCol(4, 0)
+	updatePluginList()
+	Gui, Font
+	; The menu
+	Menu, plMenu, Add, % TXT._run, plugin_Run
+	Menu, plMenu, Add, % TXT.plg_properties, plugin_showprops
+	Menu, plMenu, Add, % TXT.HST_m_del, plugin_delete
+	Menu, plMenu, Default, % TXT._run
+
+	Gui, pluginM:Show, % "w" wt+14 " h" ht, % PROGNAME " " TXT.PLG__name
+	; the Hotkeys
+	Hotkey, IfWinActive, % PROGNAME " " TXT.PLG__name
+	hkZ("^f", "pluginSearchfocus")
+	hkZ("!d", "pluginSearchfocus")
+	Hotkey, If
+	Hotkey, If, IsPlugListViewActive()
+	hkZ("Enter", "plugin_Run")
+	hkZ("!Enter", "plugin_showprops")
+	hkZ("Del", "plugin_delete")
+	Hotkey, If
+	return
+
+pluginMLV:
+	if A_GuiEvent = DoubleClick
+		gosub plugin_Run
+	return
+
+pluginSearchfocus:
+	GuiControl, pluginM:focus, searchTerm
+	GuiControl, pluginM:focus, Edit1
+	return
+
+plugin_Run:
+	gosub plugin_getSelected
+	filepath := PLUGINS["<>"][dirNum]["plugin_path"]
+	API.runPlugin(filepath)
+	return
+
+plugin_showprops:
+	gosub plugin_getSelected
+	disText := ""
+	for key,value in PLUGINS["<>"][dirNum]
+		if key not in #,`*
+			disText .= key "  -  " value "`n"
+	guiMsgbox(plugin_displayname " " TXT._properties, disText, "pluginM")
+	EmptyMem()
+	return
+
+plugin_delete:
+	gosub plugin_getSelected
+	MsgBox, 52, Plugin Delete, % TXT.PLG_delmsg "`n" plugin_displayname
+	IfMsgBox, Yes
+	{
+		FileDelete, % plugPath := "plugins\" PLUGINS["<>"][dirNum]["Plugin_path"]
+		FileRemoveDir, % Substr(plugPath,1,-4) ".lib", 1 	;remove .ahk and put .lib
+		LV_Delete(valSelected)
+		DidDelete := 1
+	}
+	return
+
+plugin_getSelected:
+	Gui, pluginM:Default
+	if LV_GetNext() = 0
+		valSelected := selected_row
+	else valSelected := LV_GetNext()
+	LV_GetText(dirNum, valSelected, 4) , plugin_displayname := PLUGINS["<>"][dirNum]["name"]
+	return
+
+pluginMSearch:
+	Gui, pluginM:Submit, Nohide
+	updatePluginList(searchTerm)
+	return
+
+pluginMGuiContextMenu:
+	Gui, pluginM:Default
+	if (A_GuiControl != "pluginMLV") or (LV_GetNext() = 0)
+		return
+	selected_row := LV_GetNext()
+	Menu, plMenu, Show, %A_Guix%, %A_guiy%
+	return
+
+pluginMGuiEscape:
+pluginMGuiClose:
+	GUi, pluginM: Destroy
+	Menu, plmenu, DeleteAll
+	if DidDelete {
+		MsgBox, 52, Warning, % TXT.PLG_restartmsg
+		IfMsgBox, Yes
+			gosub reload
+	} 
+	EmptyMem()
+	return
+
+}
+
+updatePluginList(searchTerm="") {
+	Gui, PluginM:Default
+	LV_Delete()
+
+	for k,v in PLUGINS
+	{
+		if k in external,pformat,`<`>
+			continue
+		if !updatePluginList_validate(searchTerm,v)
+			continue
+		LV_Add("", v.name, v.tags, v.author, v["#"])
+	}
+	for k,v in PLUGINS.external
+	{
+		if !updatePluginList_validate(searchTerm,v)
+			continue
+		LV_Add("", v.name, v.tags, v.author, v["#"])
+	}
+	for k,v in PLUGINS.pformat
+	{
+		if !updatePluginList_validate(searchTerm,v)
+			continue
+		LV_Add("", v.name, v.tags, v.author, v["#"])
+	}
+}
+
+updatePluginList_validate(searchTerm, v){
+	return SuperInstr(v.name " " v.tags " " v.author , Trim(searchTerm), 1)
+}
+
+;////////////////////////////////////////////////////////////////////////////////////////////////////////////
+;------------------------------------------------------ END OF GUI FUNCTIONS --------------------------------
+
+updatePluginIncludes() {
 	FileDelete, plugins\_registry.ahk
 	loop, plugins\*.ahk
+	{
+		if Instr(A_LoopFileName, "external.") = 1
+			continue
 		st .= "#Include, %A_ScriptDir%\plugins\" A_LoopFileName "`n"
+	}
 	FileAppend, % st, plugins\_registry.ahk
 }
 
+;-------------------------------------------------------------------------------------------------------------
+;Loads Plugins into the Obj
+;-------------------------------------------------------------------------------------------------------------
+
 loadPlugins() {
+	PLUGINS.pformat := {} , PLUGINS.external := {} , PLUGINS["<>"] := {}	; init 2nd level objects
 	loop, plugins\*.ahk
 	{
 		if A_LoopFileName = _registry.ahk
@@ -19,18 +171,33 @@ loadPlugins() {
 		p:=1 , detobj := {}
 		while RegExMatch(ov, "im)^;@Plugin-.*$", o, p){
 			ps := Substr(o, Instr(o,"-")+1) , pname := Substr(ps, 1, Instr(ps," ")-1) , ptext := Substr(ps, Instr(ps, " ")+1)
-			p += Strlen(o) , detobj[pname] := ptext
+			p += Strlen(o) , detobj[pname] .= ptext
 		}
 
 		filename := Substr(A_LoopFileName, 1, -4) , c := 0
 		loop, parse, filename,`.
 			name%A_index% := A_LoopField , c++
-		if c>0 && !IsObject(PLUGINS[name1])
-			PLUGINS[name1] := detobj
-		if c>1 && !IsObject(PLUGINS[name1][name2])
-			PLUGINS[name1][name2] := detobj
-		if c>2 && !IsObject(PLUGINS[name1][name2][name3])
-			PLUGINS[name1][name2][name3] := detobj
+		detobj["#"] := A_index		; add unique number of <> realtive directory
+		detobj["name"] := detobj.name ? detobj.name : Substr(A_LoopFileName,1,-4) 	; add the Name of plugin
+		detobj["Plugin_path"] := A_LoopFileName
+		; and * stores the path of plugin
+		if c>1
+		{
+			if name1 = external
+				detobj["*"] := "plugins\external." name2 ".ahk" , PLUGINS["external"][name2] := detobj.Clone() 
+				, PLUGINS["<>"][A_index] := detobj.Clone()
+			else if name1 = pformat
+				detobj["*"] := "plugin_pformat_" name2 , PLUGINS["pformat"][name2] := detobj.Clone() 
+				, PLUGINS["<>"][A_index] := detobj.Clone()
+		}
+		else detobj["*"] := "plugin_" name1 , PLUGINS[name1] := detobj.Clone() , PLUGINS["<>"][A_Index] := detobj.Clone()
 	}
-	msgbox % plugins.autoupdate.description
 }
+
+;///////////////////////// MORE LOW END GUI FUNCTIONS ///////////////////////////////////////////////////////////////////
+
+IsPlugListViewActive(){
+	return IsActive("SysListView321", "classnn") && IsActive(PROGNAME " " TXT.PLG__name, "window") && ctrlRef==""
+}
+#If IsPlugListViewActive()
+#If

@@ -310,16 +310,6 @@ load_Settings(all=false)
 		if !beepFrequency
 			beepFrequency := 1500
 
-		;Action Mode
-		ini_actmd_keys := Trim( ini_read("Advanced", "actionmode_keys") )
-		if !ini_actmd_keys
-			ini_actmd_keys := ACTIONMODE_DEF
-		; the below code will add more actionmode keys in the future version if not present in old ini
-		else if (tn1 := getQuant(ACTIONMODE_DEF, " ")+0) > (tn2 := getQuant(ini_actmd_keys, " ")+0)
-			temp := Substr(ACTIONMODE_DEF, Instr(ACTIONMODE_DEF, " ", 0, 1, tn2+1))
-			, ini_actmd_keys .= temp
-			, Ini_Write("Advanced", "actionmode_keys", ini_actmd_keys, 0)
-
 		ignoreWindows := ini_read("Advanced", "ignoreWindows")
 		cut_is_delete_windows := ini_read("Advanced", "cut_equalto_delete")
 		ini_defEditor := (t:=ini_read("System", "default_editor")) ? t : "Notepad.exe"
@@ -342,7 +332,7 @@ save_Settings()
 	IniWrite, %new_Quality%,		%CONFIGURATION_FILE%, Main, Quality_of_Thumbnail_Previews
 	IniWrite, %new_copyBeep%,  		%CONFIGURATION_FILE%, Main, CopyBeep
 	IniWrite, %new_KeepSession%,	%CONFIGURATION_FILE%, Main, Keep_Session
-	Iniwrite, % !new_formatting, 	%CONFIGURATION_FILE%, Advanced, Start_with_formatting
+	;Iniwrite, % !new_formatting, 	%CONFIGURATION_FILE%, Advanced, Start_with_formatting
 	IniWrite, %new_DaysToStore%,	%CONFIGURATION_FILE%, Clipboard_History, Days_To_Store
 	IniWrite, %new_IsImageStored%,	%CONFIGURATION_FILE%, Clipboard_History, Store_Images
 	
@@ -412,19 +402,20 @@ save_Default(full=1){
 	;---- Non GUI
 	Ini_write(s := "Advanced", "history_k", "Win + c")
 	Ini_write(s, "instapaste_write_clipboard", "0")
-	ini_write(s, "Start_with_formatting", "1")
+	;ini_write(s, "Start_with_formatting", "1")
 	ini_write(s, "Show_pasting_tip", "0")
 	ini_write(s, "windows_copy_shortcut")
 	ini_write(s, "windows_cut_shortcut")
 	ini_write(s, "is_duplicate_copied", "1")
-	ini_write(s, "actionmode_keys", ACTIONMODE_DEF)
 	ini_write(s, "beepFrequency", 1500)
 	ini_write(s, "ignoreWindows", "")
 
 	;--v9.8.1 added
 	ini_write("Main", "CopyBeep", "0")
-
 	ini_write("Advanced", "cut_equalto_delete", cut_is_delete_windows)
+	; delete removed
+	Ini_delete("Advanced", "Start_with_formatting")
+	Ini_delete("Advanced", "Actionmode_keys")
 }
 
 Ini_write(section, key, value="", ifblank=true){

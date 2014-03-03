@@ -95,6 +95,7 @@ history_SearchBox:
 	return
 
 history_ButtonPreview:
+	Gui, History:Default
 	Gui, submit, nohide
 	if (LV_GetNext() == "0")
 		v := selected_row

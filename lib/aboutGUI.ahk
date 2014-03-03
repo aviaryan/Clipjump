@@ -62,6 +62,7 @@ reset:
 	{
 		FileRemoveDir, cache, 1
 		FileDelete, settings.ini
+		FileDelete, ClipjumpCustom.ini
 		if A_IsCompiled
 			FileRemoveDir, icons, 1
 		IfExist, %A_Startup%/Clipjump.lnk

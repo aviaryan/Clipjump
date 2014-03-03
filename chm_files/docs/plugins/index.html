@@ -1,0 +1,49 @@
+<html>
+<head>
+  <title>Plugins</title>
+  <link rel="stylesheet" href="../../Blogs.css" type="text/css">
+</head>
+
+<body>
+<h1>Plugins</h1>
+Plugins are AutoHotkey scripts that are placed in the plugins folder in Clipjump.exe directory.<br>
+They can be accessed from the Plugin Manager that runs with the M key in <a href="../basic_help.html#actmd">Action Mode</a>. 
+<br><br>
+
+<h3>Installing</h3>
+Simply copy the .ahk file with all other dependent files in the plugins directory and <b>restart Clipjump</b>.<br>
+<b>Note</b> - Clipjump lists all plugins to use at ExitTime and <b>not at runTime</b>. Thus Restarting Clipjump after making changes to plugins is necessary.
+<br><br>
+
+<h3>Running a plugin from ClipjumpCustom</h3>
+The <code>API.runPlugin( plugin_file_name , param1 , param2 , param3 , ..... )</code> can be used to run a plugin.<br>
+If <b>no</b> parameter (param) is passed at all , then the user will be automatically asked for the needed number of parameters. Below are suitable examples -
+<pre>
+[some_section]
+noautorun=1
+run = API.runPlugin( some_plugin.ahk )
+
+[some_section2]
+bind=Win+Alt+K
+run = API.runPlugin( some_plugin.ahk , the_text , the_title )
+</pre>
+<br>
+
+<h3>Creating your own plugins</h3>
+If you know the AutoHotkey language, you won't take a minute starting creating your first plugins. If you are not familiar with AutoHotkey, I recommended 
+<a href="http://ahkscript.org">trying it</a> as it is the ever so easy and suprisingly powerful programming langauge. You <b>won't</b> regret.<br>
+See <a href="basics.html">Plugins Basic Guide</a>
+<br><br>
+
+<h3>More Plugins</h3>
+Third party plugins can be downloaded at the <a href="http://clipjump.sourceforge.net/pluginslist.html">Official Plugins Listing page</a><br>
+
+<br><br>
+<hr noshade=noshade size=5 color=yellow>
+<br>
+<a href="http://translate.google.com/translate?hl=en&sl=en&u=clipjump.sourceforge.net/docs/plugins/index.html" id="translate">Translate</a>
+<br><br>
+
+</body>
+
+</html>

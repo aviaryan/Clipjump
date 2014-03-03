@@ -10,8 +10,8 @@ searchPasteMode(x, y, h){
 	Gui, searchpm:New
 	Gui, searchpm:+LastFound +AlwaysOnTop -Caption +ToolWindow
 	Gui, Add, Edit, x1 y1 w220 R1 vsearchpm gsearchpm_edit -VScroll,
-	Gui, Add, Edit, x+5 yp w40 r1 vsearchpm_ct +disabled , ;show like 4/17
-	Gui, searchpm:show, % "x" x " y" y " w" 220+2+5+40 " h" h+2, Clipjump_SPM
+	Gui, Add, Edit, x+5 yp w45 r1 vsearchpm_ct +disabled , ;show like 4/17
+	Gui, searchpm:show, % "x" x " y" y " w" 220+2+5+45 " h" h+2, Clipjump_SPM
 
 	Hotkey, IfWinActive, Clipjump_SPM ahk_class AutoHotkeyGUI
 	hkZ(spmkey.enter, "spm_paste", 1)
@@ -30,13 +30,13 @@ searchpm_edit:
 	return
 
 spm_paste:
-	ctrlref := "pastemode" , SPM.KEEP := 1
+	ctrlref := "pastemode" , SPM.KEEP := 1 , MULTIPASTE := 0 	;multipaste will end as this step terminates the ops
 	gosub SPM_dispose
 	return
 
 searchpmGuiEscape:
 spm_cancel:
-	ctrlref := "cancel" , SPM.KEEP := 1
+	ctrlref := "cancel" , SPM.KEEP := 1 , MULTIPASTE := 0
 	gosub SPM_dispose
 	return
 

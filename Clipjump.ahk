@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 10.7
+;@Ahk2Exe-SetVersion 10.7.2.6
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -41,13 +41,13 @@ global ini_LANG := "" , H_Compiled := (Substr(A_AhkPath, Instr(A_AhkPath, "\", 0
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "10.7"
+global VERSION := "10.7.2.6b"
 global CONFIGURATION_FILE := "settings.ini"
 
 ini_LANG := ini_read("System", "lang")
 global TXT := Translations_load("languages/" ini_LANG ".txt") 		;Load translations
 
-global UPDATE_FILE := "https://raw.github.com/aviaryan/Clipjump/master/version.txt"
+global UPDATE_FILE := "http://sourceforge.net/projects/clipjump/files/version.txt/download"
 global PRODUCT_PAGE := "http://clipjump.sourceforge.net"
 global HELP_PAGE := "http://clipjump.sourceforge.net/docs"
 global AUTHOR_PAGE := "http://aviaryan.github.io"
@@ -88,14 +88,14 @@ global WORKINGHT := tempbottom-temptop
 global restoreCaller := 0
 
 ;Global Inits
-global CN := {}, CUSTOMS := {}, CDS := {}, SEARCHOBJ := {}, HISTORYOBJ := {}, TOTALCLIPS, ACTIONMODE := {}, PLUGINS := {}, ACTIONMODE_DEF := "H S C X F D P O E F1 L"
+global CN := {}, CUSTOMS := {}, CDS := {}, SEARCHOBJ := {}, HISTORYOBJ := {}, TOTALCLIPS, ACTIONMODE := {}, PLUGINS := {}, STORE := {} ;store=global public storage space
 global cut_is_delete_windows := "XLMAIN QWidget" 			;excel, kingsoft office
-global CURSAVE, TEMPSAVE, LASTCLIP, LASTFORMAT, Islastformat_Changed := 1, IScurCBACTIVE := 0
+global CURSAVE, TEMPSAVE, LASTCLIP, LASTFORMAT, Islastformat_Changed := 1, IScurCBACTIVE := 0, curPformat, curPfunction, curPisPreviewable
 global NOINCOGNITO := 1, SPM := {}, protected_DoBeep := 1
 
 ;Initailizing Common Variables
 global CALLER_STATUS, CLIPJUMP_STATUS := 1		; global vars are not declared like the below , without initialising
-global CALLER := CALLER_STATUS := true, IN_BACK := false
+global CALLER := CALLER_STATUS := 1, IN_BACK := 0, MULTIPASTE, PASTEMODE_ACT
 global CLIP_ACTION := "", ONCLIPBOARD := 0 , ISACTIVEEXCEL := 0 , HASCOPYFAILED := 0 , ctrlRef		;specific purpose global vars
 
 ;Init General vars
@@ -128,12 +128,12 @@ else if (ini_Version != VERSION)
 
 ;Global Ini declarations
 global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_IsChannelMin := 1 , CopyMessage, FORMATTING
-		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, channel_K, onetime_K, paste_k, actionmode_k, ini_is_duplicate_copied, ini_formatting, ini_actmd_keys
+		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, channel_K, onetime_K, paste_k, actionmode_k, ini_is_duplicate_copied, ini_formatting
 		, ini_CopyBeep , beepFrequency , ignoreWindows, ini_defEditor
 
 ; (search) paste mode keys 
 global pastemodekey := {} , spmkey := {}
-temp_keys := "a|c|s|z|space|x|e|up|down|f|h"
+temp_keys := "a|c|s|z|space|x|e|up|down|f|h|Enter"
 loop, parse, temp_keys,|
 	pastemodekey[A_LoopField] := "^" A_LoopField
 temp_keys := "Enter|Up|Down|Home"
@@ -142,13 +142,14 @@ loop, parse, temp_keys,|
 
 global windows_copy_k, windows_cut_k
 
+init_actionmode()
 ;Initialising Clipjump Channels
 initChannels()
 ;loading Settings
 load_Settings(1)
 validate_Settings()
 ;load plugins
-;loadPlugins()        ;<--- INACTIVE
+loadPlugins()
 ;load custom settings
 loadCustomizations()
 
@@ -201,7 +202,6 @@ hkZ(windows_copy_k, "windows_copy") , hkZ(windows_cut_k, "windows_cut")
 OnMessage(0x4a, "Receive_WM_COPYDATA")  ; 0x4a is WM_COPYDATA
 ;Clean History
 historyCleanup()
-init_actionmode()
 
 ;create Ignore windows group from | separated values
 loop, parse, ignoreWindows,|
@@ -291,8 +291,7 @@ paste:
 
 		if !IScurCBACTIVE 				;if the current clipboard is not asked for , then only load from file
 			try FileRead, Clipboard, *c %A_WorkingDir%/%CLIPS_dir%/%TEMPSAVE%.avc
-		try temp_clipboard := Clipboard
-		;temp_clipboard := CDS[CN.NG][TEMPSAVE]
+		try temp_clipboard := Clipboard  	;temp_clipboard := CDS[CN.NG][TEMPSAVE]
 
 		fixStatus := fixCheck()
 		realclipno := CURSAVE - TEMPSAVE + 1
@@ -307,6 +306,8 @@ paste:
 				halfClip := halfClip . "`n`n" MSG_MORE_PREVIEW
 			}
 			else halfClip := temp_clipboard
+			if curPisPreviewable
+				halfClip := %curPfunction%(halfClip)
 		}
 		PasteModeTooltip(temp_clipboard)
 		SetTimer, ctrlCheck, 50
@@ -451,7 +452,6 @@ moveBack:
 	IScurCBACTIVE := 0 			;the key will be always pressed after V
 	try FileRead, clipboard, *c %CLIPS_dir%/%TEMPSAVE%.avc
 	try temp_clipboard := Clipboard
-	;temp_clipboard := CDS[CN.NG][TEMPSAVE]
 
 	fixStatus := fixCheck()
 	realClipNo := CURSAVE - TEMPSAVE + 1
@@ -465,6 +465,8 @@ moveBack:
 			halfClip := halfClip "`n`n" MSG_MORE_PREVIEW
 		}
 		else halfClip := temp_clipboard
+		IF curPisPreviewable
+			halfClip := %curPfunction%(halfClip)
 	}
 	PasteModeTooltip(temp_clipboard)
 	SetTimer, ctrlCheck, 50
@@ -481,13 +483,30 @@ IN_BACK_correction(){ 	; corrects TEMPSAVE value when C (backwards) is used in p
 
 ;-------------- paste mode tips ------------------------
 
+multiPaste:
+	if SPM.ACTIVE {
+		WinHide, Clipjump_SPM ahk_class AutoHotkeyGUI
+		WinWaitNotActive, Clipjump_SPM ahk_class AutoHotkeyGUI
+		temp_spmWasActive := 1
+	}
+	MULTIPASTE := PASTEMODE_ACT := 1
+	while PASTEMODE_ACT
+		sleep 50 		; wait till ctrlCheck: runs
+	if MULTIPASTE 		; if multipaste is still ON, becomes OFF due to release of ctrl (which doesnt disturb when spm is active)
+		gosub paste
+	if temp_spmWasActive {
+		WinShow, Clipjump_SPM ahk_class AutoHotkeyGUI
+		temp_spmWasActive := 0
+	}
+	return
+
 cancel:
 	Gui, Hide
 	PasteModeTooltip(TXT.TIP_cancelm "`t(1)`n" TXT.TIP_modem, 1)
 	ctrlref := "cancel"
 	if SPM.ACTIVE
 		gosub SPM_dispose 	; dispose it if There - Note that this step ends the label as ctrlCheck dies so ctrlRef is kept upwards to be updated
-	hkZ(pastemodekey.c, "moveback", 0)
+	hkZ(pastemodekey.c, "moveback", 0) , hkZ(pastemodekey.enter, "multiPaste", 0)
 	hkZ(pastemodekey.space, "fixate", 0) , hkZ(pastemodekey.z, "Formatting", 0) , hkZ(pastemodekey.a, "navigate_to_first", 0)
 	hkZ(pastemodekey.s, "Ssuspnd", 0) , hkZ(pastemodekey.up, "channel_up", 0) , hkZ(pastemodekey.down, "channel_down", 0)
 	hkZ(pastemodekey.f, "searchpm", 0) , hkZ(pastemodekey.h, "editclip", 0) , hkZ(pastemodekey.x, "Cancel", 0) , hkZ(pastemodekey.x, "Delete", 1)
@@ -555,9 +574,33 @@ ctrlForCopy:
 	return
 
 Formatting:
-	FORMATTING := !FORMATTING
+	matched_pformat := 0
+	if curPformat=
+		matched_pformat := 1
+	for key,value in PLUGINS["pformat"]
+	{
+		if matched_pformat {
+			curPformat := value.name , curPfunction := value["*"] , matched_pformat := 0
+			break
+		}
+		if ( value["name"] == curPformat )
+			matched_pformat := 1
+	}
+	;rebuild show text
+	if temp_clipboard != ""
+	{
+		If strlen(temp_clipboard) > 200
+		{
+			StringLeft,halfclip,temp_clipboard, 200
+			halfClip := halfClip . "`n`n" MSG_MORE_PREVIEW
+		}
+		else halfClip := temp_clipboard
+	}
+	if matched_pformat
+		curPformat := "" , FORMATTING := 1 , curPisPreviewable := 0 ; case of switching to default
+	else halfClip := (curPisPreviewable := value["Previewable"]) ? %curPfunction%(halfClip) : halfClip , FORMATTING := 0
 	if ctrlRef = pastemode
-		PasteModeTooltip(temp_clipboard)
+		PasteModeTooltip(temp_clipboard) 	; rebuild prvw
 	return
 
 fixate:
@@ -668,21 +711,23 @@ PasteModeTooltip(cText, notpaste=0) {
 		if cText =
 		ToolTip % "{" CN.Name "} Clip " realclipno " of " CURSAVE "`t" fixStatus (WinExist("Display_Cj") ? "" : "`n`n" MSG_ERROR "`n`n"), % SPM.X, % SPM.Y
 		else
-		ToolTip % "{" CN.Name "} Clip " realclipno " of " CURSAVE "`t" GetClipboardFormat() "`t" fixstatus (!FORMATTING ? "`t[" TXT.TIP_noformatting "]" : "") 
+		ToolTip % "{" CN.Name "} Clip " realclipno " of " CURSAVE "`t" GetClipboardFormat() "`t" fixstatus ( curPformat ? "`t[" curPformat "]" : "" )
 		. "`n`n" halfclip, % SPM.X, % SPM.Y
 	}
 }
 
-
 ctrlCheck:
-	if (!GetKeyState("Ctrl")) && (!SPM.ACTIVE)
+	if ((!GetKeyState("Ctrl")) && (!SPM.ACTIVE)) || PASTEMODE_ACT
 	{
 		Critical
 		SetTimer, ctrlCheck, Off
-		CALLER := false , sleeptime := 300
-		TEMPSAVE := realActive 				; keep the current clip pos saved
-
+		CALLER := false , sleeptime := 300 , TEMPSAVE := realActive 				; keep the current clip pos saved
 		Gui, 1:Hide
+		; Change vars a/c MULTIPASTE
+		if MULTIPASTE && !GetKeyState("Ctrl") && !temp_spmWasActive 		;if spmIsActive user is not expected to cancel by releasing Ctrl
+			if ctrlRef = pastemode
+				ctrlRef := "cancel"
+		; ---
 		if ctrlRef = cancel
 		{
 			ToolTip, %MSG_CANCELLED%
@@ -727,17 +772,17 @@ ctrlCheck:
 		else if ctrlRef = pastemode
 		{
 			ToolTip, %MSG_PASTING%
-			if !FORMATTING
+			if curPformat 	;use curpf to get the func
 			{
-				if Instr(GetClipboardFormat(), "Text")
-				{
-					Critical, Off 			; off to enable thread overlap
-					API.blockMonitoring(1)
-					try Clipboard := Rtrim(Clipboard, "`r`n")
-					API.blockMonitoring(0, 5)
-					CALLER := 0 	; make it 0 again to avoid any interference with apps like Excel
-					Critical, On 			; on critical for just the case
-				}
+				Critical, Off
+				API.blockMonitoring(1) 	; this is done to have the boomerang effect ONCLIPBOARD work.
+				STORE.ClipboardChanged := 0
+				try Coutput := %curPfunction%(Clipboard)
+				if STORE.ClipboardChanged
+					try Clipboard := Coutput
+				else ONCLIPBOARD := 1
+				API.blockMonitoring(0, 5)
+				Critical, On
 				Send, ^{vk56}
 				sleeptime := 1
 			}
@@ -762,7 +807,9 @@ ctrlCheck:
 		sleep % sleeptime
 		Tooltip
 
-		restoreCaller := 0		; make it 0 in case Clipboard was not touched (Pasting was done) 
+		restoreCaller := PASTEMODE_ACT := 0 	; restoreCaller - make it 0 in case Clipboard was not touched (Pasting was done)
+		if !GetKeyState("Ctrl") && !SPM.ACTIVE
+			MULTIPASTE := 0 		; deactivated when Ctrl released
 		ctrlRef := ""
 		CALLER := CALLER_STATUS , EmptyMem()
 	}
@@ -797,7 +844,7 @@ hkZ_pasteMode(mode=0){
 	hkZ(pastemodekey.c, "MoveBack", mode) , hkZ(pastemodekey.x, "Cancel", mode) , hkZ(pastemodekey.z, "Formatting", mode)
 	hkZ(pastemodekey.space, "Fixate", mode) , hkZ(pastemodekey.s, "Ssuspnd", mode) , hkZ(pastemodekey.e, "export", mode)
 	hkZ(pastemodekey.up, "channel_up", mode) , hkZ(pastemodekey.down, "channel_down", mode) , hkZ(pastemodekey.a, "navigate_to_first", mode)
-	hkZ(pastemodekey.f, "searchpm", mode) , hkZ(pastemodekey.h, "editclip", mode)
+	hkZ(pastemodekey.f, "searchpm", mode) , hkZ(pastemodekey.h, "editclip", mode) , hkZ(pastemodekey.enter, "multiPaste", mode)
 
 	if !mode        ;init Cj
 	{
@@ -808,17 +855,10 @@ hkZ_pasteMode(mode=0){
 	}
 }
 
-;changeCDS(nc, nx, ){
-;	if nc=
-;		nc := oc
-;	CDS[nc][nx] := CDS[oc][ox]
-;	CDS[nc][nx "f"] := CDS[oc][ox "f"]
-;}
-
 ;--------------------------- CHANNEL FUNCTIONS ----------------------------------------------------------------
 
 channel_up:
-	CN.NG += 2 				;+2 to counter that -1 below
+	CN.NG += 2
 channel_down:
 	CN.NG -= 1 , correctTEMPSAVE()
 	if Instr(CN.NG, "-")
@@ -961,49 +1001,42 @@ historyCleanup()
 
 
 actionmode:
+	update_actionmode()
 	temp_am := TT_Console(ACTIONMODE.text, ACTIONMODE.keys, temp3, temp3, 5, "s8", "Consolas|Courier New")
-	if ACTIONMODE[temp_am] != ""
-		gosub % ACTIONMODE[temp_am]
+	if ACTIONMODE[temp_am] != "Exit_actmd"
+		if Instr(ACTIONMODE[temp_am] , "(")
+			RunFunc(ACTIONMODE[temp_am])
+		else gosub % ACTIONMODE[temp_am]
 	else
 		EmptyMem()
 	return
 
 init_actionmode() {
-	;ini_actmd_keys stores user prefs till Help File
+	ACTIONMODE := {H: "history", S: "channelGUI", C: "copyfile", X: "copyfolder", F: "CopyFileData", D: "disable_clipjump"
+		, P: "pitswap", O: "onetime", L: "classTool", E: "settings", F1: "hlp", Esc: "Exit_actmd", M: "pluginManager_GUI()"
+		, H_caption: TXT.HST__name, S_caption: TXT.CNL__name, C_caption: TXT._cfilep, X_caption: TXT._cfolderp, F_caption: cfiled 
+		, D_caption: TXT.ACT_disable " " PROGNAME, P_caption: TXT._pitswp, O_caption: TXT._ot, L_caption: TXT.IGN__name, E_caption: TXT.SET__name
+		, F1_caption: TXT.TRY_help, Esc_caption: TXT.ACT_exit, M_caption: TXT.PLG__name}
+}
 
-	t12 := {}
-	loop, parse, ini_actmd_keys, %A_space%, %A_space%
-		t12.Insert(A_LoopField)
-
-	ACTIONMODE := {(t12.1): "history", (t12.2): "channelGUI", (t12.3): "copyfile", (t12.4): "copyfolder", (t12.5): "CopyFileData", (t12.6): "disable_clipjump"
-		, (t12.7): "pitswap", (t12.8): "onetime", (t12.9): "settings", (t12.10): "hlp", (t12.11): "classTool"}
-
-	ACTIONMODE.keys := ini_actmd_keys " Esc End Q"
-
-	status_text := !CLIPJUMP_STATUS ? TXT.ACT_enable : TXT.ACT_disable   ;8
-
-	;auto-detect width
-	; max 35
-	ACTIONMODE.text := ""
+update_actionmode(){
+	thetext := ""
 	.  PROGNAME " " TXT.ACT__name
 	. "`n-----------"
 	. "`n"
-	. "`n" fillwithSpaces(TXT.HST__name, 35) " -  " t12.1 		;35 is default
-	. "`n" fillwithSpaces(TXT.CNL__name)     " -  " t12.2
-	. "`n" fillwithSpaces(TXT._cfilep)       " -  " t12.3
-	. "`n" fillwithSpaces(TXT._cfolderp)     " -  " t12.4
-	. "`n" fillwithSpaces(TXT._cfiled)       " -  " t12.5
-	. "`n" fillwithSpaces(status_text " " PROGNAME) " -  " t12.6
-	. "`n" fillwithSpaces(TXT._pitswp)       " -  " t12.7
-	. "`n" fillwithSpaces(TXT._ot)           " -  " t12.8
-	. "`n"
-	. "`n" fillwithSpaces(TXT.IGN__name)     " -  " t12.11
-	. "`n" fillwithSpaces(TXT.SET__name)     " -  " t12.9
-	. "`n" fillwithSpaces(TXT.TRY_help)      " -  " t12.10
-	. "`n"
-	. "`n" fillwithSpaces(TXT.ACT_exit)      " -  Esc, End, Q"
+	ACTIONMODE.remove("text") , ACTIONMODE.remove("keys")
 
+	for k,v in ACTIONMODE
+	if !Instr(k, "_") && (k != "Esc") && v{
+		thekeys .= k " "
+		thetext .= "`n" fillwithSpaces( ACTIONMODE[k "_caption"] ? ACTIONMODE[k "_caption"] : v , 35 ) " -  " k
+	}
+	if ACTIONMODE.Esc
+		thetext .= "`n`n" fillwithSpaces( ACTIONMODE.Esc_caption ? ACTIONMODE.Esc_caption : ACTIONMODE.Esc , 35 ) " -  Esc" , thekeys .= "Esc"
+	ACTIONMODE.keys := Trim(thekeys)
+	ACTIONMODE.text := thetext
 }
+
 ;****************COPY FILE/FOLDER/DATA***************************************************************************
 
 copyFile:
@@ -1223,7 +1256,7 @@ disable_clipjump:
 
 routines_Exit() {
 	Ini_write("Clipboard_history_window", "partial", history_partial, 0)
-	;updatePluginList() - ;ENABLE WHEN PLUGINS ARE INCORPORATED
+	updatePluginIncludes() - ;ENABLE WHEN PLUGINS ARE INCORPORATED
 }
 
 ;#################### COMMUNICATION ##########################################
@@ -1318,7 +1351,7 @@ Receive_WM_COPYDATA(wParam, lParam)
 #include %A_ScriptDir%\lib\anticj_func_labels.ahk
 #include %A_ScriptDir%\lib\settings gui plug.ahk
 #include %A_ScriptDir%\lib\history gui plug.ahk
-;#include %A_ScriptDir%\lib\pluginManager.ahk
-;#include %A_ScriptDir%\plugins\_registry.ahk
+#include %A_ScriptDir%\lib\pluginManager.ahk
+#include %A_ScriptDir%\plugins\_registry.ahk
 
 ;------------------------------------------------------------------- X -------------------------------------------------------------------------------

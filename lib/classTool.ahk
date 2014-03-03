@@ -7,10 +7,10 @@ ClassManager() {
    Gui, ClipClass:New
    Gui, ClipClass:Color, FFFFFF
    Gui, ClipClass:-MaximizeBox
-   Gui, ClipClass:Add, ListView, x0 y0 w300 h260 +BackgroundD9E7FB NoSortHdr +AltSubmit -Multi vClipClass gClipClass HWNDh_LVClass, Classes
-   Gui, ClipClass:Add, Button, x0 y260 w300 h30 gClassDelete, % TXT.IGN_delete
-   Gui, ClipClass:Add, Button, x0 y290 w300 h30 gAddClass, % TXT.IGN_add
-   Gui, ClipClass:Show, w300 h325, % PROGNAME " " TXT.IGN__name
+   Gui, ClipClass:Add, ListView, x0 y0 w320 h260 +BackgroundD9E7FB NoSortHdr +AltSubmit -Multi vClipClass gClipClass HWNDh_LVClass, Classes
+   Gui, ClipClass:Add, Button, x0 y260 w320 h30 gClassDelete, % TXT.IGN_delete
+   Gui, ClipClass:Add, Button, x0 y290 w320 h30 gAddClass, % TXT.IGN_add
+   Gui, ClipClass:Show, w320 h325, % PROGNAME " " TXT.IGN__name
    LV_Colors.OnMessage()
    LV_Colors.Attach(h_LVClass, False)
    GoSub FillClassList
@@ -42,7 +42,7 @@ FillClassList:
    GuiControl, -Redraw, ClipClass
    LV_Delete()
    LV_ModifyCol()
-   LV_ModifyCol(1, 295)
+   LV_ModifyCol(1, 315)
    IniRead,OutVar,%A_WorkingDir%\settings.ini,Advanced,ignoreWindows
    Loop, parse, OutVar, |
    	{
