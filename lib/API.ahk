@@ -160,12 +160,12 @@ class API
 
 			try Run % A_AhkPath " """ A_WorkingDir "\" fpath """" params
 			catch 
-				MsgBox, 16, Error, % API.extPlugMiss . "`n" fpath
+				MsgBox, 16, Error, % TXT.API_extPlugMiss . "`n" fpath
 		}
 		else {
 			if !IsFunc(fpath)
 			{
-				MsgBox, 16, Error, % API.plugCorrupt "`n" plugin_displayname
+				MsgBox, 16, Error, % TXT.API_plugCorrupt "`n" plugin_displayname
 				return
 			}
 			; else execture
