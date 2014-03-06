@@ -130,18 +130,21 @@ class API
 			CURSAVE := TEMPSAVE := 0 , LASTCLIP := ""
 	}
 
+	;runs a plugin
+	; filename - filename of plugin with .ahk . Example > pformat.noformatting.ahk
+	; parameters - if no parameter is passed, function itself obtains them.
 	runPlugin(filename, parameters*){
 		for k,v in PLUGINS["<>"]
 		{
 			if ( v["plugin_path"] == filename )
 			{
-				fpath := v["*"] , plugin_displayname := v["name"] , dirNum := v["#"]
+				fpath := v["*"] , plugin_displayname := v["name"] , dirNum := v["#"] , Silent := v["silent"]
 				break
 			}
 		}
 		; run
 		if FileExist(fpath) {
-			if !parameters.maxIndex() {
+			if !parameters.maxIndex() && !Silent {
 				loop 3
 					If PLUGINS["<>"][dirNum].hasKey("param" A_index) {
 						Inputbox, param, % "Plugin " plugin_displayname, % PLUGINS["<>"][dirNum]["param" A_index],, 500
@@ -166,7 +169,7 @@ class API
 				return
 			}
 			; else execture
-			if !parameters.maxIndex() {
+			if !parameters.maxIndex() && !Silent {
 				funcobj := Func(fpath) , funcps := ""
 				loop % funcobj.maxParams
 				{
@@ -228,6 +231,24 @@ class API
 		}
 	}
 	
+	;gets binary ClipboardAll data from simple text
+	; Text = the string you want to convert to ClipboardAll
+	; returnVar = byref variable to return ClipboardAll data
+	Text2Binary(Text, byref returnVar){
+		this.blockMonitoring(1)
+		try {
+			oldclip := ClipboardAll
+			Clipboard := Text
+			this.blockMonitoring(0) , this.blockMonitoring(1)
+			returnVar := ClipboardAll
+			Clipboard := oldclip
+			Error := 0
+		}
+		catch 
+			Error := 1
+		this.blockMonitoring(0)
+		return Error
+	}
 
 	;---- API HELPER FUNCS --	
 	getChInfo(c="", ret=1){

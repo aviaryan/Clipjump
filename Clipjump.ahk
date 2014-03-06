@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 10.7.2.6
+;@Ahk2Exe-SetVersion 10.7.2.7
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -41,7 +41,7 @@ global ini_LANG := "" , H_Compiled := (Substr(A_AhkPath, Instr(A_AhkPath, "\", 0
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "10.7.2.6b"
+global VERSION := "10.7.2.7b"
 global CONFIGURATION_FILE := "settings.ini"
 
 ini_LANG := ini_read("System", "lang")
@@ -230,16 +230,22 @@ loadClipboardDataS(){
 		{
 			ONCLIPBOARD:="" , DONE := 0
 			while !DONE
+			{
 				try {
 					FileRead, Clipboard, % "*c " A_LoopFileFullPath
 					Z := Clipboard
 					DONE := 1
 				}
+				if A_index>5
+				{
+					ONCLIPBOARD := DONE := 1
+					break
+				} 
+			}
 			while !ONCLIPBOARD
 				sleep 1
 			if Z !=
 				CDS[R][Substr(A_LoopFileName,1,-4)] := Z
-				;, CDS[R][y "f"] := GetClipboardFormat()		; extenstion .avc is removed
 		}
 	}
 	API.blockMonitoring(0)
@@ -321,7 +327,7 @@ paste:
 
 onClipboardChange:
 	Critical, On
-	if ONCLIPBOARD=
+	if !ONCLIPBOARD
 	{
 		ONCLIPBOARD:=1 	; if let blank, the label ends quickly
 		return
@@ -1195,16 +1201,12 @@ editclip:
 		return
 	}
 	Fileread, temp_clipboard2, cache\edit.txt
-	API.blockMonitoring(1)
-	try oldclip := ClipboardAll
-	try Clipboard := temp_clipboard2
-	API.blockMonitoring(0) , API.blockMonitoring(1)
-	try temp_clipboardall := ClipboardAll
-	try Clipboard := oldclip
+	API.Text2Binary(temp_clipboard2, temp_clipboardall)
+	FileDelete, %CLIPS_dir%/%TEMPSAVE%.avc
 	FileAppend, % temp_clipboardall, %CLIPS_dir%/%TEMPSAVE%.avc
 	CDS[CN.NG][TEMPSAVE] := temp_clipboard2
 	autoTooltip(TXT.TIP_editdone, 800, 10)
-	API.blockMonitoring(0)
+	IScurCBACTIVE := false
 	return
 
 editclip_cancel:

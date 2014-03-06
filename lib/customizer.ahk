@@ -128,5 +128,3 @@ RunFunc(v){
 CustomHotkey:
 	customization_Run( CUSTOMS[A_ThisHotkey] )
 	return
-
-F9::Exitapp

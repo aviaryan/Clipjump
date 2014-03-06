@@ -59,7 +59,7 @@ plugin_showprops:
 	gosub plugin_getSelected
 	disText := ""
 	for key,value in PLUGINS["<>"][dirNum]
-		if key not in #,`*
+		if key not in #,`*,silent,previewable
 			disText .= key "  -  " value "`n"
 	guiMsgbox(plugin_displayname " " TXT._properties, disText, "pluginM")
 	EmptyMem()
@@ -169,9 +169,9 @@ loadPlugins() {
 		; read plugin dets
 		FileRead, ov, % A_LoopFileFullPath
 		p:=1 , detobj := {}
-		while RegExMatch(ov, "im)^;@Plugin-.*$", o, p){
+		while p2:=RegExMatch(ov, "im)^;@Plugin-.*$", o, p) {
 			ps := Substr(o, Instr(o,"-")+1) , pname := Substr(ps, 1, Instr(ps," ")-1) , ptext := Substr(ps, Instr(ps, " ")+1)
-			p += Strlen(o) , detobj[pname] .= ptext
+			p := p2+Strlen(o) , detobj[pname] .= ptext
 		}
 
 		filename := Substr(A_LoopFileName, 1, -4) , c := 0

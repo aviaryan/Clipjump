@@ -451,7 +451,7 @@ history_InstaPaste:
 	return
 
 history_exportclip:
-	CALLER := 0 , ONCLIPBOARD := 0
+	CALLER := 0 , ONCLIPBOARD := ""
 	history_clipboard()
 	while !ONCLIPBOARD 				;wait for onclibboard to be breached
 		sleep 50
