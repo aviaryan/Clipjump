@@ -29,6 +29,20 @@ exit:
 	ExitApp
 	return
 
+Tooltip_setFont(font_options="", font_face=""){
+;sets font for a tooltip
+	if (font_options) or (font_face)
+	{
+		loop, parse, font_face, |
+			Gui, TTfont:Font, %font_options%, %A_LoopField%
+		Gui, TTfont:Add, Text, hwnd_hwnd, `.
+		SendMessage, 0x31, 0, 0,, ahk_id %_hwnd%
+		Gui, TTfont: Destroy
+		font := ErrorLevel
+		SendMessage, 0x30, %font%, 1, %ctrl%, ahk_class tooltips_class32
+	}
+}
+
 ;BeepAt()
 ;SoundBeep function
 BeepAt(value, freq, duration=150){

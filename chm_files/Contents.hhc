@@ -10,16 +10,8 @@
 </OBJECT>
 <UL>
 	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Index">
+		<param name="Name" value="Clipjump">
 		<param name="Local" value="clipjump.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Changelog">
-		<param name="Local" value="changelog.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Screenshots (Online)">
-		<param name="Local" value="http://avi-win-tips.blogspot.in/2013/08/clipjumpscreens.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Help Index">
@@ -46,6 +38,10 @@
 			<LI> <OBJECT type="text/sitemap">
 				<param name="Name" value="Action Mode">
 				<param name="Local" value="docs/basic_help.html#actmd">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Pasting Formats">
+				<param name="Local" value="docs/basic_help.html#pformat">
 				</OBJECT>
 			<LI> <OBJECT type="text/sitemap">
 				<param name="Name" value="Edit Clips in Paste mode">
@@ -78,6 +74,10 @@
 			<LI> <OBJECT type="text/sitemap">
 				<param name="Name" value="Fixate">
 				<param name="Local" value="docs/basic_help.html#fx">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Muiltple Pasting">
+				<param name="Local" value="docs/basic_help.html#multipaste">
 				</OBJECT>
 			<LI> <OBJECT type="text/sitemap">
 				<param name="Name" value="Copy bypassing Clipjump">
@@ -128,6 +128,10 @@
 				<param name="Local" value="docs/history.html#partial">
 				</OBJECT>
 			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Edit Clip">
+				<param name="Local" value="docs/history.html#editclip">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
 				<param name="Name" value="Insta-Paste (History GUI)">
 				<param name="Local" value="docs/history.html#ipaste">
 				</OBJECT>
@@ -154,15 +158,45 @@
 			</OBJECT>
 	</UL>
 	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Plugins">
+		<param name="Local" value="docs/plugins/index.html">
+		</OBJECT>
+	<UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Introduction">
+			<param name="Local" value="docs/plugins/index.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Official Plugins">
+			<param name="Local" value="docs/plugins/index.html#def">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Creating your own plugin">
+			<param name="Local" value="docs/plugins/basics.html">
+			</OBJECT>
+	</UL>
+	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Customizing Clipjump">
 		<param name="Local" value="docs/custom.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Developer's Reference">
+		<param name="Local" value="docs/devList.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Clipjump Controller">
 		<param name="Local" value="clipjumpcontroller.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="TroubleShooting">
+		<param name="Name" value="Changelog">
+		<param name="Local" value="changelog.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Screenshots (Online)">
+		<param name="Local" value="http://avi-win-tips.blogspot.in/2013/08/clipjumpscreens.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Troubleshooting">
 		<param name="Local" value="docs/troubleshooting.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">

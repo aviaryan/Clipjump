@@ -22,8 +22,12 @@
 		<param name="Local" value="docs/faq.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Index">
+		<param name="Name" value="Clipjump">
 		<param name="Local" value="clipjump.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Pasting Formats">
+		<param name="Local" value="docs/basic_help.html#pformat">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Clipjump Channels">
@@ -92,6 +96,30 @@
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Shortcuts">
 		<param name="Local" value="docs/basic_help.html#short">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Muiltple Pasting">
+		<param name="Local" value="docs/basic_help.html#multipaste">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Edit Clip in History Tool">
+		<param name="Local" value="docs/history.html#editclip">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Developer's Reference">
+		<param name="Local" value="docs/devList.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Plugins">
+		<param name="Local" value="docs/plugins/index.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Official Plugins">
+		<param name="Local" value="docs/plugins/index.html#def">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Creating your own plugin">
+		<param name="Local" value="docs/plugins/basics.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Fixate">

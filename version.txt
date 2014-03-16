@@ -1,5 +1,15 @@
-10.6.4
-Fixed bug with more than 9 lines in a section in ClipjumpCustom.ini
-Added: a new function API.emptyChannel() for ClipjumpCustomizer
-Tried to fix bugs with Emacs-org-mode
-Minor: little more enhancements in ClipjumpCustomizer
+10.7.5
+Clipjump now supports Plugins
+Custom Paste Formats like NO-FORMATTING are now possible with the added Plugin Support
+Multiple Insta-paste'ing possible in History Tool.
+Use Enter in Paste mode to paste without closing Paste mode. After that, release Ctrl to cancel.
+Use Ctrl+Enter in Search in Paste mode to paste without closing the window i.e. multi-paste.
+ActionMode keys are totally customizable now. Add, remove, modify..
+Added Edit option in History
+Use %...% in Customizer to declare variables.
+Also added function support in %..% variables.
+Use noautorun=1 in a section in ClipjumpCustom.ini to avoid auto-executing it even if it doesn't have a bind key.
+Added API.executeSection() to execute a section at will in ClipjumpCustom.ini
+Added Store. object (multi-variable holder) to store variables that are valid throughout the Program's runtime.
+Fixes in EditClip option in Paste mode
+CHANGED No-Formatting option is now a part of paste-formatting option

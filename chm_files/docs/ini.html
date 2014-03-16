@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>Settings.ini Specific Settings</title>
+  <title>Clipjump : Settings.ini Specific Settings</title>
   <link rel="stylesheet" href="../Blogs.css" type="text/css">
 </head>
 
@@ -16,22 +16,11 @@ and not Clipjump. To create these shortcuts, open the [Advanced] section of Sett
 <br><br><br>
 
 <h4><a name=actmd_keys>Changing Action Mode Easy keys</a></h4>
-You can change the Action Mode easy keys from the Advanced section of the Settings.ini file. Navigate to the key <code>actionmode_keys</code> and you will see space 
-separated values. These are the values for easy keys of the components in the following order --
-<pre>
-1. History_Tool
-2. Channel_Selector
-3. Copy_File_Path 
-4. Copy_Active_Folder_Path
-5. Copy File Data        
-6. Toggle Clipjump Status
-7. PitSwap       
-8. One Time Stop
-9. Settings Editor  
-10. Open Help File 
-11. Ignore Windows Manager
-</pre>
-Note that you cannot disable an easy key for a component i.e. there should always be 10 space-separated keys present. 
+Action Mode keys can be changed through ClipjumpCustom.ini, please see <a href="custom.html#actmd">this</a> example.<br>
+To disable a key, empty its value. In the following example, F1 AND L keys are removed.<br>
+<pre>[actionmode_delete_bad_keys]
+ACTIONMODE.F1=
+ACTIONMODE.L=</pre>
 
 <br><br><br>
 

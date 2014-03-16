@@ -150,11 +150,11 @@ class API
 						Inputbox, param, % "Plugin " plugin_displayname, % PLUGINS["<>"][dirNum]["param" A_index],, 500
 						if ErrorLevel=0
 							params .= " """ param """" 	;if OK
+						else return
 					}
-				else break
+					else break
 			} else {
 				for k,v in parameters
-					; DECIDE Blank paramter = nothing or a parameter
 					params .= " """ v """"
 			}
 
@@ -180,12 +180,14 @@ class API
 					InputBox, param, % "Plugin " plugin_displayname, % prompt,, 500
 					if ErrorLevel=0
 						funcps .= param ","
+					else return
 				}
 			} else {
 				for k,v in parameters
 					funcps .= v ","
 			}
-			return runfunc(fpath "(" RTrim(funcps, ",") ")")
+			returnV := runfunc(fpath "(" RTrim(funcps, ",") ")")
+			return returnV
 		}
 	}
 
@@ -200,7 +202,7 @@ class API
 		gosub incognito
 	}
 
-	; get Clips file location wrt Clipjump's directory
+	; get Clips file location
 	getClipLoc(channel="", clipno=""){
 		if channel=
 			channel := CN.NG
@@ -231,6 +233,15 @@ class API
 		}
 	}
 	
+	;pastes the given text without copying it to clipjump
+	pasteText(Text){
+		this.blockMonitoring(1)
+		Clipboard := Text
+		sleep 100
+		Send ^{vk56}
+		this.blockMonitoring(0)
+	}
+
 	;gets binary ClipboardAll data from simple text
 	; Text = the string you want to convert to ClipboardAll
 	; returnVar = byref variable to return ClipboardAll data
@@ -248,6 +259,19 @@ class API
 			Error := 1
 		this.blockMonitoring(0)
 		return Error
+	}
+
+	;Tooltip for plugins
+	showTip(Text, forTime=""){
+		if forTime
+			autoTooltip(Text, forTime, 7)
+		else
+			Tooltip, % Text,,, 7
+		tooltip_setfont("s9", "Courier")
+	}
+	; removes the above tip
+	removeTip(){
+		ToolTip,,,, 7
 	}
 
 	;---- API HELPER FUNCS --	

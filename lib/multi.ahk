@@ -207,7 +207,8 @@ changeChannel(cIndex, backup_old:=1){
 ;--------------------------- select channel box --------------------------------------------------------------
 
 choosechannelgui(){
-	global channel_list
+	static channel_list
+	channel_list := ""
 	Gui, choosech:New
 	Gui, choosech: +ToolWindow -MaximizeBox
 	Gui, Add, Text, x7 y7, % TXT.CNL_choose
@@ -221,7 +222,7 @@ choosechannelgui(){
 	WinWaitActive, % TXT.CHC_name
 	WinWaitClose, % TXT.CHC_name
 	channel_list := Trim( Substr(channel_list, 1, Instr(channel_list, "-")-1) )
-	return is_notcancel channel_list
+	return is_notcancel ? "" : channel_list
 
 chooseChButtonOK:
 	Gui, choosech:submit, nohide

@@ -2,4 +2,5 @@
 #Include, %A_ScriptDir%\plugins\pformat.noformatting.ahk
 #Include, %A_ScriptDir%\plugins\pformat.sentencecase.ahk
 #Include, %A_ScriptDir%\plugins\pformat.uppercase.ahk
-#Include, %A_ScriptDir%\plugins\test.ahk
+#Include, %A_ScriptDir%\plugins\hotPaste.ahk
+#Include, %A_ScriptDir%\plugins\deleteFileFolder.ahk

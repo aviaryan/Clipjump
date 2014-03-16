@@ -3,7 +3,7 @@
 
 <html>
 <head>
-  <title>Guide</title>
+  <title>Clipjump : Guide</title>
   <link rel="stylesheet" href="../Blogs.css" type="text/css">
 </head>
 <body>
@@ -63,14 +63,22 @@ this feature can be found <a href=#spm>later</a>.
 </ul><br>
 <hr><br>
 
-<h2><a name=au>Advanced Usage</a></h2>
+<h2><a name=au></a></h2>
+
+<h3><a name=multipaste>Multiple Pasting in Paste Mode</a></h3>
+<i>[v10.7.3]</i> You can also use Enter in Paste mode (while holding Ctrl) to do multi-paste. In this mode, you will be able to paste without closing the Paste Mode.<br>
+To do multi-pasting, tap Enter in Paste Mode. Once the first entry with <code>Ctrl+Enter</code> is pasted, releasing Ctrl will 
+change action from 'pasting' to 'cancelling'. This change will be valid only in that session and once you have <i>cancelled</i> everything will be back to normal i.e. 
+<i>release</i> to paste and <i>Ctrl+x and then release</i> to cancel.<br>
+The same feature is also available <a href=#spm_multipaste>when search mode is active</a>.
+<br><br><br>
 
 <h3><a name=actmd>Clipjump Action Mode</a></h3>
 Clipjump Action Mode (or simply Action Mode) provides a clean user-friendly interface to execute almost all the other components of Clipjump. 
 Activated with the default configurable shortcut Ctrl+Shift+A , it provides easy keys to run components of Clipjump. <br>
-Action Mode easy keys <a href=ini.html#actmd_keys>can be changed</a> via the Advanced section of the Settings ini file.<br><br>
+Action Mode easy keys <a href=ini.html#actmd_keys>can be totally configured</a> through <a href="custom.html">ClipjumpCustom.ini</a><br><br>
 <i>[v9.9.1]</i>- Clipjump Action Mode is the default shortcut to execute any functionality in Clipjump. If you want to create System-Level shortcuts for these functions, 
-you should use the Settings Editor.
+you should use the Settings Editor OR <a href="custom.html">ClipjumpCustom.ini</a>.
 <br><br><br>
 
 <a name="fixate"></a>
@@ -141,20 +149,31 @@ That's it.<br>
 Now, the Right-Click > Paste Or any other option to Paste <i>other than the old Ctrl + V</i>
 will paste the Clip you had choose like it is  currently stored in System Clipboard.<br><hr><br>
 
-<!-- NOF -->
+<!-- pformat -->
 
-<a name=nof><h3>No-Formatting Mode</h3></a>
-No formatting mode truncates formatting from Clipjump clips when they are pasted.<br>
-To access this mode, use the "Z" key as the toggle when in <strong class=super>[PASTE MODE]</strong><br>
-Press "Z" once while in [PASTE MODE] and you will see a <strong class="super">[NO-FORMATTING]</strong> in the Tip.<br>
-This will mean all the clipboard data pasted from now onwards will have Formatting truncated.<br>
-To disable this mode, press "Z" again while in [PASTE MODE] and the [NO-FORMATTING] text will disappear.<br><br>
+<a name=pformat><h3>Paste Formats <font size=-1>(previously denoted by NO-Formatting Mode)</font></h3></a>
 
-<strong class=super><a name="nof_notes">Note that</a></strong> that the No-Formatting setting doesn't mean that clips copied will not have any formatting, this means that the formatting will be removed from them <b>temporarily</b> when they are pasted.<br><br>
-<img src="../images/noformat.png" border="0">
+<i>[v10.7.3+]</i> (Custom) Paste formats are possible as a plugin feature in Clipjump. With these, you can paste any clip as UPPERCASE, SentenceCase... or even trim off 
+formatting from copied HTML.<br>To choose a format to paste with, you will have to activate it in the Paste mode. As like many features, it is also available with a 
+special key. 
+In PASTE MODE, use the "Z" key as a cycler for the various formats available.<br>
+When you reach to the format of your choice, release Ctrl to paste. 
+The clip will be pasted in the selected format.<br>
+Press Ctrl+v (activate Paste Mode) again. You will see that your selected format is still active. Use "Z" to change it.<br>
 
+<img src="../images/pformat.png" border="0"><br><br>
+
+<i>How it works?</i><br>
+All paste formats are powered by their respective plugins. Clipjump loads all the available paste formats from the plugin folder, creates a list and accesses them when 
+user demands pasting/previewing from a plugin. You can too <a href="plugins/basics.html#class_pformat">create your own paste format</a> provided you know 
+<a href="http://www.autohotkey.com">AutoHotkey</a>, the simplest programming language.<br><br>
+
+<strong class=super><a name="pf_notes">Note that</a></strong> that Paste formats don't permanently change the clips. They are copied into memory and the 'memory-copy' 
+is what is changed at the time of action.<br>
+<br>
+<strong class=super>TIP</strong> - To make a paste-format as default for Clipjump , see the option <code>Default Paste Format</code> in the Settings editor. 
 <br><br>
-<strong class=super>TIP</strong> - To make Clipjump start by default in NO-FORMATTING mode , see the option <code>Start with No Formatting Enabled</code> in the Settings editor. 
+See Also - <a href="plugins/index.html#def_pformat">Default Paste Formats distributed with Clipjump</a>
 <br><br><br>
 
 <h3><a name=editclip>Edit Clips in Paste Mode</a></h3>
@@ -187,13 +206,18 @@ paste it and you will find that the active clip in paste mode is still clip 4 of
 <br>
 Clip pointer is not kept (updated) if you press Ctrl+F in Search-paste mode to close the search window. 
 <br>
-All other Paste mode shortcuts, Ctrl+E for export, Ctrl+Space for fixate are still valid in Search paste mode.
-<br>
-While searching if you arrive at a tip you want to paste without formatting, you can use Ctrl+Z and then Enter instead of Ctrl+F to close search window, then Ctrl+Z to no-formatting and then release of Ctrl.
-<br>
+All other Paste mode shortcuts, Ctrl+E for export, Ctrl+Space for fixate are still valid in Search paste mode.<br>
+While searching if you arrive at a tip you want to paste with a custom paste formatting, you can use Ctrl+Z and then Enter instead of Ctrl+F to close search window, then 
+Ctrl+Z to a paste format and then release of Ctrl.<br>
 The former method here will keep the clip pointer preserved as it ends with an action of the Search Paste Mode.
 <br><br>
 <strong class="mild">Tip</strong> - You can change shortcuts in Search paste mode through <a href=custom.html#2>ClipjumpCustom.ini</a>.
+<br><br>
+
+<a name=spm_multipaste><font size=+1><u>Multipaste in SearchPaste Mode</u></font></a><br>
+You can use Ctrl+Enter when search is active in paste mode to paste without closing the paste and search mode. <a href=#multipaste>Unlike Paste Mode</a>, 
+here after first paste with <code>Ctrl+Enter</code>, the release Ctrl action will not change to cancel. So you don't need to hold Ctrl as you always do when search mode is 
+active.
 <br><br><br>
 <!-- -->
 
@@ -254,13 +278,15 @@ See <a href=custom.html#2>ClipjumpCustom.ini</a> example to change these keys<br
 V - Activate PASTE-MODE and move forward through Multiple Clipboards (from 1 to 2 , 2 to 3)<br>
 C - Move backwards through Multiple Clipboards (from 3 to 2 , 2 to 1) <br>
 S - Add current Clip to Windows Clipboard [Selective Windows Clipboard Option] <br>
-X - Toggle between, Cancel,Delete,Delete All MODE <br>
+X - Toggle between, Cancel,Delete,Copy,Move,Delete All MODE <br>
 E - Export current clip<br>
 A - Jump to first clip<br>
 F - Activate Search<br>
 H - Edit Clip<br>
-Space - Fix/un-fix a clipboard at its position. <br>
-Z - Toggle Formatting for Clips <br><br>
+Z - Toggle pasting formats <br>
+Space - Fix/un-fix a clipboard at its position (FIXATE) <br>
+Up - Change channel to 1 up (+1)<br>
+Down - Change channel to 1 down (-1)<br><br>
 
 <b>General (System Wide)</b><br>
 Ctrl+Shift+A - Action Mode<br>

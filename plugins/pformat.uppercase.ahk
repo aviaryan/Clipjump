@@ -8,7 +8,7 @@
 
 plugin_pformat_uppercase(zin){
 	zCS := getClipboardFormat()
-	if Instr(zCS, TXT.TIP_text)
+	if (zCS== "[" TXT.TIP_text "]")
 	{
 		StringUpper, zout, zin
 		STORE.ClipboardChanged := 1

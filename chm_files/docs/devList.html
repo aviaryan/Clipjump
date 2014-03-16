@@ -1,0 +1,234 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+<head>
+  <title>Clipjump : Complete API functions and resource list</title>
+  <link rel="stylesheet" href="../Blogs.css" type="text/css">
+</head>
+
+<body>
+<h1>Complete Developer's API functions and other routines list</h1>
+<pre><ul><li><a href=#api>API functions</a>
+<li><a href=#funcs>More functions</a>
+<li><a href=#labels>Labels/routines</a>
+<li><a href=#vars>Variables</a>
+<li>Misc</ul></pre>
+<br><br>
+
+<h2><a name=api>API functions</a></h2>
+All the functions under the file API.ahk<br>
+They should be accessed as <code>API.function_name()</code> . For example <code>API.paste()</code>
+<ol>
+	<li><code>paste(channel="", clipno="")</code><br>
+	- Pastes clips from a certain postion in a certain channel. If both are blank, paste 1st clip from currently active channel.<br>
+	Example - <code>API.paste(1, 14)</code> pastes clip 14 of channel 1
+	<br>
+	<br>
+	<li><code>getClipAt(channel=0, clipno=1, toreturn=1)</code><br>
+	- Get a Clip's content i.e. what is contained in that clip. 'channel' and 'clipno' are the channel number and clip number respectively.<br>
+	If toreturn = 1 then return Clipboard text data<br>
+	If toreturn = 2 then return ClipboardAll binary data.
+	<br>
+	<br>
+	<li><code>manageClip(new_channel=0, channel="", clip="", flag=0)</code><br>
+	- Cut/Copy Clip from one channel to other. 'new_channel' is the new channel to place the clip in. Note that the clip will always be placed at clip 1 of new channel. <br>
+	If flag = 0 then cut , if flag = 1 then copy<br>
+	If channel is empty, active channel is used.<br>
+	If clip is empty, active clip in paste mode (Clip x of y, "x") is used.
+	<br>
+	<br>
+	<li><code>emptyChannel(chno="")</code><br>
+	- Empties a particular channel (chno)<br>
+	If 'chno' is empty, it DEFAULTS to current channel.<br>
+	You can also use name of a channel like API.emptyChannel(web) or API.emptyChannel(pit) or API.emptyChannel(default) . <b>Note that</b> if you are creating an AHK Script 
+	i.e. a plugin you will have to surround the channel name by quotes ("") to take it as string.
+	<br>
+	<br>
+	<li><code>runPlugin(filename, parameters*)</code><br>
+	- Runs a plugin. See <a href="plugins/index.html#run">here</a> and then <a href="plugins/basics.html#funcparams">here</a>.
+	<br>
+	<br>
+	<li><code>ExecuteSection(secName)</code><br>
+	- Executes a section in the ClipjumpCustom.ini at will.
+	<br><br>
+	<li><code>IncognitoMode(p=1)</code><br>
+	- Enable/disable Incognito Mode. Pass 1 to disable.<br>
+	If p = 1 enable incognito mode<br>
+	If p = 0 disable
+	<br>
+	<br>
+	<li><code>getClipLoc(channel="", clipno="")</code><br>
+	- get a Clip exact file location or the file in which the clip is saved<br>
+	channel - The channel the clip belongs to<br>
+	clipno - Clip number of the Clip
+	<br>
+	<br>
+	<li><code>blockMonitoring(yes=1)</code><br>
+	- blocks Clipjump Clipboard monitoring. Useful when you are changing clipboard content such that you don't want it to be accounted by Clipjump<br>
+	If first parameter i.e. yes = 1 , then block Monitoring.<br>
+	If 0 , then unblock (or enable Clipboard monitoring)
+	<br>
+	<br>
+	<li><a name=showtip><code>showTip(Text, forTime="")</code></a><br>
+	- shows a Tip (with a different font). recommended when creating a plugin<br>
+	Text - the text to show in the tip<br>
+	forTime - time for which the tip is to be shown, if the paramter is not passed i.e. blank, the tip becomes permanent
+	<br>
+	<br>
+	<li><code>removeTip()</code><br>
+	- removes the Plugin API Tip i.e. the tip created using the above function API.showTip()
+	<br>
+	<br>
+	<li><code>pasteText(Text)</code><br>
+	- pastes the 'Text' that is passed to the function.<br>
+	Text - the text/string you want to paste
+	<br>
+	<br>
+	<li><code>Text2Binary(Text, byref returnVar)</code><br>
+	- gets binary ClipboardAll data from simple text i.e. string. You pass it a string and it converts it into binary data and returns it via byref variable returnVar<br>
+	Text = the string you want to convert to ClipboardAll type data<br>
+	returnVar = byref variable to return ClipboardAll data
+	<br>
+	<br>
+</ol>
+<hr>
+<h2><a name=funcs>More functions</a></h2>
+Other interesting functions that are not a part of API.<br>
+Unlike API, they should be accessed normally as <code>function_name()</code> . For example <code>changeChannel(2)</code>
+<ol>
+	<li><code>BeepAt(value, freq, duration=150)</code><br>
+	- Make a beep system sound.<br>
+	If 'value' = 1 , then the function will beep else it will not.<br>
+	freq - frequency of the beep<br>
+	duration - duration of the beep to be played in milliseconds
+	<br>
+	<br>
+	<li><code>getClipboardFormat(type=1)</code><br>
+	- gets the type of data on Clipboard<br>
+	If 'type' = 1 , then the function returns the type of data a/c Paste Mode i.e. "[Text]" for text data including HTML , "[File/Folder]" for file,folder copied data and 
+	(blank) for Picture type data.<br>
+	If 'type' = 0 , then the function returns the data type formats ID's on Clipboard as per the Microsoft list.
+	<br>
+	<br>
+	<li><code>inputBox(title, text)</code><br>
+	- shows a dialog for user to enter any text and the function returns that text. See <a href="custom.html#inputbox">More</a>
+	<br>
+	<br>
+	<li><code>HParse(hotkey)</code><br>
+	- converts a normal hotkey like 'Win+Alt+Z' or 'Ctrl+PrintScreen' to AutoHotkey format like '#!z' or '^Printscreen'.<br>
+	hotkey - The Standard hotkey to convert to AHK form.<br>
+	The function returns the AHK formatted hotkey of the input hotkey.
+	<br>
+	<br>
+	<li><code>changeChannel(channelno)</code><br>
+	- Changes channel to 'channelno'<br>
+	<br>
+	<br>
+	<li><code>channel_find( name )</code><br>
+	- Finds the channel corresponding to the 'name' and returns its channel number.<br>
+	name - The name of the channel like 'Default'
+	<br>
+	<br>
+	<li><code>chooseChannelgui()</code><br>
+	- Shows a GUI for the user to select channel, if he selects a channel the function returns the selected channel number.<br>
+	USAGE-ClipjumpCustom <code>tip = %chooseChannelgui()%</code><br>
+	USAGE-AhkScript(Plugin) <code>zSelectedCh := chooseChannelgui()</code>
+	<br>
+	<br>
+	<li><code>manageChannel(channel)</code><br>
+	- Deletes a channel with the channel number 'channel'<br>
+	channel - The Channel Number of the channel to be deleted.
+	<br>
+	<br>
+	<li><code>set_pformat( paste_format )</code><br>
+	- Sets the Paste format which is currently active.<br>
+	paste_format - The name of paste format (like 'UPPERCASE') to be made active.<br>
+	USAGE - <code>set_pformat(SentenceCase)</code>
+	<br>
+	<br>
+</ol>
+<hr>
+<h2><a name=labels>Labels/Routines</a></h2>
+Labels should be accessed as <code>run = label_name</code> in ClipjumpCustom and <code>gosub label_name</code> in AhkScript.<br>
+<ol>
+	<li>These are the labels to open various dialogs and gui in Clipjump. You can easily guess their functions from their names.<br>
+		<ol><li>actionmode
+			<li>settings
+			<li>history
+			<li>channelgui
+			<li>classtool
+			<li>channelGUI
+			<li>pluginManagerGui</ol>
+	<br>
+	<li><code>disable_clipjump</code><br>
+	- Toggles Clipjump Status i.e. Enabled or disabled (same like Options > Disable Clipjump in Tray Menu)
+	<br>
+	<br>
+	<li><code>endPasteMode</code><br>
+	- Ends Paste Mode forcibly. 
+	<br>
+	<br>
+	<li><code>incognito</code><br>
+	- Toggle Incognito Mode status
+	<br>
+	<br>
+	<li><code>simplePaste</code><br>
+	- Pastes the current active content on System Clipboard
+	<br>
+	<br>
+	<li><code>windows_copy</code> and <code>windows_cut</code><br>
+	- Copies / Cuts the selected text or file without copying to Clipjump i.e. only System Clipboard is affected. This is what is used inside <a href="ini.html#syscopy">
+	Copy to System Clipboard bypassing Clipjump</a>
+	<br>
+	<br>
+	<li><code>updt</code><br>
+	- Check for Updates
+	<br>
+	<br>
+	<li><code>exit</code><br>
+	- Exits Clipjump properly
+	<br>
+	<br>
+</ol>
+<hr>
+<h2><a name=vars>Variables</a></h2>
+The important variables in Clipjump which can be changed to customize much of the behavior in the program are listed below. Please note that only selected variables 
+have been listed to prevent any issues with the core functionality of Clipjump.<br>
+Changing a variable in ClipjumpCustom is done as <code>variable = value</code> and in AHKScript is done as <code>variable := "value"</code>
+<ol>
+	<li>Channel Object
+		<ol><li><code>CN.NG</code> - Holds the channel number that is currently active.
+			<li><code>CN.Name</code> - The name of the channel that is currently active.
+			<li><code>CN.Total</code> - Total number of channels that are currently created by the user.</ol>
+	<br>
+	<li><code>STORE</code> Object<br>
+	- Public Storage Space. Use as <code>STORE.var := "value"</code> and <code>msgbox % STORE.var</code><br>
+	See also <a href=custom.html#store>STORE in ClipjumpCustom</a>.
+	<br>
+	<br>
+	<li><code>curPformat</code> - Holds the current active paste format.
+	<br>
+	<br>
+	<li><code>CALLER</code> - Holds 1 if Clipboard Monitoring is on by Clipjump and 0 if not.
+	<br>
+	<br>
+	<li>pastemodekey and spmkey<br>
+	- Use as pastemodekey.(key) OR spmkey.(key) to change keys currently used in PasteMode and Search-PasteMode.<br>
+	See <a href=custom.html#change_mode_key>here</a> for an example.
+	<br>
+	<br>
+</ol>
+
+<br><br>
+
+
+It is likely that the page will be updated with more valuable information. Here in the <a href="http://clipjump.sourceforge.net/docs/devList.html">online link</a> in case 
+you want to stay in touch.<br>
+<hr noshade=noshade size=5 color=yellow>
+<br>
+<a href="http://translate.google.com/translate?hl=en&sl=en&u=clipjump.sourceforge.net/docs/devList.html" id="translate">Translate</a>
+<br><br>
+</body>
+
+</html>

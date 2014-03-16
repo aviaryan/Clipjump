@@ -11,7 +11,7 @@
 
 plugin_pformat_noformatting(zin){
 	zCS := getClipboardFormat()
-	if Instr(zCS, TXT.TIP_text)
+	if (zCS== "[" TXT.TIP_text "]")
 	{
 		try z := Rtrim(zin, "`r`n")
 		CALLER := 0 , STORE.ClipboardChanged := 1	; make it 0 again to avoid any interference with apps like Excel

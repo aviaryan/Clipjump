@@ -2,6 +2,10 @@
 Plugin management Routines
 */
 
+pluginManagerGui:
+	pluginManager_GUI()
+	return
+
 pluginManager_GUI(){
 	static wt, ht
 	static searchTerm, pluginMLV
@@ -11,7 +15,7 @@ pluginManager_GUI(){
 
 	Gui, PluginM:New
 	Gui, Margin, 7, 7
-	Gui, +ToolWindow -MaximizeBox
+	Gui, -MaximizeBox
 	Gui, Font,, Consolas
 	Gui, Add, Edit, % "x7 y7 w" wt " vsearchTerm gpluginMSearch", 
 	Gui, Font,, Courier New
@@ -22,11 +26,14 @@ pluginManager_GUI(){
 	Gui, Font
 	; The menu
 	Menu, plMenu, Add, % TXT._run, plugin_Run
+	Menu, plMenu, Add
+	Menu, plMenu, Add, % TXT.plg_edit, plugin_edit
 	Menu, plMenu, Add, % TXT.plg_properties, plugin_showprops
 	Menu, plMenu, Add, % TXT.HST_m_del, plugin_delete
 	Menu, plMenu, Default, % TXT._run
 
-	Gui, pluginM:Show, % "w" wt+14 " h" ht, % PROGNAME " " TXT.PLG__name
+	Gui, Add, StatusBar
+	Gui, pluginM:Show, % "w" wt+14 " h" ht+30, % PROGNAME " " TXT.PLG__name
 	; the Hotkeys
 	Hotkey, IfWinActive, % PROGNAME " " TXT.PLG__name
 	hkZ("^f", "pluginSearchfocus")
@@ -34,6 +41,7 @@ pluginManager_GUI(){
 	Hotkey, If
 	Hotkey, If, IsPlugListViewActive()
 	hkZ("Enter", "plugin_Run")
+	hkZ("F2", "plugin_edit")
 	hkZ("!Enter", "plugin_showprops")
 	hkZ("Del", "plugin_delete")
 	Hotkey, If
@@ -50,9 +58,18 @@ pluginSearchfocus:
 	return
 
 plugin_Run:
+	Gui, pluginM:Default
 	gosub plugin_getSelected
 	filepath := PLUGINS["<>"][dirNum]["plugin_path"]
+	SB_SetText(TXT.PLG_sb_running " - " plugin_displayname)
 	API.runPlugin(filepath)
+	Gui, pluginM:Default 	; set it def again incase gui was changed
+	SB_SetText(TXT.PLG_sb_exit " - " plugin_displayname)
+	return
+
+plugin_edit:
+	gosub plugin_getSelected
+	Run % ini_defEditor " """ "plugins\" PLUGINS["<>"][dirNum]["plugin_path"] """"
 	return
 
 plugin_showprops:
@@ -73,6 +90,8 @@ plugin_delete:
 		FileDelete, % plugPath := "plugins\" PLUGINS["<>"][dirNum]["Plugin_path"]
 		FileRemoveDir, % Substr(plugPath,1,-4) ".lib", 1 	;remove .ahk and put .lib
 		LV_Delete(valSelected)
+		Gui, pluginM:Default
+		SB_SetText(TXT.PLG_sb_deleted " - " plugin_displayname)
 		DidDelete := 1
 	}
 	return
@@ -192,6 +211,8 @@ loadPlugins() {
 		}
 		else detobj["*"] := "plugin_" name1 , PLUGINS[name1] := detobj.Clone() , PLUGINS["<>"][A_Index] := detobj.Clone()
 	}
+	; -- set def pformat
+	set_pformat()
 }
 
 ;///////////////////////// MORE LOW END GUI FUNCTIONS ///////////////////////////////////////////////////////////////////

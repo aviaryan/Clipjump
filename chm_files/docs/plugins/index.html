@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>Plugins</title>
+  <title>Clipjump : Plugins</title>
   <link rel="stylesheet" href="../../Blogs.css" type="text/css">
 </head>
 
@@ -15,7 +15,7 @@ Simply copy the .ahk file with all other dependent files in the plugins director
 <b>Note</b> - Clipjump lists all plugins to use at ExitTime and <b>not at runTime</b>. Thus Restarting Clipjump after making changes to plugins is necessary.
 <br><br>
 
-<h3>Running a plugin from ClipjumpCustom</h3>
+<h3><a name=run>Running a plugin from ClipjumpCustom</a></h3>
 The <code>API.runPlugin( plugin_file_name , param1 , param2 , param3 , ..... )</code> can be used to run a plugin.<br>
 If <b>no</b> parameter (param) is passed at all , then the user will be automatically asked for the needed number of parameters. Below are suitable examples -
 <pre>
@@ -33,6 +33,25 @@ run = API.runPlugin( some_plugin.ahk , the_text , the_title )
 If you know the AutoHotkey language, you won't take a minute starting creating your first plugins. If you are not familiar with AutoHotkey, I recommended 
 <a href="http://ahkscript.org">trying it</a> as it is the ever so easy and suprisingly powerful programming langauge. You <b>won't</b> regret.<br>
 See <a href="basics.html">Plugins Basic Guide</a>
+<br><br>
+
+<h3><a name=def>Officially Distributed Plugins</a></h3>
+<ol>
+	<li>General
+	<ol><li><i>Hotstring-Paste</i> - A very raw sample plugin that helps you to create Hotstrings to paste, i.e. you type a text and a clip stored by Clipjump is pasted.
+		<li><i>NoFormatting paste</i> - Pastes current clipboard trimming off any formatting (like HTML).
+		<li><i>Delete [File/Folder]</i> - Deletes clips of data type <code>[File/Folder]</code> from selected or all channels.
+	</ol>
+	<li><a name=def_pformat>Paste Formats</a>
+	<ol><li><i>NO-FORMATTING</i>
+		<li><i>SentenceCase</i>
+		<li><i>UPPERCASE</i>
+	</ol>
+	<li><a name=def_ext>External</a>
+	<ol><li><i>Ini Editor</i> - by rbrtryn, Added as a secondary interface to edit Settings.ini
+		<li><i>Controller</i> - Clipjump Controller, as a plugin
+	</ol>
+</ol>
 <br><br>
 
 <h3>More Plugins</h3>

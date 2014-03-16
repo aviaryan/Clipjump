@@ -45,6 +45,7 @@ TT_Console( msg, keys, x="", y="", whichtooltip=1, font_options="", font_face=""
 		;WinWait ahk_class tooltips_class32
 		;win := WinExist()
 		gosub TT_Console_SetFont
+		
 	}
 
 	;create hotkeys

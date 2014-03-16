@@ -60,7 +60,7 @@ spm_prevres:
 SPM_dispose:
 	Gui, searchpm:Destroy
 	SPM.ACTIVE := 0
-	if SPM.KEEP 
+	if SPM.KEEP
 	{
 		while ctrlRef != ""
 			sleep 20

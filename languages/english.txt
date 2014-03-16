@@ -109,8 +109,6 @@ SET_T_copybeep = Check to hear a customizable beep when clipboard data is added 
                = You can change the Beep Frequency in the [Advanced] section of Settings.ini
 SET_T_keepsession = Should Clipjump continue with all the saved clipboards after it's restart
 SET_T_ismessage = This value determines whether you want to see the confirmation message or not while copy/cut operations.
-SET_T_formatting = Do you want Clipjump to start with No-Formatting Mode enabled ?
-                 = Tick for Yes.
 SET_T_daystostore = Number of days for which the clipboard record will be stored
 SET_T_images = Should clipboard images be stored in history ?
 SET_T_chnl = Shortcut to show the <Select Channel> Window
@@ -201,10 +199,6 @@ UPD_automsg = Click Yes to auto update Clipjump or No to go to website.
 ;10
 ;=========
 
-SET_T_pst = Single character combination to use with Ctrl in activating [PASTE MODE]
-          = Note that letters  E C X Z S A  are reserved.
-          = 
-          = Also make sure to see "Copy bypassing Clipjump" in the help file
 CHC_name = Select Channel
 TIP_done = Done
 TIP_copycutfailed = Copy/Move Not Done
@@ -246,3 +240,39 @@ TIP_editnotdone = Clip NOT edited !
 ;======
 
 HST_m_edit = Edit Clip 		(Ctrl+H)
+
+;======
+;10.7.2.6b
+;======
+
+_name = Name
+_tags = Tags
+_author = Author
+_run = Run
+_properties = Properties
+PLG_properties = Properties (Alt+Enter)
+PLG__name = Plugin Manager
+PLG_fetchparam = parameter for the plugin
+PLG_delmsg = Are you sure you want to proceed with deleting the following plugin?
+PLG_restartmsg = You have deleted some plugins.
+               = Please note that plugins except that from the (external.) class will take effect only after program restart.
+               = Do you want to continue?
+API_extplugMiss = The following external plugin file is missing.
+API_plugCorrupt = The following plugin is corrupt or missing.
+
+;=====
+;10.7.5
+;=====
+
+PLG_Sb_running = Running Plugin
+PLG_Sb_exit = Plugin Terminated
+PLG_Sb_deleted = Plugin Deleted
+SET_T_pst = Single character combination to use with Ctrl in activating [PASTE MODE]
+          = Note that letters  E C X Z S A F H are reserved.
+          = 
+          = Also make sure to see "Copy bypassing Clipjump" in the help file
+SET_pformat = Default Paste-Format
+SET_T_pformat = The Paste format you would like to be active at Clipjump startup. '-original' is the default Clipjump pasting technique.
+SET_t_plugM = Shortcut to open Plugin Manager
+PLG_edit = Edit (F2)
+CUS_error = There was an error in a ClipjumpCustom.ini routine?

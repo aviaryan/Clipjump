@@ -23,7 +23,7 @@ gui_Settings()
 
 	Gui, Settings:New
 	Gui, Margin, 8, 8
-	Gui, Add, GroupBox,	% "w" left_size " h207", % TXT.SET_main		; for every new checkbox add 18 pixels to the height, and for every new UpDown control add 26 pixels
+	Gui, Add, GroupBox,	% "w" left_size " h237", % TXT.SET_main		; for every new checkbox add 18 pixels to the height, and for every new UpDown control add 26 pixels
 	; The total width of the GUI is about 289 x 2
 	
 	Gui, Add, CheckBox, xp+9 yp+22 Section Checked%ini_limitMaxClips% vnew_limitMaxClips gchkbox_limitMaxClips, % TXT.SET_limitmaxclips	; when this is checked the following two controls will be disabled
@@ -42,10 +42,16 @@ gui_Settings()
 	Gui, Add, Checkbox, xs Checked%ini_CopyBeep% 		vnew_copyBeep 			gchkbox_copybeep, 		% TXT.SET_copybeep
 	Gui, Add, Checkbox, xs Checked%ini_IsMessage%		vnew_IsMessage			gchkbox_IsMessage,		% TXT.SET_ismessage
 	Gui, Add, Checkbox, xs Checked%ini_KeepSession%		vnew_KeepSession		gchkbox_KeepSession,	% TXT.SET_keepsession
-	Gui, Add, Checkbox, % "xs Checked" !ini_formatting " vnew_formatting			gchkbox_formatting",	% TXT.SET_formatting
+
+	Gui, Add, Text, xs y+20, % TXT.SET_pformat 		; the y param is not needed but to make it symmetrical
+	; Build pformats list
+	tempLst := "-original-|" (ini_def_pformat="" ? "|" : "")
+	for tempK, tempV in PLUGINS.pformat
+		tempLst .= tempV["Name"] "|"     ( (ini_def_pformat == tempV["Name"]) ? "|" : "" ) 
+	Gui, Add, DropDownList, % "x" left_size-110 " w110 yp-2  r5	vnew_default_pformat 		gdropdown_pformat",		% tempLst
 
 	;---- Clipboard H
-	Gui, Add, GroupBox, % "xm y223 w" left_size " h74",	% TXT.SET_cb  ;h=169 + 16 ; + 10 in v8.7
+	Gui, Add, GroupBox, % "xm y253 w" left_size " h74",	% TXT.SET_cb  ;
 
 	Gui, Add, Text,		xp+9 yp+22,		% TXT.SET_daystostore
 	Gui, Add, Edit,	%	"x" left_size-55 " yp-3 w50 r1 Number vnew_DaysToStore gedit_DaysToStore"
@@ -56,7 +62,7 @@ gui_Settings()
 	;---- Shortcuts
 	x_ofhotkeys := left_size+right_size+5-120
 	;5 is gap betn two adjacent group boxes , 120 is width of hotkey control
-	Gui, Add, GroupBox, % "ym w" right_size " h207 vshortcutgroupbox",	% TXT.SET_shortcuts
+	Gui, Add, GroupBox, % "ym w" right_size " h237 vshortcutgroupbox",	% TXT.SET_shortcuts
 	Gui, Add, Text, 	xp+9 yp+22 section,	% TXT.SET_pst
 	Gui, Add, Edit, %	"Limit1 Uppercase -Wantreturn x" x_ofhotkeys " yp-3 w120 vpst_K ghotkey_paste", % paste_k
 	Gui, Add, Text, 	xs y+8,		% TXT.SET_actmd
@@ -71,9 +77,11 @@ gui_Settings()
 	Gui, Add, Hotkey,	x%x_ofhotkeys% yp-3 vchnl_K		ghotkey_chnl, % channel_K
 	Gui, Add, Text,		xs y+8,		% TXT._ot
 	Gui, Add, Hotkey,	x%x_ofhotkeys% yp-3 vot_K		ghotkey_ot, % onetime_K
+	Gui, Add, Text, 	xs y+8, 	% TXT.PLG__name
+	Gui, Add, Hotkey, 	x%x_ofhotkeys% yp-3 vplugM_K 	ghotkey_plugM, % pluginManager_K
 
 	;---- Channels
-	Gui, Add, GroupBox, % "xs-9 y223 w" right_size " h74", % PROGNAME " " TXT.SET_channels
+	Gui, Add, GroupBox, % "xs-9 y253 w" right_size " h74", % PROGNAME " " TXT.SET_channels
 	Gui, Add, Text, 	xs yp+22,	% TXT._pitswp " Hotkey"
 	Gui, Add, Hotkey,	x%x_ofhotkeys% yp-3 vpitswp_K  ghotkey_pitswp, % pitswap_K
 	Gui, Add, Checkbox, xs y+8 Checked%ini_IsChannelMin% vnew_IsChannelMin gchkbox_isChannelMin, % TXT.SET_ischannelmin
@@ -82,10 +90,10 @@ gui_Settings()
 	size_advanced := getControlInfo("text", TXT.SET_advanced, "w", "Underline")
 	Gui, Settings:Default
 	Gui, Font, Underline
-	Gui, Add, Text, 	% "y303 x" left_size+right_size+5-size_advanced " cBlue gsettings_open_advanced", % TXT.SET_advanced 	;+5 for gap betn group boxes
+	Gui, Add, Text, 	% "y333 x" left_size+right_size+5-size_advanced " cBlue gsettings_open_advanced", % TXT.SET_advanced 	;+5 for gap betn group boxes
 	Gui, Add, Text, 	x9 yp cBlue gClassTool, % TXT.SET_manageignore
 	Gui, font, norm
-	Gui, Add, Button,	% "x" ((left_size+right_size)/2)-60 " y328 Default gsettingsButtonOK", 	&OK 	;57 in vertical
+	Gui, Add, Button,	% "x" ((left_size+right_size)/2)-60 " yp+23 Default gsettingsButtonOK", 	&OK 	;57 in vertical
 	Gui, Add, Button,	x+8 gsettingsButtonCancel,			% TXT.SET_cancel
 	Gui, Add, Button,	x+8	Disabled vsettingsButtonApply gsettingsButtonApply,	% TXT.SET_apply
 	GuiControl, Disable, settingsButtonApply
@@ -138,7 +146,7 @@ updown_Quality:
 chkbox_copybeep:
 chkbox_KeepSession:
 chkbox_IsMessage:
-chkbox_formatting:
+dropdown_pformat:
 edit_DaysToStore:
 updown_DaysToStore:
 chkbox_IsImageStored:
@@ -150,13 +158,14 @@ hotkey_ot:
 chkbox_ischannelmin:
 hotkey_pitswp:
 hotkey_actmd:
+hotkey_plugM:
 	GuiControl, Enable, settingsButtonApply
 	settingsHaveChanged := true
 	return
 
 hotkey_paste:
 	GuiControlGet, pst_k
-	pst_K := Trim(pst_k, "ESCXZA `t")
+	pst_K := Trim(pst_k, "ESCXZAFH `t")
 	if pst_k =
 		GuiControl,, pst_k
 	GuiControl, Enable, settingsButtonApply
@@ -225,7 +234,7 @@ WM_MOUSEMOVE()	; From the help file
 	NEW_QUALITY_TT := TXT.SET_T_quality
 	NEW_KEEPSESSION_TT := TXT.SET_T_keepsession
 	NEW_ISMESSAGE_TT := TXT.SET_T_ismessage
-	NEW_FORMATTING_TT := TXT.SET_T_formatting
+	new_default_pformat_TT := TXT.SET_T_pformat
 	NEW_DAYSTOSTORE_TT := TXT.SET_T_daystostore
 	NEW_ISIMAGESTORED_TT := TXT.SET_T_images
 	pst_k_TT := TXT.SET_T_pst
@@ -237,6 +246,7 @@ WM_MOUSEMOVE()	; From the help file
 	OT_K_TT := TXT.SET_T_ot
 	PITSWP_K_TT := TXT.SET_T_pitswp
 	NEW_ischannelmin_TT := TXT.SET_T_ischannelmin
+	plugM_k_TT := TXT.SET_t_PLUGM
 
 	;---------------------------------------------
 
@@ -294,9 +304,6 @@ load_Settings(all=false)
 		history_K := HParse(history_K)
 		history_partial := Ini_read("Clipboard_history_window", "partial") ? 1 : 0 	; Important as the use of the var in History tool is such that false = 0 .
 
-		Iniread, ini_formatting, % CONFIGURATION_FILE, Advanced, Start_with_formatting, %A_space%
-		FORMATTING := ini_formatting ? 1 : 0
-
 		Iniread, MSG_PASTING_t,% CONFIGURATION_FILE, Advanced, Show_pasting_tip, %A_space%
 		MSG_PASTING := MSG_PASTING_t ? MSG_PASTING : ""
 
@@ -316,6 +323,9 @@ load_Settings(all=false)
 		;change priority once
 		priority := ini_read("System", "Priority")
 		try Process, Priority,, % Priority
+		;v10.7.3
+		ini_def_pformat := ini_read("Main", "default_pformat")
+		pluginManager_K := ini_read("Shortcuts", "pluginManager_K")
 	}
 
 }
@@ -332,7 +342,6 @@ save_Settings()
 	IniWrite, %new_Quality%,		%CONFIGURATION_FILE%, Main, Quality_of_Thumbnail_Previews
 	IniWrite, %new_copyBeep%,  		%CONFIGURATION_FILE%, Main, CopyBeep
 	IniWrite, %new_KeepSession%,	%CONFIGURATION_FILE%, Main, Keep_Session
-	;Iniwrite, % !new_formatting, 	%CONFIGURATION_FILE%, Advanced, Start_with_formatting
 	IniWrite, %new_DaysToStore%,	%CONFIGURATION_FILE%, Clipboard_History, Days_To_Store
 	IniWrite, %new_IsImageStored%,	%CONFIGURATION_FILE%, Clipboard_History, Store_Images
 	
@@ -346,6 +355,9 @@ save_Settings()
 
 	IniWrite, %pitswp_k%  ,% CONFIGURATION_FILE, Channels, pitswap_K
 	Iniwrite, %new_ischannelMin%, % CONFIGURATION_FILE , Channels, IsChannelMin
+	; v10.7.3
+	ini_write("Main", "default_pformat", new_default_pformat="-original-" ? "" : new_default_pformat, 0) 	; trim reqd to remove space
+	ini_write("Shortcuts", "pluginManager_K", plugM_k, 0)
 
 	;Disable old shortcuts
 	  hkZ(Copyfilepath_K, 	"CopyFile", 0)
@@ -356,6 +368,7 @@ save_Settings()
 	, hkZ(paste_k ? "$^" paste_k : emptyvar, "paste", 	0)
 	, hkZ(pitswap_K, 	   "PitSwap", 0)
 	, hkZ(actionmode_K, 	"actionmode", 0)
+	, hkZ(pluginManager_K, 	"pluginManagerGUI", 0)
 
 	;Re-create shortcuts
 	  hkZ(Cfilep_K, "CopyFile", 1) 
@@ -366,8 +379,26 @@ save_Settings()
 	, hkZ(pst_k ? "$^" pst_k : emptyvar, "paste", CLIPJUMP_STATUS )
 	, hkZ(pitswp_K, "PitSwap", 1)
 	, hkZ(actmd_k, "actionmode", 1)
+	, hkZ(plugM_k, "pluginManagerGUI", 1)
 
 	;Load settings will load correct values for vars
+}
+
+set_pformat(pst_format=""){
+; Sets the default pformat at Clipjump startup , runs after all the plugins have been loaded.
+	pst_format := pst_format="" ? ini_def_pformat : pst_format
+	if pst_format == "-original-"
+		pst_format := ""
+	for k,v in PLUGINS.pformat
+		if ( v["name"] == pst_format )
+		{
+			curPformat := v["name"] , curPfunction := v["*"] , curPisPreviewable := v["Previewable"]
+			success := 1
+			break
+		}
+	if !success 	; if no match was found = default
+		curPformat := "" , curPisPreviewable := 0
+	return 1
 }
 
 save_Default(full=1){
@@ -402,7 +433,6 @@ save_Default(full=1){
 	;---- Non GUI
 	Ini_write(s := "Advanced", "history_k", "Win + c")
 	Ini_write(s, "instapaste_write_clipboard", "0")
-	;ini_write(s, "Start_with_formatting", "1")
 	ini_write(s, "Show_pasting_tip", "0")
 	ini_write(s, "windows_copy_shortcut")
 	ini_write(s, "windows_cut_shortcut")
@@ -413,9 +443,12 @@ save_Default(full=1){
 	;--v9.8.1 added
 	ini_write("Main", "CopyBeep", "0")
 	ini_write("Advanced", "cut_equalto_delete", cut_is_delete_windows)
-	; delete removed
+	; delete removed v10.7.2.6
 	Ini_delete("Advanced", "Start_with_formatting")
 	Ini_delete("Advanced", "Actionmode_keys")
+	; v10.7.3 added
+	ini_write("Main", "default_pformat", "")
+	ini_write("Shortcuts", "pluginManager_K", "")
 }
 
 Ini_write(section, key, value="", ifblank=true){
@@ -459,7 +492,6 @@ validate_Settings()
 		ini_Quality := 20
 	if ini_KeepSession is not integer
 		ini_KeepSession := 1
-	ini_formatting := ini_formatting ? 1 : 0
 
 	if !ini_KeepSession
 		clearData()

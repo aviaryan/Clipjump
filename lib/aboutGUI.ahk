@@ -44,6 +44,7 @@ blog:
 	BrowserRun(AUTHOR_PAGE)
 	return
 
+2GuiEscape:
 2GuiClose:
 	Gui, 2:Hide
 	EmptyMem()
@@ -90,7 +91,7 @@ trayMenu(destroy=0){
 
 	;Tray Icon
 	if !(A_isCompiled) && !(H_COMPILED)			;Important for showing Cj's icon in the Titlebar of GUI
-		Menu, Tray, Icon, icons\icon.ico
+		Menu, Tray, Icon, % mainIconPath
 	if H_COMPILED
 		Menu, Tray, Icon, % A_AhkPath
 	Menu, Tray, NoStandard
@@ -99,6 +100,9 @@ trayMenu(destroy=0){
 	Menu, Tray, Add
 	Menu, Tray, Add,% TXT.SET_actmd "`t" Hparse_Rev(actionmode_k), actionmode
 	Menu, Tray, Add		; separator
+		Menu, Maintanence_Tray, Add, % "Delete [File/Folder]", plugin_deleteFileFolder
+		Menu, Maintanence_Tray, Add, % TXT.TRY_updates, updt
+	Menu, Tray, Add, % "Maintanence", :Maintanence_Tray
 		Menu, Options_Tray, Add, % TXT.TRY_incognito, incognito
 		Menu, Options_Tray, Add, % TXT.TRY_disable " " PROGNAME, disable_clipjump
 		Menu, Options_Tray, Add, % TXT.TRY_startup, strtup
@@ -106,12 +110,12 @@ trayMenu(destroy=0){
 		Menu, Tools_Tray, Add, % TXT.HST__name "`t" Hparse_Rev(history_K), history
 		Menu, Tools_Tray, Add, % TXT.SET_chnl "`t" Hparse_Rev(channel_K), channelGUI
 		Menu, Tools_Tray, Add, % TXT.IGN__name, classTool
+		Menu, Tools_Tray, Add, % TXT.PLG__name "`t" Hparse_Rev(pluginManager_k), pluginManagerGUI
 		Menu, Tools_Tray, Add, % TXT.SET__name, settings
 	Menu, Tray, Add, % TXT.TRY_tools, :Tools_Tray
-	Menu, Tray, Add		; separator
-	Menu, Tray, Add, % TXT.TRY_updates, updt
+	Menu, Tray, Add
 	Menu, Tray, Add, % TXT.TRY_help, hlp
-	Menu, Tray, Add		; separator
+	Menu, Tray, Add
 	Menu, Tray, Add, % TXT.TRY_restart, reload
 	Menu, Tray, Add, % TXT.TRY_exit, exit
 	Menu, Tray, Default, % TXT.ABT__name " " PROGNAME

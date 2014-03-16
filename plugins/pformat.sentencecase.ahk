@@ -9,7 +9,7 @@
 
 plugin_pformat_sentencecase(zin){
 	zCS := getClipboardFormat()
-	if Instr(zCS, TXT.TIP_text)
+	if (zCS== "[" TXT.TIP_text "]")
 	{
 		zin_copy := zin , STORE.ClipboardChanged := 1
 		loop, parse, zin, `.?!`n`r

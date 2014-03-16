@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 10.7.2.7
+;@Ahk2Exe-SetVersion 10.7.5
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -36,12 +36,13 @@ ListLines, Off
 #MaxHotkeysPerInterval 1000
 
 global ini_LANG := "" , H_Compiled := (Substr(A_AhkPath, Instr(A_AhkPath, "\", 0, 0)+1) == "Clipjump.exe") && (!A_IsCompiled) ? 1 : 0
+global mainIconPath := FileExist("Clipjump.exe") ? "Clipjump.exe" : "icons/icon.ico"
 
 ;*********Program Vars**********************************************************
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "10.7.2.7b"
+global VERSION := "10.7.5"
 global CONFIGURATION_FILE := "settings.ini"
 
 ini_LANG := ini_read("System", "lang")
@@ -123,13 +124,16 @@ If !FileExist(CONFIGURATION_FILE)
 	try TrayTip, Clipjump, % TXT.ABT_cjready , 10, 1
 }
 else if (ini_Version != VERSION)
+{
 	save_default(0) 			;0 corresponds to selective save
+	gosub Reload 		; Update plugin includes with what the user has incase he updates his Clipjump
+}
 
 
 ;Global Ini declarations
-global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_IsChannelMin := 1 , CopyMessage, FORMATTING
+global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_IsChannelMin := 1 , CopyMessage
 		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, channel_K, onetime_K, paste_k, actionmode_k, ini_is_duplicate_copied, ini_formatting
-		, ini_CopyBeep , beepFrequency , ignoreWindows, ini_defEditor
+		, ini_CopyBeep , beepFrequency , ignoreWindows, ini_defEditor, ini_def_Pformat, pluginManager_k
 
 ; (search) paste mode keys 
 global pastemodekey := {} , spmkey := {}
@@ -184,18 +188,16 @@ IfExist, %A_Startup%/Clipjump.lnk
 global CLIPS_dir := "cache/clips"
 	, THUMBS_dir := "cache/thumbs"
 	, FIXATE_dir := "cache/fixate"
-	, NUMBER_ADVANCED := 29 + CN.Total 					;the number stores the line number of ADVANCED section
+	, NUMBER_ADVANCED := 31 + CN.Total 					;the number stores the line number of ADVANCED section
 
 ;Setting Up shortcuts
 hkZ( ( paste_k ? "$^" paste_k : emptyvar ) , "Paste")
 hkZ("$^c", "NativeCopy") , hkZ("$^x", "NativeCut")
 hkZ(Copyfilepath_K, "CopyFile") , hkZ(Copyfolderpath_K, "CopyFolder")
 hkZ(history_K, "History")
-hkZ(Copyfiledata_K, "CopyFileData")
-hkZ(channel_K, "channelGUI")
-hkZ(onetime_K, "oneTime")
-hkZ(pitswap_K, "pitswap")
-hkZ(actionmode_K, "actionmode")
+hkZ(Copyfiledata_K, "CopyFileData") , hkZ(channel_K, "channelGUI")
+hkZ(onetime_K, "oneTime") , hkZ(pitswap_K, "pitswap")
+hkZ(actionmode_K, "actionmode") , hkZ(pluginManager_k, "pluginManagerGUI")
 ;more shortcuts
 hkZ(windows_copy_k, "windows_copy") , hkZ(windows_cut_k, "windows_cut")
 ;Environment
@@ -214,7 +216,7 @@ EmptyMem()
 return
 
 ;Tooltip No 1 is used for Paste Mode tips, 2 is used for notifications , 3 is used for updates , 4 is used in Settings , 5 is used in Action Mode
-;6 used in Class Tool, 7.........., 8 used in Customizer, 9 used in history tool, 10 in edit clips
+;6 used in Class Tool, 7 in API (Plugin) , 8 used in Customizer, 9 used in history tool, 10 in edit clips
 
 ;OLD VERSION COMPATIBILITES TO REMOVE
 ;NONE
@@ -580,7 +582,7 @@ ctrlForCopy:
 	return
 
 Formatting:
-	matched_pformat := 0
+	matched_pformat := 0 , curPformat := Trim(curPformat)
 	if curPformat=
 		matched_pformat := 1
 	for key,value in PLUGINS["pformat"]
@@ -603,8 +605,8 @@ Formatting:
 		else halfClip := temp_clipboard
 	}
 	if matched_pformat
-		curPformat := "" , FORMATTING := 1 , curPisPreviewable := 0 ; case of switching to default
-	else halfClip := (curPisPreviewable := value["Previewable"]) ? %curPfunction%(halfClip) : halfClip , FORMATTING := 0
+		curPformat := "" , curPisPreviewable := 0 ; case of switching to default
+	else halfClip := (curPisPreviewable := value["Previewable"]) ? %curPfunction%(halfClip) : halfClip
 	if ctrlRef = pastemode
 		PasteModeTooltip(temp_clipboard) 	; rebuild prvw
 	return
@@ -897,6 +899,7 @@ correctTEMPSAVE(){
 		IN_BACK_correction()
 	if TEMPSAVE > %CURSAVE%
 		TEMPSAVE := 1
+	return TEMPSAVE
 }
 
 compacter() {
@@ -1145,7 +1148,7 @@ global
 	if A_IsCompiled or H_Compiled 		; H_Compiled is a user var created if compiled with ahk_h
 		Menu, tray, icon, % A_AhkPath
 	else
-		Menu, tray, icon, icons\icon.ico
+		Menu, tray, icon, % mainIconPath
 	if !NOINCOGNITO
 		Menu, Tray, icon, icons\no_history.ico
 	if !CALLER_STATUS or !CALLER
@@ -1217,19 +1220,19 @@ editclip_cancel:
 	return
 
 windows_copy:
-	CALLER := 0
+	API.blockMonitoring(1)
 	Send ^{vk43}
 	sleep 100
 	makeClipboardAvailable(0)   ;wait till Clipboard is ready
-	CALLER := CALLER_STATUS
+	API.blockMonitoring(0)
 	return
 
 windows_cut:
-	CALLER := 0
+	API.blockMonitoring(1)
 	Send ^{vk58}
 	sleep 100
 	makeClipboardAvailable(0)
-	CALLER := CALLER_STATUS
+	API.blockMonitoring(0)
 	return
 
 ;Copies text to a var in the script without invoking Clipjump
@@ -1258,7 +1261,7 @@ disable_clipjump:
 
 routines_Exit() {
 	Ini_write("Clipboard_history_window", "partial", history_partial, 0)
-	updatePluginIncludes() - ;ENABLE WHEN PLUGINS ARE INCORPORATED
+	updatePluginIncludes()
 }
 
 ;#################### COMMUNICATION ##########################################
