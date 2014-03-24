@@ -1,8 +1,8 @@
 ## [Clipjump](http://clipjump.sourceforge.net)
 A Magical Clipboard Manager  
   
-[Download](https://sourceforge.net/projects/clipjump/files/ClipjumpSetup.exe/download)  
-[Online Manual](http://avi-win-tips.blogspot.com/2013/04/clipjump-online-guide.html)
+[Download](https://sourceforge.net/projects/clipjump/files/latest/download)  
+[Online Manual](http://http://clipjump.sourceforge.net/docs/)
   
 A Multiple-Clipboard management utility for Windows.  
 Allows you to simultaneously use multiple clipboards like never before.  
@@ -14,17 +14,9 @@ It's fast , it's easy, it's magic.
 1. Get [AutoHotkey](http://www.autohotkey.com) and install it.
 2. Then double-click `Clipjump.ahk` to run it with AutoHotkey.exe
   
-#### Compiling the Source (Current Method)
-1. Use [Ahk2Exe](https://github.com/fincs/Ahk2Exe) Compiler included in the AHK_L distribution to compile `Clipjump.ahk` with icon `iconx.ico`.
-2. Use a suitable version of `Unicode` as the Base File.  
-  
-~~**AND (new method)**  
-1. Run `_compile_genfiles.ahk` to generate `clipjump_code.ahk`  
-2. Use Ahk_H Compiler to compile `ClipjumpHexe.ahk` using a unicode AutoHotkey.exe as the base file.  
-3. ResHack the file to add icons natively into it i.e. don't use icons/icon.ico.~~  
-  
-  
-#### Setting up the Installer
-1. Use 7-zip's SFX archive feature.  
-2. UPX 7z.sfx for smaller executables.  
+#### Distribution
+Clipjump is distributed without compiling and a disguised AutoHotkey.exe renamed as  Clipjump.exe runs Clipjump.ahk  
+1. Get the [ResHacked AutoHotkey.exe](http://sourceforge.net/projects/clipjump/files/other_downloads/Clipjump_ahkExe.7z/download) from sourceforge. This is the one which is to be distributed as Clipjump.exe  
+2. Correct the version numbers of the binary file.  
+3. Distribute it with the source.
   
