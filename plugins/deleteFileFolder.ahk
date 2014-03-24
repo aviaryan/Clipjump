@@ -1,7 +1,7 @@
 ;@Plugin-Name Delete [File/Folder]
 ;@Plugin-Description Deletes clips that are [File/Folder] type from a channel.
 ;@Plugin-Author Avi
-;@Plugin-Version 0.1
+;@Plugin-Version 0.2
 ;@Plugin-Tags clip management file folder
 
 ;@Plugin-param1 The channels whose [file/folder]s are to be deleted separated by space. If this param is empty, all channels that exist are taken into account.
@@ -24,16 +24,26 @@ plugin_deleteFileFolder(zchannels=""){
 		{
 			API.showTip("Deleting Clips of type [File/Folder] from channel " A_LoopField) 	; show tip
 			changeChannel(A_LoopField) 		; change Channel to the one to be examined
-			loop, cache\clips%zCfactor%\*.avc
+			zSomething_deleted := 1
+
+			while zSomething_deleted	;  clearClip() changes clips locn and so loop over files in the directory becomes invalid. So we start it again.
 			{
-				ONCLIPBOARD := 0 	; This var is made 1 by the OnClipboardChange: label that responds to system clipboard change.
-				FileRead, Clipboard, *c %A_LoopFileFullPath% 	; read clip file to clipboard
-				zFormat := getClipboardFormat() 				; get its format
-				if ( zFormat == "[" TXT.TIP_file_folder "]" ) 	; if format is file/folder
+				zSomething_deleted := 0
+				loop, cache\clips%zCfactor%\*.avc
 				{
-					clearClip( Substr(A_LoopFileName,1,-4) ) 	; clear the file/folder clip
+					ONCLIPBOARD := 0 	; This var is made 1 by the OnClipboardChange: label that responds to system clipboard change.
+					FileRead, Clipboard, *c %A_LoopFileFullPath% 	; read clip file to clipboard
+					zFormat := getClipboardFormat() 				; get its format
+					if ( zFormat == "[" TXT.TIP_file_folder "]" ) 	; if format is file/folder
+					{
+	
+						clearClip( Substr(A_LoopFileName,1,-4) ) 	; clear the file/folder clip
+						zSomething_deleted := 1
+						break
+					}
 				}
 			}
+
 		}
 	}
 	Critical, Off 	; Off Critical so that if ONCLIPBOARDCHANGE: wants, it can update the var ONCLIPBOARD

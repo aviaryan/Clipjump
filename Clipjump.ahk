@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 10.7.5
+;@Ahk2Exe-SetVersion 10.7.5.1
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -42,7 +42,7 @@ global mainIconPath := FileExist("Clipjump.exe") ? "Clipjump.exe" : "icons/icon.
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "10.7.5"
+global VERSION := "10.7.5.1"
 global CONFIGURATION_FILE := "settings.ini"
 
 ini_LANG := ini_read("System", "lang")
@@ -255,7 +255,6 @@ loadClipboardDataS(){
 
 paste:
 	Critical, On
-
 	IfWinActive, ahk_group ignoreGroup
 	{
 		Send ^{vk56}

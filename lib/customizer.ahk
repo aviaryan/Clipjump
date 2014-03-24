@@ -46,7 +46,7 @@ loadCustomizations(){
 customization_Run(obj){
 	for k,v in obj
 	{
-		try { ; Try
+		;try { ; Try - No need currently
 		k := Ltrim(k, "0123456789") 	; correct key
 		loop { 			; change %..% vars to keys
 			if !($op1 := Instr(v, "%", 0, 1, 1)) || !($op2 := Instr(v, "%", 0, 1, 2))
@@ -94,10 +94,10 @@ customization_Run(obj){
 			}
 			else %k% := v
 		}
-		} ; catch
-		catch {
-		MsgBox, 16, Clipjump, % TXT.CUS_error "`nkey = " k "`nvalue = " v
-		}
+		;} ; catch
+		;catch {
+		;MsgBox, 16, Clipjump, % TXT.CUS_error "`nkey = " k "`nvalue = " v
+		;}
 	}
 }
 
