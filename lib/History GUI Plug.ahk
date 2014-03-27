@@ -142,7 +142,7 @@ history_clipboard:
 history_EditClip: 		; label inside to call history_searchbox which uses local func variables
 	Gui, History:Default
 	LV_GetText(clip_file_path, LV_GetNext(0), hidden_date_no)
-	runwait % ini_defEditor " """ A_WorkingDir "\cache\history\" clip_file_path """"
+	runwait % ( Instr(clip_file_path, ".jpg") ? ini_defImgEditor : ini_defEditor ) " """ A_WorkingDir "\cache\history\" clip_file_path """"
 	HISTORYOBJ[clip_file_path "_data"] := HISTORYOBJ[clip_file_path "_date"] := ""  	; free to rebuild them
 	gosub history_SearchBox
 	return

@@ -189,7 +189,7 @@ Clipjump will respond to the exit and update the clip. Alternatively press Esc a
 <i>[v10.6+]</i> Press F to activate the Search feature in Paste mode. A box should come above the tip.<br>
 From here, you can search for specific text among all the clips in all the channels. Here are the key points-
 <ul>
-<li>When Search box is active, leave Ctrl and type your query . Don't worry paste will not be invoked.
+<li>When Search box is active, leave Ctrl and type your query . Don't worry, paste will not be invoked.
 <li>As you type, you will see the tip jump to the first matched point. First it searches the currently active channel and then goes in ascending order to the next channels. Use Up and down to move Up and down the results
 <li>Use Enter to paste if your result is in the underlying tip.
 <li>Use Home/Esc to cancel paste operation.
@@ -273,24 +273,31 @@ Note that you will have to restart Clipjump once you have made changes to the Se
 
 <h3><a name=short>Shortcut List</a></h3>
 <b>Paste Mode (Ctrl Held)</b><br>
-See <a href=custom.html#2>ClipjumpCustom.ini</a> example to change these keys<br><br>
+See <a href=custom.html#2>ClipjumpCustom.ini</a> example to change these keys<br>
 
-V - Activate PASTE-MODE and move forward through Multiple Clipboards (from 1 to 2 , 2 to 3)<br>
-C - Move backwards through Multiple Clipboards (from 3 to 2 , 2 to 1) <br>
-S - Add current Clip to Windows Clipboard [Selective Windows Clipboard Option] <br>
-X - Toggle between, Cancel,Delete,Copy,Move,Delete All MODE <br>
-E - Export current clip<br>
-A - Jump to first clip<br>
-F - Activate Search<br>
-H - Edit Clip<br>
-Z - Toggle pasting formats <br>
-Space - Fix/un-fix a clipboard at its position (FIXATE) <br>
-Up - Change channel to 1 up (+1)<br>
-Down - Change channel to 1 down (-1)<br><br>
+<pre>V - Activate PASTE-MODE and move forward through Multiple Clipboards (from 1 to 2 , 2 to 3)
+C - Move backwards through Multiple Clipboards (from 3 to 2 , 2 to 1) 
+S - Add current <a href=#winclip>Clip to Windows Clipboard</a>
+X - Toggle between Cancel, Delete, Copy, Move and Delete All MODE 
+E - <a href=#export>Export</a> current clip
+A - Jump to first clip
+F - Activate <a href=#spm>Search</a>
+H - <a href=#editclip>Edit Clip</a>
+Z - Toggle <a href=#pformat>pasting formats</a>
+Enter - Start <a href=#multipaste>Multiple Pasting</a> Session
+Space - <a href=#fx>Fix/un-fix</a> a clipboard at its position
+Up - Change channel to 1 up (+1)
+Down - Change channel to 1 down (-1)</pre><br>
+
+<b>Search in Paste Mode(Ctrl released)</b><br>
+<pre>Enter - Paste
+Home/Esc - Cancel
+Up - Move one clip up (+1)
+Down -Move one clip down (-1)</pre><br>
 
 <b>General (System Wide)</b><br>
-Ctrl+Shift+A - Action Mode<br>
-Win+C - Open Clipjump Clipboard History Tool<br><br>
+<pre>Ctrl+Shift+A - <a href=#actmd>Action Mode</a>
+Win+C - Open Clipjump Clipboard History Tool</pre><br><br>
 
 <hr noshade=noshade size=5 color=yellow>
 <br>

@@ -10,5 +10,5 @@ More on redistribution (and editing) terms can be seen at (http://www.apache.org
 Contact ==================
 
 Mail:- avi.aryan123@gmail.com
-Site:- www.avi-win-tips.blogspot.com
-Site:- www.github.com/avi-aryan
+Site:- www.aviaryan.github.io
+Site:- www.github.com/aviaryan

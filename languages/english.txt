@@ -276,3 +276,9 @@ SET_T_pformat = The Paste format you would like to be active at Clipjump startup
 SET_t_plugM = Shortcut to open Plugin Manager
 PLG_edit = Edit (F2)
 CUS_error = There was an error in a ClipjumpCustom.ini routine?
+
+;=====
+;10.7.8
+;=====
+
+TRY_pstmdshorts = Paste Mode shortcuts

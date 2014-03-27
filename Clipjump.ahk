@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 10.7.5.1
+;@Ahk2Exe-SetVersion 10.7.8
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -42,7 +42,7 @@ global mainIconPath := FileExist("Clipjump.exe") ? "Clipjump.exe" : "icons/icon.
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "10.7.5.1"
+global VERSION := "10.7.8"
 global CONFIGURATION_FILE := "settings.ini"
 
 ini_LANG := ini_read("System", "lang")
@@ -133,7 +133,7 @@ else if (ini_Version != VERSION)
 ;Global Ini declarations
 global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_IsChannelMin := 1 , CopyMessage
 		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, channel_K, onetime_K, paste_k, actionmode_k, ini_is_duplicate_copied, ini_formatting
-		, ini_CopyBeep , beepFrequency , ignoreWindows, ini_defEditor, ini_def_Pformat, pluginManager_k
+		, ini_CopyBeep , beepFrequency , ignoreWindows, ini_defEditor, ini_defImgEditor, ini_def_Pformat, pluginManager_k
 
 ; (search) paste mode keys 
 global pastemodekey := {} , spmkey := {}
@@ -286,7 +286,7 @@ paste:
 		{
 			oldclip_exist := 1
 			try oldclip_data := ClipboardAll
-			catch temp {
+			catch {
 				makeClipboardAvailable(0)  						; make clipbboard available in case it is blocked
 			}
 		}
@@ -297,8 +297,9 @@ paste:
 			hkZ_pasteMode(1) , is_pstMode_active := 1
 
 		if !IScurCBACTIVE 				;if the current clipboard is not asked for , then only load from file
-			try FileRead, Clipboard, *c %A_WorkingDir%/%CLIPS_dir%/%TEMPSAVE%.avc
-		try temp_clipboard := Clipboard  	;temp_clipboard := CDS[CN.NG][TEMPSAVE]
+			try_ClipboardfromFile(A_WorkingDir "/" CLIPS_dir "/" TEMPSAVE ".avc") 	; gets file onto clipboard trying 100 times
+
+		temp_clipboard := trygetVar("Clipboard")  	;gets variable with multiple tries
 
 		fixStatus := fixCheck()
 		realclipno := CURSAVE - TEMPSAVE + 1
@@ -457,8 +458,8 @@ moveBack:
 		TEMPSAVE := 1
 	realActive := TEMPSAVE
 	IScurCBACTIVE := 0 			;the key will be always pressed after V
-	try FileRead, clipboard, *c %CLIPS_dir%/%TEMPSAVE%.avc
-	try temp_clipboard := Clipboard
+	try_ClipboardfromFile(CLIPS_dir "/" TEMPSAVE ".avc")
+	temp_clipboard := trygetVar("Clipboard")
 
 	fixStatus := fixCheck()
 	realClipNo := CURSAVE - TEMPSAVE + 1
@@ -786,7 +787,7 @@ ctrlCheck:
 				STORE.ClipboardChanged := 0
 				try Coutput := %curPfunction%(Clipboard)
 				if STORE.ClipboardChanged
-					try Clipboard := Coutput
+					try Clipboard := Coutput , IScurCBACTIVE := 0
 				else ONCLIPBOARD := 1
 				API.blockMonitoring(0, 5)
 				Critical, On
@@ -1021,10 +1022,10 @@ actionmode:
 
 init_actionmode() {
 	ACTIONMODE := {H: "history", S: "channelGUI", C: "copyfile", X: "copyfolder", F: "CopyFileData", D: "disable_clipjump"
-		, P: "pitswap", O: "onetime", L: "classTool", E: "settings", F1: "hlp", Esc: "Exit_actmd", M: "pluginManager_GUI()"
-		, H_caption: TXT.HST__name, S_caption: TXT.CNL__name, C_caption: TXT._cfilep, X_caption: TXT._cfolderp, F_caption: cfiled 
-		, D_caption: TXT.ACT_disable " " PROGNAME, P_caption: TXT._pitswp, O_caption: TXT._ot, L_caption: TXT.IGN__name, E_caption: TXT.SET__name
-		, F1_caption: TXT.TRY_help, Esc_caption: TXT.ACT_exit, M_caption: TXT.PLG__name}
+		, P: "pitswap", O: "onetime", E: "settings", F1: "hlp", Esc: "Exit_actmd", M: "pluginManager_GUI()", F2: "OpenShortcutsHelp"
+		, H_caption: TXT.HST__name, S_caption: TXT.SET_chnl, C_caption: TXT._cfilep, X_caption: TXT._cfolderp, F_caption: cfiled 
+		, D_caption: TXT.ACT_disable " " PROGNAME, P_caption: TXT._pitswp, O_caption: TXT._ot, E_caption: TXT.SET__name
+		, F1_caption: TXT.TRY_help, Esc_caption: TXT.ACT_exit, M_caption: TXT.PLG__name, F2_caption: TXT.try_pstmdshorts}
 }
 
 update_actionmode(){
@@ -1075,7 +1076,7 @@ CopyFileData:
 	else if temp_extension in cj,avc
 	{
 		API.blockMonitoring(1)
-		try Fileread, Clipboard, *c %selectedFile%
+		try_ClipboardfromFile(selectedFile)
 		ClipWait, 1, 1
 		oldclip := ClipboardAll
 		API.blockMonitoring(0)

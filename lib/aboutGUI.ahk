@@ -113,8 +113,10 @@ trayMenu(destroy=0){
 		Menu, Tools_Tray, Add, % TXT.PLG__name "`t" Hparse_Rev(pluginManager_k), pluginManagerGUI
 		Menu, Tools_Tray, Add, % TXT.SET__name, settings
 	Menu, Tray, Add, % TXT.TRY_tools, :Tools_Tray
+		Menu, Help_Tray, Add, % TXT.TRY_pstmdshorts, openShortcutsHelp
+		Menu, Help_Tray, Add, % "Clipjump.chm", hlp
 	Menu, Tray, Add
-	Menu, Tray, Add, % TXT.TRY_help, hlp
+	Menu, Tray, Add, % TXT.TRY_help, :Help_Tray
 	Menu, Tray, Add
 	Menu, Tray, Add, % TXT.TRY_restart, reload
 	Menu, Tray, Add, % TXT.TRY_exit, exit
@@ -122,6 +124,12 @@ trayMenu(destroy=0){
 	return
 
 }
+
+openShortcutsHelp:
+	try run hh.exe mk:@MSITStore:%A_WorkingDir%\Clipjump.chm::/docs/basic_help.html#short
+	catch
+		MsgBox, 16, Clipjump, There was a problem.`nPlease check that Clipjump.chm exists in the root folder.
+	return
 
 reload:
 	OnExit,

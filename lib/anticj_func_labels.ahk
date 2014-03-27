@@ -70,6 +70,33 @@ FoolGUI(switch=1){
 	WinActivate, foolgui
 }
 
+;Try getting a Variable like Clipboard
+tryGetvar(varname, maxtries=100){
+	while !fetch_done
+	{
+		try {
+			if A_index>%maxtries%
+				break
+			ret := %varname%
+			fetch_done := 1
+		}
+	}
+	return ret
+}
+
+;Try getting a file onto Clipboard
+try_ClipboardfromFile(file, maxtries=100){
+	while !temp_ClipbrdLoaded
+	{
+		try { ;Tries needed in case of heavy memory programs like Netbeans
+			if A_index > %maxtries%
+				break
+			FileRead, Clipboard, *c %file%
+			temp_ClipbrdLoaded := 1
+		}
+	}
+}
+
 ;Checks and makes sure Clipboard is available
 ;Use 0 as the param when for calling the function, the aim is only to free clipboard and not get its contents
 MakeClipboardAvailable(doreturn=1){

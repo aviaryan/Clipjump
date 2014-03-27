@@ -326,6 +326,7 @@ load_Settings(all=false)
 		;v10.7.3
 		ini_def_pformat := ini_read("Main", "default_pformat")
 		pluginManager_K := ini_read("Shortcuts", "pluginManager_K")
+		ini_defImgEditor := (t:=ini_read("System", "default_image_editor")) ? t : "mspaint.exe"
 	}
 
 }
@@ -440,7 +441,6 @@ save_Default(full=1){
 	ini_write(s, "beepFrequency", 1500)
 	ini_write(s, "ignoreWindows", "")
 
-	;--v9.8.1 added
 	ini_write("Main", "CopyBeep", "0")
 	ini_write("Advanced", "cut_equalto_delete", cut_is_delete_windows)
 	; delete removed v10.7.2.6
@@ -449,6 +449,8 @@ save_Default(full=1){
 	; v10.7.3 added
 	ini_write("Main", "default_pformat", "")
 	ini_write("Shortcuts", "pluginManager_K", "")
+	; v10.7.8
+	ini_write("System", "default_image_editor", "mspaint.exe")
 }
 
 Ini_write(section, key, value="", ifblank=true){
