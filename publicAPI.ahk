@@ -1,19 +1,49 @@
-; Clipjump API functions to be included and used in 3rd party scripts
-; Uses the ClipjumpConmmunicator function
+/*
 
-;msgbox % Clipjump.IncognitoMode(1)
+Clipjump API functions to be included and used in 3rd party scripts 
+Uses the ClipjumpConmmunicator.ahk function
+Note that API.text2binary() is not supported currently
+
+- 31/3/2014
+
+*/
+
+;Clipjump.Call("IncognitoMode", 1)
+;Clipjump.call("pasteText", "some text")
+;msgbox % Clipjump.call("getClipLoc", 1, 5)
+;Clipjump.call("Paste","","")
 ;return
 
 #include %A_ScriptDir%/ClipjumpCommunicator.ahk
+
 
 class Clipjump
 {
 	static k := "API:"
 	static cbF := A_temp "\cjcb.txt"
+	static rFuncs := "|getClipAt|getClipLoc|"
 
-	; pastes clip at channel and clipno
-	paste(channel="", clipno=""){
-		return CjControl(this.k "paste`n" channel "`n" clipno)
+	; calls an API function present in API.ahk
+	; Almost all of API needs can be fulfilled by this master function
+	; Other dummy functions 
+	; eg > 		Clipjump.call("pasteText", "Some_text 2 paste")
+	; 			Clipjump.call("paste", 2, 2)
+	;			Clipjump.call("emptyChannel", 2)
+	;			Clipjump.call("incognitoMode", 1)
+
+	call(funcName, parameters*){
+		for key,val in parameters
+			ps .= "`n" val
+		FileDelete, % this.cbF
+		k := CjControl(this.k funcName ps)
+		if k && Instr(this.rFuncs, "|" funcName "|")
+		{
+			this._wait4file()
+			Fileread, out, % this.cbF
+			FileDelete, % this.cbF
+			return out
+		}
+		else return ""
 	}
 
 	; get Clip At channel and clipno .
@@ -42,29 +72,9 @@ class Clipjump
 		else return ""
 	}
 
-	; copy cut clips from one ch to another
-	manageClip(new_channel=0, channel="", clip="", flag=0){ ; 0 = cut , 1 = copy
-		return CjControl(this.k "manageClip`n" new_channel "`n" channel "`n" clip "`n" flag)
-	}
-	
-	; p=1 turns on Incongito mode
-	IncognitoMode(p=1){
-		return CjControl(this.k "IncognitoMode`n" p)
-	}
 
-	; get Clip's location in clipjump's cache dir
-	getCliploc(channel=0, clipno=1){
-		k := CjControl(this.k "getCliploc`n" channel "`n" clipno)
-		if k
-		{
-			this._wait4file()
-			FileRead, out, % this.cbF
-			FileDelete, % this.cbF
-			return out
-		}
-		else return 0
-	}
-
+	;------------------------------------------- END -----------------------------------------
+	;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 	; Reserved functions used by the class
 	_wait4file(){
