@@ -1,7 +1,9 @@
 /*
 
-Clipjump API functions to be included and used in 3rd party scripts 
-Uses the ClipjumpConmmunicator.ahk function
+This function file helps any AHK script to use Clipjump API functions from its side. 
+Just include this file in your script and use the Clipjump Class methods.
+It requires the ClipjumpConmmunicator.ahk function file.
+
 Note that API.text2binary() is not supported currently
 
 - 31/3/2014
@@ -24,8 +26,7 @@ class Clipjump
 	static rFuncs := "|getClipAt|getClipLoc|"
 
 	; calls an API function present in API.ahk
-	; Almost all of API needs can be fulfilled by this master function
-	; Other dummy functions 
+	; Almost all of API needs can be fulfilled by this master function 
 	; eg > 		Clipjump.call("pasteText", "Some_text 2 paste")
 	; 			Clipjump.call("paste", 2, 2)
 	;			Clipjump.call("emptyChannel", 2)
@@ -47,7 +48,8 @@ class Clipjump
 	}
 
 	; get Clip At channel and clipno .
-	; toreturn = 1 returns clipboard text , =2 returns clipboardall data
+ 	; toreturn = 1 returns clipboard text , =2 returns clipboardall data
+	; Use this function and not Call("getClipAt", ....) for calling getClipAt() as Call() will not work for ClipboardAll data
 	getClipAt(channel=0, clipno=1, toreturn=1){
 		k := CjControl(this.k "getClipAt`n" channel "`n" clipno "`n" toreturn)
 		if k
