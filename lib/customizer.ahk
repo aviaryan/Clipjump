@@ -35,7 +35,7 @@ loadCustomizations(){
 		}
 		if !(tobj.noautorun) && (tobj.bind = "")
 			customization_Run(tobj)
-		else
+		else if Hparse(tobj.bind) 	; if key is valid
 			hkZ( tobj.bind := "$" Hparse(tobj.bind), "CustomHotkey", 1 ) ; create hotkey
 			, CUSTOMS[tobj.bind] := {}
 			, CUSTOMS[tobj.bind] := tobj.Clone()

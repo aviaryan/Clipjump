@@ -2,7 +2,7 @@
 
 Act_API(D, k){
 	static cbF := A_temp "\cjcb.txt"
-	static rFuncs := "|getClipAt|getClipLoc|"
+	static rFuncs := "|getClipAt|getClipLoc|getVar|runFunction|"
 
 	fname := Substr(  D, l := Strlen(k)+1, ( Instr(D, "`n")?Instr(D, "`n"):Strlen(D)+1 ) -l  )
 	p := Substr( D, Instr(D, "`n") ? Instr(D, "`n")+1 : 200 )
@@ -21,6 +21,8 @@ Act_API(D, k){
 		r := API[fname](ps.1, ps.2, ps.3)
 	else if n=4
 		r := API[fname](ps.1, ps.2, ps.3, ps.4)
+	else if n=5
+		r := API[fname](ps.1, ps.2, ps.3, ps.4, ps.5)
 
 	if Instr(rFuncs, "|" fname "|")
 		FileAppend, % r, % cbF
@@ -191,6 +193,37 @@ class API
 		}
 	}
 
+	; runs any other function like choosechannelgui() , changeChannel()
+	runFunction(funcString){
+		return runFunc(funcString)
+	}
+
+	; runs the Label
+	runLabel(label){
+		gosub % ( IsLabel(label) ? label : "emptylabel" )
+	}
+
+	; sets a variable
+	setVar(var, value){
+		global
+		value := valueOf(value)
+		if Instr(var,".")
+		{
+			loop, parse, var,`.
+				$j%A_index% := Trim(A_LoopField) , $n := A_index-1
+			if $n=1
+				%$j1%[$j2] := value
+			if $n=2
+				%$j1%[$j2][$j3] := value
+		}
+		else %var% := value
+	}
+
+	;gets a variable value
+	getVar(var){
+		return valueOf("%" var "%")
+	}
+
 	; EXecute a section in the ClipjumpCustom.ini
 	ExecuteSection(secName){
 		customization_Run( CUSTOMS["_" secName] )
@@ -274,7 +307,10 @@ class API
 		ToolTip,,,, 7
 	}
 
+	;------------------------
 	;---- API HELPER FUNCS --	
+	;------------------------
+
 	getChInfo(c="", ret=1){
 		; returns obj full of channel information data
 		; ret=0 returns string

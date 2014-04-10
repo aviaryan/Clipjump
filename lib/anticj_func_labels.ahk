@@ -84,6 +84,35 @@ tryGetvar(varname, maxtries=100){
 	return ret
 }
 
+;Parses the string and converts the %....% to their respective values
+;From   https://github.com/aviaryan/autohotkey-scripts/blob/master/Functions/ValueOf.ahk
+
+Valueof(VarinStr){
+global
+local Midpoint, emVar, $j, $n
+	loop,
+	{
+		StringReplace, VarinStr, VarinStr,`%,`%, UseErrorLevel
+		Midpoint := ErrorLevel / 2
+		if Midpoint = 0
+			return ( emvar := VarinStr )
+		emVar := Substr(VarinStr, Instr(VarinStr, "%", 0, 1, Midpoint)+1, Instr(VarinStr, "%", 0, 1, Midpoint+1)-Instr(VarinStr, "%", 0, 1, Midpoint)-1)
+
+		if Instr(emVar, ".")
+		{
+			loop, parse, emVar,`.
+				$j%A_index% := Trim(A_LoopField) , $n := A_index-1
+			if $n=1
+				emVar := %$j1%[$j2]
+			if $n=2
+				emVar := %$j1%[$j2][$j3]
+		} 
+		else emVar := %emVar%
+
+		VarinStr := Substr(VarinStr, 1, Instr(VarinStr, "%", 0, 1, Midpoint)-1) emVar Substr(VarinStr, Instr(VarinStr, "%", 0, 1, Midpoint+1)+1)
+	}
+}
+
 ;Try getting a file onto Clipboard
 try_ClipboardfromFile(file, maxtries=100){
 	while !temp_ClipbrdLoaded
@@ -116,7 +145,6 @@ MakeClipboardAvailable(doreturn=1){
 ;	returns data types
 GetClipboardFormat(type=1){		;Thanks nnnik
 	Critical, On
-
  	DllCall("OpenClipboard", "int", "")
  	while c := DllCall("EnumClipboardFormats","Int",c?c:0)
 		x .= "," c
@@ -305,7 +333,7 @@ TooltipOff10:
 	ToolTip,,,, % ( Substr(A_ThisLabel, 0) == "f" ) ? 1 : RegExReplace(A_ThisLabel, "TooltipOff")
 	return
 
-
+emptylabel:
 keyblocker:
 	return
 

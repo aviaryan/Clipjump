@@ -1,0 +1,34 @@
+<html>
+<head>
+  <title>Clipjump : Common Format Plugin</title>
+  <link rel="stylesheet" href="../../Blogs.css" type="text/css">
+</head>
+
+<body>
+<h1>Common Formats Paste Format</h1>
+<b>version 0.1</b><br>
+<a href=https://raw.github.com/aviaryan/Clipjump/master/plugins/pformat.commonformats.ahk>Download from Github</a><br><br>
+
+'Common Formats' is a pformat plugin that lets you paste the clip with various inbuilt paste formattings. The 'pformat.commonformats.ahk' file can be edited to include more
+ formats.<br><br>
+
+ <h3>Using</h3>
+ Once you have selected the common format <a href="../basic_help.html#pformat">paste-format</a>, releasing Ctrl to paste will bring up the GUI. Use Up/Down keys or mouse to select 
+ your needed format and press 'Enter' or OK button to paste.<br>
+ You can press 'Esc' or simply close the GUI to cancel the paste operation.<br>
+ Selecting the <b>paste-format 'None'</b> will paste the original clip without making any changes.
+ <br><br>
+
+ <b>The Apply button</b> (Alt+A) applies the current changes made the the formatting to the clip to be pasted. Thus it helps you in applying multiple formats to a clip in 
+ the needed order. Note that the 'None' paste format will still paste the real original clip and the 'apply' won't be undertaken.
+ <br><br>
+
+ <h3>Porting an existing pformat to under Common Formats</h3>
+ To make any independent pformat a part of the common format, you can simply copy its code to the pformat.commonformats.ahk file. <br>
+ Then replace the main function name <code>plugin_pformat_name(</code> by <code>plugin_pformat_commonformats_name(</code> where 'name' is the name of that independent 
+ pformat.
+ <br><br>
+
+OR you can create a new format under the 'Common Formats' plugin. It should be easy provided you know <a href=http://autohotkey.com>AutoHotkey</a>. Just make sure
+ you name the new format function as <code>plugin_pformat_commonformats_MYNAME</code> where 'MYNAME' is the unique name of your format and this is what that will 
+ appear in the GUI. (Related: <a href=basics.html#class_pformat>pformat</a>)

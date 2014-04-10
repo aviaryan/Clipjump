@@ -170,7 +170,7 @@ updatePluginIncludes() {
 	{
 		if Instr(A_LoopFileName, "external.") = 1
 			continue
-		st .= "#Include, %A_ScriptDir%\plugins\" A_LoopFileName "`n"
+		st .= "#Include *i %A_ScriptDir%\plugins\" A_LoopFileName "`n"
 	}
 	FileAppend, % st, plugins\_registry.ahk
 }
@@ -206,10 +206,17 @@ loadPlugins() {
 				detobj["*"] := "plugins\external." name2 ".ahk" , PLUGINS["external"][name2] := detobj.Clone() 
 				, PLUGINS["<>"][A_index] := detobj.Clone()
 			else if name1 = pformat
-				detobj["*"] := "plugin_pformat_" name2 , PLUGINS["pformat"][name2] := detobj.Clone() 
-				, PLUGINS["<>"][A_index] := detobj.Clone()
+			{
+				detobj["*"] := "plugin_pformat_" name2
+				If IsFunc(detobj["*"]) 				; If function exists i.e. is included
+					PLUGINS["pformat"][name2] := detobj.Clone() , PLUGINS["<>"][A_index] := detobj.Clone()
+			}
 		}
-		else detobj["*"] := "plugin_" name1 , PLUGINS[name1] := detobj.Clone() , PLUGINS["<>"][A_Index] := detobj.Clone()
+		else {
+			detobj["*"] := "plugin_" name1
+			if IsFunc(detobj["*"])
+				PLUGINS[name1] := detobj.Clone() , PLUGINS["<>"][A_Index] := detobj.Clone()
+		}
 	}
 	; -- set def pformat
 	set_pformat()

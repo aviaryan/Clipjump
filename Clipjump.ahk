@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 10.7.8
+;@Ahk2Exe-SetVersion 10.8
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -42,7 +42,7 @@ global mainIconPath := FileExist("Clipjump.exe") ? "Clipjump.exe" : "icons/icon.
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "10.7.8"
+global VERSION := "10.8"
 global CONFIGURATION_FILE := "settings.ini"
 
 ini_LANG := ini_read("System", "lang")
@@ -1325,7 +1325,7 @@ Receive_WM_COPYDATA(wParam, lParam)
 {
 	global
     Local D
-    static k := "API:" , apif := "Act_API"
+    static k := "API:" , cmd := "cmd:" , apif := "Act_API"
 
    D := StrGet( NumGet(lParam + 2*A_PtrSize) )  ;unicode transfer
     if D is not Integer
@@ -1357,6 +1357,6 @@ Receive_WM_COPYDATA(wParam, lParam)
 #include %A_ScriptDir%\lib\settings gui plug.ahk
 #include %A_ScriptDir%\lib\history gui plug.ahk
 #include %A_ScriptDir%\lib\pluginManager.ahk
-#include %A_ScriptDir%\plugins\_registry.ahk
+#include *i %A_ScriptDir%\plugins\_registry.ahk
 
 ;------------------------------------------------------------------- X -------------------------------------------------------------------------------
