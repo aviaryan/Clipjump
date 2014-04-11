@@ -44,6 +44,10 @@
 				<param name="Local" value="docs/basic_help.html#pformat">
 				</OBJECT>
 			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Common Formats (paste format)">
+				<param name="Local" value="docs/plugins/plugin_commonformats.html">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
 				<param name="Name" value="Edit Clips in Paste mode">
 				<param name="Local" value="docs/basic_help.html#editclip">
 				</OBJECT>
@@ -173,6 +177,10 @@
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Creating your own plugin">
 			<param name="Local" value="docs/plugins/basics.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Public API">
+			<param name="Local" value="docs/devList.html#pubapi">
 			</OBJECT>
 	</UL>
 	<LI> <OBJECT type="text/sitemap">

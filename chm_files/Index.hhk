@@ -22,6 +22,10 @@
 		<param name="Local" value="docs/faq.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Public API">
+		<param name="Local" value="docs/devList.html#pubapi">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Clipjump">
 		<param name="Local" value="clipjump.html">
 		</OBJECT>

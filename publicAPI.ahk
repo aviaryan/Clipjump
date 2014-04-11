@@ -28,6 +28,7 @@ msgbox % cj.version
 */
 
 ;cj := new Clipjump()
+;cj.runFunction("set_pformat(NO-FORMATTING)")
 ;msgbox % cj.author_page
 
 class Clipjump
@@ -66,7 +67,7 @@ class Clipjump
 	/*
 	Use -
 		cj := new Clipjump()
-		cj["pastemodekey.y"] := "^z"
+		cj["pastemodekey.z"] := "^y"
 		cj.MYVAR := "value"
 	*/
 	__Set(var, value){
@@ -118,7 +119,12 @@ CjControl(ByRef Code)
     SetTitleMatchMode %Prev_TitleMatchMode%
 
     while !FileExist(A_temp "\clipjumpcom.txt")
-       sleep 50
+    {
+    	if (A_index>40)		;2 secs total
+    		if !CjControl_check()
+    			return -1
+       	sleep 50
+   	}
     FileDelete % A_temp "\clipjumpcom.txt"
 
     return 1        ;True
