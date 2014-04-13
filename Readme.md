@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/aviaryan/clipjump.png?label=ready&title=Ready)](https://waffle.io/aviaryan/clipjump)
 ## [Clipjump](http://clipjump.sourceforge.net)
 A Magical Clipboard Manager  
   
