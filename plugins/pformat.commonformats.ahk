@@ -45,7 +45,7 @@ plugin_pformat_commonformats_UpperCase(zin){
 
 plugin_pformat_commonformats_RegexReplace(zin, zps){
 	STORE["commonformats_RegexReplace"] := "Write Search Needle in first line and replacement string in second line in Input Field. The Replace is based on Autohotkey's"
-	 . " RegexReplace(). Learn more at "
+	 . " RegexReplace(). Learn more at http://www.autohotkey.com/docs/commands/RegExReplace.htm"
 
 	loop, parse, zps, `n, `r
 		zps%A_index% := A_LoopField
