@@ -3,13 +3,14 @@
 ;@Plugin-Description Only works for Text ([Text] or [File/Folder]) type data.
 ;@Plugin-Author Avi
 ;@Plugin-Tags pformat
-;@Plugin-version 0.1
+;@Plugin-version 0.3
 ;@Plugin-Previewable 0
 
 
 ;------------------------------------------------------------- Paste Formats ------------------------------------
 
 plugin_pformat_commonformats_None(zin){
+	STORE["commonformats_None"] := "This pastes the original clip rejecting any change made to the clip."
 	return zin , STORE.ClipboardChanged := 0
 }
 
@@ -42,22 +43,40 @@ plugin_pformat_commonformats_UpperCase(zin){
 	return zout , STORE.ClipboardChanged := 1
 }
 
+plugin_pformat_commonformats_RegexReplace(zin, zps){
+	STORE["commonformats_RegexReplace"] := "Write Search Needle in first line and replacement string in second line in Input Field. The Replace is based on Autohotkey's"
+	 . " RegexReplace(). Learn more at "
+
+	loop, parse, zps, `n, `r
+		zps%A_index% := A_LoopField
+	try 
+		zout := RegExReplace(zin, zps1, zps2)
+	catch 
+		zout := zin
+	return zout , STORE.ClipboardChanged := 1
+}
 
 ;--------------------------------- The Plugin File Starts , end of Paste Formats ---------------------------------
 ;-----------------------------------------------------------------------------------------------------------------
 
 
 plugin_pformat_commonformats(zin){
-	static zchosenformat, zedit
+	static zchosenformat, zedit, zinputfield, zinfo
 	zDone := zOut := ""
 
 	Gui, commonformat:New
 	Gui, +AlwaysOnTop +ToolWindow -MaximizeBox
 
-	Gui, Add, ListBox, x5 y5 r15 w120 vzchosenformat gzchosenformat section, % plugin_pformat_commonformats_listfunc(A_ScriptDir "\plugins\pformat.commonformats.ahk")
-	Gui, Add, Edit, x+10 w400 h200 vzedit +multi, % zin
-	Gui, Add, Button, xs y+30 +Default, OK
+	Gui, Add, ListBox, x5 y5 r15 w140 vzchosenformat gzchosenformat section, % plugin_pformat_commonformats_listfunc(A_ScriptDir "\plugins\pformat.commonformats.ahk")
+	Gui, Add, Edit, x+10 w500 h200 vzedit +multi, % zin
+
+	Gui, Add, GroupBox, xs y+5 h70 w650, Info
+	Gui, Add, Edit, xp+5 yp+15 w640 h50 +ReadOnly -Border vzinfo,
+
+	Gui, Add, Button, xs y+40 +Default, OK
 	Gui, Add, Button, x+30 yp gplugin_pformat_commonformats_apply, &Apply
+	Gui, Add, Text, x+55 yp-15, Input Field
+	Gui, Add, Edit, x+10 yp-2 w441 h40 gzchosenformat vzinputfield, 
 	Gui, commonformat:Show,, Choose Format
 
 	while !zDone
@@ -70,7 +89,8 @@ plugin_pformat_commonformats_dopaste:
 	Gui, commonformat:Submit, nohide
 	If zchosenformat=
 		zchosenformat := "None"
-	zOut := Func("plugin_pformat_commonformats_" zchosenformat).(zin)
+	zFobj := Func("plugin_pformat_commonformats_" zchosenformat)
+	zOut := ( zFobj.MaxParams > 1 ) ? zFobj.(zin, zinputfield) : zFobj.(zin)
 	zDone := 1
 	return
 
@@ -93,15 +113,17 @@ plugin_pformat_commonformats_end:
 
 zchosenformat:
 	Gui, commonformat:Submit, nohide
+
 	if A_GuiEvent=DoubleClick
 		gosub commonformatbuttonOK
 	ELSE {
 		if zchosenformat=
 			zchosenformat := "None"
-		zchosenformat := "plugin_pformat_commonformats_" zchosenformat
-		zoutput := %zchosenformat%(zin)
+		zFobj := Func("plugin_pformat_commonformats_" zchosenformat)
+		zoutput := ( zFobj.MaxParams > 1 ) ? zFobj.(zin, zinputfield) : zFobj.(zin)
 		STORE.ClipboardChanged := 0 		; remove any clipboard change
 		GuiControl, commonformat:, Edit1, % zoutput
+		GuiControl, commonformat:, Edit2, % STORE["commonformats_" zchosenformat]
 	}
 	return
 
@@ -130,23 +152,3 @@ plugin_pformat_commonformats_listfunc(file){
 	return Trim( RegExReplace(lst, "`n", "|"),"|" )
 }
 
-
-;plugin_pformat_commonformats_Delimiters(zin){
-;	zobj := {"{each}": "", "{none}": ""}
-;	zinpDel := inputbox("Input Delimiter", "What is the input delimiter in this clip?`nLeave 'blank' for Linefeed/Linebreak/Enter"
-;		. "`nWrite {each} to separate each character")
-;	if zinpDel=
-;		zinpDel := "`n"
-;	if zinpDel={each}
-;		zinpDel := ""
-
-;	zoutpDel := inputbox("Output Delimiter", "By what do you want the output to be delimited/separated ?`nLeave blank for Enter`nWrite {none} to make output"
-;	. " delimited by" . " nothing")
-;	if zoutpDel=
-;		zoutpDel := "`r`n"
-;	if zoutpDel={none}
-;		zoutpDel := ""
-;	loop, parse, zinpDel, % zinpDel, `r
-;		zout .= A_LoopField zoutpDel
-;	return RTrim(zout, zoutpDel) , STORE.ClipboardChanged := 1
-;}
