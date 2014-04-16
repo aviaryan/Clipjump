@@ -29,7 +29,7 @@ Returns >
 ;return
 
 
-TT_Console( msg, keys, x="", y="", whichtooltip=1, font_options="", font_face="" ) {
+TT_Console(msg, keys, x="", y="", whichtooltip=1, font_options="", font_face="", followMouse=0) {
 
 	;create font
 	if (font_options) or (font_face)
@@ -41,12 +41,7 @@ TT_Console( msg, keys, x="", y="", whichtooltip=1, font_options="", font_face=""
 	Tooltip, % msg, % x, % y, % whichtooltip
 	;set font
 	if createfont
-	{
-		;WinWait ahk_class tooltips_class32
-		;win := WinExist()
 		gosub TT_Console_SetFont
-		
-	}
 
 	;create hotkeys
 	loop, parse, keys, %A_space%, %a_space%
@@ -54,7 +49,16 @@ TT_Console( msg, keys, x="", y="", whichtooltip=1, font_options="", font_face=""
 		;Hotkey, % A_LoopField, TT_Console_Check, On
 
 	while !is_TTkey_pressed
-		sleep 20
+	{
+		if followMouse
+		{
+			Tooltip, % msg,,, % whichtooltip
+			if createfont
+				gosub TT_Console_SetFont
+			sleep 200
+		}
+		else sleep 20
+	}
 
 	ToolTip,,,, % whichtooltip
 

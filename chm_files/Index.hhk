@@ -14,10 +14,6 @@
 		<param name="Local" value="contact.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Help Contents">
-		<param name="Local" value="docs/index.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="FAQ">
 		<param name="Local" value="docs/faq.html">
 		</OBJECT>

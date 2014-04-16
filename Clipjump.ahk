@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 10.8
+;@Ahk2Exe-SetVersion 10.9
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -42,7 +42,7 @@ global mainIconPath := FileExist("Clipjump.exe") ? "Clipjump.exe" : "icons/icon.
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "10.8"
+global VERSION := "10.9"
 global CONFIGURATION_FILE := "settings.ini"
 
 ini_LANG := ini_read("System", "lang")
@@ -126,6 +126,7 @@ If !FileExist(CONFIGURATION_FILE)
 else if (ini_Version != VERSION)
 {
 	save_default(0) 			;0 corresponds to selective save
+	FileDelete, lib\classTool.ahk 		; REMOVED
 	gosub Reload 		; Update plugin includes with what the user has incase he updates his Clipjump
 }
 
@@ -133,7 +134,7 @@ else if (ini_Version != VERSION)
 ;Global Ini declarations
 global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_IsChannelMin := 1 , CopyMessage
 		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, channel_K, onetime_K, paste_k, actionmode_k, ini_is_duplicate_copied, ini_formatting
-		, ini_CopyBeep , beepFrequency , ignoreWindows, ini_defEditor, ini_defImgEditor, ini_def_Pformat, pluginManager_k
+		, ini_CopyBeep , beepFrequency , ignoreWindows, ini_defEditor, ini_defImgEditor, ini_def_Pformat, pluginManager_k, holdClip_K, ini_PreserveClipPos
 
 ; (search) paste mode keys 
 global pastemodekey := {} , spmkey := {}
@@ -198,6 +199,7 @@ hkZ(history_K, "History")
 hkZ(Copyfiledata_K, "CopyFileData") , hkZ(channel_K, "channelGUI")
 hkZ(onetime_K, "oneTime") , hkZ(pitswap_K, "pitswap")
 hkZ(actionmode_K, "actionmode") , hkZ(pluginManager_k, "pluginManagerGUI")
+hkZ(holdClip_K, "holdClip")
 ;more shortcuts
 hkZ(windows_copy_k, "windows_copy") , hkZ(windows_cut_k, "windows_cut")
 ;Environment
@@ -681,28 +683,38 @@ clipSaver() {
 	if test=
 		return (HASCOPYFAILED := 1) * ablankvar 			;actually the return doesnt matter here
 
-	Loop, %CURSAVE%
-	{
-		tempNo := CURSAVE - A_Index + 1
-		IfExist, %FIXATE_dir%\%tempNo%.fxt 		; manage the fixed clips so they stay intact
-		{
-			t_TempNo := tempNo + 1
-			FileMove, %CLIPS_dir%\%t_TempNo%.avc,	%CLIPS_dir%\%t_TempNo%_a.avc
-			FileMove, %CLIPS_dir%\%tempNo%.avc,		%CLIPS_dir%\%t_TempNo%.avc
-			FileMove, %CLIPS_dir%\%t_TempNo%_a.avc,	%CLIPS_dir%\%tempNo%.avc
-			z := CDS[CN.NG][t_TempNo] , CDS[CN.NG][t_TempNo] := CDS[CN.NG][tempNo] , CDS[CN.NG][tempNo] := z
-			IfExist, %THUMBS_dir%\%tempNo%.jpg
-			{
-				FileMove, %THUMBS_dir%\%t_TempNo%.jpg,	%THUMBS_dir%\%t_TempNo%_a.jpg
-				FileMove, %THUMBS_dir%\%tempNo%.jpg,	%THUMBS_dir%\%t_TempNo%.jpg
-				FileMove, %THUMBS_dir%\%t_TempNo%_a.jpg, %THUMBS_dir%\%tempNo%.jpg
-			}
-			FileMove, %FIXATE_dir%\%tempNo%.fxt, %FIXATE_dir%\%t_TempNo%.fxt
-		}
-	}
-
+	manageFIXATE(CURSAVE, CN.NG, CN.N)
 	return tempCB
 }
+
+manageFIXATE(clipAdded, channel, Dir_constant){
+	; manages how Fixed clip are re-positioned when a new clip is added disturing the order.
+	; It is necessary for the new clip to be added at Clip 1 position
+	path_CLIPS := "cache\clips" Dir_constant
+	path_FIXATE := "cache\fixate" Dir_constant
+	path_THUMBS := "cache\thumbs" Dir_constant
+
+	Loop, %clipAdded%
+	{
+		tempNo := clipAdded - A_Index + 1
+		IfExist, %path_FIXATE%\%tempNo%.fxt
+		{
+			t_TempNo := tempNo + 1
+			FileMove, %path_CLIPS%\%t_TempNo%.avc,	%path_CLIPS%\%t_TempNo%_a.avc
+			FileMove, %path_CLIPS%\%tempNo%.avc,		%path_CLIPS%\%t_TempNo%.avc
+			FileMove, %path_CLIPS%\%t_TempNo%_a.avc,	%path_CLIPS%\%tempNo%.avc
+			z := CDS[channel][t_TempNo] , CDS[channel][t_TempNo] := CDS[channel][tempNo] , CDS[channel][tempNo] := z
+			IfExist, %path_THUMBS%\%tempNo%.jpg
+			{
+				FileMove, %path_THUMBS%\%t_TempNo%.jpg,	%path_THUMBS%\%t_TempNo%_a.jpg
+				FileMove, %path_THUMBS%\%tempNo%.jpg,	%path_THUMBS%\%t_TempNo%.jpg
+				FileMove, %path_THUMBS%\%t_TempNo%_a.jpg, %path_THUMBS%\%tempNo%.jpg
+			}
+			FileMove, %path_FIXATE%\%tempNo%.fxt, %path_FIXATE%\%t_TempNo%.fxt
+		}
+	}
+}
+
 
 fixCheck() {
 	IfExist, %FIXATE_dir%\%TEMPSAVE%.fxt 	;TEMPSAVE is global
@@ -807,6 +819,8 @@ ctrlCheck:
 
 		Critical, Off
 		; The below thread will be interrupted when the Clipboard command is executed. The ONC label will exit as CALLER := 0 in the situtaion
+		if !ini_PreserveClipPos
+			TEMPSAVE := cursave 		; not preserve active clip
 
 		if ctrlref in cancel, delete, DeleteAll
 			if !IScurCBACTIVE 						;dont disturb current clipboard if it is already active
@@ -830,6 +844,8 @@ endPastemode:
 	SetTimer, ctrlCheck, Off
 	if SPM.ACTIVE
 		gosub SPM_dispose
+	if !ini_PreserveClipPos
+		TEMPSAVE := cursave
 	API.blockMonitoring(1)
 	if !IScurCBACTIVE
 		try Clipboard := oldclip_data
@@ -889,6 +905,35 @@ pitSwap:
 	else
 		CN.pit_NG := CN.NG , changeChannel(temp)
 		, autoTooltip("PitSwap Activated", 500)
+	return
+
+holdClip:
+	; cut - make own by clipjump custom ---- send = this, then del
+	API.blockMonitoring(1) , ONCLIPBOARD := 0
+	Send % ( STORE.holdClip_send ? STORE.holdClip_send : "^{vk43}" )
+	STORE.holdClip_send := "^{vk43}" 	; change it quickly
+	while !ONCLIPBOARD
+	{
+		if A_Index>20
+		{
+			API.blockMonitoring(0)
+			return
+		}
+		sleep 50
+	}
+	holdclip_continue := 1 , hkZ( ( paste_k ? "$^" paste_k : emptyvar ) , "Paste", 0) 	; disable paste mode
+	try temp_cb := trygetVar("Clipboard")
+	keyPressed := TT_Console(TXT.TIP_holdclip "`n`n" Substr(temp_cb, 1, 200) " ...", "Insert Esc",,,,,, 1)
+	if keyPressed = Insert
+	{
+		try t_cb := ClipboardAll
+		try Clipboard := ""
+	}
+	API.blockMonitoring(0)
+	if keyPressed = Insert
+		try Clipboard := t_cb
+	hkZ( ( paste_k ? "$^" paste_k : emptyvar ) , "Paste")
+	EmptyMem()
 	return
 
 ;---------------     Clips management based functions       ------------------
@@ -1338,6 +1383,7 @@ Receive_WM_COPYDATA(wParam, lParam)
     while !FileExist(A_temp "\clipjumpcom.txt")
     	FileAppend, a,% A_temp "\clipjumpcom.txt"
 
+    EmptyMem()
     return 1
 }
 
@@ -1347,7 +1393,6 @@ Receive_WM_COPYDATA(wParam, lParam)
 #Include %A_ScriptDir%\lib\Customizer.ahk
 #Include %A_ScriptDir%\lib\API.ahk
 #Include %A_ScriptDir%\lib\translations.ahk
-#Include %A_ScriptDir%\lib\classtool.ahk
 #Include %A_ScriptDir%\lib\multi.ahk
 #Include %A_ScriptDir%\lib\aboutgui.ahk
 #include %A_ScriptDir%\lib\TT_Console.ahk

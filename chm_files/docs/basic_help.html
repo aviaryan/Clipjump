@@ -9,7 +9,7 @@
 <body>
 <br>
 
-<h4><a name=bu>Getting Started</a></h4><br>
+<h4><a name=bu>First Steps</a></h4><br>
 <ul>
 <li>After Downloading Clipjump, unzip it and run Clipjump.exe .<br>
 It's a portable application so no installation is needed.<br>
@@ -102,13 +102,24 @@ on the fixed clip will remove the FIX from it and the "[FIXED]" from the tip wil
 <a href="../images/fixate.png"><img src="../images/fixate.png" border="0"></a><br><br>
 <strong class="super">Note that the DeleteAll option will delete FIXED Clips too.</strong><br><hr><br>
 
+<h3><a name=holdclip>Copy Clipboard to Buffer (Hold Clip)</a></h3>
+<i>[v10.9+]</i> Hold Clip feature allows you to copy clipboard to a buffer location from where you can either paste the data or copy it to the currently active channel.
+<br>No shortcut for holdclip is assigned by default but the option has been provided in the Settings Editor. Once you have created a shortcut for holdclip, use it copy 
+the selected text/file/folder/<i>anything</i> to the buffer.<br>
+Tip - Want HoldClip feature to cut rather than copy data to buffer. Try this <a href=custom.html>Customization</a> --
+<pre>[cut_to_buffer]
+bind = Ctrl + Win + X
+STORE.holdClip_send = ^{vk58}
+; virtual key 58 is X , so ^x = Ctrl+X
+run = holdclip</pre>
+<br><br>
 
 <h3><a name=path>Copying Paths to Clipjump</a></h3>
 <ul>
 <li>Activating the Action Mode and then C will copy path(s) of selected files in all file managers including Windows Explorer.<br>
 <a href="../images/path.png"><img src="../images/path.png" border="0"></a>
 <li>Using Action Mode and then X will copy path of current opened folder in all file managers including Windows Explorer. You can also create an independent shortcut 
-for this function in the Settings Editor. 
+for this function in the Settings Editor.<br>
 </ul>
 <hr><br><br>
 
@@ -128,13 +139,13 @@ Simply open the editor and look for the <code>Paste Mode(Ctrl +..)</code> value 
 <h3><a name=ot>One Time Stop</a></h3>
 Many a times you have applications that use Clipboard's common transfer to extract data from various locations.
 These apps can be a headache when used with as consistent a tool as Clipjump. <br>
-The <b>One Time Stop</b> feature just solves this problem. Available with a configurable independent shortcut which is by default unassigned, 
-you can call it once to make Clipjump automatically ignore the last data and linked content that is transferred to System Clipboard and so Clipjump. 
+The <b>One Time Stop</b> feature just solves this problem. Available with O key in Action Mode,
+you can call it once to make Clipjump automatically ignore the next data and linked content that is transferred to System Clipboard and so Clipjump. 
 In this period, what really happens is that the Clipjump Clipboard Monitoring is 
-deactivated , a feature which can be controlled via <a href="../clipjumpcontroller.html">Clipjump Controller</a>. <br> 
+deactivated.<br>
 <strong class=super>NOTE</strong> - When Clipboard Monitoring is disabled (as in One Time Stop) , Clipjump's tray icon will become dark.  
 <br><br>
-<strong class=super>WARNING</strong> - <b>One Time Stop</b> is deactivated when Paste Mode is accessed in the <i>ignore</i> period.
+<strong class=super>WARNING</strong> - <b>One Time Stop</b> is deactivated when Paste Mode is accessed in the <i>one time stop activated</i> period.
 <br><br><br>
 
 <a name="winclip">

@@ -42,13 +42,15 @@ gui_Settings()
 	Gui, Add, Checkbox, xs Checked%ini_CopyBeep% 		vnew_copyBeep 			gchkbox_copybeep, 		% TXT.SET_copybeep
 	Gui, Add, Checkbox, xs Checked%ini_IsMessage%		vnew_IsMessage			gchkbox_IsMessage,		% TXT.SET_ismessage
 	Gui, Add, Checkbox, xs Checked%ini_KeepSession%		vnew_KeepSession		gchkbox_KeepSession,	% TXT.SET_keepsession
+	Gui, Add, Checkbox, xs Checked%ini_PreserveClipPos%		vnew_PreserveClipPos 	gsettingsChanged, 	% TXT.SET_keepactivepos
 
-	Gui, Add, Text, xs y+20, % TXT.SET_pformat 		; the y param is not needed but to make it symmetrical
+	Gui, Add, Text, xs y+10, % TXT.SET_pformat 		; the y param is not needed but to make it symmetrical
 	; Build pformats list
 	tempLst := "-original-|" (ini_def_pformat="" ? "|" : "")
 	for tempK, tempV in PLUGINS.pformat
 		tempLst .= tempV["Name"] "|"     ( (ini_def_pformat == tempV["Name"]) ? "|" : "" ) 
-	Gui, Add, DropDownList, % "x" left_size-110 " w110 yp-2  r5	vnew_default_pformat 		gdropdown_pformat",		% tempLst
+	Gui, Add, DropDownList, % "x" left_size-110 " w110 yp-3  r5	vnew_default_pformat 		gdropdown_pformat",		% tempLst
+
 
 	;---- Clipboard H
 	Gui, Add, GroupBox, % "xm y253 w" left_size " h74",	% TXT.SET_cb  ;
@@ -75,8 +77,8 @@ gui_Settings()
 	Gui, Add, Hotkey,	x%x_ofhotkeys% yp-3 vcfiled_K   ghotkey_cfiled, % Copyfiledata_K
 	Gui, Add, Text,		xs y+8,		% TXT.SET_chnl
 	Gui, Add, Hotkey,	x%x_ofhotkeys% yp-3 vchnl_K		ghotkey_chnl, % channel_K
-	Gui, Add, Text,		xs y+8,		% TXT._ot
-	Gui, Add, Hotkey,	x%x_ofhotkeys% yp-3 vot_K		ghotkey_ot, % onetime_K
+	Gui, Add, Text,		xs y+8,		% TXT.SET_holdclip
+	Gui, Add, Hotkey,	x%x_ofhotkeys% yp-3 vhldClip_K		ghotkey_holdClip, % holdClip_K
 	Gui, Add, Text, 	xs y+8, 	% TXT.PLG__name
 	Gui, Add, Hotkey, 	x%x_ofhotkeys% yp-3 vplugM_K 	ghotkey_plugM, % pluginManager_K
 
@@ -114,9 +116,10 @@ gui_Settings()
 	hkZ(Copyfolderpath_K, "shortcutblocker_settings", 1)
 	hkZ(Copyfiledata_K, "shortcutblocker_settings", 1)
 	hkZ(channel_K, "shortcutblocker_settings", 1)
-	hkZ(onetime_K, "shortcutblocker_settings", 1)
+	hkZ(holdclip_K, "shortcutblocker_settings", 1)
 	hkZ(pitswap_K, "shortcutblocker_settings", 1)
 	hkZ(actionmode_k, "shortcutblocker_settings", 1)
+	hkz(pluginManager_K, "shortcutblocker_settings", 1)
 	Hotkey, If
 	#If
 	Hotkey, If
@@ -137,6 +140,7 @@ chkbox_limitMaxClips:
 		GuiControl, Enable, new_Threshold
 	}
 	; there isn't a return on purpose
+settingsChanged:
 edit_MaxClips:
 updown_MaxClips:
 edit_Threshold:
@@ -159,6 +163,7 @@ chkbox_ischannelmin:
 hotkey_pitswp:
 hotkey_actmd:
 hotkey_plugM:
+hotkey_holdClip:
 	GuiControl, Enable, settingsButtonApply
 	settingsHaveChanged := true
 	return
@@ -243,10 +248,11 @@ WM_MOUSEMOVE()	; From the help file
 	cfilep_K_TT := TXT.SET_T_cfilep
 	cfolderp_K_TT := TXT.SET_T_cfolderp
 	cfiled_K_TT := TXT.SET_T_cfiled
-	OT_K_TT := TXT.SET_T_ot
+	hldClip_K_TT := TXT.SET_T_holdClip
 	PITSWP_K_TT := TXT.SET_T_pitswp
 	NEW_ischannelmin_TT := TXT.SET_T_ischannelmin
 	plugM_k_TT := TXT.SET_t_PLUGM
+	new_PreserveClipPos_TT := TXT.SET_T_keepactivepos
 
 	;---------------------------------------------
 
@@ -292,12 +298,19 @@ load_Settings(all=false)
 	IniRead, Copyfolderpath_K,% CONFIGURATION_FILE, Shortcuts, Copyfolderpath_K
 	IniRead, Copyfiledata_K,% CONFIGURATION_FILE, Shortcuts, Copyfiledata_K
 	Iniread, channel_K,% CONFIGURATION_FILE, Shortcuts, channel_K
-	Iniread, onetime_K,% CONFIGURATION_FILE, Shortcuts, onetime_K
+	;Iniread, onetime_K,% CONFIGURATION_FILE, Shortcuts, onetime_K
 	Iniread, paste_K, % CONFIGURATION_FILE, Shortcuts, paste_K
 	Iniread, Actionmode_K, % CONFIGURATION_FILE, Shortcuts, actionmode_k
 
 	Iniread, pitswap_K, % CONFIGURATION_FILE, Channels, pitswap_K
 	Iniread, ini_IsChannelMin,% CONFIGURATION_FILE, Channels, IsChannelMin
+
+	holdClip_K := ini_read("Shortcuts", "holdClip_K")
+	ini_PreserveClipPos := ini_read("Main", "ini_PreserveClipPos")
+	pluginManager_K := ini_read("Shortcuts", "pluginManager_K")
+	ini_def_pformat := ini_read("Main", "default_pformat")
+
+	; // below are INI only settings , not loaded by settings editor
 
 	if (all) {
 		Iniread, history_K,  % CONFIGURATION_FILE, Advanced, history_K
@@ -324,14 +337,13 @@ load_Settings(all=false)
 		priority := ini_read("System", "Priority")
 		try Process, Priority,, % Priority
 		;v10.7.3
-		ini_def_pformat := ini_read("Main", "default_pformat")
-		pluginManager_K := ini_read("Shortcuts", "pluginManager_K")
 		ini_defImgEditor := (t:=ini_read("System", "default_image_editor")) ? t : "mspaint.exe"
 	}
 
 }
 
 save_Settings()
+; Works for the Settings Editor
 ; Preconditions: New settings are saved in variables beginning in "new_", corresponding to each setting.
 ; Postconditions: Settings in variables starting in "new_" are saved in the configuration file in the corresponding key.
 {
@@ -350,7 +362,6 @@ save_Settings()
 	IniWrite, %Cfolderp_K%,% CONFIGURATION_FILE, Shortcuts, Copyfolderpath_K
 	IniWrite, %Cfiled_K%  ,% CONFIGURATION_FILE, Shortcuts, Copyfiledata_K
 	Iniwrite, %chnl_K%	  ,% CONFIGURATION_FILE, Shortcuts, channel_K
-	IniWrite, %ot_K% 	  ,% CONFIGURATION_FILE, Shortcuts, onetime_K
 	Iniwrite, %pst_k%	  ,% CONFIGURATION_FILE, Shortcuts, paste_K
 	IniWrite, %actmd_k%   ,% CONFIGURATION_FILE, Shortcuts, actionmode_k
 
@@ -359,13 +370,15 @@ save_Settings()
 	; v10.7.3
 	ini_write("Main", "default_pformat", new_default_pformat="-original-" ? "" : new_default_pformat, 0) 	; trim reqd to remove space
 	ini_write("Shortcuts", "pluginManager_K", plugM_k, 0)
+	ini_write("Shortcuts", "holdClip_K", hldClip_K, 0)
+	ini_write("Main", "ini_PreserveClipPos", new_PreserveClipPos, 0)
 
 	;Disable old shortcuts
 	  hkZ(Copyfilepath_K, 	"CopyFile", 0)
 	, hkZ(Copyfolderpath_K, "CopyFolder", 0) 
 	, hkZ(Copyfiledata_K,   "CopyFileData", 0)
 	, hkZ(channel_K,		"channelGUI",  0)
-	, hkZ(onetime_K,		"onetime",		0)
+	, hkZ(holdClip_K,		"holdClip",		0)
 	, hkZ(paste_k ? "$^" paste_k : emptyvar, "paste", 	0)
 	, hkZ(pitswap_K, 	   "PitSwap", 0)
 	, hkZ(actionmode_K, 	"actionmode", 0)
@@ -376,7 +389,7 @@ save_Settings()
 	, hkZ(Cfolderp_K, "CopyFolder", 1)
 	, hkZ(Cfiled_K,   "CopyFileData", 1)
 	, hkZ(chnl_K, "channelGUI",  1)
-	, hkZ(ot_K,	"onetime",		1)
+	, hkZ(hldClip_K,	"holdClip",		1)
 	, hkZ(pst_k ? "$^" pst_k : emptyvar, "paste", CLIPJUMP_STATUS )
 	, hkZ(pitswp_K, "PitSwap", 1)
 	, hkZ(actmd_k, "actionmode", 1)
@@ -451,6 +464,9 @@ save_Default(full=1){
 	ini_write("Shortcuts", "pluginManager_K", "")
 	; v10.7.8
 	ini_write("System", "default_image_editor", "mspaint.exe")
+	; v10.9
+	ini_write("Shortcuts", "holdClip_K", "")
+	ini_write("Main", "ini_PreserveClipPos", 1)
 }
 
 Ini_write(section, key, value="", ifblank=true){
@@ -503,6 +519,7 @@ validate_Settings()
 
 	ini_IsImageStored := ini_IsImageStored = 0 ? 0 : 1
 	ini_DaysToStore := ini_DaysToStore < 0 ? 0 : ini_DaysToStore
+	ini_PreserveClipPos := ini_PreserveClipPos ? 1 : 0
 
 	if !ini_DaysToStore
 	{

@@ -76,29 +76,34 @@ class API
 		if clip =
 			clip := c_info.realTEMPSAVE
 		else clip := c_info.realCURSAVE - clip + 1
-
-		f := "cache\clips" c_info.p "\" clip ".avc"
-
 		nc_info := this.getChInfo(new_channel)
+
+		origClip := "cache\clips" c_info.p "\" clip ".avc" , origThumb := "cache\thumbs" c_info.p "\" clip ".jpg"
+		newClip := "cache\clips" nc_info.p "\" nc_info.realCURSAVE + 1 ".avc"
+		newThumb := "cache\thumbs" nc_info.p "\" nc_info.realCURSAVE + 1 ".jpg" 
+
 		; process
 		if flag
 		{
-			FileCopy, % f, % "cache\clips" nc_info.p "\" nc_info.realCURSAVE + 1 ".avc", 1
+			FileTransfer(origClip, newClip) , FileTransfer(origThumb, newThumb)
 			CDS[new_channel][nc_info.realCURSAVE+1] := CDS[channel][clip]
+			manageFIXATE( nc_info.realCURSAVE + 1, new_channel, nc_info.p)
 		}
 		else
 		{
-			Filemove, % f, % "cache\clips" nc_info.p "\" nc_info.realCURSAVE + 1 ".avc", 1
-			CDS[new_channel][nc_info.realCURSAVE+1] := CDS[channel][clip] , CDS[channel][clip] := ""
+			FileTransfer(origClip, newClip, 0) , FileTransfer(origThumb, newThumb, 0)
+			FileDelete, % "cache\fixate" c_info.p "\" clip ".fxt"
 
+			CDS[new_channel][nc_info.realCURSAVE+1] := CDS[channel][clip] , CDS[channel][clip] := ""
 			c_Folder1 := "cache\clips" c_info.p "\" , c_Folder2 := "cache\fixate" c_info.p "\" , c_Folder3 := "cache\thumbs" c_info.p "\"
 			loop % c_info.realCURSAVE-clip
 			{
 				FileMove, % c_Folder1 clip+A_Index ".avc", % c_Folder1 clip+A_Index-1 ".avc", 1
-				FileMove, % c_Folder2 clip+A_Index ".txt", % c_Folder2 clip+A_index-1 ".txt", 1
+				FileMove, % c_Folder2 clip+A_Index ".fxt", % c_Folder2 clip+A_index-1 ".fxt", 1
 				FileMove, % c_Folder3 clip+A_Index ".jpg", % c_Folder3 clip+A_index-1 ".jpg", 1
 				CDS[channel][clip+A_index-1] := CDS[channel][clip+A_index] , CDS[channel][clip+A_index] := ""
 			}
+			manageFIXATE( nc_info.realCURSAVE + 1, new_channel, nc_info.p )
 		}
 		; fix vars
 		CN["CURSAVE" nc_info.p] += 1

@@ -31,19 +31,19 @@ It gives power to-
 <h3>Basic commands</h3>
 The Ini can contain multiple sections ([....]) which may use the following commands in needed order to execute them one by one.
 <ul>
-	<li>run - run a label or function
-	<li>bind - bind a hotkey (shortcut) to a section
-	<li>tip - show a tooltip with text
-	<li>send - sends or stimulates text
+	<li><a href=#ex1>run</a> - run a label or function
+	<li><a href=#ex1>bind</a> - bind a hotkey (shortcut) to a section
+	<li><a href=#ex1>tip</a> - show a tooltip with text
+	<li><a href=#send_ex>send</a> - sends or stimulates text
 	<li>sleep - wait for time in milliseconds
-	<li>noautorun=1 - use it to prevent autoRun of a section at clipjump startup
+	<li><a href=#noautorun_ex>noautorun=1</a> - use it to prevent autoRun of a section at clipjump startup
 </ul>
 Besides this you can also change the inner variables of Clipjump just by using a variable = value syntax.<br>
 Some of the most common variables needed to work highly requested features have been given below.<br>
 Go through them as a tutorial as they contain important information about the correct syntax and usage.<br>
 <strong class=super>Note</strong> - Restart Clipjump after making changes in ClipjumpCustom.ini to take them into effect.<br><br>
 
-<h4>Example 1 (Shortcut to toggle Incognito Mode)</h4>
+<h4><a name=ex1>Example 1 (Shortcut to toggle Incognito Mode)</a></h4>
 <pre class="brush: ini;">
 [toggle_incognito]
 bind=Win+Alt+I
@@ -52,9 +52,10 @@ tip=Incognito Mode toggled
 </pre>
 The above code uses 3 commands, bind, run and tip.<br>
 <ol>
-	<li>Bind creates a shortcut for the section meaning that the section will not <b>auto-execute at Clipjump start.</b> Here that shortcut is <code>Win + Alt + I</code>.
-	<li>run runs the label 'incognito' inside Clipjump which is responsible for toggling incognito mode.
-	<li>tip shows a tooltip when this custom function is run. Here the tip shown will contain the text 'Incognito Mode toggled'.
+	<li><code>Bind</code> creates a shortcut for the section meaning that the section will not <b>auto-execute at Clipjump start.</b>
+	Here that shortcut is <code>Win + Alt + I</code>.
+	<li><code>run</code> runs the label 'incognito' inside Clipjump which is responsible for toggling incognito mode.
+	<li><code>tip</code> shows a tooltip when this custom function is run. Here the tip shown will contain the text 'Incognito Mode toggled'.
 </ol>
 Note that you can also use <code>noautorun=1</code> to prevent auto-execution of section even if it doesn't have a 'bind'.
 <br><br>
@@ -128,7 +129,7 @@ tip=Channel changed to 4
 Suppose you don't want to create a separate shortcut Win+V for the above example. Here is how to create a Action Mode shortcut for it.
 <pre class="brush: ini;">
 [changeto_4]
-noautorun=1
+<a name=noautorun_ex>noautorun=1</a>
 ; noautorun prevents auto-execution of a section in absence of bind
 run=changeChannel(4)
 tip=Channel changed to 4
@@ -178,7 +179,7 @@ run = API.paste( 2, %zClipno% )
 </ul>
 <br><br>
 
-<h4>Example 8 [SEND] (Filling Form)</h4>
+<h4><a name=send_ex>Example 8 [SEND] (Filling Form)</a></h4>
 The first example using Send. As briefed above, the command sends or stimulates a key press.<br>
 So to get started, know that 'Send' has some rules which must be noted.<br>
 <ul>

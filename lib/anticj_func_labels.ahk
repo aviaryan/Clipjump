@@ -17,7 +17,7 @@ channelGUI:
 	return
 
 classTool:
-	classManager()
+	API.runPlugin("external.ignoreWmanager.ahk")
 	return
 
 main:
@@ -68,6 +68,14 @@ FoolGUI(switch=1){
 	Gui, foolgui: -Caption +E0x80000 +LastFound +OwnDialogs +Owner +AlwaysOnTop
 	Gui, foolgui: Show, NA, foolgui
 	WinActivate, foolgui
+}
+
+;Function for FileCopy, FileMove
+FileTransfer(src, dest, keep_original=1, flag=1){
+	if keep_original
+		FileCopy, % src, % dest, % flag
+	else
+		FileMove, % src, % dest, % flag
 }
 
 ;Try getting a Variable like Clipboard

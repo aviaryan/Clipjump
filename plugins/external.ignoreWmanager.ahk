@@ -1,3 +1,20 @@
+;@Plugin-Name Ignored Window Manager
+;@Plugin-Description Manages the windows that will be ignored by Clipjump Clipboard monitoring and paste mode.
+;@Plugin-Author fump2000
+;@Plugin-Version 0.1
+;@Plugin-Tags system
+
+global cj := new Clipjump()
+global PROGNAME := cj.PROGNAME
+global TXT := {}
+
+TXT.IGN_delete := cj["TXT.IGN_delete"] , TXT.IGN_add := cj["TXT.IGN_add"]
+TXT.IGN__name := cj["TXT.IGN__name"] , TXT.IGN_RestartMsg := cj["TXT.IGN_RestartMsg"]
+TXT.IGN_tip := cj["TXT.IGN_tip"]
+
+ClassManager()
+#Include %A_ScriptDir%\..\publicAPI.ahk
+
 ;============================================================================
 ; Class-Manager for ClipJump
 ;============================================================================
@@ -43,6 +60,7 @@ FillClassList:
    LV_Delete()
    LV_ModifyCol()
    LV_ModifyCol(1, 315)
+
    IniRead,OutVar,%A_WorkingDir%\settings.ini,Advanced,ignoreWindows
    Loop, parse, OutVar, |
    	{
@@ -65,13 +83,16 @@ ClassDelete:
 ClipClassGuiClose:
    If ClassChange
    {
-      MsgBox, 67, %PROGNAME%, % TXT.IGN_RestartMsg
+      MsgBox, 67, % PROGNAME, % TXT.IGN_RestartMsg
       IfMsgBox, Yes
-         Reload
+         cj.runLabel("reload")
       IfMsgBox, No
          Gui, ClipClass:Destroy
+      IfMsgBox, Cancel
+         return      ; dont Exitapp
    }
    Else  Gui, ClipClass:Destroy
+   ExitApp
    Return
 
 AddClass:

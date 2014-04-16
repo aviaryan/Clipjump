@@ -282,3 +282,17 @@ CUS_error = There was an error in a ClipjumpCustom.ini routine?
 ;=====
 
 TRY_pstmdshorts = Paste Mode shortcuts
+
+;=====
+;10.9
+;=====
+
+TIP_holdclip = Press Ctrl+V to paste
+             = Press Insert to add clip to channel
+             = Press Esc to exit
+SET_holdclip = Hold Clip Feature
+SET_T_holdclip = Copies the selected text or item to a buffer and prevents it from being captured by Clipjump.
+               = You can then paste the clip, move it to a channel or reject it.
+SET_keepactivepos = Preserve Current Active Clip position
+SET_T_keepactivepos = Do you want Clipjump to remember the last active Clip in Paste Mode ?
+                    = Unticking it will make Clipjump Paste Mode always start from Clip 1.
