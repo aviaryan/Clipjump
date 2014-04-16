@@ -3,7 +3,7 @@
 ;@Plugin-Description Only works for Text ([Text] or [File/Folder]) type data.
 ;@Plugin-Author Avi
 ;@Plugin-Tags pformat
-;@Plugin-version 0.3
+;@Plugin-version 0.35
 ;@Plugin-Previewable 0
 
 
@@ -15,11 +15,11 @@ plugin_pformat_commonformats_None(zin){
 }
 
 plugin_pformat_commonformats_htmlList(zin){
-	return RegExReplace(Trim(zin, "`r`n "), "m)^", "<li>") , STORE.ClipboardChanged := 1
+	return RegExReplace( Trim(zin, "`r`n "), "m`a)^", "<li>") , STORE.ClipboardChanged := 1
 }
 
 plugin_pformat_commonformats_BBCodeList(zin){
-	return RegExReplace(Trim(zin, "`r`n "), "m)^", "[*]") , STORE.ClipboardChanged := 1
+	return RegExReplace( Trim(zin, "`r`n "), "m`a)^", "[*]") , STORE.ClipboardChanged := 1
 }
 
 plugin_pformat_commonformats_NoFormatting(zin){
@@ -29,7 +29,7 @@ plugin_pformat_commonformats_NoFormatting(zin){
 plugin_pformat_commonformats_NumberedList(zin){
 	zin := Trim(zin, "`r`n ")
 	loop, parse, zin, `n, `r
-		zout .= A_index ". " A_LoopField
+		zout .= A_index ". " A_LoopField "`r`n"
 	return zout , STORE.ClipboardChanged := 1
 }
 
@@ -87,10 +87,9 @@ plugin_pformat_commonformats(zin){
 commonformatbuttonOK:
 plugin_pformat_commonformats_dopaste:
 	Gui, commonformat:Submit, nohide
-	If zchosenformat=
-		zchosenformat := "None"
-	zFobj := Func("plugin_pformat_commonformats_" zchosenformat)
-	zOut := ( zFobj.MaxParams > 1 ) ? zFobj.(zin, zinputfield) : zFobj.(zin)
+	STORE.ClipboardChanged := 1 , zOut := zedit
+	If (zchosenformat="None") or (zchosenformat="")
+		zOut := zin, STORE.ClipboardChanged := 0
 	zDone := 1
 	return
 
