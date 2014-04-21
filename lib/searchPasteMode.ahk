@@ -71,6 +71,7 @@ SPM_dispose:
 
 searchpm:
 	SPM.ACTIVE := 1
+	Gui, imgprv:Destroy
 	WinGetPos, pmtip_x, pmtip_y,,, ahk_class tooltips_class32
 	SPM.X := pmtip_x , SPM.Y := pmtip_y
 	correctTEMPSAVE() , SPM.TEMPSAVE := TEMPSAVE , SPM.CHANNEL := CN.NG
@@ -87,7 +88,7 @@ searchpm_search(term){
 		SEARCHOBJ[r] := {}
 		for k,v in CDS[r]
 		{
-			if SuperInstr(v, Trim(term, " "), 1)
+			if SuperInstr( getRealCD(v), Trim(term, " "), 1)
 				SEARCHOBJ[r][k] := "|" , c++
 		}
 	}

@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 10.9
+;@Ahk2Exe-SetVersion 11.0
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -42,7 +42,7 @@ global mainIconPath := FileExist("Clipjump.exe") ? "Clipjump.exe" : "icons/icon.
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "10.9"
+global VERSION := "11"
 global CONFIGURATION_FILE := "settings.ini"
 
 ini_LANG := ini_read("System", "lang")
@@ -68,6 +68,7 @@ global MSG_FOLDER_PATH_COPIED := TXT.TIP_folderpath " " PROGNAME
 
 ;History Tool
 global hidden_date_no := 4 , history_w , history_partial := 1 ;start off with partial=1 <> much better
+global PREV_FILE := "cache\prev.txt"
 
 ;*******************************************************************************
 
@@ -135,6 +136,7 @@ else if (ini_Version != VERSION)
 global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_IsChannelMin := 1 , CopyMessage
 		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, channel_K, onetime_K, paste_k, actionmode_k, ini_is_duplicate_copied, ini_formatting
 		, ini_CopyBeep , beepFrequency , ignoreWindows, ini_defEditor, ini_defImgEditor, ini_def_Pformat, pluginManager_k, holdClip_K, ini_PreserveClipPos
+		, chOrg_K
 
 ; (search) paste mode keys 
 global pastemodekey := {} , spmkey := {}
@@ -169,15 +171,6 @@ loop
 	}
 }
 
-;*******GUIS******************************************************
-
-;Preview GUI
-Gui +LastFound +AlwaysOnTop -Caption +ToolWindow +Border
-gui, add, picture,x0 y0 w400 h300 vimagepreview,
-
-;More GUIs and Menus can be seen in lib folder
-
-;********************************************************************
 ;STARTUP
 IfExist, %A_Startup%/Clipjump.lnk
 {
@@ -189,7 +182,7 @@ IfExist, %A_Startup%/Clipjump.lnk
 global CLIPS_dir := "cache/clips"
 	, THUMBS_dir := "cache/thumbs"
 	, FIXATE_dir := "cache/fixate"
-	, NUMBER_ADVANCED := 31 + CN.Total 					;the number stores the line number of ADVANCED section
+	, NUMBER_ADVANCED := 34 + CN.Total 					;the number stores the line number of ADVANCED section
 
 ;Setting Up shortcuts
 hkZ( ( paste_k ? "$^" paste_k : emptyvar ) , "Paste")
@@ -199,7 +192,7 @@ hkZ(history_K, "History")
 hkZ(Copyfiledata_K, "CopyFileData") , hkZ(channel_K, "channelGUI")
 hkZ(onetime_K, "oneTime") , hkZ(pitswap_K, "pitswap")
 hkZ(actionmode_K, "actionmode") , hkZ(pluginManager_k, "pluginManagerGUI")
-hkZ(holdClip_K, "holdClip")
+hkZ(holdClip_K, "holdClip") , hkZ(chOrg_K, "channelOrganizer")
 ;more shortcuts
 hkZ(windows_copy_k, "windows_copy") , hkZ(windows_cut_k, "windows_cut")
 ;Environment
@@ -218,7 +211,7 @@ EmptyMem()
 return
 
 ;Tooltip No 1 is used for Paste Mode tips, 2 is used for notifications , 3 is used for updates , 4 is used in Settings , 5 is used in Action Mode
-;6 used in Class Tool, 7 in API (Plugin) , 8 used in Customizer, 9 used in history tool, 10 in edit clips
+;6 used in Class Tool, 7 in API (Plugin) , 8 used in Customizer, 9 used in history tool, 10 in edit clips, 11 in Channel Organizer
 
 ;OLD VERSION COMPATIBILITES TO REMOVE
 ;NONE
@@ -232,24 +225,15 @@ loadClipboardDataS(){
 		CDS[R:=A_index-1] := {}
 		loop, % fp "\*.avc"
 		{
-			ONCLIPBOARD:="" , DONE := 0
-			while !DONE
-			{
-				try {
-					FileRead, Clipboard, % "*c " A_LoopFileFullPath
-					Z := Clipboard
-					DONE := 1
-				}
-				if A_index>5
-				{
-					ONCLIPBOARD := DONE := 1
-					break
-				} 
-			}
+			ONCLIPBOARD:="" , Z := ""
+			if try_ClipboardfromFile(A_LoopFileFullPath, 100)
+				Z := trygetVar("Clipboard", 100)
+			else
+				ONCLIPBOARD := 1 , Z := ""
+
 			while !ONCLIPBOARD
-				sleep 1
-			if Z !=
-				CDS[R][Substr(A_LoopFileName,1,-4)] := Z
+				sleep 5
+			CDS[R][Substr(A_LoopFileName,1,-4)] := Z
 		}
 	}
 	API.blockMonitoring(0)
@@ -263,7 +247,7 @@ paste:
 		return
 	}
 
-	Gui, 1:Hide
+	Gui, imgprv:Destroy
 	CALLER := 0
 	ctrlRef := "pastemode"
 	if IN_BACK
@@ -448,12 +432,10 @@ clipChange(CErrorlevel, clipboard_copy) {
 }
 
 moveBack:
-	Critical
-
+	Critical ;, On
 	IfWinActive, ahk_group IgnoreGroup
 		return
-
-	Gui, 1:Hide
+	Gui, imgprv:Destroy
 	IN_BACK := true
 	TEMPSAVE := realActive + 1
 	if realActive = %CURSAVE%
@@ -742,7 +724,7 @@ ctrlCheck:
 		Critical
 		SetTimer, ctrlCheck, Off
 		CALLER := false , sleeptime := 300 , TEMPSAVE := realActive 				; keep the current clip pos saved
-		Gui, 1:Hide
+		Gui, imgprv:Destroy
 		; Change vars a/c MULTIPASTE
 		if MULTIPASTE && !GetKeyState("Ctrl") && !temp_spmWasActive 		;if spmIsActive user is not expected to cancel by releasing Ctrl
 			if ctrlRef = pastemode
@@ -839,7 +821,7 @@ ctrlCheck:
 
 endPastemode:
 	; ends the paste abruptly - as required by export and suspend
-	Gui, 1:Hide
+	Gui, imgprv:Destroy
 	Tooltip
 	SetTimer, ctrlCheck, Off
 	if SPM.ACTIVE
@@ -1009,6 +991,11 @@ thumbGenerator() {
 
 showPreview(){
 	static scrnhgt := A_ScreenHeight / 2 , scrnwdt := A_ScreenWidth / 2
+	static imagepreview
+
+	Gui, imgprv:New
+	Gui, imgprv:+LastFound +AlwaysOnTop -Caption +ToolWindow +Border
+	Gui, add, picture,x0 y0 w400 h300 vimagepreview,
 
 	if FileExist( (img := A_WorkingDir "\" THUMBS_dir "\" TEMPSAVE ".jpg") )
 	{
@@ -1024,9 +1011,12 @@ showPreview(){
 		GuiControl, , imagepreview, *w%displayW% *h%displayH% %THUMBS_dir%\%TEMPSAVE%.jpg
 		MouseGetPos, ax, ay
 		ay := ay + (scrnHgt / 10)
-
+		if (scrnwdt*2-ax < displayw/2)
+			ax := 2
+		if (scrnhgt*2-ay < displayh/2)
+			ay := 2
 		; Try ensures we dont see the error if it happens due to thread overlaps
-		try Gui, Show, x%ax% y%ay% h%displayh% w%displayw%, Display_Cj
+		try Gui, imgprv:Show, x%ax% y%ay% h%displayh% w%displayw% NoActivate, Display_Cj
 	}
 }
 
@@ -1066,10 +1056,10 @@ actionmode:
 	return
 
 init_actionmode() {
-	ACTIONMODE := {H: "history", S: "channelGUI", C: "copyfile", X: "copyfolder", F: "CopyFileData", D: "disable_clipjump"
-		, P: "pitswap", O: "onetime", E: "settings", F1: "hlp", Esc: "Exit_actmd", M: "pluginManager_GUI()", F2: "OpenShortcutsHelp"
-		, H_caption: TXT.HST__name, S_caption: TXT.SET_chnl, C_caption: TXT._cfilep, X_caption: TXT._cfolderp, F_caption: cfiled 
-		, D_caption: TXT.ACT_disable " " PROGNAME, P_caption: TXT._pitswp, O_caption: TXT._ot, E_caption: TXT.SET__name
+	ACTIONMODE := {H: "history", S: "channelGUI", O: "channelOrganizer", C: "copyfile", X: "copyfolder", F: "CopyFileData", D: "disable_clipjump"
+		, P: "pitswap", T: "onetime", E: "settings", F1: "hlp", Esc: "Exit_actmd", M: "pluginManager_GUI()", F2: "OpenShortcutsHelp"
+		, H_caption: TXT.HST__name, S_caption: TXT.SET_chnl, O_caption: TXT.ORG__name, C_caption: TXT._cfilep, X_caption: TXT._cfolderp, F_caption: cfiled 
+		, D_caption: TXT.ACT_disable " " PROGNAME, P_caption: TXT._pitswp, T_caption: TXT._ot, E_caption: TXT.SET__name
 		, F1_caption: TXT.TRY_help, Esc_caption: TXT.ACT_exit, M_caption: TXT.PLG__name, F2_caption: TXT.try_pstmdshorts}
 }
 
@@ -1225,34 +1215,58 @@ export:
 
 editclip:
 	try temp_clipboard := Clipboard
+	IScurCBACTIVE := 1
 	gosub endPastemode
-	if temp_clipboard =
-	{
-		autoTooltip(TXT.TIP_editnotdone, 800, 10)
-		return
-	}
+	EditImg := 0
 	Tooltip, % TXT.TIP_editing,,, 10
+
+	if temp_clipboard=
+	{
+		EditImg := 1
+		Gdip_CaptureClipboard(A_WorkingDir "\cache\edit.jpg", 100)
+		if !FileExist("cache\edit.jpg")
+		{
+			autoTooltip(TXT.TIP_editnotdone, 800, 10)
+			return
+		}
+		run, % ini_defImgEditor " """ A_WorkingDir "\cache\edit.jpg" """",,, editclip_pid
+	}
+	else {
+		FileDelete, cache\edit.txt
+		FileAppend, % temp_clipboard , cache\edit.txt
+		run, % ini_defEditor " """ A_WorkingDir "\cache\edit.txt" """",,, editclip_pid
+	}
+
 	hkZ("Esc", "editclip_cancel", 1)
-	FileDelete, cache\edit.txt
-	FileAppend, % temp_clipboard , cache\edit.txt
 	Critical, Off
-	run, % ini_defEditor " """ A_WorkingDir "\cache\edit.txt" """",,, editclip_pid
+
 	loop {
 		Process, Exist, % editclip_pid
 		if !ErrorLevel
 			break
 		sleep 100
 	}
-	if editclip_cancel
-	{
+	if (editclip_cancel) {
 		editclip_cancel := "" , autoTooltip(TXT.TIP_editnotdone, 800, 10)
 		return
 	}
-	Fileread, temp_clipboard2, cache\edit.txt
-	API.Text2Binary(temp_clipboard2, temp_clipboardall)
-	FileDelete, %CLIPS_dir%/%TEMPSAVE%.avc
-	FileAppend, % temp_clipboardall, %CLIPS_dir%/%TEMPSAVE%.avc
-	CDS[CN.NG][TEMPSAVE] := temp_clipboard2
+
+	if EditImg {
+		API.blockMonitoring(1)
+		Gdip_SetImagetoClipboard(A_WorkingDir "\cache\edit.jpg")
+		ClipWait, 3, 1
+		try FileAppend, %ClipboardAll%, %CLIPS_dir%/%TEMPSAVE%.avc
+		Gdip_CaptureClipboard( A_WorkingDir "\" THUMBS_dir "\" TEMPSAVE ".jpg", ini_Quality)
+		FileDelete, cache\edit.jpg
+		API.blockMonitoring(0)
+	} else {
+		Fileread, temp_clipboard2, cache\edit.txt
+		API.Text2Binary(temp_clipboard2, temp_clipboardall)
+		FileDelete, %CLIPS_dir%/%TEMPSAVE%.avc
+		FileAppend, % temp_clipboardall, %CLIPS_dir%/%TEMPSAVE%.avc
+		CDS[CN.NG][TEMPSAVE] := temp_clipboard2
+	}
+
 	autoTooltip(TXT.TIP_editdone, 800, 10)
 	IScurCBACTIVE := false
 	return
@@ -1402,6 +1416,7 @@ Receive_WM_COPYDATA(wParam, lParam)
 #include %A_ScriptDir%\lib\settings gui plug.ahk
 #include %A_ScriptDir%\lib\history gui plug.ahk
 #include %A_ScriptDir%\lib\pluginManager.ahk
+#include %A_ScriptDir%\lib\channelOrganizer.ahk
 #include *i %A_ScriptDir%\plugins\_registry.ahk
 
 ;------------------------------------------------------------------- X -------------------------------------------------------------------------------

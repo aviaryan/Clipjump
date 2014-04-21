@@ -102,7 +102,7 @@ history_ButtonPreview:
 	else v := LV_GetNext()
 
 	LV_GetText(clip_file_path, v, hidden_date_no)
-	gui_History_Preview(clip_file_path, history_SearchBox)
+	gui_Clip_Preview( "cache\history\" clip_file_path, history_SearchBox)
 	return
 
 history_ButtonDelete:
@@ -192,15 +192,15 @@ historyGuiEscape:
 	return
 }
 
-gui_History_Preview(path, history_SearchBox)
-; Creates and shows a GUI for viewing history items
+gui_Clip_Preview(path, searchBox="", owner="History")
 {
 	global prev_copybtn, prev_findtxt, prev_handle, preview_search, prev_picture, preview, prev_findtxtw
-	static wt := A_ScreenWidth / 2 , ht := A_ScreenHeight / 2 , maxlines = Round(ht / 13)
+	static wt := A_ScreenWidth / 2.2 , ht := A_ScreenHeight / 2.5 ;, maxlines = Round(ht / 13)
 	preview := {}
 
 	preview.isimg := Instr(Substr(path, -2), "jpg") ? 1 : 0
-	preview.path := A_WorkingDir "\cache\history\" path
+	preview.path := A_workingdir "\" path
+	preview.owner := owner
 
 	Gui, Preview:New
 	Gui, Margin, 0, 0
@@ -236,14 +236,14 @@ gui_History_Preview(path, history_SearchBox)
 	Gui, Add, Edit, % "x+10 yp-2 w155 h23 vpreview_search gpreviewSearch " ( preview.isimg ? "+ReadOnly" : "" ),  	; -5 margin on right side
 	Gui, Add, Text, x5 y+0 w5 			; white-space just below the button
 
-	Gui, Preview:+OwnerHistory
-	Gui, History:+Disabled
+	Gui, Preview:+Owner%owner%
+	Gui, % preview.owner ":+Disabled"
 	Gui, Preview: +Resize +MaximizeBox -MinimizeBox
 	Gui, Preview:Show, AutoSize, % TXT.PRV__name
 
 	GuiControlGet, prev_findtxt, Preview:Pos
 	if !preview.isimg
-		GuiControl, , preview_search, % history_SearchBox
+		GuiControl, , preview_search, % searchBox
 	return
 	
 button_Copy_to_Clipboard:
@@ -258,7 +258,7 @@ button_Copy_to_Clipboard:
 
 previewGuiClose:
 previewGuiEscape:
-	Gui, History:-Disabled
+	Gui, % preview.owner ":-Disabled"
 	Gui, Preview:Destroy
 	prev_handle := ""
 	prev_document := ""

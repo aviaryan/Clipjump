@@ -87,6 +87,8 @@ tryGetvar(varname, maxtries=100){
 				break
 			ret := %varname%
 			fetch_done := 1
+		} catch {
+			MakeClipboardAvailable(0)
 		}
 	}
 	return ret
@@ -123,28 +125,49 @@ local Midpoint, emVar, $j, $n
 
 ;Try getting a file onto Clipboard
 try_ClipboardfromFile(file, maxtries=100){
+	;Critical, Off
 	while !temp_ClipbrdLoaded
 	{
-		try { ;Tries needed in case of heavy memory programs like Netbeans
+		try {
 			if A_index > %maxtries%
 				break
 			FileRead, Clipboard, *c %file%
 			temp_ClipbrdLoaded := 1
 		}
 	}
+	while !DllCall("OpenClipboard", "int", "")
+		sleep 10
+	DllCall("CloseClipboard")
+	;Critical, On 		; // To make sure thread doesnt overlaps when user goes fast thru the paste mode
+	;MakeClipboardAvailable(0) ;// Other Clipboard capturing apps get activated after CJ changes Clipboard. So wait 4 them to finish
+	return temp_ClipbrdLoaded
+}
+
+getRealCD(text){
+; Substitues [IMAGE] for blank data in CDS . Used by the search funcs in search paste mode and Organizer
+	return text="" ? TXT.HST_viewimage : text
+}
+
+ClipTransfer(sub, cno, nsub, ncno, keep_original=1, flag=1){
+; Copy moves a clip along with the 3 files
+	FileTransfer("cache\clips" sub "\" cno ".avc", "cache\clips" nsub "\" ncno ".avc", keep_original, flag)
+	FileTransfer("cache\thumbs" sub "\" cno ".jpg", "cache\thumbs" nsub "\" ncno ".jpg", keep_original, flag)
+	FileTransfer("cache\fixate" sub "\" cno ".fxt", "cache\fixate" nsub "\" ncno ".fxt", keep_original, flag)
 }
 
 ;Checks and makes sure Clipboard is available
 ;Use 0 as the param when for calling the function, the aim is only to free clipboard and not get its contents
 MakeClipboardAvailable(doreturn=1){
-
+	;Critical, On
 	while !temp
 	{
 		temp := DllCall("OpenClipboard", "int", "")
 		sleep 10
 	}
 	DllCall("CloseClipboard")
-	return doreturn ? Clipboard : ""
+	if doreturn
+		ret := Clipboard
+	return ret
 }
 
 ;type=1
@@ -337,6 +360,7 @@ TooltipOff7:
 TooltipOff8:
 TooltipOff9:
 TooltipOff10:
+TooltipOff11:
 	SetTimer, % A_ThisLabel, Off
 	ToolTip,,,, % ( Substr(A_ThisLabel, 0) == "f" ) ? 1 : RegExReplace(A_ThisLabel, "TooltipOff")
 	return
@@ -364,8 +388,8 @@ getQuant(str, what){
 }
 
 ;Used for Debugging
-debugTip(text, tooltipno=20){
-	Tooltip, % text,,, % tooltipno
+debugTip(text, x="", y="", tooltipno=20){
+	Tooltip, % text,% x,% y, % tooltipno
 }
 
 fillwithSpaces(text, limit=35){

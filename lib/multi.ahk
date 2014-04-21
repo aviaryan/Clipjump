@@ -216,7 +216,7 @@ choosechannelgui(){
 	StringReplace, lst, lst, |, ``|, All
 	StringReplace, lst, lst, `n, |, All
 	Gui, Add, Listbox, x+20 vchannel_list h150, % lst
-	Gui, Add, button, x7 y+10 gchoosechbuttonok, OK
+	Gui, Add, button, x7 y+10 gchoosechbuttonok Default, OK
 	Gui, Add, button, x+10 yp gchoosechbuttoncancel, % TXT.SET_cancel
 	Gui, Show,, % TXT.CHC_name
 	WinWaitActive, % TXT.CHC_name
@@ -244,7 +244,9 @@ channel_find(name=""){
 	Iniread, o, %CONFIGURATION_FILE%, Channels
 	loop, parse, o, `n, `r
 	{
-		k := Trim( Substr(A_LoopField, 1, p:=Instr(A_LoopField, "=")-1) )
+		if ( ( k := Trim( Substr(A_LoopField, 1, p:=Instr(A_LoopField, "=")-1) ) ) >= CN.Total ) 		; if ini has a old entry
+			continue
+
 		v := Trim( Substr(A_LoopField, p+2) )
 		if k is Integer
 		{

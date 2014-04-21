@@ -43,7 +43,8 @@ class API
 		}
 		else {
 			r := this.getClipLoc(channel, clipno)
-			try Fileread, Clipboard, *c %r%
+			try_ClipboardFromFile(r, 10)
+			;try Fileread, Clipboard, *c %r%
 		}
 
 		Send ^{vk56}
@@ -80,7 +81,7 @@ class API
 
 		origClip := "cache\clips" c_info.p "\" clip ".avc" , origThumb := "cache\thumbs" c_info.p "\" clip ".jpg"
 		newClip := "cache\clips" nc_info.p "\" nc_info.realCURSAVE + 1 ".avc"
-		newThumb := "cache\thumbs" nc_info.p "\" nc_info.realCURSAVE + 1 ".jpg" 
+		newThumb := "cache\thumbs" nc_info.p "\" nc_info.realCURSAVE + 1 ".jpg"
 
 		; process
 		if flag
@@ -206,6 +207,21 @@ class API
 	; runs the Label
 	runLabel(label){
 		gosub % ( IsLabel(label) ? label : "emptylabel" )
+	}
+
+	; gets total no of clips in a channel
+	getChStrength(channel){
+		o := API.getChInfo(channel)
+		return o.realCURSAVE
+	}
+	
+	; deletes a clip
+	deleteClip(channel, clip){
+		zbkCh := CN.NG 	; create backup of current channel
+		CN["CURSAVE" CN.N] := CURSAVE , CN["TEMPSAVE" CN.N] := TEMPSAVE
+		changeChannel(channel)
+		clearClip( API.getChStrength(channel) - clip + 1 )
+		changeChannel(zbkCh)
 	}
 
 	; sets a variable
