@@ -26,6 +26,18 @@
 		<param name="Local" value="clipjump.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Clips Organizer">
+		<param name="Local" value="docs/organizer.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Developer's Reference">
+		<param name="Local" value="docs/devList.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Addons page">
+		<param name="Local" value="http://clipjump.sourceforge.net/addons.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Pasting Formats">
 		<param name="Local" value="docs/basic_help.html#pformat">
 		</OBJECT>

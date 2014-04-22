@@ -115,6 +115,8 @@ trayMenu(destroy=0){
 		Menu, Tools_Tray, Add, % TXT.SET__name, settings
 	Menu, Tray, Add, % TXT.TRY_tools, :Tools_Tray
 		Menu, Help_Tray, Add, % TXT.TRY_pstmdshorts, openShortcutsHelp
+		Menu, Help_Tray, Add, % "FAQ", openFaq
+		Menu, Help_Tray, Add
 		Menu, Help_Tray, Add, % "Clipjump.chm", hlp
 	Menu, Tray, Add
 	Menu, Tray, Add, % TXT.TRY_help, :Help_Tray
@@ -125,6 +127,12 @@ trayMenu(destroy=0){
 	return
 
 }
+
+openFaq:
+	try run hh.exe mk:@MSITStore:%A_WorkingDir%\Clipjump.chm::/docs/faq.html
+	catch
+		MsgBox, 16, Clipjump, There was a problem.`nPlease check that Clipjump.chm exists in the root folder.
+	return
 
 openShortcutsHelp:
 	try run hh.exe mk:@MSITStore:%A_WorkingDir%\Clipjump.chm::/docs/basic_help.html#short

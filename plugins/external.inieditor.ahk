@@ -1,6 +1,6 @@
 ;@Plugin-Name IniEditor
 ;@Plugin-Description IniEditor by rbrtryn
-;@Plugin-Author rbrtryn, Avi
+;@Plugin-Author rbrtryn
 ;@Plugin-Tags settings.ini
 ;@Plugin-Site http://www.autohotkey.com/board/topic/93868-
 ;@Plugin-param1 The path of Ini. Leave blank for <settings.ini>
@@ -16,7 +16,7 @@
 */
 
 ; Autoexecute:
-    
+
     iniFile := Substr(A_AhkPath, 1, Instr(A_AhkPath, "\", 0, 0)) "settings.ini" ;Default
 
     loop %0%

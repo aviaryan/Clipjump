@@ -6,7 +6,7 @@
 
 
 <body>
-	<center><h3> Frequently asked questions </h3></center>
+	<center><h1> Frequently asked questions (FAQ)</h1></center>
 <br><br><br>
 
 <dl>
@@ -14,66 +14,12 @@
 	<dd>A Translate Link powered by <b><a href=http://translate.google.com>Google Translate</a></b> has been added <b>at the bottom</b> of each page of this help file. <br>
 		Simply Click on the <code>Translate</code> link and you will see that page translated in your language. 
 	</dd>
-	<br><br><br>
+	<br><br>
 	
 	<dt>How to change the language of Clipjump ?</dt>
 	<dd>Use the <b>About Clipjump</b> option in System Tray Menu. (<a href="translate.html#intro">Link</a>)
 	</dd>
-	<br><br><br>
-
-	<dt>What is this 'cache' folder?</dt>
-	<dd>The 'cache' folder stores all the clips of Clipjump. The folder was hidden in previous versions.<br>
-		It contains folders with channel numbers that stores clips for that channel. eg > (clips for channel 0) , (clips1 for channel 1) and so on.
-		<br>If you look to backup selected channels, you can copy and store clips[n], thumbs[n] and fixate[n] directory for it though it is 
-		usually recommended to <b>stay away from the cache directory</b>. 
-	</dd>
-	<br><br><br>
-
-	<dt>I had the copied the file/folder to Clipjump but when I paste it , nothing happens ?</dt>
-	<dd><li>Make sure that what you are pasting is a [FILE/FOLDER] and not it's path.
-		<li>Make sure that you are pasting it in a file manager such as Windows Explorer.
-		<li>Check that the path given by Clipjump's [PASTE MODE] tip exists . This means if Clipjump's tip contains <code>C:\test.txt</code> , then make 
-			sure the file exists. 
-	</dd>
-	<br><br><br>
-
-	<dt>The Clear History button in History Tool doesn't delete the recent Clips in Ctrl+V Paste Mode ?</dt>
-	<dd>The History Tool and the Paste-Mode are two different components and there clips are independent of each other . <br>
-		The <code>Clear History</code> button deletes all the History items whereas the <a href="basic_help.html#delete_all">DeleteAll mode</a> deletes all the clips that are in that channel.
-	</dd>
-	<br><br><br>
-
-	<dt>I copy an image from Windows Explorer but I don't see it's preview in the Paste Mode ?</dt>
-	<dd>The thing you copy when you press Ctrl+C on an image file in Windows Explorer is the link to the file and not the file's data . <br>
-		Similarly here, you are not copying the image but the link to the image file. To copy the image to Clipjump , you have 2 ways -
-		<li>Open the image in an Image editor such as MS Paint. Select a region and then from the Right click menu, select <code>Copy</code>.
-		<li>Use the <a href="basic_help.html#fdata">Copy File Data</a> feature and press its shortcut while selecting the image file in Explorer 
-			or any other file manager. You will notice the <code>Transferred to Clipjump</code> and then the (previewed) image will be available on Clipjump.
-	</dd>
-
-	<br><br><br>
-
-	<dt>I have disabled the <i>Retain Clipboard data after Restart</i> feature but the clips in Paste Mode are still there ?</dt>
-	<dd><a href="channels.html#channel_notes">See Here</a></dd>
-
-	<br><br><br>
-
-	<dt>Will my clips change if I use the Paste Formats?</dt>
-	<dd><a href="basic_help.html#pf_notes">See Here</a></dd>
-
-	<br><br><br>
-
-	<dt>Why do I get the warning <i>Clipjump is not running as administrator</i> ?</dt>
-	<dd>When Clipjump, a portable application is placed in drives or folders which don't allow users to write to them , Clipjump will not be able to 
-		save its clips and thus will become of no use. To avoid such a condition, a one time warning is coded into Clipjump to aware users of the 
-		fact.
-	</dd>
-	<br><br><br>
-
-	<dt>Will updating Clipjump preserve my settings , history and clips ?</dt>
-	<dd>Yes , you will lose nothing. </dd>
-
-	<br><br><br>
+	<br><br>
 
 	<dt>How do I update Clipjump ?</dt>
 	<dd>To update Clipjump , follow these steps - 
@@ -83,7 +29,80 @@
 		<li>Paste the files on your current copy of Clipjump such that <i>new</i> Clipjump.exe replaces the old one.
 		<li>Run Clipjump.exe
 	</dd>
-	<br><br><br>
+	<br><br>
+
+	<dt>Will updating Clipjump preserve my settings , history and clips ?</dt>
+	<dd>Yes , you will lose nothing. </dd>
+
+	<br><br>
+
+	<dt>What is this 'cache' folder?</dt>
+	<dd>The 'cache' folder stores all the clips of Clipjump. The folder was hidden in previous versions.<br>
+		It contains folders with channel numbers that stores clips for that channel. eg > (clips for channel 0) , (clips1 for channel 1) and so on.
+		<br>If you look to backup selected channels, you can copy and store clips[n], thumbs[n] and fixate[n] directory for it though it is 
+		usually recommended to <b>stay away from the cache directory</b>. 
+	</dd>
+	<br><br>
+
+	<dt>I had the copied the file/folder to Clipjump but when I paste it , nothing happens ?</dt>
+	<dd><li>Make sure that what you are pasting is a [FILE/FOLDER] and not it's path.
+		<li>Make sure that you are pasting it in a file manager such as Windows Explorer.
+		<li>Check that the path given by Clipjump's [PASTE MODE] tip exists . This means if Clipjump's tip contains <code>C:\test.txt</code> , then make 
+			sure the file exists. 
+	</dd>
+	<br><br>
+
+	<dt>The Clear History button in History Tool doesn't delete the recent Clips in Ctrl+V Paste Mode ?<br>
+		OR<br>
+		I delete a clip from Ctrl+V Paste Mode but it is still there in History Tool ?</dt>
+	<dd>The History Tool and the Paste-Mode are two different components and there clips are independent of each other. <br>
+		History Tool is meant for <b>history-keeping</b> whereas Ctrl+V Paste Mode is meant to show clips contained in different channel of Clipjump. The history of 
+		clips to any of the channel is shown in a single window i.e. History Tool.<br>
+		The <code>Clear History</code> button deletes all the History items whereas the <a href="basic_help.html#delete_all">DeleteAll mode</a> deletes all the clips that are in that channel.<br>
+		AND<br>
+		The Delete button in History deletes a History Clip and the Delete Mode (Ctrl+X 4 times) in Paste Mode deletes a clip contained in the channel.
+	</dd>
+
+	<br><br>
+
+	<dt>I copy an image from Windows Explorer but I don't see it's preview in the Paste Mode ?</dt>
+	<dd>The thing you copy when you press Ctrl+C on an image file in Windows Explorer is the link to the file and not the file's data . <br>
+		Similarly here, you are not copying the image but the link to the image file. To copy the image to Clipjump , you have 2 ways -
+		<li>Open the image in an Image editor such as MS Paint. Select a region and then from the Right click menu, select <code>Copy</code>.
+		<li>Use the <a href="basic_help.html#fdata">Copy File Data</a> feature and press its shortcut while selecting the image file in Explorer 
+			or any other file manager. You will notice the <code>Transferred to Clipjump</code> and then the (previewed) image will be available on Clipjump.
+	</dd>
+
+	<br><br>
+
+	<dt>I can't set a <b>Win</b> key shortcut in Settings editor ?</dt>
+	<dd>This is a limitation of the Hotkey control that is used. You can use the <a href=custom.html>ClipjumpCustom.ini</a> along with the right 
+		<a href=devList.html#labels>Label</a> to create a custom shortcut for yourself.<br>
+		Here is an example for creating shortcut Win+K for Hold Clip<br>
+		<pre>[holdclip_win]
+bind = Win + K
+run = holdClip</pre>
+	</dd>
+
+	<br><br>
+
+	<dt>I have disabled the <i>Retain Clipboard data after Restart</i> feature but the clips in Paste Mode are still there ?</dt>
+	<dd><a href="channels.html#channel_notes">See Here</a></dd>
+
+	<br><br>
+
+	<dt>Will my clips change if I use the Paste Formats?</dt>
+	<dd><a href="basic_help.html#pf_notes">See Here</a></dd>
+
+	<br><br>
+
+	<dt>Why do I get the warning <i>Clipjump is not running as administrator</i> ?</dt>
+	<dd>When Clipjump, a portable application is placed in drives or folders which don't allow users to write to them , Clipjump will not be able to 
+		save its clips and thus will become of no use. To avoid such a condition, a one time warning is coded into Clipjump to aware users of the 
+		fact.
+	</dd>
+	<br><br>
+
 	
 	<dt>I don't want duplicate data to be stored in Clipjump . What should I do ?</dt>
 	<dd>These are some steps you can undertake to avoid redundancy in Clipjump -
@@ -93,19 +112,19 @@
 		<li>You can also try <a href=basic_help.html#disable>Disabling Clipjump</a> if it looks a proper option for you.
 	</dd>
 
-	<br><br><br>
+	<br><br>
 
 	<dt>Can History Tool only store distinct history items ?</dt>
 	<dd>No. The History tool in Clipjump is meant to keep track of all the clips that were copied to Clipjump with their timestamps.<br>
 		If you are looking to free History disk consumption, try sorting the Window with the 'Size' column. </dd>
 
-	<br><br><br>
+	<br><br>
 
 	<dt>I see the error "[The preview/path cannot be loaded]" when pasting data from zip file opened in Windows Explorer ?</dt>
 	<dd>This happens because the zip file contents have temporary paths . <code>C:/file.zip/some.txt</code> refers to no browsable location and and so Clipjump is not able 
 		to show the contents.</dd>
 
-	<br><br><br>
+	<br><br>
 
 	<dt>The Column Mode data in Notepad++ is not pasted properly ?</dt>
 	<dd>This is a known issue. You can also use the <code><a href=basic_help.html#disable>Disable Clipjump</a></code> option to take Clipjump out of the equation and make 
@@ -113,20 +132,20 @@
 	<i>[v9.8.1+]</i>You may also <a href=basic_help.html#ignorew>automatically disable Clipjump for</a> Notepad++ .<br>
 	<i>[v9.8.9+]</i>The Column Mode paste will work if you paste just after copying column mode data.</dd>
 
-	<br><br><br>
+	<br><br>
 
 	 <dt>I get the 'Pit Channel not found' message when I try to use the 'PitSwap' feature ?</dt>
 	 <dd>PitSwap as you may know switches to a channel named 'Pit' when it is used. As you probably have not created a channel named 'Pit' , you are getting this error. 
 	 Go to the channel selector GUI to create a channel named as 'Pit' and you will be OK. </dd>
 
-	 <br><br><br>
+	 <br><br>
 
 	<dt>I see Japanese / Chinese characters as boxes ?</dt>
 	<dd>This is a uncommon <a href="http://social.technet.microsoft.com/Forums/windows/en-US/1eea3d70-c29a-4a80-9dd7-87ec131f160a/chinese-characters-showing-as-blocks-on-windows-7?forum=w7itproappcompat">Windows Issue</a>
 	 and has nothing to do with Clipjump. To fix it , create a text-file named as 火 or some other chinese on the Desktop and logoff and on. You should be back to normal.
 	</dd>
 
-	<br><br><br>
+	<br><br>
 
 	<dt>How do I see a larger preview of image in the History Preview ?</dt>
 	<dd>History Preview window automatically resizes the image contained with its dimensions . You can drag the Preview window from its edges to resize the window with the 

@@ -4,8 +4,10 @@
   <link rel="stylesheet" href="../../Blogs.css" type="text/css">
 </head>
 
-<body><br>
-<pre>
+<body>
+<h1>Plugins Basic Tutorial</h1>
+<br>
+
 <ol>
 <li><a href=#intro>Introduction</a>
 <li><a href=#filename>The filename</a>
@@ -17,7 +19,7 @@
 <li><a href=#things>Things to Note</a>
 <li><a href=#libs>Libs</a>
 <li><a href=../devList.html>Developers Complete List</a>
-</ol></pre>
+</ol>
 
 <br><br>
 
@@ -42,11 +44,11 @@ There is no limit on what can be the 'key' here. Even <code>;@Plugin-authorSite 
 <br><br><br>
 
 <h2><a name=funcparams>Script/Function parameters</a></h2>
-The Plugin parameters like <code>;@Plugin-param(N)</code> where (N) is a natural number are the Function parameters. (like <code>;@Plugin-Param1</code>) 
+The Plugin parameters like <code>;@Plugin-param(N)</code> where (N) is a natural number are the Function parameters. (like <code class=syntax>;@Plugin-Param1</code>) 
 They hold information about the Nth parameter of the main function in the plugin file.<br>
-When you run a plugin with <code>API.runPlugin( plugin_filename , param1, param2 ....)</code> without any 'param's , the function auto-asks you the parameters showing these 
+When you run a plugin with <code class=syntax>API.runPlugin( plugin_filename , param1, param2 ....)</code> without any 'param's , the function auto-asks you the parameters showing these 
 informations if they are present.<br>
-You can provide a parameter as <code>;@Plugin-Silent 1</code> to force API.runPlugin() to <b>NOT ask</b> the user for parameters even if no parameter is passed to it.<br>
+You can provide a parameter as <code class=syntax>;@Plugin-Silent 1</code> to force API.runPlugin() to <b>NOT ask</b> the user for parameters even if no parameter is passed to it.<br>
 Function parameters are not Mandatory but it is recommended to provide them.
 <br><br><br>
 
@@ -54,20 +56,20 @@ Function parameters are not Mandatory but it is recommended to provide them.
 <ol>
 	<li>Variable Names in plugin files that are included (not external) should start with <code>z</code>. This is because Clipjump doesn't uses any variable starting with 
 		'z' and so this is the best option to avoid variable conflicts.
-	<li>The parameter names in the function definition ( <code>plugin_myplugin(zParam1, zParam2)</code> ) should also start with 'z'.
+	<li>The parameter names in the function definition ( <code class=syntax>plugin_myplugin(zParam1, zParam2)</code> ) should also start with 'z'.
 </ol>
 <b>TIP-</b> You can use the STORE object to also store variables. It is a <code>global</code> object and is totally meant for storing by plugins and through
- ClipjumpCustom.ini. Eg> <code>STORE.myvar := "text"</code> and <code>zVar := STORE.myvar</code>
+ ClipjumpCustom.ini. Eg> <code>STORE.myvar := "text"</code> and <code class=syntax>zVar := STORE.myvar</code>
 <br><br><br>
 
 <h2><a name=classes>Plugin Classes</a></h2>
 'Classes' is a way to distinguish certain plugins from normal plugins. All the plugins whose name is like <code>a.b.ahk</code> and not <code>b.ahk</code> mean they belong 
 to a class (here 'a').<br>
-As already said, these files have main function like <code>plugin_a_b()</code>.
+As already said, these files have main function like <code class=syntax>plugin_a_b()</code>.
 Currently Clipjump has 2 defined classes. User is not allowed to create them. (i.e. create a file like xyzPlugin.coreScript.ahk)
+<br><br>
 
-<ul>
-<li><h3><a name=class_pformat>pformat</a></h3>
+<h3><a name=class_pformat>pformat</a></h3>
 The plugins in this class are used in the paste-format option in Paste mode (key = Z). Officially distributed plugins like <code>pformat.uppercase.ahk</code> and 
 <code>pformat.noformatting.ahk</code> belong to this class.<br>
 <ol>
@@ -79,29 +81,28 @@ The plugins in this class are used in the paste-format option in Paste mode (key
 	<li>When toggling and when pasting, Clipjump inputs the <code>Clipboard</code> variable and not the <code>ClipboardAll</code> variable as the first parameter. 
 		If the plugin needs the 'ClipboardAll' variable, it can consult it anytime as it will be the same as what current active</li>
 </ol>
-</li>
+<br>
 
-<li><h3><a name=class_ext>external</a></h3>
+<h3><a name=class_ext>external</a></h3>
 Plugins whose name starts with <code>external.</code> belong to the 'external' class. They are not included in Clipjump at runtime and solely run through the 
 AutoHotkey.exe (i.e. Clipjump.exe) when needed.<br>
 <b>The Parameters in external plugins ? </b> Like <a href=#funcparams>Function parameters</a> , the external script file can contain <code>-Param1</code>, 
-<code>-Param2</code> and so.. for the <code>API.runPlugin()</code> to take them as Script parameters and thus ask the user if they pass no paramter.<br>
+<code>-Param2</code> and so.. for the <code class=syntax>API.runPlugin()</code> to take them as Script parameters and thus ask the user if they pass no paramter.<br>
 For example try running the <code>external.controller.ahk</code> and then seeing its source code.
-</li>
-</ul>
 <br><br><br>
 
 <h2><a name=things>Things to Note</a></h2>
 <ol>
-	<li>Use <code>;@Plugin-Silent 1</code> to make <code>API.runPlugin()</code> not ask the user for parameters even if user doesn't enters them.
-	<li>It will be a good idea to use <code>API.showTip</code> and <code>API.removeTip</code> (<a href=../devList.html#showtip>Link</a>)
+	<li>Use <code>;@Plugin-Silent 1</code> to make <code class=syntax>API.runPlugin()</code> not ask the user for parameters even if user doesn't enters them.
+	<li>It will be a good idea to use <code class=syntax>API.showTip</code> and 
+		<code class=syntax>API.removeTip</code> (<a href=../devList.html#showtip>Link</a>)
 	<li>While testing keep in mind that your plugin will be included in Clipjump.ahk and thus run from the directory of Clipjump.ahk. So be careful with the WorkingDir 
 		factor.
 	<li>There will be no auto-execution of any plugin as a non-external plugin will be included at the bottom of Clipjump.ahk
 	<li>Please reload Clipjump when you change/add a plugin file to load it into Clipjump.
 	<li>Make sure to have a look at <a href=../devList.html>The Complete Developer List</a> and the <a href=../devList.html#pubapi>public API</a>
 </ol>
-<br><br><br>
+<br><br>
 
 <h2><a name=libs>Libs</a></h2>
 If your plugin file requires more files as #Includes, consider keeping them in (file_name).lib directory. So for the plugin <code>external.controller.ahk</code> 

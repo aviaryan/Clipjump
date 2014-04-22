@@ -7,12 +7,14 @@
 <body>
 <h1>Common Formats Paste Format</h1>
 <b>version 0.35</b><br>
-<a href=https://raw.github.com/aviaryan/Clipjump/master/plugins/pformat.commonformats.ahk>Download from Github</a><br><br>
+<a href=https://raw.github.com/aviaryan/Clipjump/master/plugins/pformat.commonformats.ahk>Github</a> (This plugin is included in Clipjump download)
+<br><br>
 
+<h2>Introduction</h2>
 'Common Formats' is a pformat plugin that lets you paste the clip with various inbuilt paste formattings. The 'pformat.commonformats.ahk' file can be edited to include more
  formats.<br><br>
 
- <h3>Using</h3>
+ <h2>Using</h2>
  Once you have selected the common format <a href="../basic_help.html#pformat">paste-format</a>, releasing Ctrl to paste will bring up the GUI. Use Up/Down keys or mouse to select 
  your needed format and press 'Enter' or OK button to paste.<br>
  You can press 'Esc' or simply close the GUI to cancel the paste operation.<br>
@@ -25,8 +27,9 @@
 
 <b>Input Field</b> is used by formats that have parameters in addition to the input text. <b>RegExReplace</b> for example uses input field to get the other 2 parameters, 
 the match needle and the replacement text AND the users are supposed to enter them line by line.
+<br><br>
 
- <h3>Porting an existing pformat to under Common Formats</h3>
+<h2>Porting an existing pformat to under Common Formats</h2>
  To make any independent pformat a part of the common format, you can simply copy its code to the pformat.commonformats.ahk file. <br>
  Then replace the main function name <code>plugin_pformat_name(</code> by <code>plugin_pformat_commonformats_name(</code> where 'name' is the name of that independent 
  pformat.
@@ -37,6 +40,6 @@ OR you can create a new format under the 'Common Formats' plugin. It should be e
  appear in the GUI. (Related: <a href=basics.html#class_pformat>pformat</a>)
 
 <br><br>
-<b>Info</b> Data for the format shown in the respective field is nothing but data stored in <code>STORE</code> object as <code>STORE["commonformats_" formatName]</code> 
+<b>Info Data</b> for the format shown in the respective field is nothing but data stored in <code>STORE</code> object as <code>STORE["commonformats_" formatName]</code> 
 where formatName is the name of the format such as 'RegexReplace'.
 <br>

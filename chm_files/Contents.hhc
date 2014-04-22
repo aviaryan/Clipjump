@@ -35,8 +35,8 @@
 			<param name="Local" value="docs/basic_help.html#pformat">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Common Formats (paste format)">
-			<param name="Local" value="docs/plugins/plugin_commonformats.html">
+			<param name="Name" value="Clips Organizer">
+			<param name="Local" value="docs/organizer.html">
 			</OBJECT>
 	</UL>
 
@@ -115,8 +115,12 @@
 			<param name="Local" value="docs/basic_help.html#fx">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Edit Clips">
+			<param name="Name" value="Editing Clips">
 			<param name="Local" value="docs/basic_help.html#editclip">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Common Formats (paste format)">
+			<param name="Local" value="docs/plugins/plugin_commonformats.html">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Muiltple Pasting">
@@ -127,11 +131,19 @@
 			<param name="Local" value="docs/basic_help.html#path">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Copying File data">
+			<param name="Local" value="docs/basic_help.html#fdata">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Export Clipboards">
 			<param name="Local" value="docs/basic_help.html#export">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Selective Windows Clipboard">
+			<param name="Name" value="Copying and Moving Clips">
+			<param name="Local" value="docs/basic_help.html#copycutclip">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Copying to Windows Clipboard">
 			<param name="Local" value="docs/basic_help.html#winclip">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
@@ -159,11 +171,11 @@
 			<param name="Local" value="docs/basic_help.html#paste">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Disable Clipjump">
+			<param name="Name" value="Disabling Clipjump">
 			<param name="Local" value="docs/basic_help.html#disable">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Auto-disable at certain windows">
+			<param name="Name" value="Auto-disabling at certain windows">
 			<param name="Local" value="docs/basic_help.html#ignorew">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
@@ -177,6 +189,10 @@
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Clipjump Settings Editor">
 			<param name="Local" value="docs/settings.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="One Time Stop">
+			<param name="Local" value="docs/basic_help.html#ot">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="More Ini based settings">

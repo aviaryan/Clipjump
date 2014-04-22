@@ -199,9 +199,17 @@ changeChannel(cIndex, backup_old:=1){
 	GuiControl, % "Channel:+Range0-" CN.Total, ChannelUpdown 		; refresh up-down limits
 
 	LASTCLIP := LASTFORMAT := IScurCBACTIVE := "" 								;make all false as they are different for other channels
-	CopyMessage := !ini_IsMessage ? "" : MSG_TRANSFER_COMPLETE " {" CN.Name "}"
+	renameChannel(CN.NG, CN.Name)
+}
 
-	Menu, Tray, Tip, % PROGNAME " {" CN.Name "}"
+renameChannel(channel, name){
+	ini_write("Channels", channel, name, 0)
+	if ( CN.NG == channel )
+	{
+		CN.Name := name
+		CopyMessage := !ini_IsMessage ? "" : MSG_TRANSFER_COMPLETE " {" name "}"
+		Menu, Tray, Tip, % PROGNAME " {" CN.Name "}"
+	}
 }
 
 ;--------------------------- select channel box --------------------------------------------------------------

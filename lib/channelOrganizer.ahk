@@ -1,7 +1,6 @@
-/*
-TODO
-menu for ListBox
-
+/* *****************
+Hello. How are you ?
+ * *****************
 */
 
 channelOrganizer:
@@ -28,13 +27,12 @@ channelOrganizer(){
 	Gui, Add, Edit, % "x" wt-200 " yp w200 vchOrg_search gchOrg_search", 		; width of EDIT is fixed = 200
 	Gui, Font, s10
 
-	;chList := RegexReplace( Trim( channel_find(), "`n" ), "`n", "|" )
-	;Sort, chList, D| N
 	Gui, Add, ListBox, section x5 y+10 w115 h%ht% gchOrg_Lb vchOrg_Lb -LV0X10 AltSubmit, ;% "|" chList 	; width of LB is fixed = 115
 	gosub chOrg_addChList
 
 	Gui, Font, s12, Wingdings
-	Gui, Add, Button, x+4 yp+50 w30 gchOrgUp, % chr(233) 			; buttons width = 30
+	Gui, Add, Button, x+4 yp+20 w30 +Disabled, % chr(231)
+	Gui, Add, Button, xp y+20 w30 gchOrgUp, % chr(233) 			; buttons width = 30
 	Gui, Add, Button, xp y+2 w30 gchOrgDown, % chr(234)
 	Gui, Add, Button, xp y+2 w30 gchOrgCut, % chr(34)
 	Gui, Add, Button, xp y+2 w30 gchOrgCopy, % chr(52)
@@ -52,7 +50,7 @@ channelOrganizer(){
 	GuiControl, chOrg:+AltSubmit, chOrg_Lv
 	; Gui Done
 
-	; // MENU
+	; // MENU LV
 	Menu, chOrgLVMenu, Add, % TXT.HST_m_prev, chOrg_preview
 	Menu, chOrgLVMenu, Add
 	Menu, chOrgLVMenu, Add, % TXT.HST_m_insta, chOrg_paste
@@ -66,8 +64,14 @@ channelOrganizer(){
 	Menu, chOrgLVMenu, Add, % TXT.HST_m_ref, chOrg_refresh
 	Menu, chOrgLVMenu, Default, % TXT.HST_m_prev
 
+	; // MENU LB
+	Menu, chOrgLBMenu, Add, % TXT.ORG_m_inc, chOrgUp
+	Menu, chOrgLBMenu, Add, % TXT.ORG_m_dec, chOrgDown
+	Menu, chOrgLBMenu, Add, % TXT._rename " (F2)", chOrg_renameCh
+	Menu, chOrgLBMenu, Add, % TXT.HST_m_del, chOrgDelete
+
 	; Hotkeys
-	Hotkey, IfWinActive, % TXT.ORG__name
+	Hotkey, IfWinActive, % TXT.ORG__name " ahk_class AutoHotkeyGUI"
 	hkZ("F5", "chOrg_refresh")
 	hkZ("^f", "chOrg_searchfocus")
 	Hotkey, If
@@ -80,7 +84,12 @@ channelOrganizer(){
 	hkZ("!x", "chOrgCut")
 	hkZ("!c", "chOrgCopy")
 	Hotkey, If
-
+	Hotkey, If, IsChOrgLBActive()
+	hkZ("Del", "chOrgDelete")
+	hkZ("!Up", "chOrgUp")
+	hkZ("!Down", "chOrgDown")
+	hkZ("F2", "chOrg_renameCh")
+	Hotkey, If
 	Hotkey, If, IsPrevActive()
 	hkZ("^f", "prevSearchfocus")
 	Hotkey, If
@@ -106,9 +115,10 @@ chOrgGuiSize:
 	return
 
 chOrgGuiContextMenu:
-	if (A_GuiControl != "chOrg_Lv") or (LV_GetNext() = 0)
-		return
-	Menu, chOrgLVMenu, Show, %A_GuiX%, %A_GuiY%
+	if (A_GuiControl == "chOrg_Lv")
+		Menu, chOrgLVMenu, Show, %A_GuiX%, %A_GuiY%
+	else if (A_GuiControl == "chOrg_Lb")
+		Menu, chOrgLBMenu, Show, %A_GuiX%, %A_GuiY%
 	return
 
 chOrgGuiEscape:
@@ -116,33 +126,42 @@ chOrgGuiClose:
 	Ini_write("Organizer", "w", width+158, 0) , Ini_write("Organizer", "h", height, 0)
 	Gui, chOrg:Destroy
 	Menu, chOrgLVMenu, DeleteAll
+	Menu, chOrgLBMenu, DeleteAll
 	EmptyMem()
 	return
 
 chOrgUp:
-chOrgDown:
+chOrgDown: 	; dont make these labels critical
 	Gui, chorg:Default
-	tempNo := A_ThisLabel="chOrgUp" ? 1 : 0
-	temp_row_s := 0
-	while (temp_row_s := LV_GetNext(temp_row_s)) {
-		LV_GetText(fch, temp_row_s, 1) , LV_GetText(fcl, temp_row_s, 2)
-		spRow := tempNo ? temp_row_s-1 : temp_row_s+1
-		sch := scl := ""
-		LV_GetText(sch, spRow, 1) , LV_GetText(scl, spRow, 2)
-		if (sch != "") {
-			chOrg_clipSwap(fch, fcl, sch, scl)
-			LV_GetText(ftxt, temp_row_s, 3) , LV_GetText(stxt, spRow, 3)
-			Gui, chOrg:Default
-			LV_Modify(temp_row_s, "", fch, fcl, stxt) 		; // change only 3rd col.. 
-			LV_Modify(SprOW,"", sch, scl, ftxt)
+	t_Up := A_ThisLabel="chOrgUp" ? 1 : 0
+	gosub chOrg_isChActive
+	if !isChActive {
+		temp_row_s := 0
+		while (temp_row_s := LV_GetNext(temp_row_s)) {
+			LV_GetText(fch, temp_row_s, 1) , LV_GetText(fcl, temp_row_s, 2)
+			spRow := t_Up ? temp_row_s-1 : temp_row_s+1
+			sch := scl := ""
+			LV_GetText(sch, spRow, 1) , LV_GetText(scl, spRow, 2)
+			if (sch != "") {
+				chOrg_clipSwap(fch, fcl, sch, scl)
+				LV_GetText(ftxt, temp_row_s, 3) , LV_GetText(stxt, spRow, 3)
+				Gui, chOrg:Default
+				LV_Modify(temp_row_s, "", fch, fcl, stxt) 		; // change only 3rd col.. 
+				LV_Modify(SprOW,"", sch, scl, ftxt)
+			}
 		}
+	} else {
+		gosub chorg_getChSelected
+		nCh := chSel + (t_Up ? -1 : 1)
+		if chOrg_clipFolderSwap(chSel, nCh)
+			gosub chOrg_addChList
 	}
 	return
 
 
 chOrgDelete:
-	GuiControlGet, out, chOrg:Enabled, Button3 		; Cut button not enabled when LB is active
-	if out {
+	gosub chOrg_isChActive
+	if !isChActive {
 		gosub chOrg_getSelected
 		if Instr(rSel, "`n")
 		{
@@ -156,14 +175,15 @@ chOrgDelete:
 	}
 	else {
 		if (chOrg_Lb != "") && (chOrg_Lb>1) {
+			gosub chorg_getChSelected
 			MsgBox, 67, % TXT.ORG_delCnlMsgTitle, % TXT.ORG_delCnlMsg
 			IfMsgBox, Yes
 			{
-				manageChannel(chOrg_Lb-2)
+				manageChannel(chSel)
 				gosub chOrg_addChList
 			}
 			IfMsgBox, No
-				API.emptyChannel(chOrg_Lb-2)
+				API.emptyChannel(chSel)
 			IfMsgBox, Cancel
 				chOrg_notification( TXT.TIP_cancelled)
 			else chOrg_notification("Channel Operation Done")
@@ -198,6 +218,18 @@ chOrgCopy:
 	gosub chOrg_refresh
 	return
 
+chorg_getChSelected:
+	Gui, chorg:Submit, nohide
+	chSel := chOrg_Lb-2
+	chSelname := ini_read("Channels", chSel)
+	return
+
+chOrg_isChActive:
+	Gui, chorg:Default
+	GuiControlGet, isChActive, chOrg:Enabled, Button4 		; Cut button not enabled when LB is active
+	isChActive := !isChActive
+	return
+
 chOrg_getSelected:
 	Gui, chOrg:Default
 	temp_row_s := 0 , rSel := ""
@@ -214,10 +246,8 @@ chOrg_paste:
 	gosub chOrg_getSelected
 	gosub chOrgGuiClose
 	WinWaitClose, % TXT.ORG__name
-	;WinHide, % TXT.ORG__name
 	loop, parse, rSel, `n
 		API.paste( Substr(A_LoopField, 1, Instr(A_LoopField, "-")-1) , Substr(A_LoopField, Instr(A_LoopField, "-")+1) )
-	;WinClose, % TXT.ORG__name
 	return
 
 chOrg_preview:
@@ -234,10 +264,20 @@ chOrg_preview:
 	}
 	return
 
+chOrg_renameCh:
+	gosub chorg_getChSelected
+	InputBox, outName, % TXT.ORG__name, % TXT.ORG_renameAsk " -> " chSel,, 500, 200,,,,, % chSelname
+	if (ErrorLevel=1) or (outName="")
+		return
+	renameChannel(chSel, outName)
+	gosub chOrg_addChList
+	return
+
 chOrg_Lv:
 	Gui, chOrg:Default
-	loop 4
-		GuiControl, Enable, % "Button"  A_index
+	GuiControl, , Button1, % chr(232)
+	loop 2
+		GuiControl, Enable, % "Button"  A_index+3
 	if A_GuiEvent = DoubleClick
 		gosub chOrg_preview
 	return
@@ -246,9 +286,17 @@ chOrg_refresh:
 chOrg_search:
 chOrg_Lb:
 	Gui, chOrg:submit, nohide
+	GuiControl, , Button1, % chr(231)
+
+	if chOrg_Lb=1
+		loop 4 		; in case all channels are selected
+			GuiControl, Disable, % "Button"  A_index+1	
+	else
+		loop 2 {
+			GuiControl, Disable, % "Button"  A_index+3
+			GuiControl, Enable,  % "Button"  A_Index+1
+		}
 	chOrgLV_update(chOrg_search, chOrg_Lb>1 ? chOrg_Lb-2 : "")
-	loop 4
-		GuiControl, Disable, % "Button"  A_index
 	return
 
 }
@@ -256,6 +304,31 @@ chOrg_Lb:
 chOrg_searchfocus:
 	GuiControl, chOrg:Focus, Edit1
 	return
+
+chOrg_clipFolderSwap(orig_ch, new_ch){
+	if (new_ch<0) or ( new_ch >= CN.Total )
+		return 0
+
+	origch := orig_ch ? orig_ch : "" , newch := new_ch ? new_ch : ""
+	ClipFolderTransfer(newch, newch "_a", 0)
+	ClipFolderTransfer(origch, newch, 0)
+	ClipFolderTransfer(newch "_a", origch, 0)
+
+	obj_orig := CDS[orig_ch] , obj_new := CDS[new_ch] 	; update cached datas
+	CDS[orig_ch] := obj_new , CDS[new_ch] := obj_orig
+
+	CN["TEMPSAVE" CN.N] := TEMPSAVE , CN["CURSAVE" CN.N] := CURSAVE 	; submit active values
+	ts_orig := CN["TEMPSAVE" origch] , cs_orig := CN["CURSAVE" origch] ; update cursave values
+	CN["TEMPSAVE" origch] := CN["TEMPSAVE" newch] , CN["CURSAVE" origch] := CN["CURSAVE" newch]
+	CN["TEMPSAVE" newch] := ts_orig , CN["CURSAVE" newch] := cs_orig
+
+	orig_name := ini_read("Channels", orig_ch) , Ini_write("Channels", orig_ch, ini_read("Channels", new_ch), 0)
+	ini_write("Channels", new_ch, orig_name, 0)
+
+	if ( CN.NG == orig_ch )
+		changeChannel(new_ch, 0) 	; 0 for dont save prev values is neccesary
+	return 1
+}
 
 chOrg_clipSwap(fch, fcl, sch, scl){
 	f_sub := (fch?fch:"") , s_sub := (sch?sch:"")
@@ -280,7 +353,10 @@ chOrg_notification:
 	return
 
 IsChOrgLVActive(){
-	return IsActive("SysListView321", "classnn") && IsActive(TXT.ORG__name, "window") && ctrlRef==""
+	return IsActive("SysListView321", "classnn") && WinActive(TXT.ORG__name " ahk_class AutoHotkeyGUI") && ctrlRef==""
+}
+IsChOrgLBActive(){
+	return IsActive("ListBox1", "classnn") && WinActive(TXT.ORG__name " ahk_class AutoHotkeyGUI")
 }
 
 ; // UPDATES the ListView with current search
@@ -308,6 +384,8 @@ chOrgLV_update(term="", channel=""){
 
 
 #If IsChOrgLVActive()
+#If
+#If IsChOrgLBActive()
 #If
 
 ; /// EDITED VERSION

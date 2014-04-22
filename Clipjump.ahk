@@ -133,7 +133,7 @@ else if (ini_Version != VERSION)
 
 
 ;Global Ini declarations
-global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_IsChannelMin := 1 , CopyMessage
+global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_IsChannelMin := 1 , ini_isMessage, CopyMessage
 		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, channel_K, onetime_K, paste_k, actionmode_k, ini_is_duplicate_copied, ini_formatting
 		, ini_CopyBeep , beepFrequency , ignoreWindows, ini_defEditor, ini_defImgEditor, ini_def_Pformat, pluginManager_k, holdClip_K, ini_PreserveClipPos
 		, chOrg_K
@@ -218,6 +218,7 @@ return
 ;End Of Auto-Execute================================================================================================================
 
 loadClipboardDataS(){
+	API.showTip(TXT.TIP_initMsg)
 	API.blockMonitoring(1)
 	loop % CN.Total
 	{
@@ -226,16 +227,16 @@ loadClipboardDataS(){
 		loop, % fp "\*.avc"
 		{
 			ONCLIPBOARD:="" , Z := ""
-			if try_ClipboardfromFile(A_LoopFileFullPath, 100)
-				Z := trygetVar("Clipboard", 100)
-			else
-				ONCLIPBOARD := 1 , Z := ""
+			if try_ClipboardfromFile(A_LoopFileFullPath, 300)
+				Z := trygetVar("Clipboard", 500) 	; 300 tries minimize chances of Clipboard recorders like Exekutor to interrupt 
+			else ONCLIPBOARD := 1 , Z := ""
 
 			while !ONCLIPBOARD
 				sleep 5
 			CDS[R][Substr(A_LoopFileName,1,-4)] := Z
 		}
 	}
+	API.removeTip()
 	API.blockMonitoring(0)
 }
 
@@ -1057,10 +1058,10 @@ actionmode:
 
 init_actionmode() {
 	ACTIONMODE := {H: "history", S: "channelGUI", O: "channelOrganizer", C: "copyfile", X: "copyfolder", F: "CopyFileData", D: "disable_clipjump"
-		, P: "pitswap", T: "onetime", E: "settings", F1: "hlp", Esc: "Exit_actmd", M: "pluginManager_GUI()", F2: "OpenShortcutsHelp"
+		, P: "pitswap", T: "onetime", E: "settings", F1: "hlp", Esc: "Exit_actmd", M: "pluginManager_GUI()", F2: "OpenShortcutsHelp", L: "classTool"
 		, H_caption: TXT.HST__name, S_caption: TXT.SET_chnl, O_caption: TXT.ORG__name, C_caption: TXT._cfilep, X_caption: TXT._cfolderp, F_caption: cfiled 
 		, D_caption: TXT.ACT_disable " " PROGNAME, P_caption: TXT._pitswp, T_caption: TXT._ot, E_caption: TXT.SET__name
-		, F1_caption: TXT.TRY_help, Esc_caption: TXT.ACT_exit, M_caption: TXT.PLG__name, F2_caption: TXT.try_pstmdshorts}
+		, F1_caption: TXT.TRY_help, Esc_caption: TXT.ACT_exit, M_caption: TXT.PLG__name, F2_caption: TXT.try_pstmdshorts, L_caption: TXT.IGN__name}
 }
 
 update_actionmode(){

@@ -9,12 +9,13 @@
 
 <body>
 <h1>Complete Developer's API functions and other routines list</h1>
+<br>
 <pre><ul><li><a href=#api>API functions</a>
 <li><a href=#funcs>More functions</a>
 <li><a href=#labels>Labels/routines</a>
 <li><a href=#vars>Variables</a>
 <li><a href=#pubapi>The Public API</a>
-<li><a name=#misc>Misc</a></ul></pre>
+<li><a href=#misc>Misc</a></ul></pre>
 <br><br>
 
 <h2><a name=api>API functions</a></h2>
@@ -64,8 +65,10 @@ They should be accessed as <code>API.function_name()</code> . For example <code>
 	<br>
 
 	<li><code>ExecuteSection(secName)</code><br>
-	- Executes a section in the ClipjumpCustom.ini at will.
-	<br><br>
+	- Executes a section in the ClipjumpCustom.ini
+	<br>
+	<br>
+
 	<li><code>IncognitoMode(p=1)</code><br>
 	- Enable/disable Incognito Mode. Pass 1 to disable.<br>
 	If p = 1 enable incognito mode<br>
@@ -92,6 +95,13 @@ They should be accessed as <code>API.function_name()</code> . For example <code>
 	name - The name of the label to be run.
 	<br>
 	<br>
+	
+	<li><code>deleteClip(channel, clip)</code><br>
+	- deletes a clip from a channel<br>
+	channel - The <b>channel number</b> whose clip is to be deleted<br>
+	clip - The Clip number to be deleted.
+	<br>
+	<br>
 
 	<li><a name=showtip><code>showTip(Text, forTime="")</code></a><br>
 	- shows a Tip (with a different font). recommended when creating a plugin<br>
@@ -111,6 +121,11 @@ They should be accessed as <code>API.function_name()</code> . For example <code>
 	<br>
 	<br>
 
+	<li><code>getChStrength(channel)</code><br>
+	- gets total number of clips in a channel i.e. population of a channel
+	<br>
+	<br>
+
 	<li><code>Text2Binary(Text, byref returnVar)</code><br>
 	- gets binary ClipboardAll data from simple text i.e. string. You pass it a string and it converts it into binary data and returns it via byref variable returnVar<br>
 	Text = the string you want to convert to ClipboardAll type data<br>
@@ -124,7 +139,7 @@ They should be accessed as <code>API.function_name()</code> . For example <code>
 	<br>
 	<br>
 </ol>
-<hr>
+<br>
 <h2><a name=funcs>More functions</a></h2>
 Other interesting functions that are not a part of API.<br>
 Unlike API, they should be accessed normally as <code>function_name()</code> . For example <code>changeChannel(2)</code>
@@ -180,7 +195,7 @@ Unlike API, they should be accessed normally as <code>function_name()</code> . F
 	<br>
 	<br>
 </ol>
-<hr>
+<br>
 <h2><a name=labels>Labels/Routines</a></h2>
 Labels should be accessed as <code>run = label_name</code> in ClipjumpCustom and <code>gosub label_name</code> in AhkScript.<br>
 <ol>
@@ -191,7 +206,8 @@ Labels should be accessed as <code>run = label_name</code> in ClipjumpCustom and
 			<li>channelgui
 			<li>classtool
 			<li>channelGUI
-			<li>pluginManagerGui</ol>
+			<li>pluginManagerGui
+			<li>channelOrganizer</ol>
 	<br>
 	<li>These are the labels corresponding to various features of Clipjump. Again, the name itself should be explanatory.<br>
 		<ol><li>onetime
@@ -225,7 +241,7 @@ Labels should be accessed as <code>run = label_name</code> in ClipjumpCustom and
 	<br>
 	<br>
 </ol>
-<hr>
+<br>
 <h2><a name=vars>Variables</a></h2>
 The important variables in Clipjump which can be changed to customize much of the behavior in the program are listed below. Please note that only selected variables 
 have been listed to prevent any issues with the core functionality of Clipjump.<br>
@@ -253,28 +269,28 @@ Changing a variable in ClipjumpCustom is done as <code>variable = value</code> a
 	<br>
 	<br>
 </ol>
-<hr>
+<br>
 
 <h2><a name=pubapi>Public API</a></h2>
 Public API (publicAPI.ahk) gives power to any Ahk Script as well an <a href=plugins/basics.html#class_ext>external plugin</a> to control all aspects of Clipjump from 
 changing and reading variables to running function and labels. It is by default distibuted with Clipjump and present in the Clipjump.exe directory.<br>
 <a href=https://github.com/aviaryan/Clipjump/blob/master/publicAPI.ahk>Here</a> is the online github link in case it ever updates<br>
 <br>
-An external plugin can include publicapi as <code>#Include %A_ScriptDir%\..\publicAPI.ahk</code><br>
+An external plugin can include publicapi as <code class=syntax>#Include %A_ScriptDir%\..\publicAPI.ahk</code><br>
 Once publicAPI is included in the script, you will have to initialize it.<br>
-<code> cj := new Clipjump()     ; The name 'cj' doesnt matter</code>
+<code class=syntax>cj := new Clipjump()     ; The name 'cj' doesnt matter</code>
 Then you can call API methods, set variables, get variables and so on using the 'cj' object. Here are few examples -<br>
 <pre>msgbox % cj.version
 cj["pastemodekey.z"] := "^y"
 msgbox % cj.getClipLoc(1, 5)
 cj.runFunction("set_pformat(NO-FORMATTING)")
 cj.runLabel("exit") 		; closes Clipjump</pre>
+
 <br>
-<hr>	
+<br>
 
 <h2><a name=misc>Misc</a></h2>
 <ul>
-	<li>
 </ul>
 
 <br><br>

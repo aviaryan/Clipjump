@@ -54,7 +54,6 @@ HST_clip = Clip
 HST_date = Date
 HST_size = Size(B)
 HST_dconsump = Disk Consumption
-HST_viewimage = [Double-click to view image]
 HST_m_prev = &Preview
 HST_m_copy = &Copy 			(Ctrl+C)
 HST_m_insta = &Insta-Paste 	(Space)
@@ -296,3 +295,23 @@ SET_T_holdclip = Copies the selected text or item to a buffer and prevents it fr
 SET_keepactivepos = Preserve Current Active Clip position
 SET_T_keepactivepos = Do you want Clipjump to remember the last active Clip in Paste Mode ?
                     = Unticking it will make Clipjump Paste Mode always start from Clip 1.
+
+;=====
+;11
+;=====
+
+HST_viewimage = [IMAGE]
+ORG__name = Clipjump Channel Organizer
+ORG_m_inc = Move Up    (Alt+Up)
+ORG_m_dec = Move Down   (Alt+Down)
+ORG_error = Not Supported
+ORG_countStatus = Items Listed
+SET_org = Channel Organizer
+ORG_delCnlMsgTitle = Choose Channel Operation
+ORG_delCnlMsg = What do you want to do with the selected Channel ?
+      = Delete the channel permanently = Yes
+      = Empty the channel = No
+      = Do Nothing = Cancel
+_rename = Rename
+ORG_renameAsk = Please write new name for channel number
+TIP_initMsg = Initialising Clipjump

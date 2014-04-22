@@ -5,20 +5,21 @@
 </head>
 
 <body>
-<h1>Plugins</h1>
+<h1>Plugins</h1><br>
+
 Plugins are AutoHotkey scripts that are placed in the plugins folder in Clipjump.exe directory.<br>
 They can be accessed from the Plugin Manager that runs with the M key in <a href="../basic_help.html#actmd">Action Mode</a>. 
 <br><br>
 
-<h3>Installing</h3>
+<h2>Installing</h2>
 Simply copy the .ahk file with all other dependent files in the plugins directory and <b>restart Clipjump</b>.<br>
 <b>Note</b> - Clipjump lists all plugins to use at ExitTime and <b>not at runTime</b>. Thus Restarting Clipjump after making changes to plugins is necessary.
 <br>
 <b>TIP</b> - To disable a plugin temporarily, create a folder named (for example) '_Disabled' in the plugins folder and move the plugin to it.
-<br><br>
+<br><br><br>
 
-<h3><a name=run>Running a plugin from ClipjumpCustom</a></h3>
-The <code>API.runPlugin( plugin_file_name , param1 , param2 , param3 , ..... )</code> can be used to run a plugin.<br>
+<h2><a name=run>Running a plugin from ClipjumpCustom</a></h2>
+The <code class=syntax>API.runPlugin( plugin_file_name , param1 , param2 , param3 , ..... )</code> can be used to run a plugin.<br>
 If <b>no</b> parameter (param) is passed at all , then the user will be automatically asked for the needed number of parameters. Below are suitable examples -
 <pre>
 [some_section]
@@ -29,35 +30,35 @@ run = API.runPlugin( some_plugin.ahk )
 bind=Win+Alt+K
 run = API.runPlugin( some_plugin.ahk , the_text , the_title )
 </pre>
-<br>
+<br><br>
 
-<h3>Creating your own plugins</h3>
+<h2>Creating your own plugins</h2>
 If you know the AutoHotkey language, you won't take a minute starting creating your first plugins. If you are not familiar with AutoHotkey, I recommended 
 <a href="http://ahkscript.org">trying it</a> as it is the ever so easy and suprisingly powerful programming langauge. You <b>won't</b> regret.<br>
 See <a href="basics.html">Plugins Basic Guide</a>
-<br><br>
+<br><br><br>
 
-<h3><a name=def>Officially Distributed Plugins</a></h3>
+<h2><a name=def>Officially Distributed Plugins</a></h2>
 <ol>
 	<li>General
-	<ol><li><i>Hotstring-Paste</i> - A very raw sample plugin that helps you to create Hotstrings to paste, i.e. you type a text and a clip stored by Clipjump is pasted.
-		<li><i>NoFormatting paste</i> - Pastes current clipboard trimming off any formatting (like HTML).
-		<li><i>Delete [File/Folder]</i> - Deletes clips of data type <code>[File/Folder]</code> from selected or all channels.
+	<ol><li>Hotstring-Paste - A very raw sample plugin that helps you to create Hotstrings to paste, i.e. you type a text and a clip stored by Clipjump is pasted.
+		<li>NoFormatting paste - Pastes current clipboard trimming off any formatting (like HTML).
+		<li>Delete [File/Folder] - Deletes clips of data type <code>[File/Folder]</code> from selected or all channels.
 	</ol>
 	<li><a name=def_pformat>Paste Formats</a>
-	<ol><li><i><a href=plugin_commonformats.html>Common Formats</a></i> (<a href=http://clipjump.sourceforge.net/docs/plugins/plugin_commonformats.html>Online Link</a>)
-		<li><i>NO-FORMATTING</i>
-		<li><i>SentenceCase</i>
-		<li><i>UPPERCASE</i>
+	<ol><li><a href=plugin_commonformats.html>Common Formats</a> (<a href=http://clipjump.sourceforge.net/docs/plugins/plugin_commonformats.html>Online Link</a>)
+		<li>NO-FORMATTING
+		<li>SentenceCase
+		<li>UPPERCASE
 	</ol>
 	<li><a name=def_ext>External</a>
-	<ol><li><i>Ini Editor</i> - by rbrtryn, Added as a secondary interface to edit Settings.ini
-		<li><i>Controller</i> - Clipjump Controller, as a plugin
+	<ol><li>Ini Editor - by rbrtryn, Added as a secondary interface to edit Settings.ini
+		<li>Controller - Clipjump Controller, as a plugin
 	</ol>
 </ol>
 <br><br>
 
-<h3>More Plugins</h3>
+<h2>More Plugins</h2>
 Third party plugins can be downloaded at the <a href="http://clipjump.sourceforge.net/addons.html">Official Addons page</a><br>
 
 <br><br>

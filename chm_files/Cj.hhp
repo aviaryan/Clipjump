@@ -7,7 +7,7 @@ Index File=Index.hhk
 Default Window=
 Default Topic=clipjump.html
 Default Font=
-Full-text search=Yes
+Full-text search=No
 Auto Index=Yes
 Language=
 Title=Clipjump Help
@@ -20,26 +20,27 @@ Display compile notes=Yes
 
 [FILES]
 Blogs.css
+changelog.html
 clipjump.html
 clipjumpcontroller.html
 contact.html
-changelog.html
-images\cancel.png
-images\COPY.png
-images\delete.png
-images\copyclip.png
-images\fixate.png
-images\pformat.png
-images\pasting.png
-images\path.png
-images\trayicon.png
 docs\basic_help.html
-docs\history.html
-docs\settings.html
-docs\faq.html
-docs\ini.html
-docs\translate.html
-docs\index.html
 docs\custom.html
+docs\faq.html
+docs\history.html
+docs\ini.html
+docs\organizer.html
+docs\settings.html
+docs\translate.html
 docs\troubleshooting.html
 docs\examples\ClipjumpCustom.ini
+images\cancel.png
+images\COPY.png
+images\copyclip.png
+images\delete.png
+images\fixate.png
+images\pasting.png
+images\path.png
+images\pformat.png
+images\trayicon.png
+

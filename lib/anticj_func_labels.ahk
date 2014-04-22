@@ -88,7 +88,8 @@ tryGetvar(varname, maxtries=100){
 			ret := %varname%
 			fetch_done := 1
 		} catch {
-			MakeClipboardAvailable(0)
+			fetch_done := 0 	; I think fetch_done=1 runs even after error and so no use of the try catch happened before
+			MakeClipboardAvailable(0, 10)
 		}
 	}
 	return ret
@@ -126,6 +127,7 @@ local Midpoint, emVar, $j, $n
 ;Try getting a file onto Clipboard
 try_ClipboardfromFile(file, maxtries=100){
 	;Critical, Off
+	temp_ClipbrdLoaded := 0
 	while !temp_ClipbrdLoaded
 	{
 		try {
@@ -138,8 +140,6 @@ try_ClipboardfromFile(file, maxtries=100){
 	while !DllCall("OpenClipboard", "int", "")
 		sleep 10
 	DllCall("CloseClipboard")
-	;Critical, On 		; // To make sure thread doesnt overlaps when user goes fast thru the paste mode
-	;MakeClipboardAvailable(0) ;// Other Clipboard capturing apps get activated after CJ changes Clipboard. So wait 4 them to finish
 	return temp_ClipbrdLoaded
 }
 
@@ -155,14 +155,24 @@ ClipTransfer(sub, cno, nsub, ncno, keep_original=1, flag=1){
 	FileTransfer("cache\fixate" sub "\" cno ".fxt", "cache\fixate" nsub "\" ncno ".fxt", keep_original, flag)
 }
 
+ClipFolderTransfer(sub, nsub, keep_original=1, flag=1){
+; Copy moves a channel with the 3 folders
+	static d1 := "clips" , d2 := "thumbs" , d3 := "fixate"
+	loop 3
+		if keep_original
+			FileCopyDir, % "cache\" d%A_index% sub, % "cache\" d%A_index% nsub, % flag
+		else
+			FileMoveDir, % "cache\" d%A_index% sub, % "cache\" d%A_index% nsub, % flag
+}
+
 ;Checks and makes sure Clipboard is available
 ;Use 0 as the param when for calling the function, the aim is only to free clipboard and not get its contents
-MakeClipboardAvailable(doreturn=1){
+MakeClipboardAvailable(doreturn=1, sleeptime=10){
 	;Critical, On
 	while !temp
 	{
 		temp := DllCall("OpenClipboard", "int", "")
-		sleep 10
+		sleep % sleeptime
 	}
 	DllCall("CloseClipboard")
 	if doreturn
@@ -320,7 +330,7 @@ IsActive(what, oftype="classnn", ispattern=false){
 	if oftype = classnn
 		ControlGetFocus, O, A
 	else if oftype = window
-		WinGetActiveTitle, O
+		WinGetActiveTitle, O 
 
 	if ispattern
 		return Instr(O, what) ? 1 : 0
