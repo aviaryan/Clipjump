@@ -10,6 +10,7 @@ gui_History()
 	;2_3_sort are the vars storing how cols are sorted , 1 means in Sort ; 0 means SortDesc
 
 	Gui, History:new
+	Gui, Color, F6F8E1
 	Gui, Margin, 7, 7
 	Gui, +Resize +MinSize390x110
 

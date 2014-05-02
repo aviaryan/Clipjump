@@ -71,7 +71,9 @@ FoolGUI(switch=1){
 }
 
 ;Function for FileCopy, FileMove
-FileTransfer(src, dest, keep_original=1, flag=1){
+FileTransfer(src, dest="", keep_original=1, flag=1){
+	if dest =
+		FileDelete, % src
 	if keep_original
 		FileCopy, % src, % dest, % flag
 	else
@@ -148,17 +150,16 @@ getRealCD(text){
 	return text="" ? TXT.HST_viewimage : text
 }
 
-ClipTransfer(sub, cno, nsub, ncno, keep_original=1, flag=1){
-; Copy moves a clip along with the 3 files
+ClipTransfer(sub, cno, nsub="", ncno="", keep_original=1, flag=1){
+; Copy moves a clip along with the 3 or more files
 	FileTransfer("cache\clips" sub "\" cno ".avc", "cache\clips" nsub "\" ncno ".avc", keep_original, flag)
 	FileTransfer("cache\thumbs" sub "\" cno ".jpg", "cache\thumbs" nsub "\" ncno ".jpg", keep_original, flag)
-	FileTransfer("cache\fixate" sub "\" cno ".fxt", "cache\fixate" nsub "\" ncno ".fxt", keep_original, flag)
 }
 
 ClipFolderTransfer(sub, nsub, keep_original=1, flag=1){
 ; Copy moves a channel with the 3 folders
-	static d1 := "clips" , d2 := "thumbs" , d3 := "fixate"
-	loop 3
+	static d1 := "clips" , d2 := "thumbs" ;, d3 := "fixate"
+	loop 2 ;3
 		if keep_original
 			FileCopyDir, % "cache\" d%A_index% sub, % "cache\" d%A_index% nsub, % flag
 		else
@@ -287,6 +288,35 @@ hkZ(HotKey, Label, Status=1) {
 				MsgBox, 16, Clipjump Warning, It looks like the hotkey %t% doesn't exist ? `nRefer to troubleshooting page in help file.
 		}
 	}
+}
+
+; Converts an Ini file to an object
+Ini2Obj(Ini){
+	out := {}
+	loop, read, % Ini
+	{
+		if ( Instr(l := Trim(A_LoopReadLine), ";") == 1 ) or !l
+			continue
+		if RegExMatch(l, "iU)\[.*\]", ov)
+		{
+			curS := Substr(ov, 2, -1) , out[curS] := {}
+			continue
+		}
+		out[curS][ k := Trim( Substr(l, 1, p:=Instr(l, "=")-1) ) ] := Trim( Substr(l, p+2) )
+	}
+	return out
+}
+
+; Saves an object as an Ini file
+Obj2Ini(obj, Ini){
+	FileDelete, % Ini
+	for k,v in obj
+	{
+		t .= "`n[" k "]`r`n"
+		for k2,v2 in v
+			t .= k2 " = " v2 "`r`n"
+	}
+	FileAppend, % Trim(t, "`r`n"), % Ini
 }
 
 ;Gdip_SetImagetoClipboard()
@@ -475,7 +505,7 @@ guiMsgBox(title, text, owner="" ,isEditable=0, wait=0, w="", h=""){
 	static thebox
 	wf := getControlInfo("edit", text, "w", "s9", "Lucida Console")
 	hf := getControlInfo("edit", text, "h", "s9", "Lucida Console")
-	w := !w ? (wf > A_ScreenWidth/1.5 ? A_ScreenWidth/1.5 : wf+20) : w 	;+10 for scl bar
+	w := !w ? (wf > A_ScreenWidth/1.5 ? A_ScreenWidth/1.5 : wf+200) : w 	;+10 for scl bar
 	h := !h ? (hf > A_ScreenHeight ? A_ScreenHeight : hf+65) : h 		;+10 for margin, +more for the button
 
 	Gui, guiMsgBox:New

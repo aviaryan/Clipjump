@@ -76,7 +76,6 @@ global PREV_FILE := "cache\prev.txt"
 FileCreateDir, cache
 FileCreateDir, cache/clips
 FileCreateDir, cache/thumbs
-FileCreateDir, cache/fixate
 FileCreateDir, cache/history
 FileSetAttrib, -H, %A_WorkingDir%\cache
 
@@ -90,7 +89,7 @@ global WORKINGHT := tempbottom-temptop
 global restoreCaller := 0
 
 ;Global Inits
-global CN := {}, CUSTOMS := {}, CDS := {}, SEARCHOBJ := {}, HISTORYOBJ := {}, TOTALCLIPS, ACTIONMODE := {}, PLUGINS := {}, STORE := {} ;store=global public storage space
+global CN := {}, CUSTOMS := {}, CDS := {}, CPS := {}, SEARCHOBJ := {}, HISTORYOBJ := {}, TOTALCLIPS, ACTIONMODE := {}, PLUGINS := {}, STORE := {}
 global cut_is_delete_windows := "XLMAIN QWidget" 			;excel, kingsoft office
 global CURSAVE, TEMPSAVE, LASTCLIP, LASTFORMAT, Islastformat_Changed := 1, IScurCBACTIVE := 0, curPformat, curPfunction, curPisPreviewable
 global NOINCOGNITO := 1, SPM := {}, protected_DoBeep := 1
@@ -140,7 +139,7 @@ global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_IsCh
 
 ; (search) paste mode keys 
 global pastemodekey := {} , spmkey := {}
-temp_keys := "a|c|s|z|space|x|e|up|down|f|h|Enter"
+temp_keys := "a|c|s|z|space|x|e|up|down|f|h|Enter|t|F1"
 loop, parse, temp_keys,|
 	pastemodekey[A_LoopField] := "^" A_LoopField
 temp_keys := "Enter|Up|Down|Home"
@@ -181,7 +180,7 @@ IfExist, %A_Startup%/Clipjump.lnk
 
 global CLIPS_dir := "cache/clips"
 	, THUMBS_dir := "cache/thumbs"
-	, FIXATE_dir := "cache/fixate"
+	, FIXATE_txt := "fixed"
 	, NUMBER_ADVANCED := 34 + CN.Total 					;the number stores the line number of ADVANCED section
 
 ;Setting Up shortcuts
@@ -207,6 +206,9 @@ loop, parse, ignoreWindows,|
 
 loadClipboardDataS()
 OnExit, exit
+
+fix_FixateFiles()
+
 EmptyMem()
 return
 
@@ -214,7 +216,38 @@ return
 ;6 used in Class Tool, 7 in API (Plugin) , 8 used in Customizer, 9 used in history tool, 10 in edit clips, 11 in Channel Organizer
 
 ;OLD VERSION COMPATIBILITES TO REMOVE
-;NONE
+; FIXATE
+
+fix_FixateFiles(){
+	loop % CN.Total
+	{
+		fp := "cache\fixate" (A_Index-1 ? A_index-1 : "") , rp := A_index-1
+		if !FileExist(fp)
+			continue
+		else DidRun := 1
+		CPS[rp] := {}  ; using 0 for ch 0
+		loop, % fp "\*.fxt"
+			CPS[rp][ cp := Substr(A_LoopFileName,1,-4) ] := {} , CPS[rp][cp][FIXATE_txt] := 1
+		FileRemoveDir, % fp, 1
+	}
+	if DidRun
+		Prefs2Ini()
+}
+
+Prefs2Ini(){
+	loop % CN.Total
+	{
+		fp := "cache\clips" (A_index-1 ? A_index-1 : "")
+		Obj2Ini( CPS[A_index-1] , fp "\prefs.ini" )
+	}
+}
+
+AddClipPref(Ch, Cl, Pr, val){
+	if !IsObject( CPS[Ch][Cl] )
+		CPS[Ch][Cl] := {}
+	CPS[Ch][Cl][Pr] := val
+}
+
 ;End Of Auto-Execute================================================================================================================
 
 loadClipboardDataS(){
@@ -224,6 +257,7 @@ loadClipboardDataS(){
 	{
 		fp := "cache\clips" ( A_index-1 ? A_index-1 : "" )
 		CDS[R:=A_index-1] := {}
+		CPS[R] := ini2Obj(fp "\prefs.ini")
 		loop, % fp "\*.avc"
 		{
 			ONCLIPBOARD:="" , Z := ""
@@ -304,10 +338,10 @@ paste:
 			if curPisPreviewable
 				halfClip := %curPfunction%(halfClip)
 		}
+		realActive := TEMPSAVE
 		PasteModeTooltip(temp_clipboard)
 		SetTimer, ctrlCheck, 50
 
-		realActive := TEMPSAVE
 		TEMPSAVE -= 1
 		If (TEMPSAVE == 0)
 			TEMPSAVE := CURSAVE
@@ -344,7 +378,7 @@ onClipboardChange:
 		LASTFORMAT := temp_lastformat , CLIP_ACTION := returnV ? "" : CLIP_ACTION  		;make CLIP_ACTION empty if copy/cut succeeded else let it be so that if window uses
 			;2 transfers like Excel , the demand can be fulfilled
 		IScurCBACTIVE := returnV 									;current clipboard is active after new data copied to clipboard SUCCESSFULLY
-		if FileExist(FIXATE_dir "\" CURSAVE ".fxt") 	; not active if the first clip is FIXED
+		if CPS[CN.NG][CURSAVE][FIXATE_txt]	; not active if the first clip is FIXED
 			IScurCBACTIVE := 0
 		if !ISACTIVEEXCEL 				;excel has known bugs with AHK and manipulating clipboard *infront* of it will cause errors
 			makeClipboardAvailable(0) 						;close clipboard in case it is still opened by clipjump
@@ -597,15 +631,15 @@ Formatting:
 	return
 
 fixate:
-	IfExist, %FIXATE_dir%\%realActive%.fxt
+	If CPS[CN.NG][realActive][FIXATE_txt]
 	{
 		fixStatus := ""
-		FileDelete, %A_WorkingDir%\%FIXATE_dir%\%realactive%.fxt
+		CPS[CN.NG][realActive].remove(FIXATE_txt)
 	}
 	else
 	{
 		fixStatus := MSG_FIXED
-		FileAppend, , %A_WorkingDir%\%FIXATE_dir%\%realActive%.fxt
+		AddClipPref(CN.NG, realActive, FIXATE_txt, 1)
 	}
 	PasteModeTooltip(temp_clipboard)
 	return
@@ -615,6 +649,14 @@ navigate_to_first: 		; navigates clip pos to the first in paste mode
 		IN_BACK_correction()
 	TEMPSAVE := CURSAVE 		; make tempsave 29 if total clips (cursave) is 29 . so load the first (latest) clip
 	gosub paste
+	return
+
+setClipTag:
+	gosub endPastemode
+	InputBox, ov, % TXT._tags, % TXT.TIP_tagprompt ,,,,,,,, % CPS[CN.NG][realActive]["Tags"]
+	if !ErrorLevel
+		AddClipPref(CN.NG, realActive, "Tags", ov), Prefs2Ini() , autoTooltip(TXT.TIP_done, 800, 2)
+	else autoTooltip(TXT.TIP_cancelled, 800, 2)
 	return
 
 clipSaver() {
@@ -674,18 +716,18 @@ manageFIXATE(clipAdded, channel, Dir_constant){
 	; manages how Fixed clip are re-positioned when a new clip is added disturing the order.
 	; It is necessary for the new clip to be added at Clip 1 position
 	path_CLIPS := "cache\clips" Dir_constant
-	path_FIXATE := "cache\fixate" Dir_constant
 	path_THUMBS := "cache\thumbs" Dir_constant
 
 	Loop, %clipAdded%
 	{
 		tempNo := clipAdded - A_Index + 1
-		IfExist, %path_FIXATE%\%tempNo%.fxt
+		If CPS[CN.NG][tempNo][FIXATE_txt]
 		{
 			t_TempNo := tempNo + 1
 			FileMove, %path_CLIPS%\%t_TempNo%.avc,	%path_CLIPS%\%t_TempNo%_a.avc
 			FileMove, %path_CLIPS%\%tempNo%.avc,		%path_CLIPS%\%t_TempNo%.avc
 			FileMove, %path_CLIPS%\%t_TempNo%_a.avc,	%path_CLIPS%\%tempNo%.avc
+
 			z := CDS[channel][t_TempNo] , CDS[channel][t_TempNo] := CDS[channel][tempNo] , CDS[channel][tempNo] := z
 			IfExist, %path_THUMBS%\%tempNo%.jpg
 			{
@@ -693,15 +735,16 @@ manageFIXATE(clipAdded, channel, Dir_constant){
 				FileMove, %path_THUMBS%\%tempNo%.jpg,	%path_THUMBS%\%t_TempNo%.jpg
 				FileMove, %path_THUMBS%\%t_TempNo%_a.jpg, %path_THUMBS%\%tempNo%.jpg
 			}
-			FileMove, %path_FIXATE%\%tempNo%.fxt, %path_FIXATE%\%t_TempNo%.fxt
+			rmv := CPS[channel][t_tempNo] , CPS[channel][t_tempNo] := CPS[channel][tempNo] , CPS[channel][tempno] := rmv
 		}
 	}
+	Prefs2Ini()
 }
 
 
 fixCheck() {
-	IfExist, %FIXATE_dir%\%TEMPSAVE%.fxt 	;TEMPSAVE is global
-		Return "[FIXED]"
+	If CPS[CN.NG][TEMPSAVE][FIXATE_txt]
+		Return TXT.TIP_fixed
 }
 
 ;Shows tooltips in Clipjump Paste Modes
@@ -711,10 +754,12 @@ PasteModeTooltip(cText, notpaste=0) {
 		Tooltip, % cText, % SPM.X, % SPM.Y
 	}
 	else {
+		tagText := (t := CPS[CN.NG][realActive]["Tags"]) != "" ? "(" t ")" : ""
 		if cText =
-		ToolTip % "{" CN.Name "} Clip " realclipno " of " CURSAVE "`t" fixStatus (WinExist("Display_Cj") ? "" : "`n`n" MSG_ERROR "`n`n"), % SPM.X, % SPM.Y
+		ToolTip % "{" CN.Name "} Clip " realclipno " of " CURSAVE "`t" tagText "`t" fixStatus 
+		. (WinExist("Display_Cj") ? "" : "`n`n" MSG_ERROR "`n`n"), % SPM.X, % SPM.Y
 		else
-		ToolTip % "{" CN.Name "} Clip " realclipno " of " CURSAVE "`t" GetClipboardFormat() "`t" fixstatus ( curPformat ? "`t[" curPformat "]" : "" )
+		ToolTip % "{" CN.Name "} Clip " realclipno " of " CURSAVE "`t" GetClipboardFormat() "`t" tagText "`t" fixstatus ( curPformat ? "`t[" curPformat "]" : "" )
 		. "`n`n" halfclip, % SPM.X, % SPM.Y
 	}
 }
@@ -816,7 +861,9 @@ ctrlCheck:
 		if !GetKeyState("Ctrl") && !SPM.ACTIVE
 			MULTIPASTE := 0 		; deactivated when Ctrl released
 		ctrlRef := ""
-		CALLER := CALLER_STATUS , EmptyMem()
+		CALLER := CALLER_STATUS
+		Prefs2Ini() 	; save preferences in memory
+		EmptyMem()
 	}
 	return
 
@@ -829,12 +876,14 @@ endPastemode:
 		gosub SPM_dispose
 	if !ini_PreserveClipPos
 		TEMPSAVE := cursave
+	else TEMPSAVE := realActive
 	API.blockMonitoring(1)
 	if !IScurCBACTIVE
 		try Clipboard := oldclip_data
 	API.blockMonitoring(0)
-	ctrlRef := "" , TEMPSAVE := realActive, restoreCaller := 0, is_pstMode_active := 0, IN_BACK := 0, oldclip_exist := 0
+	ctrlRef := "", restoreCaller := 0, is_pstMode_active := 0, IN_BACK := 0, oldclip_exist := 0
 	hkZ_pasteMode(0) , CALLER := CALLER_STATUS
+	Prefs2Ini()
 	EmptyMem()
 	return
 
@@ -852,6 +901,7 @@ hkZ_pasteMode(mode=0){
 	hkZ(pastemodekey.space, "Fixate", mode) , hkZ(pastemodekey.s, "Ssuspnd", mode) , hkZ(pastemodekey.e, "export", mode)
 	hkZ(pastemodekey.up, "channel_up", mode) , hkZ(pastemodekey.down, "channel_down", mode) , hkZ(pastemodekey.a, "navigate_to_first", mode)
 	hkZ(pastemodekey.f, "searchpm", mode) , hkZ(pastemodekey.h, "editclip", mode) , hkZ(pastemodekey.enter, "multiPaste", mode)
+	hkZ(pastemodekey.t, "setClipTag", mode) , hkZ(pastemodekey.F1, "OpenShortcutsHelp", mode)
 
 	if !mode        ;init Cj
 	{
@@ -892,7 +942,7 @@ pitSwap:
 
 holdClip:
 	; cut - make own by clipjump custom ---- send = this, then del
-	API.blockMonitoring(1) , ONCLIPBOARD := 0
+	API.blockMonitoring(1) , ONCLIPBOARD := 0 , IScurCBACTIVE := 0
 	Send % ( STORE.holdClip_send ? STORE.holdClip_send : "^{vk43}" )
 	STORE.holdClip_send := "^{vk43}" 	; change it quickly
 	while !ONCLIPBOARD
@@ -936,7 +986,7 @@ compacter() {
 		CDS[CN.NG][A_index] := ""
 		FileDelete, %A_WorkingDir%\%CLIPS_dir%\%A_Index%.avc
 		FileDelete, %A_WorkingDir%\%THUMBS_dir%\%A_Index%.jpg
-		FileDelete, %A_WorkingDir%\%FIXATE_dir%\%A_Index%.fxt
+		CPS[CN.NG].remove(A_index)
 	}
 	loop % CURSAVE-ini_Threshold
 	{
@@ -944,7 +994,7 @@ compacter() {
 		CDS[CN.NG][A_index] := CDS[CN.NG][avcNumber] , CDS[CN.NG][avcNumber] := ""
 		FileMove, %A_WorkingDir%/%CLIPS_dir%/%avcnumber%.avc, %A_WorkingDir%/%CLIPS_dir%/%A_Index%.avc, 1
 		FileMove, %A_WorkingDir%/%THUMBS_dir%/%avcnumber%.jpg, %A_WorkingDir%/%THUMBS_dir%/%A_Index%.jpg, 1
-		FileMove, %A_WorkingDir%/%FIXATE_dir%/%avcnumber%.fxt, %A_WorkingDir%/%FIXATE_dir%/%A_Index%.fxt, 1
+		; Auto rmd := CPS[CN.NG].remove(avcnumber) , CPS[CN.NG][A_Index] := rmd
 	}
 	TEMPSAVE := CURSAVE := TOTALCLIPS - ini_Threshold
 }
@@ -958,7 +1008,7 @@ clearClip(realActive) {
 	CDS[CN.NG][realActive] := ""
 	FileDelete, %CLIPS_dir%\%realactive%.avc
 	FileDelete, %THUMBS_dir%\%realactive%.jpg
-	FileDelete, %FIXATE_dir%\%realactive%.fxt
+	CPS[CN.NG].remove(realActive)
 	TEMPSAVE := realActive - 1
 	if (TEMPSAVE == 0)
 		TEMPSAVE := 1
@@ -968,17 +1018,14 @@ clearClip(realActive) {
 
 renameCorrect(realActive) {
 	loopTime := CURSAVE - realactive
-	If loopTime != 0
+	loop, %loopTime%
 	{
-		loop, %loopTime%
-		{
-			newName := realActive
-			realActive += 1
-			CDS[CN.NG][newname] := CDS[CN.NG][realactive] , CDS[CN.NG][realActive] := ""
-			FileMove, %CLIPS_dir%/%realactive%.avc,	 %CLIPS_dir%/%newname%.avc, 1
-			FileMove, %THUMBS_dir%/%realactive%.jpg, %THUMBS_dir%/%newname%.jpg, 1
-			FileMove, %FIXATE_dir%/%realactive%.fxt, %FIXATE_dir%/%newname%.fxt, 1
-		}
+		newName := realActive
+		realActive += 1
+		CDS[CN.NG][newname] := CDS[CN.NG][realactive] , CDS[CN.NG][realActive] := ""
+		FileMove, %CLIPS_dir%/%realactive%.avc,	 %CLIPS_dir%/%newname%.avc, 1
+		FileMove, %THUMBS_dir%/%realactive%.jpg, %THUMBS_dir%/%newname%.jpg, 1
+		; Auto rmv := CPS[CN.NG].remove(realActive) , CPS[CN.NG][newname] := rmv
 	}
 }
 
@@ -1321,6 +1368,7 @@ disable_clipjump:
 
 routines_Exit() {
 	Ini_write("Clipboard_history_window", "partial", history_partial, 0)
+	Prefs2Ini()
 	updatePluginIncludes()
 }
 

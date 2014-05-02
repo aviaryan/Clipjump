@@ -62,9 +62,12 @@ plugin_Run:
 	gosub plugin_getSelected
 	filepath := PLUGINS["<>"][dirNum]["plugin_path"]
 	SB_SetText(TXT.PLG_sb_running " - " plugin_displayname)
-	API.runPlugin(filepath)
+	ret := API.runPlugin(filepath)
 	Gui, pluginM:Default 	; set it def again incase gui was changed
+	if (ret != "") && !(Instr(filepath, "external.") == 1)
+		guiMsgBox(plugin_displayname " Return", ret, "pluginM")
 	SB_SetText(TXT.PLG_sb_exit " - " plugin_displayname)
+	EmptyMem()
 	return
 
 plugin_edit:

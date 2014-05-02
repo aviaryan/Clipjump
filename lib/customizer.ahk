@@ -1,4 +1,4 @@
-; Cutomizer
+; Customizer
 /*
 What is supported?
 	k = %func()%

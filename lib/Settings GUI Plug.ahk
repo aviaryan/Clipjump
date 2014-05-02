@@ -256,6 +256,7 @@ WM_MOUSEMOVE()	; From the help file
 	NEW_ischannelmin_TT := TXT.SET_T_ischannelmin
 	plugM_k_TT := TXT.SET_t_PLUGM
 	new_PreserveClipPos_TT := TXT.SET_T_keepactivepos
+	org_K_TT := "Shortcut for Channel Organizer"
 
 	;---------------------------------------------
 

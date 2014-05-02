@@ -310,12 +310,14 @@ chOrg_clipFolderSwap(orig_ch, new_ch){
 		return 0
 
 	origch := orig_ch ? orig_ch : "" , newch := new_ch ? new_ch : ""
-	ClipFolderTransfer(newch, newch "_a", 0)
-	ClipFolderTransfer(origch, newch, 0)
-	ClipFolderTransfer(newch "_a", origch, 0)
+	ClipFolderTransfer(newch, newch "_a", 0, "R")
+	ClipFolderTransfer(origch, newch, 0, "R")
+	ClipFolderTransfer(newch "_a", origch, 0, "R")
 
 	obj_orig := CDS[orig_ch] , obj_new := CDS[new_ch] 	; update cached datas
 	CDS[orig_ch] := obj_new , CDS[new_ch] := obj_orig
+	obj_orig := CPS[orig_ch] , obj_new := CPS[new_ch] 	; update prefs
+	CPS[orig_ch] := obj_new , CPS[new_ch] := obj_orig
 
 	CN["TEMPSAVE" CN.N] := TEMPSAVE , CN["CURSAVE" CN.N] := CURSAVE 	; submit active values
 	ts_orig := CN["TEMPSAVE" origch] , cs_orig := CN["CURSAVE" origch] ; update cursave values
@@ -338,6 +340,7 @@ chOrg_clipSwap(fch, fcl, sch, scl){
 	ClipTransfer(f_sub, f_cno, s_sub, s_cno, 0)
 	ClipTransfer(s_sub, s_cno "_a", f_sub, f_cno, 0)
 	bk := CDS[sch][s_cno] , CDS[sch][s_cno] := CDS[fch][f_cno] , CDS[fch][f_cno] := bk
+	bk := CPS[sch][s_cno] , CPS[sch][s_cno] := CPS[fch][f_cno] , CPS[fch][f_cno] := bk
 }
 
 chOrg_notification(text, time=800){

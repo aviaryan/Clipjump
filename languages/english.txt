@@ -315,3 +315,9 @@ ORG_delCnlMsg = What do you want to do with the selected Channel ?
 _rename = Rename
 ORG_renameAsk = Please write new name for channel number
 TIP_initMsg = Initialising Clipjump
+
+;======
+;11.2
+;======
+
+TIP_tagPrompt = Write space separated tags for this clip

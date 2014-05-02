@@ -159,17 +159,19 @@ initChannels(){
 
 	Iniread, temp, %CONFIGURATION_FILE%, channels, % CN.NG, %A_space%
 	CN.Name := (temp=="") or (temp==A_temp) ? "Default" : temp
-	ini_write("channels", "0", "Default")
+	ini_write("channels", "0", CN.Name)
 
 	CN["TOTALCLIPS"] := TOTALCLIPS
 }
 
-
 changeChannel(cIndex, backup_old:=1){
 	global
 
-	if ( cIndex >= CN.Total )
+	if ( cIndex >= CN.Total ) 	; new channel create
+	{
 		CN.Total+=1
+		CDS[cIndex] := {} , CPS[cIndex] := {} 	; create storage objs
+	}
 
 	Iniread, temp, %CONFIGURATION_FILE%, channels, %cIndex%, %A_space%
 	CN.Name := (temp=="") or (temp==A_temp) ? (!cIndex ? "Default" : cIndex) : temp
@@ -189,12 +191,11 @@ changeChannel(cIndex, backup_old:=1){
 
 	T := Substr(CLIPS_dir, 0)
 	if T is Integer
-		FIXATE_dir := Substr(FIXATE_dir, 1, -1) , CLIPS_dir := Substr(CLIPS_dir, 1, -1) , THUMBS_dir := Substr(THUMBS_dir, 1, -1)
+		CLIPS_dir := Substr(CLIPS_dir, 1, -1) , THUMBS_dir := Substr(THUMBS_dir, 1, -1)
 
-	FIXATE_dir .= cIndex , CLIPS_dir .= cIndex , THUMBS_dir .= cIndex
+	CLIPS_dir .= cIndex , THUMBS_dir .= cIndex
 
 	FileCreateDir, %CLIPS_dir%
-	FileCreateDir, %FIXATE_dir%
 	FileCreateDir, %THUMBS_dir%
 	GuiControl, % "Channel:+Range0-" CN.Total, ChannelUpdown 		; refresh up-down limits
 
@@ -271,7 +272,7 @@ channel_find(name=""){
 
 ; moves a channel or deletes it; in moving dest channel if exists is deleted
 manageChannel(orig, new=""){
-	static l := "clips fixate thumbs"
+	static l := "clips thumbs"
 	;global CN
 
 	if new=
@@ -279,7 +280,7 @@ manageChannel(orig, new=""){
 		loop, parse, l, % A_space
 			FileRemoveDir, % "cache\" A_LoopField orig, 1
 		ini_delete("Channels", orig)
-		CDS[orig] := {}
+		CDS[orig] := {} , CPS[orig] := {}
 		; move channels one step back
 		c := 0
 		loop % CN.Total-orig-1
@@ -287,11 +288,11 @@ manageChannel(orig, new=""){
 			c := A_index
 			loop, parse, l, % A_space
 				FileMoveDir, % "cache\" A_LoopField orig+c , % "cache\" A_LoopField orig+c-1, R
-			CDS[orig+c-1] := CDS[orig+c]
+			CDS[orig+c-1] := CDS[orig+c] , CPS[orig+c-1] := CPS[orig+c]
 			ini_write("Channels", orig+c-1, (z:=Ini_read("Channels", orig+c)) && (z != orig+c) ? z : orig+c-1, 0 )
 		}
 		;done ... final steps
-		ini_delete("Channels", orig+c) , CDS[orig+c] := {} 			; delete any name to avoid confusion
+		ini_delete("Channels", orig+c) , CDS[orig+c] := {} , CPS[orig+c] := {}			; delete any name to avoid confusion
 
 		bk := CN.NG
 		initChannels()
@@ -300,18 +301,19 @@ manageChannel(orig, new=""){
 		if ( bk >= orig )
 			changeChannel(bk-1, 0) 		; change the channel using proper methodology as initchannels() disturbs it
 		else changeChannel(bk, 0)
+		prefs2Ini()
 	}
 	else
 	{
 		;NOT IMPLEMENTED YET - implement CDS also
-		loop, parse, l, % A_space
-			FileRemoveDir, % "cache\" A_LoopField new, 1
-		loop, parse, l, % A_Space
-			FileMoveDir, % "cache\" A_loopfield orig, % "cache\" A_loopfield new, R
-		ini_write("Channels", new, (z:=Ini_read("Channels", orig)) ? z : new, 0 )
-		; final steps
-		if CN.NG == orig
-			changeChannel(new)
+		;loop, parse, l, % A_space
+		;	FileRemoveDir, % "cache\" A_LoopField new, 1
+		;loop, parse, l, % A_Space
+		;	FileMoveDir, % "cache\" A_loopfield orig, % "cache\" A_loopfield new, R
+		;ini_write("Channels", new, (z:=Ini_read("Channels", orig)) ? z : new, 0 )
+		;; final steps
+		;if CN.NG == orig
+		;	changeChannel(new)
 	}
 }
 

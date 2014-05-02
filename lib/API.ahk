@@ -88,20 +88,21 @@ class API
 		{
 			FileTransfer(origClip, newClip) , FileTransfer(origThumb, newThumb)
 			CDS[new_channel][nc_info.realCURSAVE+1] := CDS[channel][clip]
+			CPS[new_channel][nc_info.realCURSAVE+1] := CPS[channel][clip]
 			manageFIXATE( nc_info.realCURSAVE + 1, new_channel, nc_info.p)
 		}
 		else
 		{
 			FileTransfer(origClip, newClip, 0) , FileTransfer(origThumb, newThumb, 0)
-			FileDelete, % "cache\fixate" c_info.p "\" clip ".fxt"
+			CPS[new_channel][nc_info.realCURSAVE+1] := CPS[channel][clip] , CDS[channel].remove(Clip)
 
 			CDS[new_channel][nc_info.realCURSAVE+1] := CDS[channel][clip] , CDS[channel][clip] := ""
-			c_Folder1 := "cache\clips" c_info.p "\" , c_Folder2 := "cache\fixate" c_info.p "\" , c_Folder3 := "cache\thumbs" c_info.p "\"
+			c_Folder1 := "cache\clips" c_info.p "\" , c_Folder2 := "cache\thumbs" c_info.p "\"
 			loop % c_info.realCURSAVE-clip
 			{
 				FileMove, % c_Folder1 clip+A_Index ".avc", % c_Folder1 clip+A_Index-1 ".avc", 1
-				FileMove, % c_Folder2 clip+A_Index ".fxt", % c_Folder2 clip+A_index-1 ".fxt", 1
-				FileMove, % c_Folder3 clip+A_Index ".jpg", % c_Folder3 clip+A_index-1 ".jpg", 1
+				;Auto rmv := CPS[channel].remove(clip+A_index) , CPS[channel][clip+A_index-1] := rmv
+				FileMove, % c_Folder2 clip+A_Index ".jpg", % c_Folder2 clip+A_index-1 ".jpg", 1
 				CDS[channel][clip+A_index-1] := CDS[channel][clip+A_index] , CDS[channel][clip+A_index] := ""
 			}
 			manageFIXATE( nc_info.realCURSAVE + 1, new_channel, nc_info.p )
@@ -128,11 +129,12 @@ class API
 			chno := CN.NG
 		if chno is not Integer
 			chno := channel_find(chno)
-		CDS[chno] := {}
+		CDS[chno] := {} , CPS[chno] := {}
 		f := this.getChInfo(chno)
 		FileDelete, % "cache\clips" f.p "\*.avc"
 		FileDelete, % "cache\thumbs" f.p "\*.jpg"
-		FileDelete, % "cache\fixate" f.p "\*.fxt"
+		FileDelete, % "cache\clips" f.p "\prefs.ini"
+		;FileDelete, % "cache\fixate" f.p "\*.fxt"
 		CN["CURSAVE" f.p] := CN["TEMPSAVE" f.p] := 0
 		if f.isactive
 			CURSAVE := TEMPSAVE := 0 , LASTCLIP := ""

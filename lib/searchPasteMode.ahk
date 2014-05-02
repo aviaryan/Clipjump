@@ -88,7 +88,7 @@ searchpm_search(term){
 		SEARCHOBJ[r] := {}
 		for k,v in CDS[r]
 		{
-			if SuperInstr( getRealCD(v), Trim(term, " "), 1)
+			if SuperInstr( getRealCD(v) " " CPS[r][k]["Tags"] , Trim(term, " "), 1)
 				SEARCHOBJ[r][k] := "|" , c++
 		}
 	}
