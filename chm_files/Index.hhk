@@ -42,6 +42,10 @@
 		<param name="Local" value="docs/basic_help.html#pformat">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Adding tags to clips">
+		<param name="Local" value="docs/basic_help.html#tags">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Clipjump Channels">
 		<param name="Local" value="docs/channels.html">
 		</OBJECT>

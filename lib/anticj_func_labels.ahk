@@ -4,10 +4,14 @@
 
 ; Used Labels
 
+run_searchpm:
+	gosub searchpm
+	return
+
 settings:
 	gui_Settings()
 	return
-	
+
 history:
 	gui_History()
 	return
@@ -126,6 +130,64 @@ local Midpoint, emVar, $j, $n
 	}
 }
 
+/*
+a := {a: "b",c: "d"}
+ret := ObjectEditor(a)
+for k,v in ret
+	msgbox % k "`n" v
+return
+*/
+
+ObjectEditor(obj, Title="Properties Editor", owner="", prompt="Edit Properties and hit Save", width=""){
+	global
+	local oDone
+
+	Gui, objEdit:new
+	Gui, Font, s10 underline, Consolas
+	Gui, Add, Text, x5 y5, % prompt
+	Gui, Add, Text, xp y+15 section,
+	Gui, Font, norm, Consolas
+
+	maxsize := 0
+	for k in obj {
+		if Strlen(k) > maxsize
+			maxsize := Strlen(k)
+	}
+	maxsize := maxsize*5+100
+
+	for k,v in obj {
+		Gui, Add, Text, xs y+7, % k
+		Gui, Add, Edit, % "x" maxsize " yp vfield" A_index " w" (width ? width : 100), % v
+	}
+	Gui, Add, Button, x5 y+30 Default, Save
+	Gui, Add, Button, x+30 yp, Cancel
+	if owner {
+		Gui, objEdit:+owner%owner%
+		Gui, %owner%:+Disabled
+	}
+	Gui, objEdit:Show,, % Title
+
+	while !oDone
+		sleep 50
+	return obj
+
+objEditButtonCancel:
+objEditGuiClose:
+	if owner
+		Gui, %owner%:-Disabled
+	Gui, objEdit:Destroy
+	oDone := 1
+	return
+
+objEditButtonSave:
+	Gui, objEdit:Submit, nohide
+	for k in obj
+		obj[k] := field%A_index%
+	gosub objEditGuiClose
+	return
+
+}
+
 ;Try getting a file onto Clipboard
 try_ClipboardfromFile(file, maxtries=100){
 	;Critical, Off
@@ -201,6 +263,16 @@ GetClipboardFormat(type=1){		;Thanks nnnik
     		return ""
     else
     	return x
+}
+
+genHTMLforPreview(code){
+	FileDelete, % PREV_FILE
+	FileAppend, % "<pre style=""word-break: break-all; word-wrap: break-word;"">" deActivateHtml(code), % PREV_FILE
+}
+
+deactivateHtml(code){
+	code := RegExReplace(code, ">", "&gt;")
+	return RegExReplace(code, "<", "&lt;")
 }
 
 ;GetFile()
@@ -308,13 +380,14 @@ Ini2Obj(Ini){
 }
 
 ; Saves an object as an Ini file
-Obj2Ini(obj, Ini){
+Obj2Ini(obj, Ini, saveBlank=false){
 	FileDelete, % Ini
 	for k,v in obj
 	{
 		t .= "`n[" k "]`r`n"
 		for k2,v2 in v
-			t .= k2 " = " v2 "`r`n"
+			if (saveBlank) || (v2 != "")
+				t .= k2 " = " v2 "`r`n"
 	}
 	FileAppend, % Trim(t, "`r`n"), % Ini
 }
@@ -432,7 +505,7 @@ debugTip(text, x="", y="", tooltipno=20){
 	Tooltip, % text,% x,% y, % tooltipno
 }
 
-fillwithSpaces(text, limit=35){
+fillwithSpaces(text="", limit=35){
 	loop % limit-Strlen(text)
 		r .= A_space
 	return text r

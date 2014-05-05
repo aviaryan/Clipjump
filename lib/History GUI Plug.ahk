@@ -103,7 +103,12 @@ history_ButtonPreview:
 	else v := LV_GetNext()
 
 	LV_GetText(clip_file_path, v, hidden_date_no)
-	gui_Clip_Preview( "cache\history\" clip_file_path, history_SearchBox)
+	if !Instr(clip_file_path, ".jpg"){
+		FileRead, clip_data, % "cache\history\" clip_file_path
+		genHTMLforPreview(clip_data)
+		gui_Clip_Preview(PREV_FILE, history_searchbox)
+	}
+	else gui_Clip_Preview( "cache\history\" clip_file_path, history_SearchBox)
 	return
 
 history_ButtonDelete:
@@ -343,6 +348,7 @@ historyUpdate(crit="", create=true, partial=false)
 	local totalSize := 0
 
 	LV_Delete()
+	func := Func(partial ? "Superinstr" : "Instr") , thirdpm := partial ? 1 : 0		;The third param 0 has diff meanings in both cases
 
 	Loop, cache\history\*
 	{
@@ -352,18 +358,15 @@ historyUpdate(crit="", create=true, partial=false)
 			if !HISTORYOBJ[A_LoopFileName "_data"]
 			{
 				Fileread, lv_temp, %A_LoopFileFullPath%
-				data := HISTORYOBJ[A_LoopFileName "_data"] := lv_temp
+				HISTORYOBJ[A_LoopFileName "_data"] := lv_temp
 			}
-			else
-				data := HISTORYOBJ[A_LoopFileName "_data"]
 		}
 		else if Instr(A_LoopFileFullPath, ".jpg")
-			data := HISTORYOBJ[A_LoopFileName "_data"] := MSG_HISTORY_PREVIEW_IMAGE
+			HISTORYOBJ[A_LoopFileName "_data"] := MSG_HISTORY_PREVIEW_IMAGE
 		else Continue
-		
-		func := partial ? "Superinstr" : "Instr" 		;too smart - The third param 0 has diff meanings in both cases
+
 		;  Searching
-		if %func%(data, crit, partial ? 1 :0)
+		if func.(HISTORYOBJ[A_LoopFileName "_data"], crit, thirdpm)
 		{
 			if !HISTORYOBJ[A_LoopFileName "_date"]
 			{
@@ -373,7 +376,7 @@ historyUpdate(crit="", create=true, partial=false)
 				HISTORYOBJ[A_LoopFileName "_size"] := O
 			}
 
-			LV_Add("", data, HISTORYOBJ[A_LoopFileName "_date"], t := HISTORYOBJ[A_LoopFileName "_size"], A_LoopFileName)
+			LV_Add("", HISTORYOBJ[A_LoopFileName "_data"], HISTORYOBJ[A_LoopFileName "_date"], t := HISTORYOBJ[A_LoopFileName "_size"], A_LoopFileName)
 			totalSize += t 				; speed factor
 		}
 	}

@@ -6,6 +6,7 @@
 ;@Plugin-version 0.35
 ;@Plugin-Previewable 0
 
+;@Plugin-Param1 The Input Text
 
 ;------------------------------------------------------------- Paste Formats ------------------------------------
 

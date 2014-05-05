@@ -54,14 +54,18 @@ find clips containing that text. Use Up and Down keys to jump through the result
 this feature can be found <a href=#spm>later</a>. 
 <br><br>
 
-
+<a name=basic_notes></a>
 <h3>Notes</h3>
 <ul>
 	<li>As you can see, Releasing Ctrl is the basis of performing actions in Clipjump.
 	<li>Also, note that Cancel Mode,Delete Mode, Move Mode, Copy Mode and Delete All Mode are inter-related.
 	<strong class="mild">The program cycles through these modes when you press X while holding Ctrl.</strong><br>
 	<b>So, pressing X while holding Ctrl in Delete All Mode will switch back to Cancel Mode.</b>
-	<li>TIP - Use A in <b>Paste Mode</b> to directly jump to the first clip.
+	<li>TIP - Press A in <b>Paste Mode</b> to directly jump to the first clip.
+	<li>TIP - Press <b>F1</b> in Paste Mode to view all the keys available in Paste Mode.
+	<li><a name=1to9></a>TIP - Use keys 1....9 in Paste Mode to directly advance to clip +{num} ahead of the current clip. If you are on <code>Clip 7 of 25</code>, 
+		pressing Ctrl+5 goes to <code>Clip 12 of 25</code>. Use the minus (-) key to subtract clip position and hence move back. Two times minus will make it plus again.
+		Minus setting is made default to plus when Paste Mode is first opened.
 </ul><br>
 <br>
 
@@ -104,6 +108,7 @@ The former method here will keep the clip pointer preserved as it ends with an a
 <br><br>
 <strong>Tip</strong> - You can change shortcuts in Search paste mode through <a href=custom.html#2>ClipjumpCustom.ini</a>.<br>
 <strong>Tip</strong> - Search for <font class=note>[IMAGE]</font> to find images.<br>
+<strong>Tip</strong> - You can make paste mode always start with search enabled from the Settings Editor.
 <br><br>
 
 
@@ -138,7 +143,8 @@ user demands pasting/previewing from a plugin. You can too <a href="plugins/basi
 is what is changed at the time of action.<br>
 <strong class=super>TIP</strong> - To make a paste-format as default for Clipjump , see the option <code>Default Paste Format</code> in the Settings editor. 
 <br><br>
-See Also - <a href="plugins/index.html#def_pformat">Default Paste Formats distributed with Clipjump</a>
+See Also - <a href="plugins/index.html#def_pformat">Default Paste Formats distributed with Clipjump</a> <br>
+See Also - <a href=http://youtu.be/Za9cMlWMn4Y>Video</a> demonstrating use of paste formats
 <br><br><br>
 
 
@@ -175,11 +181,16 @@ Clipjump will respond to the exit and update the clip. Alternatively press Esc a
 <br>Editing works for all types of clips but for text clips all formatting will be lost when they are updated.
 <br><br><br>
 
+<h2><a name=tags>Adding Tags to Clips</a></h2>
+<i>[v11.2+]</i> Use the T key in Paste Mode to add tags to a clip. Tags show up in round brackets <code>(tag)</code> in the Paste mode and they can be searched from the 
+search in paste mode or the <a href=organizer.html>Channel Organizer</a>. You can add tags to copied access-keys, passwords, shortened URLs...  .<br>
+Use the 'Properties' option in Channel Organizer to add/edit tag.
+<br><br><br>
 
 <h2><a name=multipaste>Multiple Pasting in Paste Mode</a></h2>
 <i>[v10.7.3]</i> You can also use Enter in Paste mode (while holding Ctrl) to do multi-paste. In this mode, you will be able to paste without closing the Paste Mode.<br>
 To do multi-pasting, tap Enter in Paste Mode. Once the first entry with <code>Ctrl+Enter</code> is pasted, releasing Ctrl will 
-change action from 'pasting' to 'cancelling'. This change will be valid only in that session and once you have <i>cancelled</i> everything will be back to normal i.e. 
+change action from 'pasting' to 'cancelling'. This change will be valid only in that session and once you have <i>cancelled</i>, everything will be back to normal i.e. 
 <i>release</i> to paste and <i>Ctrl+x and then release</i> to cancel.<br>
 The same feature is also available <a href=#spm_multipaste>when search mode is active</a>.
 <br><br><br>
@@ -317,7 +328,9 @@ Z - Toggle <a href=#pformat>pasting formats</a>
 Enter - Start <a href=#multipaste>Multiple Pasting</a> Session
 Space - <a href=#fx>Fix/un-fix</a> a clipboard at its position
 Up - Change channel to 1 up (+1)
-Down - Change channel to 1 down (-1)</pre><br>
+Down - Change channel to 1 down (-1)
+1..9 - <a href=#1to9>Move to clip</a> {num} ahead/behind of current clip
+F1 - View listing of all keys in Paste Mode</pre><br>
 
 <h4>Search in Paste Mode(Ctrl released)</h4>
 <pre>Enter - Paste

@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 11.0
+;@Ahk2Exe-SetVersion 11.2
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -42,7 +42,7 @@ global mainIconPath := FileExist("Clipjump.exe") ? "Clipjump.exe" : "icons/icon.
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "11"
+global VERSION := "11.2"
 global CONFIGURATION_FILE := "settings.ini"
 
 ini_LANG := ini_read("System", "lang")
@@ -68,7 +68,7 @@ global MSG_FOLDER_PATH_COPIED := TXT.TIP_folderpath " " PROGNAME
 
 ;History Tool
 global hidden_date_no := 4 , history_w , history_partial := 1 ;start off with partial=1 <> much better
-global PREV_FILE := "cache\prev.txt"
+global PREV_FILE := "cache\prev.html"
 
 ;*******************************************************************************
 
@@ -135,7 +135,7 @@ else if (ini_Version != VERSION)
 global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_IsChannelMin := 1 , ini_isMessage, CopyMessage
 		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, channel_K, onetime_K, paste_k, actionmode_k, ini_is_duplicate_copied, ini_formatting
 		, ini_CopyBeep , beepFrequency , ignoreWindows, ini_defEditor, ini_defImgEditor, ini_def_Pformat, pluginManager_k, holdClip_K, ini_PreserveClipPos
-		, chOrg_K
+		, chOrg_K, ini_startSearch
 
 ; (search) paste mode keys 
 global pastemodekey := {} , spmkey := {}
@@ -234,20 +234,6 @@ fix_FixateFiles(){
 		Prefs2Ini()
 }
 
-Prefs2Ini(){
-	loop % CN.Total
-	{
-		fp := "cache\clips" (A_index-1 ? A_index-1 : "")
-		Obj2Ini( CPS[A_index-1] , fp "\prefs.ini" )
-	}
-}
-
-AddClipPref(Ch, Cl, Pr, val){
-	if !IsObject( CPS[Ch][Cl] )
-		CPS[Ch][Cl] := {}
-	CPS[Ch][Cl][Pr] := val
-}
-
 ;End Of Auto-Execute================================================================================================================
 
 loadClipboardDataS(){
@@ -284,6 +270,10 @@ paste:
 
 	Gui, imgprv:Destroy
 	CALLER := 0
+	if !ctrlRef
+		firstPasteMode := 1
+	if ini_startSearch && firstPasteMode
+		SPM.ACTIVE := 1
 	ctrlRef := "pastemode"
 	if IN_BACK
 		IN_BACK_correction()
@@ -330,10 +320,7 @@ paste:
 		else
 		{
 			If strlen(temp_clipboard) > 200
-			{
-				StringLeft,halfclip,temp_clipboard, 200
-				halfClip := halfClip . "`n`n" MSG_MORE_PREVIEW
-			}
+				halfClip := Substr(temp_clipboard, 1, 200) "`n`n" MSG_MORE_PREVIEW
 			else halfClip := temp_clipboard
 			if curPisPreviewable
 				halfClip := %curPfunction%(halfClip)
@@ -346,6 +333,9 @@ paste:
 		If (TEMPSAVE == 0)
 			TEMPSAVE := CURSAVE
 	}
+	if ini_startSearch && firstPasteMode
+		setTimer, run_searchpm, -10 	; dont open in this thrd. critical
+	firstPasteMode := 0
 	return
 
 onClipboardChange:
@@ -533,10 +523,7 @@ cancel:
 	ctrlref := "cancel"
 	if SPM.ACTIVE
 		gosub SPM_dispose 	; dispose it if There - Note that this step ends the label as ctrlCheck dies so ctrlRef is kept upwards to be updated
-	hkZ(pastemodekey.c, "moveback", 0) , hkZ(pastemodekey.enter, "multiPaste", 0)
-	hkZ(pastemodekey.space, "fixate", 0) , hkZ(pastemodekey.z, "Formatting", 0) , hkZ(pastemodekey.a, "navigate_to_first", 0)
-	hkZ(pastemodekey.s, "Ssuspnd", 0) , hkZ(pastemodekey.up, "channel_up", 0) , hkZ(pastemodekey.down, "channel_down", 0)
-	hkZ(pastemodekey.f, "searchpm", 0) , hkZ(pastemodekey.h, "editclip", 0) , hkZ(pastemodekey.x, "Cancel", 0) , hkZ(pastemodekey.x, "Delete", 1)
+	hkZ_pasteMode(0, 0) , hkZ(pastemodekey.x, "Delete", 1)
 	return
 
 delete:
@@ -632,19 +619,31 @@ Formatting:
 
 fixate:
 	If CPS[CN.NG][realActive][FIXATE_txt]
-	{
-		fixStatus := ""
-		CPS[CN.NG][realActive].remove(FIXATE_txt)
-	}
+		fixStatus := "" , CPS[CN.NG][realActive].remove(FIXATE_txt)
 	else
-	{
-		fixStatus := MSG_FIXED
-		AddClipPref(CN.NG, realActive, FIXATE_txt, 1)
-	}
+		fixStatus := MSG_FIXED , AddClipPref(CN.NG, realActive, FIXATE_txt, 1)
+	prefs_changed := 1
 	PasteModeTooltip(temp_clipboard)
 	return
 
-navigate_to_first: 		; navigates clip pos to the first in paste mode
+TogglejumpClip:
+	jumpClip_sign := !jumpClip_sign
+	return
+
+AddjumpClip:
+	if IN_BACK
+		IN_BACK_correction()
+	TEMPSAVE += (!jumpClip_sign ? -Substr(A_ThisHotkey, 2)+1 : Substr(A_ThisHotkey, 2)+1)
+	loop 	; as somthing like +9 could make tempsave = 17 when tempsave was 8 and the cursave is also 8
+		if (TEMPSAVE>CURSAVE)
+			TEMPSAVE := TEMPSAVE-CURSAVE
+		else if TEMPSAVE<1
+			TEMPSAVE := CURSAVE+TEMPSAVE
+		else break
+	gosub paste
+	return
+
+navigate_to_first:
 	if IN_BACK
 		IN_BACK_correction()
 	TEMPSAVE := CURSAVE 		; make tempsave 29 if total clips (cursave) is 29 . so load the first (latest) clip
@@ -692,7 +691,7 @@ clipSaver() {
 			if (temp21 = "Y") or (temp21 = "")
 			{
 				FileAppend, %tempC%, %CLIPS_dir%/%CURSAVE%.avc
-				CDS[CN.NG][CURSAVE] := ISACTIVEEXCEL ? tempCB : Clipboard  ;, CDS[CN.NG][CURSAVE "f"] := GetClipboardFormat()
+				CDS[CN.NG][CURSAVE] := ISACTIVEEXCEL ? tempCB : Clipboard
 				copied := 1
 			}
 			else LASTCLIP := "" , LASTFORMAT := "" , HASCOPYFAILED := 1 	; lastclip was not captured by cj
@@ -736,9 +735,11 @@ manageFIXATE(clipAdded, channel, Dir_constant){
 				FileMove, %path_THUMBS%\%t_TempNo%_a.jpg, %path_THUMBS%\%tempNo%.jpg
 			}
 			rmv := CPS[channel][t_tempNo] , CPS[channel][t_tempNo] := CPS[channel][tempNo] , CPS[channel][tempno] := rmv
+			prefs_changed := 1
 		}
 	}
-	Prefs2Ini()
+	if prefs_changed
+		Prefs2Ini()
 }
 
 
@@ -750,17 +751,21 @@ fixCheck() {
 ;Shows tooltips in Clipjump Paste Modes
 PasteModeTooltip(cText, notpaste=0) {
 	global
+	if STORE["pstTipRebuild"] {
+		Tooltip
+		STORE["pstTipRebuild"] := 0
+	}
 	if notpaste {
 		Tooltip, % cText, % SPM.X, % SPM.Y
 	}
 	else {
 		tagText := (t := CPS[CN.NG][realActive]["Tags"]) != "" ? "(" t ")" : ""
 		if cText =
-		ToolTip % "{" CN.Name "} Clip " realclipno " of " CURSAVE "`t" tagText "`t" fixStatus 
+			ToolTip % "{" CN.Name "} Clip " realclipno " of " CURSAVE fillWithSpaces("",7) tagText " " fixStatus 
 		. (WinExist("Display_Cj") ? "" : "`n`n" MSG_ERROR "`n`n"), % SPM.X, % SPM.Y
 		else
-		ToolTip % "{" CN.Name "} Clip " realclipno " of " CURSAVE "`t" GetClipboardFormat() "`t" tagText "`t" fixstatus ( curPformat ? "`t[" curPformat "]" : "" )
-		. "`n`n" halfclip, % SPM.X, % SPM.Y
+		ToolTip % "{" CN.Name "} Clip " realclipno " of " CURSAVE fillWithSpaces("",7) GetClipboardFormat() fillWithSpaces("",5) (curPformat ? "[" curPformat "]" : "") 
+			. fillWithSpaces("",5) tagText " " fixstatus "`n`n" halfclip, % SPM.X, % SPM.Y
 	}
 }
 
@@ -841,7 +846,7 @@ ctrlCheck:
 			}
 		}
 
-		IN_BACK := false , is_pstMode_active := 0 , oldclip_exist := 0
+		IN_BACK := is_pstMode_active := oldclip_exist := jumpClip_sign := 0
 		hkZ_pasteMode(0)
 		restoreCaller := 1 			; Restore CALLER in the ONC label . This a second line of defence wrt to the last line of this label.
 
@@ -862,7 +867,8 @@ ctrlCheck:
 			MULTIPASTE := 0 		; deactivated when Ctrl released
 		ctrlRef := ""
 		CALLER := CALLER_STATUS
-		Prefs2Ini() 	; save preferences in memory
+		if prefs_changed
+			Prefs2Ini() 	; save preferences in memory
 		EmptyMem()
 	}
 	return
@@ -881,9 +887,10 @@ endPastemode:
 	if !IScurCBACTIVE
 		try Clipboard := oldclip_data
 	API.blockMonitoring(0)
-	ctrlRef := "", restoreCaller := 0, is_pstMode_active := 0, IN_BACK := 0, oldclip_exist := 0
+	ctrlRef := "", restoreCaller := is_pstMode_active := IN_BACK := oldclip_exist := jumpClip_sign := 0
 	hkZ_pasteMode(0) , CALLER := CALLER_STATUS
-	Prefs2Ini()
+	if prefs_changed
+		Prefs2Ini()
 	EmptyMem()
 	return
 
@@ -892,18 +899,26 @@ Ssuspnd:
 	addToWinClip(realactive , "has Clip " realclipno)
 	return
 
-hkZ_pasteMode(mode=0){
+pstMode_Help:
+	PasteModeTooltip(TXT.SET_shortcuts "`n" TXT.TIP_help, 1) , Tooltip_setFont("s8", "Courier New|Consolas")
+	STORE["pstTipRebuild"] := 1
+	return
+
+hkZ_pasteMode(mode=0, disableAll=1){
 ; mode=0 is for initialising Clipjump
 ; mode=1 is for init Paste Mode
 	Critical
 
+	loop 9
+		hkZ("^" A_index, "AddjumpClip", mode) 	; above them to allow any modifications
+	hkZ("^-", "TogglejumpClip", mode)
 	hkZ(pastemodekey.c, "MoveBack", mode) , hkZ(pastemodekey.x, "Cancel", mode) , hkZ(pastemodekey.z, "Formatting", mode)
 	hkZ(pastemodekey.space, "Fixate", mode) , hkZ(pastemodekey.s, "Ssuspnd", mode) , hkZ(pastemodekey.e, "export", mode)
 	hkZ(pastemodekey.up, "channel_up", mode) , hkZ(pastemodekey.down, "channel_down", mode) , hkZ(pastemodekey.a, "navigate_to_first", mode)
 	hkZ(pastemodekey.f, "searchpm", mode) , hkZ(pastemodekey.h, "editclip", mode) , hkZ(pastemodekey.enter, "multiPaste", mode)
-	hkZ(pastemodekey.t, "setClipTag", mode) , hkZ(pastemodekey.F1, "OpenShortcutsHelp", mode)
+	hkZ(pastemodekey.t, "setClipTag", mode) , hkZ(pastemodekey.F1, "pstMode_Help", mode)
 
-	if !mode        ;init Cj
+	if (!mode) && disableAll        ;init Cj
 	{
 		hkZ(pastemodekey.x, "DeleteAll", 0) , hkZ(pastemodekey.x, "Delete", 0)
 		hkZ(pastemodekey.x, "cutclip", 0) , hkZ(pastemodekey.x, "copyclip", 0)
@@ -1033,6 +1048,30 @@ thumbGenerator() {
 	Critical
 	ClipWait, 3, 1 				;Dont need a Clipwait here , but just for special cases I put a wait of 3 secs
 	Gdip_CaptureClipboard( A_WorkingDir "\" THUMBS_dir "\" CURSAVE ".jpg", ini_Quality)
+}
+
+Prefs2Ini(){
+global
+	loop % CN.Total
+	{
+		fp := "cache\clips" (A_index-1 ? A_index-1 : "")
+		Obj2Ini( CPS[A_index-1] , fp "\prefs.ini" )
+	}
+	prefs_changed := 0
+}
+
+ClipPref_makeKeys(Ch, Cl){
+	static l := "fixed|Tags"
+	if !IsObject( CPS[Ch][Cl] )
+		CPS[Ch][Cl] := {}
+	loop, parse, l, |
+		if !CPS[Ch][Cl].hasKey(A_LoopField)
+			CPS[Ch][Cl][A_LoopField] := ""
+}
+
+AddClipPref(Ch, Cl, Pr, val){
+	ClipPref_makeKeys(Ch, Cl)
+	CPS[Ch][Cl][Pr] := val
 }
 
 ;~ ;**************** GUI Functions ***************************************************************************
@@ -1433,14 +1472,14 @@ Receive_WM_COPYDATA(wParam, lParam)
 {
 	global
     Local D
-    static k := "API:" , cmd := "cmd:" , apif := "Act_API"
+    static k := "API:" , cmd := "cmd:"
 
    D := StrGet( NumGet(lParam + 2*A_PtrSize) )  ;unicode transfer
     if D is not Integer
     	if !Instr(D, k) 	; if both are false and so the input is garbled (chinese)
     		D := StrGet( NumGet(lParam + 2*A_PtrSize), 8, "UTF-8")  ;ansi conversion
     if Instr(D, k)
-    	%apif%(D, k) 	; done to not cause error if no lib is included
+    	Act_API(D, k) 	; done to not cause error if no lib is included
     else Act_CjControl(D)
 
     while !FileExist(A_temp "\clipjumpcom.txt")

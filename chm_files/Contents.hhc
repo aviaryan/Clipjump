@@ -123,6 +123,10 @@
 			<param name="Local" value="docs/plugins/plugin_commonformats.html">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Adding Tags to clips">
+			<param name="Local" value="docs/basic_help.html#tags">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Muiltple Pasting">
 			<param name="Local" value="docs/basic_help.html#multipaste">
 			</OBJECT>

@@ -39,6 +39,7 @@ gui_Settings()
 	Gui, Add, Edit,	%	"x" left_size-55 " yp-3 w50 r1 Number vnew_Quality gedit_Quality"
 	Gui, Add, UpDown,	Range1-100 gupdown_Quality, %ini_Quality%
 
+	Gui, Add, Checkbox, xs Checked%ini_startSearch% 	vnew_startSearch		gsettingsChanged, 		% TXT.SET_startSearch
 	Gui, Add, Checkbox, xs Checked%ini_CopyBeep% 		vnew_copyBeep 			gchkbox_copybeep, 		% TXT.SET_copybeep
 	Gui, Add, Checkbox, xs Checked%ini_IsMessage%		vnew_IsMessage			gchkbox_IsMessage,		% TXT.SET_ismessage
 	Gui, Add, Checkbox, xs Checked%ini_KeepSession%		vnew_KeepSession		gchkbox_KeepSession,	% TXT.SET_keepsession
@@ -256,7 +257,8 @@ WM_MOUSEMOVE()	; From the help file
 	NEW_ischannelmin_TT := TXT.SET_T_ischannelmin
 	plugM_k_TT := TXT.SET_t_PLUGM
 	new_PreserveClipPos_TT := TXT.SET_T_keepactivepos
-	org_K_TT := "Shortcut for Channel Organizer"
+	org_K_TT := TXT.SET_org
+	new_startSearch_TT := TXT.SET_T_startSearch
 
 	;---------------------------------------------
 
@@ -314,6 +316,7 @@ load_Settings(all=false)
 	pluginManager_K := ini_read("Shortcuts", "pluginManager_K")
 	ini_def_pformat := ini_read("Main", "default_pformat")
 	chOrg_K := ini_read("Shortcuts", "chOrg_K")
+	ini_startSearch := ini_read("Main", "startSearch")
 
 	; // below are INI only settings , not loaded by settings editor
 
@@ -378,6 +381,7 @@ save_Settings()
 	ini_write("Shortcuts", "holdClip_K", hldClip_K, 0)
 	ini_write("Main", "ini_PreserveClipPos", new_PreserveClipPos, 0)
 	ini_write("Shortcuts", "chOrg_K", org_k, 0)
+	ini_write("Main", "startSearch", new_startSearch, 0)
 
 	;Disable old shortcuts
 	  hkZ(Copyfilepath_K, 	"CopyFile", 0)
@@ -476,6 +480,7 @@ save_Default(full=1){
 	ini_write("Shortcuts", "holdClip_K", "")
 	ini_write("Main", "ini_PreserveClipPos", 1)
 	ini_write("Shortcuts", "chOrg_K", "")
+	ini_write("Main", "startSearch", 0)
 }
 
 Ini_write(section, key, value="", ifblank=true){
@@ -526,9 +531,11 @@ validate_Settings()
 	TOTALCLIPS := ini_Threshold + ini_Maxclips
 	CN.TotalClips := TotalClips
 
+	; reqd for the chkbox to use Checked0 or Checked1
 	ini_IsImageStored := ini_IsImageStored = 0 ? 0 : 1
 	ini_DaysToStore := ini_DaysToStore < 0 ? 0 : ini_DaysToStore
 	ini_PreserveClipPos := ini_PreserveClipPos ? 1 : 0
+	ini_startSearch := ini_startSearch ? 1 : 0
 
 	if !ini_DaysToStore
 	{

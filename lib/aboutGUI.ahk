@@ -135,8 +135,6 @@ openFaq:
 	return
 
 openShortcutsHelp:
-	if ctrlRef
-		gosub endPasteMode
 	try run hh.exe mk:@MSITStore:%A_WorkingDir%\Clipjump.chm::/docs/basic_help.html#short
 	catch
 		MsgBox, 16, Clipjump, There was a problem.`nPlease check that Clipjump.chm exists in the root folder.

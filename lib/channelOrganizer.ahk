@@ -34,6 +34,7 @@ channelOrganizer(){
 	Gui, Add, Button, x+4 yp+20 w30 +Disabled, % chr(231)
 	Gui, Add, Button, xp y+20 w30 gchOrgUp, % chr(233) 			; buttons width = 30
 	Gui, Add, Button, xp y+2 w30 gchOrgDown, % chr(234)
+	Gui, Add, Button, xp y+2 w30 gchOrg_props, % chr(50)
 	Gui, Add, Button, xp y+2 w30 gchOrgCut, % chr(34)
 	Gui, Add, Button, xp y+2 w30 gchOrgCopy, % chr(52)
 	Gui, Add, Button, xp y+2 w30 gchOrgDelete, % chr(251)
@@ -54,14 +55,14 @@ channelOrganizer(){
 	Menu, chOrgLVMenu, Add, % TXT.HST_m_prev, chOrg_preview
 	Menu, chOrgLVMenu, Add
 	Menu, chOrgLVMenu, Add, % TXT.HST_m_insta, chOrg_paste
+	Menu, chOrgLVMenu, Add, % TXT.PLG_properties, chOrg_props
 	Menu, chOrgLVMenu, Add
 	Menu, chOrgLVMenu, Add, % TXT.ORG_m_inc , chOrgUp
 	Menu, chOrgLVMenu, Add, % TXT.ORG_m_dec , chOrgDown
 	Menu, chOrgLVMenu, Add, % TXT.TIP_move "`t`t(Alt+X)", chOrgCut
 	Menu, chOrgLVMenu, Add, % TXT.TIP_copy "`t`t(Alt+C)" , chOrgCopy
-	Menu, chOrgLVMenu, Add, % TXT.HST_m_del, chOrgDelete
 	Menu, chOrgLVMenu, Add
-	Menu, chOrgLVMenu, Add, % TXT.HST_m_ref, chOrg_refresh
+	Menu, chOrgLVMenu, Add, % TXT.HST_m_del, chOrgDelete
 	Menu, chOrgLVMenu, Default, % TXT.HST_m_prev
 
 	; // MENU LB
@@ -78,6 +79,7 @@ channelOrganizer(){
 	Hotkey, If, IsChOrgLVActive()
 	hkZ("Enter", "chOrg_preview")
 	hkZ("Space", "chOrg_paste")
+	hkZ("!Enter", "chOrg_props")
 	hkZ("Del", "chOrgDelete")
 	hkZ("!Up", "chOrgUp")
 	hkZ("!Down", "chOrgDown")
@@ -250,6 +252,16 @@ chOrg_paste:
 		API.paste( Substr(A_LoopField, 1, Instr(A_LoopField, "-")-1) , Substr(A_LoopField, Instr(A_LoopField, "-")+1) )
 	return
 
+chOrg_props:
+	gosub chOrg_getSelected
+	out_cl := API.getChStrength(out_ch)-out_cl+1
+	ClipPref_makeKeys(out_ch, out_cl)
+	SB_SetText(TXT._editing, 2)
+	CPS[out_ch][out_cl] := ObjectEditor(CPS[out_ch][out_cl], "Edit Clip properties", "chOrg", "Hit Save when you're done.", 150)
+	prefs2Ini()
+	chOrg_notification(blank, 10)
+	return
+
 chOrg_preview:
 	gosub chOrg_getSelected
 	out_cl := API.getChStrength(out_ch) - out_cl + 1
@@ -258,8 +270,7 @@ chOrg_preview:
 		gui_Clip_preview(clippath, blank, "chOrg")
 	else {
 		LV_GetText(clipdata, last_Row, 3)
-		FileDelete, % PREV_FILE
-		FileAppend, % clipdata, % PREV_FILE
+		genHTMLforPreview(clipdata)
 		gui_Clip_preview(PREV_FILE, chOrg_search, "chOrg")
 	}
 	return
@@ -276,8 +287,8 @@ chOrg_renameCh:
 chOrg_Lv:
 	Gui, chOrg:Default
 	GuiControl, , Button1, % chr(232)
-	loop 2
-		GuiControl, Enable, % "Button"  A_index+3
+	loop 6
+		GuiControl, Enable, % "Button"  A_index+1
 	if A_GuiEvent = DoubleClick
 		gosub chOrg_preview
 	return
@@ -289,13 +300,15 @@ chOrg_Lb:
 	GuiControl, , Button1, % chr(231)
 
 	if chOrg_Lb=1
-		loop 4 		; in case all channels are selected
+		loop 6 		; in case all channels are selected
 			GuiControl, Disable, % "Button"  A_index+1	
-	else
-		loop 2 {
+	else {
+		loop 3
 			GuiControl, Disable, % "Button"  A_index+3
+		loop 2
 			GuiControl, Enable,  % "Button"  A_Index+1
-		}
+		GuiControl, Enable, % "Button7" 
+	}
 	chOrgLV_update(chOrg_search, chOrg_Lb>1 ? chOrg_Lb-2 : "")
 	return
 
@@ -372,14 +385,14 @@ chOrgLV_update(term="", channel=""){
 		{
 			maxindex := API.getChStrength(k)
 			loop % maxindex
-				if SuperInstr( v2 := getRealCD( v[maxIndex-A_index+1] )  , term, 1)
+				if SuperInstr( (v2 := getRealCD( v[maxIndex-A_index+1] )) " " CPS[k][maxIndex-A_index+1]["Tags"] , term, 1)
 					LV_Add("", k, A_index, v2) , ct++
 		}
 	}
 	else {
 		maxIndex := API.getChStrength(channel)
 		loop % maxIndex
-			if SuperInstr( v := getRealCD( CDS[channel][maxIndex-A_index+1] ) , term, 1)
+			if SuperInstr( (v := getRealCD( CDS[channel][maxIndex-A_index+1] )) " " CPS[channel][maxIndex-A_index+1]["Tags"] , term, 1)
 				LV_Add("", channel, A_index, v) , ct++
 	}
 	SB_SetText(TXT.ORG_countStatus " - " ct, 1)

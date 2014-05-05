@@ -21,6 +21,26 @@
 	</dd>
 	<br><br>
 
+	<dt>The Clear History button in History Tool doesn't delete the recent Clips in Ctrl+V Paste Mode ?<br>
+		OR<br>
+		I delete a clip from Ctrl+V Paste Mode but it is still there in History Tool ?</dt>
+	<dd>The History Tool and the Paste-Mode are two different components and there clips are independent of each other. <br>
+		History Tool is meant for <b>history-keeping</b> whereas Ctrl+V Paste Mode is meant to show clips contained in different channel of Clipjump. The history of 
+		clips added to of any of the channels are shown in a single window i.e. <a href=history.html>History Tool</a>.
+		On the other hand, clips stored in channels can be managed from the <a href=organizer.html>Channel Organizer</a>.
+	</dd>
+	<br><br>
+
+	<dt>I can't set a <b>Win</b> key shortcut in Settings editor ?</dt>
+	<dd>This is a limitation of the Hotkey control that is used. You can use the <a href=custom.html>ClipjumpCustom.ini</a> along with the right 
+		<a href=devList.html#labels>Label</a> to create a custom shortcut for yourself.<br>
+		Here is an example for creating shortcut Win+K for Hold Clip<br>
+		<pre>[holdclip_win]
+bind = Win + K
+run = holdClip</pre>
+	</dd>
+	<br><br>
+	
 	<dt>How do I update Clipjump ?</dt>
 	<dd>To update Clipjump , follow these steps - 
 		<li>Close Clipjump from the tray menu.
@@ -33,15 +53,6 @@
 
 	<dt>Will updating Clipjump preserve my settings , history and clips ?</dt>
 	<dd>Yes , you will lose nothing. </dd>
-
-	<br><br>
-
-	<dt>What is this 'cache' folder?</dt>
-	<dd>The 'cache' folder stores all the clips of Clipjump. The folder was hidden in previous versions.<br>
-		It contains folders with channel numbers that stores clips for that channel. eg > (clips for channel 0) , (clips1 for channel 1) and so on.
-		<br>If you look to backup selected channels, you can copy and store clips[n], thumbs[n] and fixate[n] directory for it though it is 
-		usually recommended to <b>stay away from the cache directory</b>. 
-	</dd>
 	<br><br>
 
 	<dt>I had the copied the file/folder to Clipjump but when I paste it , nothing happens ?</dt>
@@ -52,16 +63,16 @@
 	</dd>
 	<br><br>
 
-	<dt>The Clear History button in History Tool doesn't delete the recent Clips in Ctrl+V Paste Mode ?<br>
-		OR<br>
-		I delete a clip from Ctrl+V Paste Mode but it is still there in History Tool ?</dt>
-	<dd>The History Tool and the Paste-Mode are two different components and there clips are independent of each other. <br>
-		History Tool is meant for <b>history-keeping</b> whereas Ctrl+V Paste Mode is meant to show clips contained in different channel of Clipjump. The history of 
-		clips to any of the channel is shown in a single window i.e. History Tool.<br>
-		The <code>Clear History</code> button deletes all the History items whereas the <a href="basic_help.html#delete_all">DeleteAll mode</a> deletes all the clips that are in that channel.<br>
-		AND<br>
-		The Delete button in History deletes a History Clip and the Delete Mode (Ctrl+X 4 times) in Paste Mode deletes a clip contained in the channel.
+	<dt>What is this 'cache' folder?</dt>
+	<dd>The 'cache' folder stores all the clips of Clipjump. The folder was hidden in previous versions.<br>
+		It contains folders with channel numbers that stores clips for that channel. eg > (clips for channel 0) , (clips1 for channel 1) and so on.
+		<br>If you look to backup selected channels, you can copy and store clips[n], thumbs[n] and fixate[n] directory for it though it is 
+		usually recommended to <b>stay away from the cache directory</b>. 
 	</dd>
+	<br><br>
+
+	<dt>Will my clips change if I use the Paste Formats?</dt>
+	<dd><a href="basic_help.html#pf_notes">See Here</a></dd>
 
 	<br><br>
 
@@ -75,26 +86,11 @@
 
 	<br><br>
 
-	<dt>I can't set a <b>Win</b> key shortcut in Settings editor ?</dt>
-	<dd>This is a limitation of the Hotkey control that is used. You can use the <a href=custom.html>ClipjumpCustom.ini</a> along with the right 
-		<a href=devList.html#labels>Label</a> to create a custom shortcut for yourself.<br>
-		Here is an example for creating shortcut Win+K for Hold Clip<br>
-		<pre>[holdclip_win]
-bind = Win + K
-run = holdClip</pre>
-	</dd>
-
-	<br><br>
-
 	<dt>I have disabled the <i>Retain Clipboard data after Restart</i> feature but the clips in Paste Mode are still there ?</dt>
 	<dd><a href="channels.html#channel_notes">See Here</a></dd>
 
 	<br><br>
 
-	<dt>Will my clips change if I use the Paste Formats?</dt>
-	<dd><a href="basic_help.html#pf_notes">See Here</a></dd>
-
-	<br><br>
 
 	<dt>Why do I get the warning <i>Clipjump is not running as administrator</i> ?</dt>
 	<dd>When Clipjump, a portable application is placed in drives or folders which don't allow users to write to them , Clipjump will not be able to 
@@ -139,13 +135,6 @@ run = holdClip</pre>
 	 Go to the channel selector GUI to create a channel named as 'Pit' and you will be OK. </dd>
 
 	 <br><br>
-
-	<dt>I see Japanese / Chinese characters as boxes ?</dt>
-	<dd>This is a uncommon <a href="http://social.technet.microsoft.com/Forums/windows/en-US/1eea3d70-c29a-4a80-9dd7-87ec131f160a/chinese-characters-showing-as-blocks-on-windows-7?forum=w7itproappcompat">Windows Issue</a>
-	 and has nothing to do with Clipjump. To fix it , create a text-file named as 火 or some other chinese on the Desktop and logoff and on. You should be back to normal.
-	</dd>
-
-	<br><br>
 
 	<dt>How do I see a larger preview of image in the History Preview ?</dt>
 	<dd>History Preview window automatically resizes the image contained with its dimensions . You can drag the Preview window from its edges to resize the window with the 

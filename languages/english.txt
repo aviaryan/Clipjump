@@ -321,3 +321,28 @@ TIP_initMsg = Initialising Clipjump
 ;======
 
 TIP_tagPrompt = Write space separated tags for this clip
+SET_startSearch = Start Paste mode with Search enabled
+SET_T_startSearch = Make Ctrl+V open paste mode with the search mode enabled. 
+                  = This will help if you don't like holding down Ctrl to navigate through clips. Also see "Search in Paste Mode" in Help file.
+_editing = Editing
+
+; Note to Translator > please make sure the out in Ctrl+v+F1 is aligned properly in TIP_help
+TIP_help = 
+= Release Ctrl - Paste
+= V            - Move forward One Clip
+= C            - Move Back One Clip
+= X            - Cancel mode, Move Clip, Delete Clip, Copy Clip
+= Z            - Change Pasting Format
+= Space        - FIX
+= S            - Put current Clip to system Clipboard
+= E            - Export
+= Up/Down      - Change channel +1/-1
+= A            - Move to first clip of the channel
+= 1..9         - Jump to nth Clip ahead of the active clip
+= F            - Search
+= H            - Edit
+= Enter        - Start Multiple Pasting Session
+= T            - Tag
+= F1           - Help
+= 
+= Press V to exit this window

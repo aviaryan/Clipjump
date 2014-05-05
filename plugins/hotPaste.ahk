@@ -1,5 +1,5 @@
-;@Plugin-Name Hotstring-Paste
-;@Plugin-Version 0.2
+﻿;@Plugin-Name Hotstring-Paste
+;@Plugin-Version 0.25
 ;@Plugin-Description Edit this plugin file to add hotstrings (like hotkeys) that will paste the desired clip when you write a particular text.
 ;@Plugin-Description Makes badass use of the awesome hotstrings feature in AutoHotkey
 ;@Plugin-Author AutoHotkey, Avi
@@ -8,8 +8,32 @@
 #Hotstring EndChars `n `t
 
 plugin_hotPaste(){
-	MsgBox, 64, Hello, % "Please edit the plugins\hotPaste.ahk file to meet your needs. The Comments in the file will guide you through.`n"
+	FileCreateDir, plugins\hotPaste.lib
+
+test := "
+(
+; writing 'cj_site' followed by a space/Enter/Tab will PASTE the site URL
+::cj_site::
+	API.PasteText(""http://clipjump.sourceforge.net"")
+	return
+
+::1stClip::
+	API.Paste(0,1)		; write '1stClip' to paste clip 1 of channel 0.
+	return
+
+::3clip:: 				
+	API.Paste(CN.NG, 3)    ; CN.NG has the current active channel number, this pastes 3rd clip of active channel
+	return
+
+; EDIT THIS FILE TO ADD MORE AND RESTART TO HAVE THEM LOADED
+)"
+
+	if !FileExist( zPath := "plugins\hotPaste.lib\base.ahk" )
+		FileAppend, % test, % zPath
+
+	MsgBox, 64, Hello, % "Please edit the plugins\hotPaste.lib\base.ahk file to meet your needs. The Comments in the file will guide you through.`n"
 	 . "A Gui will be added to this plugin in the future versions."
+	Run % ini_defEditor " """ "plugins\hotPaste.lib\base.ahk"""
 }
 
 
@@ -19,39 +43,8 @@ IfWinNotActive, a_window_dat_never_exists
 {
 ;////////////////////   HOTRSTRINGS AREA  ///////////////////////////////////
 
-/*
-EXAMPLES (Commented, are not executed)
 
-	; writing 'cj_site' followed by a space or enter or tab expands the action to API.paste(2, 1)
-	::cj_site::
-		API.Paste(2,1) 		; Clip 1 of channel 2 has http://clipjump.sourceforge.net [FIXED] via the Fixate feature.
-		return
-	
-	::1stClip::
-		API.Paste(1,1)		; write '1stClip' to paste clip 1 of channel 1.
-		return
-	
-	::adres:: 				
-		API.PasteText("Building 12, Toms Street, Sector 4, BigCity, ISA")    ; write 'adres' to paste the address given here
-		return
-*/
-
-; NOT Commented (WORKS)
-; write   'cj_site'   followed by space to see   'http://clipjump.sourceforge.net'   pasted
-
-::cj_site::
-	API.PasteText("http://clipjump.sourceforge.net")
-	return
-
-; WRITE MORE HOTSTRINGS BELOW (and don't forget to restart)
-
-
-
-
-
-
-
-
+#Include *i %A_ScriptDir%\plugins\hotPaste.lib\base.ahk
 
 
 ; //////////////////// END OF HOTSTRINGS AREA //////////////////////////////
