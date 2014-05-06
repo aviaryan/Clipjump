@@ -1,5 +1,5 @@
 /* *****************
-Hello. How are you ?
+  Channel Organizer
  * *****************
 */
 
@@ -15,11 +15,11 @@ channelOrganizer(){
 	if !wt
 		wt := A_ScreenWidth>1200 ? 800 : 700
 	if !ht
-		ht := A_ScreenHeight>800 ? 450 : 390
+		ht := A_ScreenHeight>800 ? 450 : 400
 	w_ofSearch := getControlInfo("button", TXT.HST_search, "w", "s10")
 
 	Gui, chOrg:New
-	Gui, +Resize +MinSize500x280
+	Gui, +Resize +MinSize625x400
 	Gui, Color, D2D2D2
 	Gui, Font, s10
 	Gui, Add, Text, % "x" wt - w_ofSearch - 200 " y10", % TXT.HST_search
@@ -34,6 +34,7 @@ channelOrganizer(){
 	Gui, Add, Button, x+4 yp+20 w30 +Disabled, % chr(231)
 	Gui, Add, Button, xp y+20 w30 gchOrgUp, % chr(233) 			; buttons width = 30
 	Gui, Add, Button, xp y+2 w30 gchOrgDown, % chr(234)
+	Gui, Add, Button, xp y+2 w30 gchorg_openPastemode, % chr(49)
 	Gui, Add, Button, xp y+2 w30 gchOrg_props, % chr(50)
 	Gui, Add, Button, xp y+2 w30 gchOrgCut, % chr(34)
 	Gui, Add, Button, xp y+2 w30 gchOrgCopy, % chr(52)
@@ -54,13 +55,14 @@ channelOrganizer(){
 	; // MENU LV
 	Menu, chOrgLVMenu, Add, % TXT.HST_m_prev, chOrg_preview
 	Menu, chOrgLVMenu, Add
-	Menu, chOrgLVMenu, Add, % TXT.HST_m_insta, chOrg_paste
+	Menu, chOrgLVMenu, Add, % TXT.ORG_m_insta, chOrg_paste
 	Menu, chOrgLVMenu, Add, % TXT.PLG_properties, chOrg_props
-	Menu, chOrgLVMenu, Add
-	Menu, chOrgLVMenu, Add, % TXT.ORG_m_inc , chOrgUp
-	Menu, chOrgLVMenu, Add, % TXT.ORG_m_dec , chOrgDown
-	Menu, chOrgLVMenu, Add, % TXT.TIP_move "`t`t(Alt+X)", chOrgCut
-	Menu, chOrgLVMenu, Add, % TXT.TIP_copy "`t`t(Alt+C)" , chOrgCopy
+	Menu, chOrgLVMenu, Add, % TXT.ORG_m_openPst, chOrg_openPasteMode
+		Menu, chOrgSubM, Add, % TXT.ORG_m_inc , chOrgUp
+		Menu, chOrgSubM, Add, % TXT.ORG_m_dec , chOrgDown
+		Menu, chOrgSubM, Add, % TXT.TIP_move "    (" TXT["_!x"] ")", chOrgCut
+		Menu, chOrgSubM, Add, % TXT.TIP_copy "    (" TXT["_!c"] ")" , chOrgCopy
+	mENU, chOrgLVMenu, Add, % TXT._more_options, :chOrgSubM
 	Menu, chOrgLVMenu, Add
 	Menu, chOrgLVMenu, Add, % TXT.HST_m_del, chOrgDelete
 	Menu, chOrgLVMenu, Default, % TXT.HST_m_prev
@@ -80,6 +82,7 @@ channelOrganizer(){
 	hkZ("Enter", "chOrg_preview")
 	hkZ("Space", "chOrg_paste")
 	hkZ("!Enter", "chOrg_props")
+	hkZ("^o", "chOrg_openPasteMode")
 	hkZ("Del", "chOrgDelete")
 	hkZ("!Up", "chOrgUp")
 	hkZ("!Down", "chOrgDown")
@@ -129,6 +132,7 @@ chOrgGuiClose:
 	Gui, chOrg:Destroy
 	Menu, chOrgLVMenu, DeleteAll
 	Menu, chOrgLBMenu, DeleteAll
+	Menu, chOrgSubM, DeleteAll
 	EmptyMem()
 	return
 
@@ -244,6 +248,12 @@ chOrg_getSelected:
 	rSel := Trim(rSel, "`n")
 	return
 
+chOrg_openPasteMode:
+	gosub chOrg_getSelected
+	;WinGetPos, x, y,,, % TXT.ORG__name " ahk_class AutoHotkeyGUI"
+	API.showPasteTipAt(out_ch, out_cl) ;, x+100, y+160)
+	return
+
 chOrg_paste:
 	gosub chOrg_getSelected
 	gosub chOrgGuiClose
@@ -287,7 +297,7 @@ chOrg_renameCh:
 chOrg_Lv:
 	Gui, chOrg:Default
 	GuiControl, , Button1, % chr(232)
-	loop 6
+	loop 7
 		GuiControl, Enable, % "Button"  A_index+1
 	if A_GuiEvent = DoubleClick
 		gosub chOrg_preview
@@ -300,14 +310,14 @@ chOrg_Lb:
 	GuiControl, , Button1, % chr(231)
 
 	if chOrg_Lb=1
-		loop 6 		; in case all channels are selected
-			GuiControl, Disable, % "Button"  A_index+1	
+		loop 7 		; in case all channels are selected
+			GuiControl, Disable, % "Button"  A_index+1
 	else {
-		loop 3
+		loop 4
 			GuiControl, Disable, % "Button"  A_index+3
 		loop 2
 			GuiControl, Enable,  % "Button"  A_Index+1
-		GuiControl, Enable, % "Button7" 
+		GuiControl, Enable, % "Button8"
 	}
 	chOrgLV_update(chOrg_search, chOrg_Lb>1 ? chOrg_Lb-2 : "")
 	return

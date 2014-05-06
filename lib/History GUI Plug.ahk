@@ -255,7 +255,7 @@ gui_Clip_Preview(path, searchBox="", owner="History")
 button_Copy_to_Clipboard:
 	Gui, Preview:Submit, nohide
 	if !preview.isimg
-		try Fileread, Clipboard, % preview.path
+		try Clipboard := prev_handle.Document.body.innerText
 	else
 		Gdip_SetImagetoClipboard(preview.path)
 	sleep 500

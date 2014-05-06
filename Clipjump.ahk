@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 11.2
+;@Ahk2Exe-SetVersion 11.2.3
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -42,7 +42,7 @@ global mainIconPath := FileExist("Clipjump.exe") ? "Clipjump.exe" : "icons/icon.
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "11.2"
+global VERSION := "11.2.3"
 global CONFIGURATION_FILE := "settings.ini"
 
 ini_LANG := ini_read("System", "lang")
@@ -720,10 +720,10 @@ manageFIXATE(clipAdded, channel, Dir_constant){
 	Loop, %clipAdded%
 	{
 		tempNo := clipAdded - A_Index + 1
-		If CPS[CN.NG][tempNo][FIXATE_txt]
+		If CPS[channel][tempNo][FIXATE_txt]
 		{
 			t_TempNo := tempNo + 1
-			FileMove, %path_CLIPS%\%t_TempNo%.avc,	%path_CLIPS%\%t_TempNo%_a.avc
+			FileMove, %path_CLIPS%\%t_TempNo%.avc,		%path_CLIPS%\%t_TempNo%_a.avc
 			FileMove, %path_CLIPS%\%tempNo%.avc,		%path_CLIPS%\%t_TempNo%.avc
 			FileMove, %path_CLIPS%\%t_TempNo%_a.avc,	%path_CLIPS%\%tempNo%.avc
 
@@ -1128,16 +1128,21 @@ historyCleanup()
 }
 
 
-;----------------------- ACTION MODE AND GET CLASS TOOL ----------------------------------------------------
-
+;----------------------- ACTION MODE ----------------------------------------------------
 
 actionmode:
 	update_actionmode()
 	temp_am := TT_Console(ACTIONMODE.text, ACTIONMODE.keys, temp3, temp3, 5, "s8", "Consolas|Courier New")
 	if ACTIONMODE[temp_am] != "Exit_actmd"
+	{
 		if Instr(ACTIONMODE[temp_am] , "(")
 			RunFunc(ACTIONMODE[temp_am])
-		else gosub % ACTIONMODE[temp_am]
+		else if ACTIONMODE[temp_am]
+			gosub % ACTIONMODE[temp_am]
+		else if temp_am is Integer 			; give user chance to override setting
+			changeChannel(temp_am)
+			, autoTooltip("Channel " temp_am " active", 800, 2)
+	}
 	else
 		EmptyMem()
 	return
@@ -1151,6 +1156,7 @@ init_actionmode() {
 }
 
 update_actionmode(){
+	static numadd := "0123456789"
 	thetext := ""
 	.  PROGNAME " " TXT.ACT__name
 	. "`n-----------"
@@ -1164,6 +1170,8 @@ update_actionmode(){
 	}
 	if ACTIONMODE.Esc
 		thetext .= "`n`n" fillwithSpaces( ACTIONMODE.Esc_caption ? ACTIONMODE.Esc_caption : ACTIONMODE.Esc , 35 ) " -  Esc" , thekeys .= "Esc"
+	loop, parse, numadd
+		thekeys .= " " A_LoopField
 	ACTIONMODE.keys := Trim(thekeys)
 	ACTIONMODE.text := thetext
 }

@@ -102,11 +102,12 @@ customization_Run(obj){
 }
 
 RunFunc(v){
+	static rk := "ª"
 	; runs dynamic functions
 	fn := Substr(v, 1, Instr(v,"(")-1)
 	pms := Substr(v, Instr(v,"(")+1, -1) , ps := {}
 	loop, parse, pms,`,, %A_Space%
-		ps.Insert(A_LoopField)
+		ps.Insert( RegExReplace(A_LoopField, rk, ",") )
 	n := ps.MaxIndex()
 	; API functions
 	if Instr(fn, "."){

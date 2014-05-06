@@ -94,7 +94,7 @@ class API
 		else
 		{
 			FileTransfer(origClip, newClip, 0) , FileTransfer(origThumb, newThumb, 0)
-			CPS[new_channel][nc_info.realCURSAVE+1] := CPS[channel][clip] , CDS[channel].remove(Clip)
+			CPS[new_channel][nc_info.realCURSAVE+1] := CPS[channel][clip] , CPS[channel].remove(Clip)
 
 			CDS[new_channel][nc_info.realCURSAVE+1] := CDS[channel][clip] , CDS[channel][clip] := ""
 			c_Folder1 := "cache\clips" c_info.p "\" , c_Folder2 := "cache\thumbs" c_info.p "\"
@@ -189,16 +189,31 @@ class API
 						prompt := "#" A_index " " TXT.PLG_fetchparam
 					InputBox, param, % "Plugin " plugin_displayname, % prompt,, 500
 					if ErrorLevel=0
-						funcps .= param ","
+						funcps .= RegexReplace(param, ",", "ª") ","
 					else return
 				}
 			} else {
 				for k,v in parameters
-					funcps .= v ","
+					funcps .= Regexreplace(v, ",", "ª") ","
 			}
 			returnV := runfunc(fpath "(" RTrim(funcps, ",") ")")
 			return returnV
 		}
+	}
+
+	; shows paste mode tooltip with search at the passed channel and clip posn
+	showPasteTipAt(ch, cl, x="", y=""){
+		_tmpsv := TEMPSAVE , _cnl := CN.NG, _cursv := CURSAVE
+		CN["CURSAVE" CN.N] := CURSAVE , CN["TEMPSAVE" CN.N] := TEMPSAVE 	; load all values in CN obj
+		v := API.getChStrength(ch)-cl+1
+		changeChannel(ch, 0)
+		TEMPSAVE := v
+		SPM.ACTIVE := 1
+		SPM.X := x , SPM.Y := y
+		gosub paste
+		gosub searchpm
+		SPM.TEMPSAVE := _tmpsv
+		SPM.Channel := _cnl
 	}
 
 	; runs any other function like choosechannelgui() , changeChannel()
