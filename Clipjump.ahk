@@ -35,8 +35,8 @@ ListLines, Off
 #HotkeyInterval 1000
 #MaxHotkeysPerInterval 1000
 
-global ini_LANG := "" , H_Compiled := (Substr(A_AhkPath, Instr(A_AhkPath, "\", 0, 0)+1) == "Clipjump.exe") && (!A_IsCompiled) ? 1 : 0
-global mainIconPath := FileExist("Clipjump.exe") ? "Clipjump.exe" : "icons/icon.ico"
+global ini_LANG := "" , H_Compiled := RegexMatch(Substr(A_AhkPath, Instr(A_AhkPath, "\", 0, 0)+1), "iU)^(Clipjump).*(\.exe)$") && (!A_IsCompiled) ? 1 : 0
+global mainIconPath := H_Compiled || A_IsCompiled ? A_AhkPath : "icons/icon.ico"
 
 ;*********Program Vars**********************************************************
 ; Capitalised variables (here and everywhere) indicate that they are global

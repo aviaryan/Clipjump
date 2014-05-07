@@ -90,10 +90,7 @@ trayMenu(destroy=0){
 	}
 
 	;Tray Icon
-	if !(A_isCompiled) && !(H_COMPILED)			;Important for showing Cj's icon in the Titlebar of GUI
-		Menu, Tray, Icon, % mainIconPath
-	if H_COMPILED
-		Menu, Tray, Icon, % A_AhkPath
+	Menu, Tray, Icon, % mainIconPath
 	Menu, Tray, NoStandard
 	Menu, Tray, Add, % TXT.ABT__name " " PROGNAME, main
 	Menu, Tray, Tip, % PROGNAME " {" CN.Name "}"
