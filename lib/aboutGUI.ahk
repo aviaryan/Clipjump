@@ -97,9 +97,9 @@ trayMenu(destroy=0){
 	Menu, Tray, Add
 	Menu, Tray, Add,% TXT.SET_actmd "`t" Hparse_Rev(actionmode_k), actionmode
 	Menu, Tray, Add		; separator
-		Menu, Maintanence_Tray, Add, % "Delete [File/Folder]", plugin_deleteFileFolder
-		Menu, Maintanence_Tray, Add, % TXT.TRY_updates, updt
-	Menu, Tray, Add, % "Maintanence", :Maintanence_Tray
+		Menu, Maintenance_Tray, Add, % "Delete [File/Folder]", plugin_deleteFileFolder
+		Menu, Maintenance_Tray, Add, % TXT.TRY_updates, updt
+	Menu, Tray, Add, % "Maintenance", :Maintenance_Tray
 		Menu, Options_Tray, Add, % TXT.TRY_incognito, incognito
 		Menu, Options_Tray, Add, % TXT.TRY_disable " " PROGNAME, disable_clipjump
 		Menu, Options_Tray, Add, % TXT.TRY_startup, strtup
