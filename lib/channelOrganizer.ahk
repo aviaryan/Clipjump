@@ -74,10 +74,8 @@ channelOrganizer(){
 	Menu, chOrgLBMenu, Add, % TXT.HST_m_del, chOrgDelete
 
 	; Hotkeys
-	Hotkey, IfWinActive, % TXT.ORG__name " ahk_class AutoHotkeyGUI"
+	Hotkey, If, IsChorgActive()
 	hkZ("F5", "chOrg_refresh")
-	Hotkey, If
-	Hotkey, If, IsPasteModeNotActive()
 	hkZ("^f", "chOrg_searchfocus")
 	Hotkey, If
 	Hotkey, If, IsChOrgLVActive()
@@ -391,6 +389,9 @@ chOrg_notification:
 	SB_SetText(empty, 2)
 	return
 
+IsChorgActive(){
+	return WinActive( TXT.ORG__name " ahk_class AutoHotkeyGUI") && ctrlRef==""
+}
 IsChOrgLVActive(){
 	return IsActive("SysListView321", "classnn") && WinActive(TXT.ORG__name " ahk_class AutoHotkeyGUI") && ctrlRef==""
 }
@@ -422,6 +423,8 @@ chOrgLV_update(term="", channel=""){
 }
 
 
+#If IsChorgActive()
+#If
 #If IsChOrgLVActive()
 #If
 #If IsChOrgLBActive()

@@ -646,12 +646,3 @@ KeyboardLayoutList()
 	return hkl_list
 }
 ; !Code by deo
-
-
-; checks if paste mode is active . Also used to create window-specific shortcuts --
-IsPasteModeNotActive(){
-	return ctrlRef==""
-}
-
-#If IsPasteModeNotActive()
-#If

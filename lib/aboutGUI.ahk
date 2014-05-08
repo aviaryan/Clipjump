@@ -99,7 +99,7 @@ trayMenu(destroy=0){
 	Menu, Tray, Add		; separator
 		Menu, Maintanence_Tray, Add, % "Delete [File/Folder]", plugin_deleteFileFolder
 		Menu, Maintanence_Tray, Add, % TXT.TRY_updates, updt
-	Menu, Tray, Add, % "Maintanence", :Maintanence_Tray
+	Menu, Tray, Add, % TXT._maintenance, :Maintanence_Tray
 		Menu, Options_Tray, Add, % TXT.TRY_incognito, incognito
 		Menu, Options_Tray, Add, % TXT.TRY_disable " " PROGNAME, disable_clipjump
 		Menu, Options_Tray, Add, % TXT.TRY_startup, strtup
