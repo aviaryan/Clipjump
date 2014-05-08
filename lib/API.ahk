@@ -234,11 +234,12 @@ class API
 	
 	; deletes a clip
 	deleteClip(channel, clip){
-		zbkCh := CN.NG 	; create backup of current channel
+		zbkCh := CN.NG , zbkClip := TEMPSAVE	; create backup of current channel
 		CN["CURSAVE" CN.N] := CURSAVE , CN["TEMPSAVE" CN.N] := TEMPSAVE
 		changeChannel(channel)
 		clearClip( API.getChStrength(channel) - clip + 1 )
 		changeChannel(zbkCh)
+		TEMPSAVE := zbkClip
 	}
 
 	; sets a variable

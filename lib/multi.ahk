@@ -215,8 +215,10 @@ renameChannel(channel, name){
 
 ;--------------------------- select channel box --------------------------------------------------------------
 
-choosechannelgui(){
+choosechannelgui(guiname=""){
 	static channel_list
+	if guiname=
+		guiname := TXT.CHC_name
 	channel_list := ""
 	Gui, choosech:New
 	Gui, choosech: +ToolWindow -MaximizeBox
@@ -227,9 +229,9 @@ choosechannelgui(){
 	Gui, Add, Listbox, x+20 vchannel_list h150, % lst
 	Gui, Add, button, x7 y+10 gchoosechbuttonok Default, OK
 	Gui, Add, button, x+10 yp gchoosechbuttoncancel, % TXT.SET_cancel
-	Gui, Show,, % TXT.CHC_name
-	WinWaitActive, % TXT.CHC_name
-	WinWaitClose, % TXT.CHC_name
+	Gui, Show,, % guiname
+	WinWaitActive, % guiname
+	WinWaitClose, % guiname
 	channel_list := Trim( Substr(channel_list, 1, Instr(channel_list, "-")-1) )
 	return is_notcancel ? "" : channel_list
 
@@ -251,20 +253,16 @@ choosechGuiClose:
 channel_find(name=""){
 	; returns list of channels if name is empty
 	Iniread, o, %CONFIGURATION_FILE%, Channels
-	loop, parse, o, `n, `r
+	mINI := Ini2Obj(CONFIGURATION_FILE)
+	if (name != "")
 	{
-		if ( ( k := Trim( Substr(A_LoopField, 1, p:=Instr(A_LoopField, "=")-1) ) ) >= CN.Total ) 		; if ini has a old entry
-			continue
-
-		v := Trim( Substr(A_LoopField, p+2) )
-		if k is Integer
-		{
-			if name=
-				str .= k " - " v "`n"
+		for k,v in mINI["Channels"]
 			if v = %name%
 				return k
-		}
 	}
+	else
+		loop % CN.Total
+			str .= A_index-1 " - " mINI["Channels"][A_index-1] "`n"
 	return Rtrim( str, "`n" )
 }
 

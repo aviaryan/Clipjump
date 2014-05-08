@@ -101,8 +101,8 @@ tryGetvar(varname, maxtries=100){
 	return ret
 }
 
-;Parses the string and converts the %....% to their respective values
-;From   https://github.com/aviaryan/autohotkey-scripts/blob/master/Functions/ValueOf.ahk
+; Parses the string and converts the %....% to their respective values
+; From   https://github.com/aviaryan/autohotkey-scripts/blob/master/Functions/ValueOf.ahk
 
 Valueof(VarinStr){
 global
@@ -601,13 +601,14 @@ guiMsgBoxGuiEscape:
 	Gui, guiMsgBox:Destroy
 	GuiEnds := 1
 	return
-
 }
+
 
 ;inputbox function for use with customizer...
 inputBox(title, text){
 	Inputbox, o, % title, % text
-	return o
+	if !ErrorLevel
+		return o
 }
 
 ; Code by deo http://www.autohotkey.com/board/topic/74348-send-command-when-switching-to-russian-input-language/#entry474543
@@ -644,5 +645,13 @@ KeyboardLayoutList()
 	hHkls =
 	return hkl_list
 }
-
 ; !Code by deo
+
+
+; checks if paste mode is active . Also used to create window-specific shortcuts --
+IsPasteModeNotActive(){
+	return ctrlRef==""
+}
+
+#If IsPasteModeNotActive()
+#If

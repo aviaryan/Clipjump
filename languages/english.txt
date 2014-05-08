@@ -110,7 +110,7 @@ SET_T_keepsession = Should Clipjump continue with all the saved clipboards after
 SET_T_ismessage = This value determines whether you want to see the confirmation message or not while copy/cut operations.
 SET_T_daystostore = Number of days for which the clipboard record will be stored
 SET_T_images = Should clipboard images be stored in history ?
-SET_T_chnl = Shortcut to show the <Select Channel> Window
+SET_T_chnl = Shortcut to show the "Select Channel" Window
            = Set the shortcut to None to disable the key combination
 SET_T_cfilep = Shortcut to copy selected file's path
              = Set the shortcut to None to disable the key combination
@@ -348,10 +348,15 @@ TIP_help =
 = Press V to exit this window
 
 ;=======
-; 11.3
+; 11.2.3
 ;=======
 _more_options = More Options
 ORG_m_openpst = Open in Paste Mode (Ctrl+O)
 _!x = Alt+X
 _!c = Alt+C
 ORG_m_insta = Insta-Paste (Space)
+
+;=======
+; 11.3
+;=======
+_destChannel = Destination Channel

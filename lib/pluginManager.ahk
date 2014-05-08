@@ -193,7 +193,7 @@ loadPlugins() {
 		p:=1 , detobj := {}
 		while p2:=RegExMatch(ov, "im)^;@Plugin-.*$", o, p) {
 			ps := Substr(o, Instr(o,"-")+1) , pname := Substr(ps, 1, Instr(ps," ")-1) , ptext := Substr(ps, Instr(ps, " ")+1)
-			p := p2+Strlen(o) , detobj[pname] .= ptext
+			p := p2+Strlen(o) , detobj[pname] .= " " ptext , detobj[pname] := Trim(detobj[pname])
 		}
 
 		filename := Substr(A_LoopFileName, 1, -4) , c := 0

@@ -62,7 +62,7 @@ channelOrganizer(){
 		Menu, chOrgSubM, Add, % TXT.ORG_m_dec , chOrgDown
 		Menu, chOrgSubM, Add, % TXT.TIP_move "    (" TXT["_!x"] ")", chOrgCut
 		Menu, chOrgSubM, Add, % TXT.TIP_copy "    (" TXT["_!c"] ")" , chOrgCopy
-	mENU, chOrgLVMenu, Add, % TXT._more_options, :chOrgSubM
+	Menu, chOrgLVMenu, Add, % TXT._more_options, :chOrgSubM
 	Menu, chOrgLVMenu, Add
 	Menu, chOrgLVMenu, Add, % TXT.HST_m_del, chOrgDelete
 	Menu, chOrgLVMenu, Default, % TXT.HST_m_prev
@@ -76,6 +76,8 @@ channelOrganizer(){
 	; Hotkeys
 	Hotkey, IfWinActive, % TXT.ORG__name " ahk_class AutoHotkeyGUI"
 	hkZ("F5", "chOrg_refresh")
+	Hotkey, If
+	Hotkey, If, IsPasteModeNotActive()
 	hkZ("^f", "chOrg_searchfocus")
 	Hotkey, If
 	Hotkey, If, IsChOrgLVActive()
@@ -142,8 +144,8 @@ chOrgDown: 	; dont make these labels critical
 	t_Up := A_ThisLabel="chOrgUp" ? 1 : 0
 	gosub chOrg_isChActive
 	if !isChActive {
-		temp_row_s := 0
-		while (temp_row_s := LV_GetNext(temp_row_s)) {
+		temp_row_s := LV_GetNext(0) ;0
+		;while (temp_row_s := LV_GetNext(temp_row_s)) {
 			LV_GetText(fch, temp_row_s, 1) , LV_GetText(fcl, temp_row_s, 2)
 			spRow := t_Up ? temp_row_s-1 : temp_row_s+1
 			sch := scl := ""
@@ -154,8 +156,10 @@ chOrgDown: 	; dont make these labels critical
 				Gui, chOrg:Default
 				LV_Modify(temp_row_s, "", fch, fcl, stxt) 		; // change only 3rd col.. 
 				LV_Modify(SprOW,"", sch, scl, ftxt)
+				LV_Modify(temp_row_s, "-Select -Focus")
+				LV_Modify(spRow, "Select")
 			}
-		}
+		;}
 	} else {
 		gosub chorg_getChSelected
 		nCh := chSel + (t_Up ? -1 : 1)
@@ -174,10 +178,19 @@ chOrgDelete:
 			chOrg_notification(TXT.ORG_error)
 			return
 		}
-		API.deleteClip( Substr(rSel, 1, Instr(rSel, "-")-1) , Substr(rSel, Instr(rSel, "-")+1) )
+		API.deleteClip( ch := Substr(rSel, 1, Instr(rSel, "-")-1) , cl := Substr(rSel, Instr(rSel, "-")+1) )
 		chOrg_notification("Selected Clip Deleted")
-		gosub chOrg_refresh
-		LV_Modify(last_Row, "Select") 	;// TO make up for refresh
+		LV_Delete(last_Row)
+		loop % LV_GetCount()
+		{
+			LV_GetText(out_ch, A_index, 1)
+			if ( out_ch == ch )
+			{
+				LV_GetText(out_cl, A_index, 2)
+				if (out_cl>cl)
+					LV_Modify(A_index, "", out_ch, out_cl-1)
+			}
+		}
 	}
 	else {
 		if (chOrg_Lb != "") && (chOrg_Lb>1) {
@@ -208,7 +221,7 @@ chOrgCopy:
 		chOrg_notification(TXT.ORG_error)
 		return
 	}
-	ret := chooseChannelGui()
+	ret := chooseChannelGui(TXT._destChannel)
 	if ret=
 	{
 		chOrg_notification(TXT.TIP_cancelled)
@@ -382,7 +395,7 @@ IsChOrgLVActive(){
 	return IsActive("SysListView321", "classnn") && WinActive(TXT.ORG__name " ahk_class AutoHotkeyGUI") && ctrlRef==""
 }
 IsChOrgLBActive(){
-	return IsActive("ListBox1", "classnn") && WinActive(TXT.ORG__name " ahk_class AutoHotkeyGUI")
+	return IsActive("ListBox1", "classnn") && WinActive(TXT.ORG__name " ahk_class AutoHotkeyGUI") && ctrlRef==""
 }
 
 ; // UPDATES the ListView with current search
