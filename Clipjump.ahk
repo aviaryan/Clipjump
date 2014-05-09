@@ -132,7 +132,7 @@ else if (ini_Version != VERSION)
 
 
 ;Global Ini declarations
-global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_IsChannelMin := 1 , ini_isMessage, CopyMessage
+global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_IsChannelMin , ini_isMessage, CopyMessage
 		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, channel_K, onetime_K, paste_k, actionmode_k, ini_is_duplicate_copied, ini_formatting
 		, ini_CopyBeep , beepFrequency , ignoreWindows, ini_defEditor, ini_defImgEditor, ini_def_Pformat, pluginManager_k, holdClip_K, ini_PreserveClipPos
 		, chOrg_K, ini_startSearch
@@ -1309,13 +1309,31 @@ export:
 	return
 
 editclip:
-	try temp_clipboard := Clipboard
-	IScurCBACTIVE := 1
-	gosub endPastemode
-	EditImg := 0
-	Tooltip, % TXT.TIP_editing,,, 10
+	correctTEMPSAVE()
+	editClip(CN.NG, CURSAVE-TEMPSAVE+1, "pstmd")
+	return
 
-	if temp_clipboard=
+editClip(cnl, clip, owner="none"){
+; Opens def editor for editing a clip
+	global
+	local ClipLoc, EditImg, tmpsv, temp_clipboard2
+	clipLoc := API.getClipLoc(cnl, clip) , tmpsv := API.getChStrength(cnl)-clip+1
+	if owner != "pstmd"
+	{
+		API.blockMonitoring(1) 
+		try_ClipboardfromFile(clipLoc) 
+		API.blockMonitoring(0)
+	}
+	temp_clipboard := trygetVar("Clipboard")
+	Tooltip, % TXT.TIP_editing,,, 10
+	if owner = pstmd
+	{
+		IScurCBACTIVE := 1
+		gosub endPastemode
+	}
+	EditImg := 0
+
+	if !GetClipboardFormat()
 	{
 		EditImg := 1
 		Gdip_CaptureClipboard(A_WorkingDir "\cache\edit.jpg", 100)
@@ -1350,21 +1368,23 @@ editclip:
 		API.blockMonitoring(1)
 		Gdip_SetImagetoClipboard(A_WorkingDir "\cache\edit.jpg")
 		ClipWait, 3, 1
-		try FileAppend, %ClipboardAll%, %CLIPS_dir%/%TEMPSAVE%.avc
-		Gdip_CaptureClipboard( A_WorkingDir "\" THUMBS_dir "\" TEMPSAVE ".jpg", ini_Quality)
+		try FileAppend, %ClipboardAll%, % clipLoc
+		Gdip_CaptureClipboard( A_WorkingDir "\cache\thumbs" (!cnl ? "" : cnl) "\" tmpsv ".jpg", ini_Quality)
 		FileDelete, cache\edit.jpg
 		API.blockMonitoring(0)
 	} else {
 		Fileread, temp_clipboard2, cache\edit.txt
 		API.Text2Binary(temp_clipboard2, temp_clipboardall)
-		FileDelete, %CLIPS_dir%/%TEMPSAVE%.avc
-		FileAppend, % temp_clipboardall, %CLIPS_dir%/%TEMPSAVE%.avc
-		CDS[CN.NG][TEMPSAVE] := temp_clipboard2
+		FileDelete, % clipLoc
+		FileAppend, % temp_clipboardall, % clipLoc
+		CDS[CN.NG][tmpsv] := temp_clipboard2
 	}
 
 	autoTooltip(TXT.TIP_editdone, 800, 10)
-	IScurCBACTIVE := false
-	return
+	if owner = pstmd
+		IScurCBACTIVE := false
+	STORE.ErrorLevel := 1
+	return EditImg ? TXT.HST_viewimage : temp_clipboard2
 
 editclip_cancel:
 	Critical, On
@@ -1372,6 +1392,7 @@ editclip_cancel:
 	hkZ("Esc", "editclip_cancel", 0)
 	Process, Close, % editclip_pid
 	return
+}
 
 windows_copy:
 	API.blockMonitoring(1)

@@ -9,7 +9,8 @@ channelOrganizer:
 
 channelOrganizer(){
 	static chOrg_Lb, chOrg_search, chOrg_Lv
-	static Width, Height 	; // Needed to make widths and hts save
+	static Width, Height, w_ofSearch 	; // Needed to make widths and hts save
+	static t_horizButtons := 8 , t_startBtn := 2, t_commonBtn := 3
 
 	wt := ini_read("Organizer", "w") , ht := ini_read("Organizer", "h")
 	if !wt
@@ -26,6 +27,7 @@ channelOrganizer(){
 	Gui, Font, s9
 	Gui, Add, Edit, % "x" wt-200 " yp w200 vchOrg_search gchOrg_search", 		; width of EDIT is fixed = 200
 	Gui, Font, s10
+	Gui, Add, Button, % "x" 5+115+4+30+4 " yp gchorgNew", % "New"
 
 	Gui, Add, ListBox, section x5 y+10 w115 h%ht% gchOrg_Lb vchOrg_Lb -LV0X10 AltSubmit, ;% "|" chList 	; width of LB is fixed = 115
 	gosub chOrg_addChList
@@ -34,6 +36,7 @@ channelOrganizer(){
 	Gui, Add, Button, x+4 yp+20 w30 +Disabled, % chr(231)
 	Gui, Add, Button, xp y+20 w30 gchOrgUp, % chr(233) 			; buttons width = 30
 	Gui, Add, Button, xp y+2 w30 gchOrgDown, % chr(234)
+	Gui, Add, Button, xp y+2 w30 gchOrgEdit, % chr(33)
 	Gui, Add, Button, xp y+2 w30 gchorg_openPastemode, % chr(49)
 	Gui, Add, Button, xp y+2 w30 gchOrg_props, % chr(50)
 	Gui, Add, Button, xp y+2 w30 gchOrgCut, % chr(34)
@@ -58,6 +61,7 @@ channelOrganizer(){
 	Menu, chOrgLVMenu, Add, % TXT.ORG_m_insta, chOrg_paste
 	Menu, chOrgLVMenu, Add, % TXT.PLG_properties, chOrg_props
 	Menu, chOrgLVMenu, Add, % TXT.ORG_m_openPst, chOrg_openPasteMode
+		Menu, chOrgSubM, Add, % TXT.HST_m_edit, chOrgEdit
 		Menu, chOrgSubM, Add, % TXT.ORG_m_inc , chOrgUp
 		Menu, chOrgSubM, Add, % TXT.ORG_m_dec , chOrgDown
 		Menu, chOrgSubM, Add, % TXT.TIP_move "    (" TXT["_!x"] ")", chOrgCut
@@ -68,6 +72,7 @@ channelOrganizer(){
 	Menu, chOrgLVMenu, Default, % TXT.HST_m_prev
 
 	; // MENU LB
+	Menu, chOrgLBMenu, Add, % "New", chOrgNewCh
 	Menu, chOrgLBMenu, Add, % TXT.ORG_m_inc, chOrgUp
 	Menu, chOrgLBMenu, Add, % TXT.ORG_m_dec, chOrgDown
 	Menu, chOrgLBMenu, Add, % TXT._rename " (F2)", chOrg_renameCh
@@ -83,6 +88,7 @@ channelOrganizer(){
 	hkZ("Space", "chOrg_paste")
 	hkZ("!Enter", "chOrg_props")
 	hkZ("^o", "chOrg_openPasteMode")
+	hkZ("^h", "chOrgEdit")
 	hkZ("Del", "chOrgDelete")
 	hkZ("!Up", "chOrgUp")
 	hkZ("!Down", "chOrgDown")
@@ -100,6 +106,11 @@ channelOrganizer(){
 	Hotkey, If
 	return
 
+MenuHandler:
+	return
+MenuFileOpen:
+	return
+
 chOrg_addChList:
 	chList := RegexReplace( Trim( channel_find(), "`n" ), "`n", "|" )
 	Sort, chList, D| N
@@ -108,13 +119,20 @@ chOrg_addChList:
 
 chOrgGuiSize:
 	if (A_EventInfo != 1){
-		Anchor("SysListView321", "wh", "chOrg:")
-		Anchor("ListBox1", "h", "chOrg:")
-		Anchor("Edit1", "x", "chOrg:")
-		Anchor("Static1", "x", "chOrg:")
-		Gui, chOrg:Default
-		ControlGetPos, , , Width,, SysListView321
-		ControlGetPos, , , , Height, ListBox1
+		;Anchor("SysListView321", "wh", "chOrg:")
+		gui_w := A_GuiWidth , gui_h := A_GuiHeight
+		GuiControl, move, SysListView321, % "w" gui_w-158-5-2 " h" gui_h-80
+		;Anchor("ListBox1", "h", "chOrg:")
+		GuiControl, move, ListBox1, % "h" gui_h-80
+		;Anchor("Edit1", "x", "chOrg:")
+		GuiControl, move, Edit1, % "x" gui_w-200-5
+		;Anchor("Static1", "x", "chOrg:")
+		GuiControl, movedraw, Static1, % "x" gui_w- w_ofsearch-200-5
+		;Gui, chOrg:Default
+		;ControlGetPos, , , Width,, SysListView321
+		;ControlGetPos, , , , Height, ListBox1
+		width := gui_w-158-5-2
+		height := gui_h-80
 		LV_ModifyCol(3, Width -60 -10)
 	}
 	return
@@ -128,7 +146,7 @@ chOrgGuiContextMenu:
 
 chOrgGuiEscape:
 chOrgGuiClose:
-	Ini_write("Organizer", "w", width+158, 0) , Ini_write("Organizer", "h", height, 0)
+	Ini_write("Organizer", "w", width+158-5-2+2, 0) , Ini_write("Organizer", "h", height+2, 0) 	; +2 dont know why
 	Gui, chOrg:Destroy
 	Menu, chOrgLVMenu, DeleteAll
 	Menu, chOrgLBMenu, DeleteAll
@@ -235,6 +253,19 @@ chOrgCopy:
 	gosub chOrg_refresh
 	return
 
+chOrgNew:
+	return
+
+chOrgNewCh:
+	InputBox, out, % "New channel name",,,,,,,,, % CN.Total
+	if !ErrorLevel {
+		changeChannel(CN.Total)
+		ini_write("Channels", CN.Total-1, out, 0)
+		gosub chOrg_addChList
+		GuiControl, chOrg:Choose, Listbox1, % CN.Total+1
+	}
+	return
+
 chorg_getChSelected:
 	Gui, chorg:Submit, nohide
 	chSel := chOrg_Lb-2
@@ -243,8 +274,10 @@ chorg_getChSelected:
 
 chOrg_isChActive:
 	Gui, chorg:Default
-	GuiControlGet, isChActive, chOrg:Enabled, Button4 		; Cut button not enabled when LB is active
-	isChActive := !isChActive
+	GuiControlGet, isChActive, chOrg:, % "Button" t_startBtn 		; Cut button not enabled when LB is active
+	if (isChActive == chr(231))
+		isChActive := 1
+	else isChActive := 0
 	return
 
 chOrg_getSelected:
@@ -257,6 +290,20 @@ chOrg_getSelected:
 		last_Row := temp_row_s
 	}
 	rSel := Trim(rSel, "`n")
+	return
+
+chOrgEdit:
+	gosub chOrg_isChActive
+	if isChActive
+		gosub chOrg_renameCh
+	else {
+		gosub chOrg_getSelected
+		STORE.ErrorLevel := 0
+		ret := editClip(out_ch, out_cl)
+		if STORE.ErrorLevel
+			LV_Modify(last_Row, "", out_ch, out_cl, ret)
+		else chOrg_notification(TXT.TIP_cancelled, 800)
+	}
 	return
 
 chOrg_openPasteMode:
@@ -307,9 +354,9 @@ chOrg_renameCh:
 
 chOrg_Lv:
 	Gui, chOrg:Default
-	GuiControl, , Button1, % chr(232)
-	loop 7
-		GuiControl, Enable, % "Button"  A_index+1
+	GuiControl, , % "Button" t_startBtn, % chr(232)
+	loop % t_horizButtons
+		GuiControl, Enable, % "Button"  A_index+t_startBtn
 	if A_GuiEvent = DoubleClick
 		gosub chOrg_preview
 	return
@@ -318,17 +365,17 @@ chOrg_refresh:
 chOrg_search:
 chOrg_Lb:
 	Gui, chOrg:submit, nohide
-	GuiControl, , Button1, % chr(231)
+	GuiControl, ,% "Button" t_startBtn, % chr(231)
 
 	if chOrg_Lb=1
-		loop 7 		; in case all channels are selected
-			GuiControl, Disable, % "Button"  A_index+1
+		loop % t_horizButtons 		; in case all channels are selected
+			GuiControl, Disable, % "Button"  A_index+t_startBtn
 	else {
-		loop 4
-			GuiControl, Disable, % "Button"  A_index+3
-		loop 2
-			GuiControl, Enable,  % "Button"  A_Index+1
-		GuiControl, Enable, % "Button8"
+		loop % t_horizButtons-t_commonBtn-1 	; 3=buttons common in bth LB LV
+			GuiControl, Disable, % "Button"  A_index+t_startBtn+t_commonBtn
+		loop % t_commonBtn
+			GuiControl, Enable,  % "Button"  A_Index+t_startBtn
+		GuiControl, Enable, % "Button" t_horizButtons+t_startBtn
 	}
 	chOrgLV_update(chOrg_search, chOrg_Lb>1 ? chOrg_Lb-2 : "")
 	return

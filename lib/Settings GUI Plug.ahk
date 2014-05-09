@@ -304,12 +304,11 @@ load_Settings(all=false)
 	IniRead, Copyfolderpath_K,% CONFIGURATION_FILE, Shortcuts, Copyfolderpath_K
 	IniRead, Copyfiledata_K,% CONFIGURATION_FILE, Shortcuts, Copyfiledata_K
 	Iniread, channel_K,% CONFIGURATION_FILE, Shortcuts, channel_K
-	;Iniread, onetime_K,% CONFIGURATION_FILE, Shortcuts, onetime_K
 	Iniread, paste_K, % CONFIGURATION_FILE, Shortcuts, paste_K
 	Iniread, Actionmode_K, % CONFIGURATION_FILE, Shortcuts, actionmode_k
 
-	Iniread, pitswap_K, % CONFIGURATION_FILE, Channels, pitswap_K
-	Iniread, ini_IsChannelMin,% CONFIGURATION_FILE, Channels, IsChannelMin
+	pitswap_K := ini_read("Channels", "pitswap_K")
+	ini_IsChannelMin := (t:=ini_read("Channels", "IsChannelMin")) ? t : 0
 
 	holdClip_K := ini_read("Shortcuts", "holdClip_K")
 	ini_PreserveClipPos := ini_read("Main", "ini_PreserveClipPos")
