@@ -130,6 +130,45 @@ local Midpoint, emVar, $j, $n
 	}
 }
 
+
+multInputBox(Title, caption="", row=5, default="", owner=""){
+	static theEdit
+	local kw, oDone
+	
+	theEdit := ""
+	kw := A_ScreenWidth<1200 ? 600 : 700
+	Gui, mIBox:new
+	Gui, Font, s10, Consolas
+	Gui, Add, Text, x5 y5, % caption
+	Gui, Font, norm, Consolas
+	Gui, Add, Edit, xp y+30 w%kw% r%row% vtheEdit, % default
+	Gui, Add, Button, x5 y+30 Default, OK
+	Gui, Add, Button, x+30 yp, Cancel
+	if owner {
+		Gui, miBox:+owner%owner%
+		Gui, %owner%:+Disabled
+	}
+	Gui, mIbox:Show,, % Title
+	while !oDone
+		sleep 50
+	return theEdit
+
+mIboxbuttonOK:
+	Gui, miBox:Submit, nohide
+	STORE.ErrorLevel := 1
+	gosub mIboxGuiClose
+	return
+
+mIboxGuiClose:
+mIboxbuttonCancel:
+	if owner
+		Gui, %owner%:-Disabled
+	Gui, mIBox:Destroy
+	oDone := 1
+	return
+
+}
+
 /*
 a := {a: "b",c: "d"}
 ret := ObjectEditor(a)

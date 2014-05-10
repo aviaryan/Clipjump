@@ -361,3 +361,7 @@ ORG_m_insta = Insta-Paste (Space)
 ;=======
 _destChannel = Destination Channel
 _maintenance = Maintenance
+_new = New
+ORG_createnew = Create New Clip
+ORG_createnewpr = New Clip will be created in the following channel
+ORG_newchname = New channel name

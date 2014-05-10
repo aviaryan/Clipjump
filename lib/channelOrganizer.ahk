@@ -27,7 +27,7 @@ channelOrganizer(){
 	Gui, Font, s9
 	Gui, Add, Edit, % "x" wt-200 " yp w200 vchOrg_search gchOrg_search", 		; width of EDIT is fixed = 200
 	Gui, Font, s10
-	Gui, Add, Button, % "x" 5+115+4+30+4 " yp gchorgNew", % "New"
+	Gui, Add, Button, % "x" 5+115+4+30+4 " yp gchorgNew", % TXT._new
 
 	Gui, Add, ListBox, section x5 y+10 w115 h%ht% gchOrg_Lb vchOrg_Lb -LV0X10 AltSubmit, ;% "|" chList 	; width of LB is fixed = 115
 	gosub chOrg_addChList
@@ -72,7 +72,7 @@ channelOrganizer(){
 	Menu, chOrgLVMenu, Default, % TXT.HST_m_prev
 
 	; // MENU LB
-	Menu, chOrgLBMenu, Add, % "New", chOrgNewCh
+	Menu, chOrgLBMenu, Add, % TXT._new, chOrgNewCh
 	Menu, chOrgLBMenu, Add, % TXT.ORG_m_inc, chOrgUp
 	Menu, chOrgLBMenu, Add, % TXT.ORG_m_dec, chOrgDown
 	Menu, chOrgLBMenu, Add, % TXT._rename " (F2)", chOrg_renameCh
@@ -82,6 +82,7 @@ channelOrganizer(){
 	Hotkey, If, IsChorgActive()
 	hkZ("F5", "chOrg_refresh")
 	hkZ("^f", "chOrg_searchfocus")
+	hkZ("^n", "chOrgNew")
 	Hotkey, If
 	Hotkey, If, IsChOrgLVActive()
 	hkZ("Enter", "chOrg_preview")
@@ -254,10 +255,28 @@ chOrgCopy:
 	return
 
 chOrgNew:
+	gosub chorg_getChSelected
+	if chSel<0
+		chSel := 0
+	STORE.ErrorLevel := 0
+	out := multInputBox(TXT.ORG_createnew, TXT.ORG_createnewpr " - " chSel, 15, blank, "chOrg")
+	if STORE.ErrorLevel
+	{
+		cInfo := API.getChInfo(chSel)
+		API.Text2Binary(out, ret)
+		FileAppend, %ret%, % "cache\clips" cInfo.p "\" cInfo.realCURSAVE+1 ".avc"
+		CDS[chSel][cInfo.realCURSAVE+1] := out
+		manageFIXATE( cInfo.realCURSAVE + 1, chSel, cInfo.p )
+		CN["CURSAVE" cInfo.p] += 1
+		if cInfo.isactive
+			CURSAVE += 1 	; also cursave if it is active
+		gosub chOrg_refresh
+	} Else
+		chOrg_notification(TXT.TIP_cancelled)
 	return
 
 chOrgNewCh:
-	InputBox, out, % "New channel name",,,,,,,,, % CN.Total
+	InputBox, out, % TXT.ORG_newchname,,,,,,,,, % CN.Total
 	if !ErrorLevel {
 		changeChannel(CN.Total)
 		ini_write("Channels", CN.Total-1, out, 0)
