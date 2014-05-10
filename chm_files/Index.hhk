@@ -30,6 +30,10 @@
 		<param name="Local" value="docs/organizer.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Create New Clip">
+		<param name="Local" value="docs/organizer.html#newclip">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Developer's Reference">
 		<param name="Local" value="docs/devList.html">
 		</OBJECT>

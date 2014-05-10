@@ -278,6 +278,9 @@ paste:
 	if IN_BACK
 		IN_BACK_correction()
 
+	if (TEMPSAVE>CURSAVE) or !TEMPSAVE
+		TEMPSAVE := CURSAVE
+
 	If !FileExist(CLIPS_dir "/" TEMPSAVE ".avc")
 	{
 		if !oldclip_exist

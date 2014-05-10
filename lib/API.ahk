@@ -239,7 +239,8 @@ class API
 		changeChannel(channel)
 		clearClip( API.getChStrength(channel) - clip + 1 )
 		changeChannel(zbkCh)
-		TEMPSAVE := zbkClip
+		if (channel != zbkCh)
+			TEMPSAVE := zbkClip
 	}
 
 	; sets a variable

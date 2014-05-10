@@ -169,8 +169,8 @@ changeChannel(cIndex, backup_old:=1){
 
 	if ( cIndex >= CN.Total ) 	; new channel create
 	{
-		CN.Total+=1
-		CDS[cIndex] := {} , CPS[cIndex] := {} 	; create storage objs
+		CN.Total+=1 , CDS[cIndex] := {} , CPS[cIndex] := {} 	; create storage objs
+		CN["TEMPSAVE" cIndex] := CN["CURSAVE" cIndex] := 0
 	}
 
 	Iniread, temp, %CONFIGURATION_FILE%, channels, %cIndex%, %A_space%
@@ -275,6 +275,8 @@ manageChannel(orig, new=""){
 
 	if new=
 	{
+		if !orig
+			return 	; dnt delete 0
 		loop, parse, l, % A_space
 			FileRemoveDir, % "cache\" A_LoopField orig, 1
 		ini_delete("Channels", orig)
