@@ -50,7 +50,7 @@
 		<param name="Local" value="docs/basic_help.html#tags">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Clipjump Channels">
+		<param name="Name" value="Channels">
 		<param name="Local" value="docs/channels.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
@@ -62,15 +62,15 @@
 		<param name="Local" value="docs/channels.html#pit">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="The Pit channel">
+		<param name="Name" value="Pit channel">
 		<param name="Local" value="docs/channels.html#pit">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Clipjump History Tool">
+		<param name="Name" value="History Tool">
 		<param name="Local" value="docs/history.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Clipjump Settings Editor">
+		<param name="Name" value="Settings Editor">
 		<param name="Local" value="docs/settings.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
@@ -200,6 +200,14 @@
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Changelog">
 		<param name="Local" value="changelog.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Incognito mode">
+		<param name="Local" value="docs/history.html#incog">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Paste Mode">
+		<param name="Local" value="docs/basic_help.html#pastemd">
 		</OBJECT>
 </UL>
 </BODY>
