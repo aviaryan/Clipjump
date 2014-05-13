@@ -3,31 +3,52 @@
 <HEAD>
 <meta name="GENERATOR" content="Microsoft&reg; HTML Help Workshop 4.1">
 <!-- Sitemap 1.0 -->
-</HEAD>
-<BODY>
+</HEAD><BODY>
 <OBJECT type="text/site properties">
 	<param name="FrameName" value="right">
 </OBJECT>
 <UL>
 	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Contact">
-		<param name="Local" value="contact.html">
+		<param name="Name" value="Adding tags to clips">
+		<param name="Local" value="docs/basic_help.html#tags">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="FAQ">
-		<param name="Local" value="docs/faq.html">
+		<param name="Name" value="Addons page">
+		<param name="Local" value="http://clipjump.sourceforge.net/addons.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Public API">
-		<param name="Local" value="docs/devList.html#pubapi">
+		<param name="Name" value="Channels">
+		<param name="Local" value="docs/channels.html">
 		</OBJECT>
+	<UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Changing Channels in Paste Mode">
+			<param name="Local" value="docs/channels.html#chnljumps">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Channel Organizer">
+			<param name="Local" value="docs/organizer.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Pit channel">
+			<param name="Local" value="docs/channels.html#pit">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Protected Channels">
+			<param name="Local" value="docs/channels.html#protected">
+			</OBJECT>
+	</UL>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Clipjump">
 		<param name="Local" value="clipjump.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Channel Organizer">
-		<param name="Local" value="docs/organizer.html">
+		<param name="Name" value="Clipjump Controller">
+		<param name="Local" value="clipjumpcontroller.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Contact">
+		<param name="Local" value="contact.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Create New Clip">
@@ -38,48 +59,50 @@
 		<param name="Local" value="docs/devList.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Addons page">
-		<param name="Local" value="http://clipjump.sourceforge.net/addons.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Pasting Formats">
-		<param name="Local" value="docs/basic_help.html#pformat">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Adding tags to clips">
-		<param name="Local" value="docs/basic_help.html#tags">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Channels">
-		<param name="Local" value="docs/channels.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Clipjump Controller">
-		<param name="Local" value="clipjumpcontroller.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Disable history with the Pit channel">
 		<param name="Local" value="docs/channels.html#pit">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Pit channel">
-		<param name="Local" value="docs/channels.html#pit">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="History Tool">
-		<param name="Local" value="docs/history.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Settings Editor">
-		<param name="Local" value="docs/settings.html">
+		<param name="Name" value="FAQ">
+		<param name="Local" value="docs/faq.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Guide">
 		<param name="Local" value="docs/basic_help.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Changing Channels in Paste Mode">
-		<param name="Local" value="docs/channels.html#chnljumps">
+		<param name="Name" value="History Tool">
+		<param name="Local" value="docs/history.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Pasting Formats">
+		<param name="Local" value="docs/basic_help.html#pformat">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="PitSwap">
+		<param name="Local" value="docs/channels.html#pitswap">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Plugins">
+		<param name="Local" value="docs/plugins/index.html">
+		</OBJECT>
+	<UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Public API">
+			<param name="Local" value="docs/devList.html#pubapi">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Official Plugins">
+			<param name="Local" value="docs/plugins/index.html#def">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Creating your own plugin">
+			<param name="Local" value="docs/plugins/basics.html">
+			</OBJECT>
+	</UL>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Settings Editor">
+		<param name="Local" value="docs/settings.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Customizing Clipjump">
@@ -88,10 +111,6 @@
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Search in Paste mode">
 		<param name="Local" value="docs/basic_help.html#spm.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Protected Channels">
-		<param name="Local" value="docs/channels.html#protected">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Copying file/folder paths">
@@ -130,18 +149,6 @@
 		<param name="Local" value="docs/devList.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Plugins">
-		<param name="Local" value="docs/plugins/index.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Official Plugins">
-		<param name="Local" value="docs/plugins/index.html#def">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Creating your own plugin">
-		<param name="Local" value="docs/plugins/basics.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Fixate">
 		<param name="Local" value="docs/basic_help.html#fx">
 		</OBJECT>
@@ -168,10 +175,6 @@
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Translating Clipjump">
 		<param name="Local" value="docs/translate.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="PitSwap">
-		<param name="Local" value="docs/channels.html#pitswap">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Resetting Clipjump">
@@ -210,5 +213,4 @@
 		<param name="Local" value="docs/basic_help.html#pastemd">
 		</OBJECT>
 </UL>
-</BODY>
-</HTML>
+</BODY></HTML>
