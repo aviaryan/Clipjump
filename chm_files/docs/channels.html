@@ -13,12 +13,14 @@
 <li><a href=#using>How to Use</a>
 <li><a href=#chnljumps>Changing Channels in Paste Mode</a>
 <li><a href=#uses>Ideas on using</a>
-<li><a href=#pit>The "Pit" Channel</a>
 <li><a href="#protected">Protected Channels</a>
+<li><a href=#pit>The "Pit" Channel</a>
+<ul>
 <li><a href=#pitswap>PitSwap</a>
+</ul>
 <li><a href=#min>Minimal GUI</a>
 <li><a href=#tips>Tips for better productivity</a>
-<li><a href=organizer.html><b>Channel Organizer</b></a>
+<li><a href=organizer.html><b>Channel Organizer</b> (separate page)</a>
 </ul>
 <br />
 
@@ -63,15 +65,7 @@
 	One of the best uses of Clipjump Channels is using it as a top 10 repository for storing frequently used items. As said above , you can copy and thus save your signatures , blog links and avatar images in a channel and quickle access them when needed.<br>
 	See Also: <a href=#protected>Protected Channels</a>
 
-	<br><br />
-
-	<h2><a name=pit>The "Pit" Channel</a></h2>
-	The <code>Pit</code> channel is a reserved channel NAME with automatic Incognito feature. When a channel is named as <code>Pit</code>, the channel does not transfer 
-	it's clips to the Clipjump History thus creating a false <i>INCOGNITO MODE</i> situation. Note that when a channel named <code>Pit</code> is active, the INCOGNITO mode 
-	is physically not turned ON and so you don't see the Clipjump's tray icon being grayed out.<br>
-	The "Pit" channel can be <b>quickly</b> used to capture <i>junk</i> or <i>confidential</i> data to Clipjump and then delete them all at once with the Delete ALL mode 
-	(Ctrl + V + X(5 times))
-	<br><br>
+	<br><br/>
 	
 	<h2><a name=protected>Protected Channels</a></h2>
 	Protected Channels are user defined special channels that require confirmation before each copy of clipboard data to them. <br>
@@ -83,7 +77,15 @@
 	The code is <code class=syntax>protected_DoBeep = 0</code>. Add it in a section with no 'bind', one which is auto-executed at Clipjump start.
 	<br><br>
 
-	<h2><a name=pitswap>PitSwap</a></h2>
+	<h2><a name=pit>The "Pit" Channel</a></h2>
+	The <code>Pit</code> channel is a reserved channel NAME with automatic Incognito feature. When a channel is named as <code>Pit</code>, the channel does not transfer 
+	it's clips to the Clipjump History thus creating a false <i>INCOGNITO MODE</i> situation. Note that when a channel named <code>Pit</code> is active, the INCOGNITO mode 
+	is physically not turned ON and so you don't see the Clipjump's tray icon being grayed out.<br>
+	The "Pit" channel can be <b>quickly</b> used to capture <i>junk</i> or <i>confidential</i> data to Clipjump and then delete them all at once with the Delete ALL mode 
+	(Ctrl + V + X(5 times))
+	<br><br>
+
+	<h3><a name=pitswap>PitSwap</a></h3>
 	<code>PitSwap</code> <i>[v9.5+]</i> allows you to jump to an existing Pit channel from any other active channel with the ease of a hotkey. Activated with the Action Mode easy key P , it is a sort of 'channel toggler'. When pressing PitSwap shortcut when a channel such as Default(#0) is active , the channel will be
 	automatically changed to a found <code>Pit</code> named channel. When pressing the shortcut , the toggle will work in reverse changing the active channel back to the one
 	you were using (here 'Default') . Note that the PitSwap toggle is deactivated <b>silently</b> when you first use PitSwap and then eventually change the Pit channel 
