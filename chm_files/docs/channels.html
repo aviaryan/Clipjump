@@ -13,22 +13,27 @@
 <li><a href=#using>How to Use</a>
 <li><a href=#chnljumps>Changing Channels in Paste Mode</a>
 <li><a href=#uses>Ideas on using</a>
-<li><a href=#pit>The "Pit" Channel</a>
 <li><a href="#protected">Protected Channels</a>
+<li><a href=#pit>The "Pit" Channel</a>
+<ul>
 <li><a href=#pitswap>PitSwap</a>
+</ul>
 <li><a href=#min>Minimal GUI</a>
 <li><a href=#tips>Tips for better productivity</a>
-<li><a href=organizer.html><b>Channel Organizer</b></a>
+<li><a href=organizer.html><b>Channel Organizer</b> (separate page)</a>
 </ul>
 <br />
 
 	
 	<h2><a name=about>About</a></h2>
 	Clipjump Channels are meant to allow users to use multiple channels of multiple Clipboards for sorting related Clipboard items together.<br />
-	The feature is accessible from the Clipjump Action Mode (with easy key S) as well as the Tray Menu. <br /><br />
-	Channels are different series or groups in which clips are stored. <br> 
-	You can create unlimited <strong class=super>distinctly named</strong> channels to store Clipboard data and store related clips in them. 
-	<br />The default channel is 0 and is named as <i>Default</i>.<br />
+	You can use the <a href=organizer.html>Channel Organizer</a> to organize your channels and clips within the channels. (accessible from the <a href=basic_help.html#actmd>Action Mode</a> with easy key 'O'). 
+	Selecting the channel to be pasted from can be done using the <a name=chnlsel>Channel Selector</a>. This feature is accessible from the <a href=basic_help.html#actmd>Action Mode</a> with easy key S as well as the Tray Menu. <br />
+	Another method of selecting the channel is described in <a href=#chnljumps>Changing Channels in Paste Mode</a>.</br>
+	<br />
+	Channels are different series or groups in which clips are stored. <br /> 
+	You can create unlimited <strong class=super>distinctly named</strong> channels to store Clipboard data and store related clips in them. <br />
+	The default channel is 0 and is named as <i>Default</i>.<br />
 	<br />
 
 	<h2><a name=using>How to Use</a></h2>
@@ -63,15 +68,7 @@
 	One of the best uses of Clipjump Channels is using it as a top 10 repository for storing frequently used items. As said above , you can copy and thus save your signatures , blog links and avatar images in a channel and quickle access them when needed.<br>
 	See Also: <a href=#protected>Protected Channels</a>
 
-	<br><br />
-
-	<h2><a name=pit>The "Pit" Channel</a></h2>
-	The <code>Pit</code> channel is a reserved channel NAME with automatic Incognito feature. When a channel is named as <code>Pit</code>, the channel does not transfer 
-	it's clips to the Clipjump History thus creating a false <i>INCOGNITO MODE</i> situation. Note that when a channel named <code>Pit</code> is active, the INCOGNITO mode 
-	is physically not turned ON and so you don't see the Clipjump's tray icon being grayed out.<br>
-	The "Pit" channel can be <b>quickly</b> used to capture <i>junk</i> or <i>confidential</i> data to Clipjump and then delete them all at once with the Delete ALL mode 
-	(Ctrl + V + X(5 times))
-	<br><br>
+	<br><br/>
 	
 	<h2><a name=protected>Protected Channels</a></h2>
 	Protected Channels are user defined special channels that require confirmation before each copy of clipboard data to them. <br>
@@ -83,17 +80,25 @@
 	The code is <code class=syntax>protected_DoBeep = 0</code>. Add it in a section with no 'bind', one which is auto-executed at Clipjump start.
 	<br><br>
 
-	<h2><a name=pitswap>PitSwap</a></h2>
+	<h2><a name=pit>The "Pit" Channel</a></h2>
+	The <code>Pit</code> channel is a reserved channel NAME with automatic Incognito feature. When a channel is named as <code>Pit</code>, the channel does not transfer 
+	it's clips to the Clipjump History thus creating a false <i>INCOGNITO MODE</i> situation. Note that when a channel named <code>Pit</code> is active, the INCOGNITO mode 
+	is physically not turned ON and so you don't see the Clipjump's tray icon being grayed out.<br>
+	The "Pit" channel can be <b>quickly</b> used to capture <i>junk</i> or <i>confidential</i> data to Clipjump and then delete them all at once with the Delete ALL mode 
+	(Ctrl + V + X(5 times))
+	<br><br>
+
+	<h3><a name=pitswap>PitSwap</a></h3>
 	<code>PitSwap</code> <i>[v9.5+]</i> allows you to jump to an existing Pit channel from any other active channel with the ease of a hotkey. Activated with the Action Mode easy key P , it is a sort of 'channel toggler'. When pressing PitSwap shortcut when a channel such as Default(#0) is active , the channel will be
 	automatically changed to a found <code>Pit</code> named channel. When pressing the shortcut , the toggle will work in reverse changing the active channel back to the one
 	you were using (here 'Default') . Note that the PitSwap toggle is deactivated <b>silently</b> when you first use PitSwap and then eventually change the Pit channel 
-	with the <b>Channel Selector GUI</b> OR by the Up-down keys in the Paste Mode.
+	with the <a href=#chnlsel>Channel Selector</a> GUI OR by the Up-down keys in the Paste Mode.
 
 	<br><br>
 
 	<h2><a name=min>Minimal Gui</a></h2>
-	Minimal GUI for Channel Selector can be activated from the Settings Editor. <br>
-	When activated , you will see a no-button window in place of the original Channel Selector GUI. You will have to use Up-Down arrow keys to change 
+	Minimal GUI for <a href=#chnlsel>Channel Selector</a> can be activated from the <a href=settings.html>Settings Editor.</a> <br>
+	When activated , you will see a no-button window in place of the original <a href=#chnlsel>Channel Selector</a> GUI. You will have to use Up-Down arrow keys to change 
 	channels and <strong class=mild> Enter key to activate a channel</strong>. <br>
 	Use <code>Del</code> key to delete a channel and <code>Esc</code> to close (cancel) the GUI.
 
@@ -103,10 +108,10 @@
 	<ul>
 	<li>For channel 1 to 9, you can also use <a href=basic_help.html#actmd>Action Mode</a> to change channels. See <a href=basic_help.html#actmd_num>How</a>.
 	<li>You can use the up-down arrow keys rather than Mouse clicks for increasing/decreasing Channel numbers.
-	<li>When in the default channel selecter mode, use Alt+U as a shortcut for the <code>Use Channel</code> button.
+	<li>When in the default <a href=#chnlsel>channel selector</a> mode, use Alt+U as a shortcut for the <code>Use Channel</code> button.
 	<li>Use <a href=#min>Minimal GUI</a>
 	<li>If you regulary change Clipjump channels, you can also create a system-level shortcut for opening Channels manager directly rather than using 
-		a 2nd level Action Mode shortcut from the Settings Editor.</ul>
+		a 2nd level <a href=basic_help.html#actmd>Action Mode</a> shortcut from the <a href=settings.html>Settings Editor</a>.</ul>
 	<br /><br /><br />
 
 <hr noshade=noshade size=5 color=yellow>
