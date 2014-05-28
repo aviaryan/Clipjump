@@ -8,6 +8,12 @@
 </head>
 <body>
 <h1><a name=short>Shortcut List</a></h1>
+
+<b>Legend:</b></br>
+<kbd>Ctrl</kbd> - indicates <b>pressing</b> the given key (here: Ctrl-key)</br>
+<kbd>Ctrl</kbd> + <kbd>V</kbd> - indicates <b>pressing</b> the givens key  simultaneously (here: Ctrl-key plus V-Key)</br>
+<kbd class="inverse">Ctrl</kbd> - indicates <b>releasing</b> the given key (here: Ctrl-key)</br>
+
 <h2>General (System Wide)</h2>
 <table>
 	<tr>
@@ -16,7 +22,7 @@
 	</tr>
 	<tr>
 		<td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>A</kbd></td>
-		<td><a href=#actmd>Action Mode</a></td>
+		<td><a href=basic_help.html#actmd>Action Mode</a></td>
 	</tr>
 	<tr>
 		<td><kbd>Win</kbd> + <kbd>C</kbd></td>
@@ -28,7 +34,7 @@
 <h2>Paste Mode</h2>
 <a href=pstmd></a>
 <kbd>Ctrl</kbd> + <kbd>V</kbd> is used to enter the <b>Paste Mode</b>.</br>
-As releasing both keys inserts the current displayed clip, thekeysequence 
+As releasing both keys inserts the current displayed clip, the keysequence 
 <ul>
 	<li>Press <kbd>Ctrl</kbd> + <kbd>V</kbd></li>
 	<li>Keep <kbd>Ctrl</kbd> pressed</li>
@@ -37,6 +43,7 @@ As releasing both keys inserts the current displayed clip, thekeysequence
 enters the intrinsic paste mode. While being in paste mode ( <kbd>Ctrl</kbd> pressed) a few more actions can be performed by pressing keys:
 
 <pre>
+<kbd class="inverse">Ctrl</kbd> (i.e release Ctrl) - Paste current clip
 <kbd>V</kbd> - Move forward through Multiple Clipboards (from 1 to 2 , 2 to 3)
 <kbd>C</kbd> - Move backward through Multiple Clipboards (from 3 to 2 , 2 to 1)
 <kbd>S</kbd> - Add current <a href=basic_help.html#winclip>Clip to Windows Clipboard</a>
@@ -62,9 +69,9 @@ The following key sequence enters <a href=basic_help.html#spm><b>Search Mode</b>
 <ul>
     <li>While <kbd>Ctrl</kbd> pressed ...</li>
     <li>Press <kbd>F</kbd></li>
-	<li>Release <kbd class="inverse">Ctrl</kbd> and <kbd  class="inverse">F</kbd></li>
+	<li>Release <kbd class="inverse">Ctrl</kbd> + <kbd  class="inverse">F</kbd></li>
 </ul>
-Now you are in <b>Search Mode</b> within <b>Paste Mode</b> and several commands are available via keypress:
+Now you are in <b>Search Mode</b> (within <b>Paste Mode</b>) and several commands (beneath entering the search term) are available via keypress:
 <pre>
 <kbd>Enter</kbd> - Paste
 <kbd>Home</kbd> / <kbd>Esc</kbd> - Cancel
@@ -79,7 +86,7 @@ See <a href=custom.html>ClipjumpCustom.ini</a> to change these keys<br>
 
 You can find <a href=basic_help.html#actmd>here</a> a few more details about <b>Action Mode</b></br>
 
-<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>A</kbd> is used to enter the <b>Action Mode</b>. A dialog box pops up, offering a lot more "actions" which can be performed. These "actions" can be accessed via keypress:
+<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>A</kbd> is used to enter the <b>Action Mode</b>. A dialog box pops up, offering more acttions which can be performed. This additional functionality can be accessed via keypress:
 
 <pre>
 <kbd>C</kbd> - <a href=basic_help.html#path>Copy File path(s)</a>
