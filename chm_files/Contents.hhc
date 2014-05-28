@@ -13,7 +13,6 @@
 		<param name="Name" value="Clipjump">
 		<param name="Local" value="clipjump.html">
 		</OBJECT>
-
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Getting Started">
 		</OBJECT>
@@ -39,9 +38,6 @@
 			<param name="Local" value="docs/organizer.html">
 			</OBJECT>
 	</UL>
-
-	<!-- Channels -->
-
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Clipjump Channels">
 		</OBJECT>
@@ -67,9 +63,6 @@
 			<param name="Local" value="docs/channels.html#pitswap">
 			</OBJECT>
 	</UL>
-
-	<!-- History -->
-
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Clipjump History Tool">
 		</OBJECT>
@@ -103,9 +96,6 @@
 			<param name="Local" value="docs/history.html#dis_his">
 			</OBJECT>
 	</UL>
-	
-	<!-- More Paste-Mode Features -->
-
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="More Paste-Mode Features">
 		</OBJECT>
@@ -155,9 +145,10 @@
 			<param name="Local" value="docs/basic_help.html#short">
 			</OBJECT>
 	</UL>
-	
-	<!-- Accessory Features -->
-
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Shortcuts">
+		<param name="Local" value="docs\shortcuts.html">
+		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Accessory Features">
 		</OBJECT>
@@ -203,9 +194,6 @@
 			<param name="Local" value="docs/ini.html">
 			</OBJECT>
 	</UL>
-
-	<!-- Translations -->
-
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Languages">
 		<param name="Local" value="docs/translate.html">
@@ -224,9 +212,6 @@
 			<param name="Local" value="docs/translate.html#doit">
 			</OBJECT>
 	</UL>
-
-	<!-- Custom -->
-
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Clipjump Custom">
 		<param name="Local" value="docs/custom.html">
@@ -245,9 +230,6 @@
 			<param name="Local" value="http://clipjump.sourceforge.net/addons.html">
 			</OBJECT>
 	</UL>
-
-	<!-- Plugins -->
-
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Plugins">
 		<param name="Local" value="docs/plugins/index.html">
@@ -274,9 +256,6 @@
 			<param name="Local" value="http://clipjump.sourceforge.net/addons.html">
 			</OBJECT>
 	</UL>
-	
-
-
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Developer's Reference">
 		<param name="Local" value="docs/devList.html">
