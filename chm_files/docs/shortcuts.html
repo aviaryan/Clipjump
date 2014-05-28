@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+<head>
+  <title>Clipjump Shortcuts</title>
+  <link rel="stylesheet" href="../Blogs.css" type="text/css">
+</head>
+<body>
+<h1><a name=short>Shortcut List</a></h1>
+<h2>General (System Wide)</h2>
+<table>
+	<tr>
+		<td><kbd>Ctrl</kbd> + <kbd>V</kbd></td>
+		<td><a href=#pstmd>Paste Mode</a></td>
+	</tr>
+	<tr>
+		<td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>A</kbd></td>
+		<td><a href=#actmd>Action Mode</a></td>
+	</tr>
+	<tr>
+		<td><kbd>Win</kbd> + <kbd>C</kbd></td>
+		<td><a href=history.html>Clipboard History Tool</a></td>
+	</tr>
+</table>
+
+
+<h2>Paste Mode</h2>
+<a href=pstmd></a>
+<kbd>Ctrl</kbd> + <kbd>V</kbd> is used to enter the <b>Paste Mode</b>.</br>
+As releasing both keys inserts the current displayed clip, thekeysequence 
+<ul>
+	<li>Press <kbd>Ctrl</kbd> + <kbd>V</kbd></li>
+	<li>Keep <kbd>Ctrl</kbd> pressed</li>
+	<li>Release <kbd class="inverse">V</kbd></li>
+</ul>
+enters the intrinsic paste mode. While being in paste mode ( <kbd>Ctrl</kbd> pressed) a few more actions can be performed by pressing keys:
+
+<pre>
+<kbd>V</kbd> - Move forward through Multiple Clipboards (from 1 to 2 , 2 to 3)
+<kbd>C</kbd> - Move backward through Multiple Clipboards (from 3 to 2 , 2 to 1)
+<kbd>S</kbd> - Add current <a href=basic_help.html#winclip>Clip to Windows Clipboard</a>
+<kbd>X</kbd> - Toggle between Cancel, Delete, Copy, Move and Delete All MODE 
+<kbd>E</kbd> - <a href=basic_help.html#export>Export</a> current clip
+<kbd>A</kbd> - Jump to first clip
+<kbd>F</kbd> - Activate <a href=basic_help.html#spm>Search / Entering <b>Search Mode</b></a>
+<kbd>H</kbd> - <a href=basic_help.html#editclip>Edit Clip</a>
+<kbd>Z</kbd> - Toggle <a href=basic_help.html#pformat>pasting formats</a>
+<kbd>T</kbd> - Add <a href=basic_help.html#tags>tags</a> to clips
+<kbd>&#8629;</kbd> (i.e. <kbd>Enter</kbd>) - Start <a href=#multipaste>Multiple Pasting</a> Session
+<kbd> </kbd> (i.e. <kbd>Space</kbd>) - <a href=basic_help.html#fx>Fix/un-fix</a> a clipboard at its position (Fixate)
+<kbd>&#8593;</kbd> (i.e. <kbd>Up</kbd>) - Change channel to 1 up (+1)
+<kbd>&#8595;</kbd> (i.e. <kbd>Down</kbd>) - Change channel to 1 down (-1)
+<kbd>1</kbd>..<kbd>9</kbd> - <a href=basic_help.html#1to9>Move to clip</a> {num} ahead/behind of current clip
+<kbd>F1</kbd> - View listing of all keys in Paste Mode
+</pre>
+
+See <a href=custom.html#2>ClipjumpCustom.ini</a> example to change these keys<br>
+
+<h3>Search in Paste Mode</h3>
+The following key sequence enters <a href=basic_help.html#spm><b>Search Mode</b></a> while being in <b>Paste Mode</b>:
+<ul>
+    <li>While <kbd>Ctrl</kbd> pressed ...</li>
+    <li>Press <kbd>F</kbd></li>
+	<li>Release <kbd class="inverse">Ctrl</kbd> and <kbd  class="inverse">F</kbd></li>
+</ul>
+Now you are in <b>Search Mode</b> within <b>Paste Mode</b> and several commands are available via keypress:
+<pre>
+<kbd>Enter</kbd> - Paste
+<kbd>Home</kbd> / <kbd>Esc</kbd> - Cancel
+<kbd>&#8593;</kbd> (i.e. <kbd>Up</kbd>) - Move one clip up (+1)
+<kbd>&#8595;</kbd> (i.e. <kbd>Down</kbd>) -Move one clip down (-1)
+</pre>
+
+See <a href=custom.html>ClipjumpCustom.ini</a> to change these keys<br>
+
+<h2>Action Mode</h2>
+<a href=actmd></a>
+
+You can find <a href=basic_help.html#actmd>here</a> a few more details about <b>Action Mode</b></br>
+
+<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>A</kbd> is used to enter the <b>Action Mode</b>. A dialog box pops up, offering a lot more "actions" which can be performed. These "actions" can be accessed via keypress:
+
+<pre>
+<kbd>C</kbd> - <a href=basic_help.html#path>Copy File path(s)</a>
+<kbd>D</kbd> - <a href=basic_help.html#disable>Disable Clipjump</a>
+<kbd>E</kbd> - <a href=Settings.html>Settings</a>
+<kbd>F</kbd> - <a href=basic_help.html#fdata>Copy File Data</a>
+<kbd>F1</kbd> - Help
+<kbd>F2</kbd> - <a href=#pstmd>Paste Mode Shortcuts</a>
+<kbd>H</kbd> - <a href=history.html>Clipboard history</a> (also accessible via direct shortcut <kbd>Win</kbd> + <kbd>C</kbd>)
+<kbd>L</kbd> - <a href=basic_help.html#ignorew>Ignore Windows Manager</a>
+<kbd>M</kbd> - Plugin Manager
+<kbd>0</kbd> - <a href=organizer.html>Channel Organizer</a>
+<kbd>P</kbd> - <a href=channels.html#pitswap>PitSwap</a>
+<kbd>S</kbd> - <a href=channels.html#chnlsel>Select Channel</a>
+<kbd>T</kbd> - <a href=basic_help.html#ot>One Time Stop</a>
+<kbd>X</kbd> - <a href=basic_help.html#path>Copy active folder path</a>
+<kbd>Esc</kbd> - Exit Action Mode Window
+</pre>
+
+See <a href=custom.html>ClipjumpCustom.ini</a> to change these keys<br>
+
+</br>
+<hr noshade=noshade size=5 color=yellow>
+<br>
+<a href="http://translate.google.com/translate?hl=en&sl=en&u=clipjump.sourceforge.net/docs/basic_help.html" id="translate">Translate</a>
+<br><br>
+
+</body>
+
+</html>
