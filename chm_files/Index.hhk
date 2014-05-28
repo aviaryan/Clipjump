@@ -3,8 +3,7 @@
 <HEAD>
 <meta name="GENERATOR" content="Microsoft&reg; HTML Help Workshop 4.1">
 <!-- Sitemap 1.0 -->
-</HEAD>
-<BODY>
+</HEAD><BODY>
 <OBJECT type="text/site properties">
 	<param name="FrameName" value="right">
 </OBJECT>
@@ -114,10 +113,6 @@
 		<param name="Local" value="docs/basic_help.html#winclip">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Shortcuts">
-		<param name="Local" value="docs/basic_help.html#short">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Muiltple Pasting">
 		<param name="Local" value="docs/basic_help.html#multipaste">
 		</OBJECT>
@@ -201,6 +196,10 @@
 		<param name="Name" value="Changelog">
 		<param name="Local" value="changelog.html">
 		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Shortcuts">
+		<param name="Name" value="Shortcuts">
+		<param name="Local" value="docs/shortcuts.html">
+		</OBJECT>
 </UL>
-</BODY>
-</HTML>
+</BODY></HTML>
