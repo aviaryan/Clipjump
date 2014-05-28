@@ -16,6 +16,7 @@ WM_MOUSEMOVE()
 	
 	;--- Descriptions --------------
 
+	; **** Settings GUI **************************
 	NEW_LIMITMAXCLIPS_TT := TXT.SET_T_limitmaxclips
 	NEW_MAXCLIPS_TT := TXT.SET_T_maxclips
 	NEW_THRESHOLD_TT := TXT.SET_T_threshold
@@ -39,6 +40,19 @@ WM_MOUSEMOVE()
 	new_PreserveClipPos_TT := TXT.SET_T_keepactivepos
 	org_K_TT := TXT.SET_org
 	new_startSearch_TT := TXT.SET_T_startSearch
+
+	; **** Channel Organizer *********************
+	chOrgToggleLeftRight_TT := TXT.ORG_toggleLeftRight
+	chOrg_search_TT := TXT.ORG_search
+	chorgNew_TT := TXT.ORG_createnew
+	chOrgUp_TT := TXT.ORG_up
+	chOrgDown_TT := TXT.ORG_down
+	chOrgEdit_TT := TXT.ORG_edit
+	chorg_openPastemode_TT := TXT.ORG_openPastemode
+	chOrg_props_TT := TXT.ORG_props
+	chOrgCut_TT := TXT.ORG_cut
+	chOrgCopy_TT := TXT.ORG_copy
+	chOrgDelete_TT := TXT.ORG_delete
 
 	;---------------------------------------------
 

@@ -8,6 +8,7 @@ channelOrganizer:
 	return
 
 channelOrganizer(){
+	global
 	static chOrg_Lb, chOrg_search, chOrg_Lv
 	static Width, Height, w_ofSearch 	; // Needed to make widths and hts save
 	static t_horizButtons := 8 , t_startBtn := 2, t_commonBtn := 3
@@ -19,6 +20,9 @@ channelOrganizer(){
 		ht := A_ScreenHeight>800 ? 450 : 400
 	w_ofSearch := getControlInfo("button", TXT.HST_search, "w", "s10")
 
+	;enable tooltips
+	OnMessage(0x200, "WM_MOUSEMOVE")
+
 	Gui, chOrg:New
 	Gui, +Resize +MinSize625x400
 	Gui, Color, D2D2D2
@@ -27,21 +31,21 @@ channelOrganizer(){
 	Gui, Font, s9
 	Gui, Add, Edit, % "x" wt-200 " yp w200 vchOrg_search gchOrg_search", 		; width of EDIT is fixed = 200
 	Gui, Font, s10
-	Gui, Add, Button, % "x" 5+115+4+30+4 " yp gchorgNew", % TXT._new
+	Gui, Add, Button, % "x" 5+115+4+30+4 " yp vchorgNew gchorgNew ", % TXT._new
 
 	Gui, Add, ListBox, section x5 y+10 w115 h%ht% gchOrg_Lb vchOrg_Lb -LV0X10 AltSubmit, ;% "|" chList 	; width of LB is fixed = 115
 	gosub chOrg_addChList
 
 	Gui, Font, s12, Wingdings
 	Gui, Add, Button, x+4 yp+20 w30 +Disabled, % chr(231)
-	Gui, Add, Button, xp y+20 w30 gchOrgUp, % chr(233) 			; buttons width = 30
-	Gui, Add, Button, xp y+2 w30 gchOrgDown, % chr(234)
-	Gui, Add, Button, xp y+2 w30 gchOrgEdit, % chr(33)
-	Gui, Add, Button, xp y+2 w30 gchorg_openPastemode, % chr(49)
-	Gui, Add, Button, xp y+2 w30 gchOrg_props, % chr(50)
-	Gui, Add, Button, xp y+2 w30 gchOrgCut, % chr(34)
-	Gui, Add, Button, xp y+2 w30 gchOrgCopy, % chr(52)
-	Gui, Add, Button, xp y+2 w30 gchOrgDelete, % chr(251)
+	Gui, Add, Button, xp y+20 w30 gchOrgUp vchOrgUp, % chr(233) 			; buttons width = 30
+	Gui, Add, Button, xp y+2 w30 gchOrgDown vchOrgDown, % chr(234)
+	Gui, Add, Button, xp y+2 w30 gchOrgEdit vchOrgEdit, % chr(33)
+	Gui, Add, Button, xp y+2 w30 gchorg_openPastemode vchorg_openPastemode, % chr(49)
+	Gui, Add, Button, xp y+2 w30 gchOrg_props vchOrg_props, % chr(50)
+	Gui, Add, Button, xp y+2 w30 gchOrgCut vchOrgCut, % chr(34)
+	Gui, Add, Button, xp y+2 w30 gchOrgCopy vchOrgCopy, % chr(52)
+	Gui, Add, Button, xp y+2 w30 gchOrgDelete vchOrgDelete, % chr(251)
 	; x = 5+115 + 4 + 30 = 154 + 4
 	Gui, Font
 	Gui, Add, ListView, % "x+4 ys w" wt-158 " h" ht " HWNDchOrg_Lv vchOrg_Lv gchOrg_Lv", % "Ch|#|" TXT.HST_clip
