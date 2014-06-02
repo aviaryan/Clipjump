@@ -134,7 +134,7 @@
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Shortcuts">
-		<param name="Local" value="docs/basic_help.html#short">
+		<param name="Local" value="docs/shortcuts.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Muiltple Pasting">
