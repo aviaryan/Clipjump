@@ -1523,6 +1523,7 @@ Receive_WM_COPYDATA(wParam, lParam)
 
 ;##############################################################################
 
+#Include %A_ScriptDir%\lib\WM_MOUSEMOVE.ahk
 #Include %A_ScriptDir%\lib\Searchpastemode.ahk
 #Include %A_ScriptDir%\lib\Customizer.ahk
 #Include %A_ScriptDir%\lib\API.ahk

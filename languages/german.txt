@@ -1,5 +1,5 @@
 ﻿;Deutsche übersetzung für Clipjump
-;erstellt von fump2000
+;erstellt von fump2000 / hoppfrosch
 
 ; Hinweise:
 ; Kommentare sollten nur am Anfang der Zeile stehen
@@ -208,7 +208,7 @@ UPD_automsg = Klicke auf Ja um ein Autoupdate durchzuführen oder klicke auf Nei
 ; the following key was modified in v10 and so you see its entry here
 SET_T_pst = Geben Sie hier einen einzelnen Buchstaben an um mit diesem in Verbindung mit STRG Clipjump zu nutzen.
           = Beachten Sie bitte, die Tasten  E C X Z S A  sind reserviert.
-          = 
+          =
           = Lesen Sie bitte außerdem den Teil "Copy bypassing Clipjump" in der Hilfedatei.
 CHC_name = Wähle Channel
 TIP_done = Erledigt
@@ -236,7 +236,7 @@ TIP_confirmcopy = Dies ist ein geschützer Channel.
 ABT_seehelp = Soll die Clipjump Hilfe geöffnet werden?
 ABT_runadmin = Clipjump läuft nicht mit Administratorrechten.
              = Dies kann zu Fehlfunktionen führen.
-             = 
+             =
              = [Dieser Hinweis erscheint nur einmal]
 ABT_cjready = Hi!
             = Clipjump ist nun aktiv.
@@ -245,3 +245,148 @@ TIP_editing = Bearbeiten....
             = Drücke Esc zum abbrechen.
 TIP_editdone = Clip wurde bearbeitet!
 TIP_editnotdone = Clip wurde NICHT bearbeitet!
+;======
+;10.7
+;======
+
+HST_m_edit = Bearbeite Clip 		(Ctrl+H)
+
+;======
+;10.7.2.6b
+;======
+
+_name = Name
+_tags = Tags
+_author = Autor
+_run = Run
+_properties = Eigenschaften
+PLG_properties = Eigenschaften (Alt+Enter)
+PLG__name = Plugin Manager
+PLG_fetchparam = parameter for the plugin
+PLG_delmsg = Wollen Sie mit dem Löschen des folgenden Plugin wirklich fortfahren?
+PLG_restartmsg = Sie haben einige Plugins gelöscht.
+               = Die Änderungen werden erst nach einem Neustart wirksam.
+               = Wollen Sie fortfahren?
+API_extplugMiss = Das folgende externe Plugin fehlt..
+API_plugCorrupt = Das folgende Plugin ist korrupt oder fehlt.
+
+;=====
+;10.7.5
+;=====
+
+PLG_Sb_running = Plugin läuft
+PLG_Sb_exit = Plugin wurde beendet
+PLG_Sb_deleted = Plugin wurde gelöscht
+SET_T_pst = Single character combination to use with Ctrl in activating [PASTE MODE]
+          = Note that letters  E C X Z S A F H are reserved.
+          =
+          = Beachten Sie den Abschnitt "Copy bypassing Clipjump" in der Hilfe
+SET_pformat = Default Einfügen-Format
+SET_T_pformat = The Paste format you would like to be active at Clipjump startup. '-original' is the default Clipjump pasting technique.
+SET_t_plugM = Shortcut to open Plugin Manager
+PLG_edit = Bearbeiten (F2)
+CUS_error = There was an error in a ClipjumpCustom.ini routine?
+
+;=====
+;10.7.8
+;=====
+
+TRY_pstmdshorts = Paste Mode Tastaturkürzel
+
+;=====
+;10.9
+;=====
+
+TIP_holdclip = Drücken Sie Strg+V um einzufügen
+             = Drücken Sie Einfg um einem Clip einem Channel hinzuzufügen
+             = Drücken Sie Esc um abzubrechen
+SET_holdclip = Hold Clip Feature
+SET_T_holdclip = Kopiert den selektierten Text in einen Buffer und verhindert, dass Clipjump den Text auffängt.
+			   = Sie können dann den Clip entweder einfügen, in einen Channel verschieben oder zurückweisen
+SET_keepactivepos = Bewahre die Position des aktuell aktiven Clips
+SET_T_keepactivepos = Wollen Sie, dass sich Clipjump an den letzten aktiven Clip im Paste Mode erinnert?
+                    = Abschalten bedeutet, das der Clipjump Paste Mode immer mit Clip 1 startet.
+
+;=====
+;11
+;=====
+
+HST_viewimage = [IMAGE]
+ORG__name = Clipjump Channel Organizer
+ORG_m_inc = Aufwärts bewegen    (Alt+Up)
+ORG_m_dec = Abwärts bewegen   (Alt+Down)
+ORG_error = Nicht unterstützt
+ORG_countStatus = aufgelistete Items
+SET_org = Channel Organizer
+ORG_delCnlMsgTitle = Wählen Sie die Channel Operation
+ORG_delCnlMsg = Was wollen Sie mit dem ausgewählten Channel machen?
+      = Channel permanent löschen = Yes
+      = Channel leeren = No
+      = Nichts = Cancel
+_rename = Umbenennen
+ORG_renameAsk = Neuer Name fur Channel Nummer
+TIP_initMsg = Initialisiere Clipjump
+
+;======
+;11.2
+;======
+
+TIP_tagPrompt = Mit Leerzeichen getrennte Tags für diesen Clip
+SET_startSearch = Starte Paste Mode mit aktivierter Suche
+SET_T_startSearch = Stelle Strg+V so um, dass Paste Mode mit aktivierter Suche gestartet wird
+                  = Dies ermöglicht, dass man nicht die Ctrl Taste gedrückt halten muss um durch die Clips zu navigieren. Siehe auch "Search in Paste Mode" in der Hilfe.
+_editing = Bearbeiten
+
+; Note to Translator > please make sure the out in Ctrl+v+F1 is aligned properly in TIP_help
+TIP_help =
+= Release Strg - Einfügen
+= V            - Wechsle zum nächsten Clip
+= C            - Wechsle zum vorigen Clip
+= X            - Beende die Modi: Bewege Clip, Lösche Clip, Kopiere Clip
+= Z            - Wechsle Einfügeformat
+= Space        - FIX
+= S            - Lege den aktuelle Clip aufs System Clipboard
+= E            - Exportiere
+= Up/Down      - Wechsle Channel +1/-1
+= A            - Springe zum ersten Clip im Channel
+= 1..9         - Springe n Clips weiter vom aktiven Clip
+= F            - Suchee
+= H            - Bearbeite
+= Enter        - Start Multiple Pasting Session
+= T            - Tag
+= F1           - Hilfe
+=
+= Drücke V um dieses Fenster zu verlassen
+
+;=======
+; 11.2.3
+;=======
+_more_options = Mehr Optionen
+ORG_m_openpst = Öffne im Paste Mode (Strg+O)
+_!x = Alt+X
+_!c = Alt+C
+ORG_m_insta = Insta-Paste (Space)
+
+;=======
+; 11.3
+;=======
+_destChannel = Ziel-Channel
+_maintenance = Wartung
+_new = Neu
+ORG_createnew = Erzeuge neuen Clip im aktuellen Channel
+ORG_createnewpr = Neuer Clip wird in folgendem Channel erzeugt
+ORG_newchname = Name des neuen Channels
+
+;========
+; 11.4 - Added tooltips for Channel Organizer (hoppfrosch)
+;=======
+ORG_toggleLeftRight = ????????
+ORG_search = Suche Clip
+ORG_up = Wechsle zum vorigen Clip
+ORG_down = Wechsle zum nächsten Clip
+ORG_edit = Bearbeite selektierten Clip
+ORG_openPastemode = Öffnet das Paste Mode Interface
+ORG_props = Bearbeite Eigenschaften des selektierten Clip
+ORG_cut = Schneidet den selektierten Clip aus und fügt ihm einem anderen Channel hinzu
+ORG_copy = Kopiert den selektierten Clip aus und fügt Kopie einem anderen Channel hinzu
+ORG_delete = Löscht den selektierten Clip
