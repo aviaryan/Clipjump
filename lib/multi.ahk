@@ -251,6 +251,7 @@ choosechGuiClose:
 ;--------------------------- find a channel ------------------------------------------------------------------
 
 channel_find(name=""){
+	local o
 	; returns list of channels if name is empty
 	Iniread, o, %CONFIGURATION_FILE%, Channels
 	mINI := Ini2Obj(CONFIGURATION_FILE)

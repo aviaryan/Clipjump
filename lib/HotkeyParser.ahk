@@ -44,7 +44,7 @@ EXAMPLES - Pre-Runs
   
 ;• ManageOrder(true) - Change (X + Control) to ^x and not x^ so that you are free from errors. If false, a <blank> value is returned when the hotkey is found un-ordered.
 
-HParse(Hotkey, RemoveInvaild = true,ManageOrder = true)
+HParse(Hotkey, RemoveInvaild = true,ManageOrder = true, useBraces=false)
 {
 
 firstkey := Substr(Hotkey, 1, 1)
@@ -56,6 +56,8 @@ loop,parse,Hotkey,+-&,%a_space%
 	if (Strlen(A_LoopField) != 1)
 	{
 		parsed := Hparse_LiteRegexM(A_LoopField)
+		if useBraces && (StrLen(parsed)>1) && (Instr(parsed, "vk") != 1)
+			parsed := "{" parsed "}"
 		If !(RemoveInvaild)
 		{
 			IfEqual,parsed
