@@ -152,7 +152,7 @@ table{
  */
 
 /* Base style, essential for every key. */
-kbd, .key {
+kbd, kbda, .key {
 	display: inline;
 	display: inline-block;
 	min-width: 1em;
@@ -174,7 +174,7 @@ kbd[title], .key[title] {
 }
 
 /* Light style for display on dark background. */
-kbd.inverse, .light-keys kbd, .key.light, .light-keys .key {
+kbda, kbd.inverse, .light-keys kbd, .key.light, .light-keys .key {
 	background: rgb(230, 230, 230);
 	background: -moz-linear-gradient(top, rgb(210, 210, 210), rgb(255, 255, 255));
 	background: -webkit-gradient(linear, left top, left bottom, from(rgb(210, 210, 210)), to(rgb(255, 255, 255)));

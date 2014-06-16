@@ -55,15 +55,16 @@ class API
 	; toreturn = 1 < return Clipboard text data > 
 	; toreturn = 2 < return ClipboardAll binary data >
 	getClipAt(channel=0, clipno=1, toreturn=1, Byref err=""){
-		this.blockMonitoring(1)
-		r := this.getClipLoc(channel, clipno)
-		try Fileread, Clipboard, *c %r%
-		err := GetClipboardformat()="" ? 0 : 1
 		if toreturn=1
-			ret := Clipboard
-		else
+			ret := CDS[channel][ this.getChStrength(channel)-clipno+1 ]
+		else {
+			this.blockMonitoring(1)
+			r := this.getClipLoc(channel, clipno)
+			try Fileread, Clipboard, *c %r%
+			err := GetClipboardformat()="" ? 0 : 1
 			ret := ClipboardAll
-		this.blockMonitoring(0)
+			this.blockMonitoring(0)
+		}
 		return ret
 	}
 

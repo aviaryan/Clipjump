@@ -135,7 +135,7 @@ else if (ini_Version != VERSION)
 global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_IsChannelMin , ini_isMessage, CopyMessage
 		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, channel_K, onetime_K, paste_k, actionmode_k, ini_is_duplicate_copied, ini_formatting
 		, ini_CopyBeep , beepFrequency , ignoreWindows, ini_defEditor, ini_defImgEditor, ini_def_Pformat, pluginManager_k, holdClip_K, ini_PreserveClipPos
-		, chOrg_K, ini_startSearch
+		, chOrg_K, ini_startSearch, ini_revFormat2def
 
 ; (search) paste mode keys 
 global pastemodekey := {} , spmkey := {}
@@ -870,6 +870,8 @@ ctrlCheck:
 			MULTIPASTE := 0 		; deactivated when Ctrl released
 		ctrlRef := ""
 		CALLER := CALLER_STATUS
+		if ini_revFormat2def
+			set_pformat(ini_def_Pformat)
 		if prefs_changed
 			Prefs2Ini() 	; save preferences in memory
 		EmptyMem()
@@ -892,6 +894,8 @@ endPastemode:
 	API.blockMonitoring(0)
 	ctrlRef := "", restoreCaller := is_pstMode_active := IN_BACK := oldclip_exist := jumpClip_sign := 0
 	hkZ_pasteMode(0) , CALLER := CALLER_STATUS
+	if ini_revFormat2def
+		set_pformat(ini_def_Pformat)
 	if prefs_changed
 		Prefs2Ini()
 	EmptyMem()

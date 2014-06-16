@@ -6,7 +6,7 @@ WM_MOUSEMOVE() v0.01
     
 By:
 	Avi Aryan
-	Extracted from "Settings GUI Plag.ahk" to make it more public 
+	Extracted from "Settings GUI Plug.ahk" to make it more public 
 */
 
 WM_MOUSEMOVE()
@@ -40,6 +40,7 @@ WM_MOUSEMOVE()
 	new_PreserveClipPos_TT := TXT.SET_T_keepactivepos
 	org_K_TT := TXT.SET_org
 	new_startSearch_TT := TXT.SET_T_startSearch
+	new_revFormat2def_TT := TXT.SET_T_revFormat2def
 
 	; **** Channel Organizer *********************
 	chOrgToggleLeftRight_TT := TXT.ORG_toggleLeftRight

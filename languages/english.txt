@@ -369,13 +369,16 @@ ORG_newchname = New channel name
 ;========
 ; 11.4 - Added tooltips for Channel Organizer (hoppfrosch)
 ;=======
-ORG_toggleLeftRight = ????????
 ORG_search = Search Clip
-ORG_up = Move selected clip upwards one position
-ORG_down = Move selected clip downwards one position
-ORG_edit = Edit selected clip
-ORG_openPastemode = Opens the paste mode interface
+ORG_up = Move selected item upwards one position
+ORG_down = Move selected item downwards one position
+ORG_edit = Edit selected item
+ORG_openPastemode = Opens the paste mode interface with the selected clip active
 ORG_props = Edit selected clip properties (tags, fixed attribute)
 ORG_cut = Cuts selected clip and insert into another channel
 ORG_copy = Copies selected clip and duplicate to another channel
-ORG_delete = Deletes selected clip
+ORG_delete = Deletes selected item
+; ----
+
+SET_revFormat2Def = Always start Paste mode with the default formatting
+SET_T_revFormat2Def = Checking this option will always start the paste mode with the default paste formatting (which is 'original'/'none' by default).

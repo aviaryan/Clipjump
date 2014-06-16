@@ -11,8 +11,9 @@
 <br><br>
 
 <h2>Introduction</h2>
-'Common Formats' is a pformat plugin that lets you paste the clip with various inbuilt paste formattings. The 'pformat.commonformats.ahk' file can be edited to include more
- formats.<br><br>
+'Common Formats' is a pformat plugin that lets you paste the clip with various inbuilt paste formatting. 
+Users can add more formats in the 'pformat.commonformats.lib/<b>user</b>.ahk' file. This file is created when the Common Formats plugin is accessed from the plugin 
+manager or paste mode. <br><br>
 
  <h2>Using</h2>
  Once you have selected the common format <a href="../basic_help.html#pformat">paste-format</a>, releasing Ctrl to paste will bring up the GUI. Use Up/Down keys or mouse to select 
@@ -30,7 +31,7 @@ the match needle and the replacement text AND the users are supposed to enter th
 <br><br>
 
 <h2>Porting an existing pformat to under Common Formats</h2>
- To make any independent pformat a part of the common format, you can simply copy its code to the pformat.commonformats.ahk file. <br>
+ To make any independent pformat a part of the common format, you can simply copy its code to the pformat.commonformats.lib/user.ahk file. <br>
  Then replace the main function name <code>plugin_pformat_name(</code> by <code>plugin_pformat_commonformats_name(</code> where 'name' is the name of that independent 
  pformat.
  <br><br>
