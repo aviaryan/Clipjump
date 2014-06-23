@@ -1,14 +1,19 @@
 ;@Plugin-Name Common Formats
-;@Plugin-Description Shows a gui to paste with a format from many types of predefined formats. Can be easily extended to include more formats.
-;@Plugin-Description Only works for Text ([Text] or [File/Folder]) type data.
+;@Plugin-Description Shows a gui to paste with a format from many types of predefined formats. Can be easily extended to include more formats. 
+;@Plugin-Description For that edit the pformat.commonformats.lib/user.ahk file. Only works for Text ([Text] or [File/Folder]) type data.
 ;@Plugin-Author Avi
 ;@Plugin-Tags pformat
-;@Plugin-version 0.35
+;@Plugin-version 0.4
 ;@Plugin-Previewable 0
 
 ;@Plugin-Param1 The Input Text
 
 ;------------------------------------------------------------- Paste Formats ------------------------------------
+
+; ###### ADD USER paste formats in base.ahk file #####
+#Include *i %A_ScriptDir%\plugins\pformat.commonformats.lib\user.ahk
+; ####################################################
+
 
 plugin_pformat_commonformats_None(zin){
 	STORE["commonformats_None"] := "This pastes the original clip rejecting any change made to the clip."
@@ -57,6 +62,7 @@ plugin_pformat_commonformats_RegexReplace(zin, zps){
 	return zout , STORE.ClipboardChanged := 1
 }
 
+
 ;--------------------------------- The Plugin File Starts , end of Paste Formats ---------------------------------
 ;-----------------------------------------------------------------------------------------------------------------
 
@@ -69,6 +75,8 @@ plugin_pformat_commonformats(zin){
 	Gui, +AlwaysOnTop +ToolWindow -MaximizeBox
 
 	Gui, Add, ListBox, x5 y5 r15 w140 vzchosenformat gzchosenformat section, % plugin_pformat_commonformats_listfunc(A_ScriptDir "\plugins\pformat.commonformats.ahk")
+	. ( (ztemp := plugin_pformat_commonformats_listfunc(ztF := A_ScriptDir "\plugins\pformat.commonformats.lib\user.ahk")) ? "|" ztemp : "" )
+
 	Gui, Add, Edit, x+10 w500 h200 vzedit +multi, % zin
 
 	Gui, Add, GroupBox, xs y+5 h70 w650, Info
@@ -79,6 +87,12 @@ plugin_pformat_commonformats(zin){
 	Gui, Add, Text, x+55 yp-15, Input Field
 	Gui, Add, Edit, x+10 yp-2 w441 h40 gzchosenformat vzinputfield, 
 	Gui, commonformat:Show,, Choose Format
+
+	if !FileExist(ztF)
+	{
+		FileCreateDir, % Substr(ztF, 1, Instr(ztF, "\", 0, 0)-1)
+		FileAppend, % "; Add User paste formats here", % ztF
+	}
 
 	while !zDone
 		sleep 200
@@ -141,13 +155,10 @@ plugin_pformat_commonformats_listfunc(file){
 	while q:=RegExMatch(z, "iU)`n[^ `t`n,;``\(\):=\?]+\([^`n]*\)[ `t`n]*{", o, p)
 	{
 		if IsFunc( zfk := Substr( RegExReplace(o, "\(.*", ""), 2) )
-		{
 			If zfk not in plugin_pformat_commonformats_listfunc,plugin_pformat_commonformats
-				lst .= "`n" LTrim(zfk, "plugin_pformat_commonformats_")
-		}
+				lst .= "`n" RegExReplace(zfk, "^(plugin_pformat_commonformats_)", "", "", 1)
 		p := q+Strlen(o)-1
 	}
-
 	Sort, lst
 	return Trim( RegExReplace(lst, "`n", "|"),"|" )
 }

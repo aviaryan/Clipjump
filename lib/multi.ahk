@@ -251,19 +251,18 @@ choosechGuiClose:
 ;--------------------------- find a channel ------------------------------------------------------------------
 
 channel_find(name=""){
-	local o
+	local str, rINI
 	; returns list of channels if name is empty
-	Iniread, o, %CONFIGURATION_FILE%, Channels
-	mINI := Ini2Obj(CONFIGURATION_FILE)
+	rINI := Ini2Obj(CONFIGURATION_FILE)
 	if (name != "")
 	{
-		for k,v in mINI["Channels"]
+		for k,v in rINI["Channels"]
 			if v = %name%
 				return k
 	}
 	else
 		loop % CN.Total
-			str .= A_index-1 " - " mINI["Channels"][A_index-1] "`n"
+			str .= A_index-1 " - " rINI["Channels"][A_index-1] "`n"
 	return Rtrim( str, "`n" )
 }
 
