@@ -60,7 +60,8 @@ The above code uses 3 commands, bind, run and tip.<br>
 	<li><code>run</code> runs the label 'incognito' inside Clipjump which is responsible for toggling incognito mode.
 	<li><code>tip</code> shows a tooltip when this custom function is run. Here the tip shown will contain the text 'Incognito Mode toggled'.
 </ol>
-Note that you can also use <code>noautorun=1</code> to prevent auto-execution of section even if it doesn't have a 'bind'.
+Note that you can also use <code>noautorun=1</code> to prevent auto-execution of section even if it doesn't have a 'bind'.<BR> 
+<a name=not_autorun></a><b>TIP - </b> Only a section which has neither a <code>bind</code> nor a <code><a href=#noautorun_ex>noautorun = 1</a></code> runs at Clipjump program startup.
 <br><br><br>
 
 
@@ -77,11 +78,11 @@ PasteMode inbuilt variable.<br>
 		spmkey.(key). So the following code will also change 'Channel up', 'Channel down' and 'paste-format' shortcut in PasteMode <b>and</b> 'cancel' shortcut in 
 		Search-PasteMode.
 		<pre class="brush: ini;">
-		[AutoRun]
-		pastemodekey.z=^y
-		pastemodekey.up=^q
-		pastemodekey.down=^d
-		spmkey.home=PgDn</pre>
+[AutoRun]
+pastemodekey.z=^y
+pastemodekey.up=^q
+pastemodekey.down=^d
+spmkey.home=PgDn</pre>
 	<li>The key names are according to the <a href="http://www.autohotkey.com/docs/KeyList.htm">AutoHotkey key list</a>. 
 </ul>
 <br><br>
@@ -130,15 +131,16 @@ tip=Channel changed to 4
 
 <h3><a name=actmd>Example 6 (Running a section with Action Mode)</a></h3>
 Suppose you don't want to create a separate shortcut Win+V for the above example. Here is how to create a Action Mode shortcut for it.
+<a name=noautorun_ex></a>
 <pre class="brush: ini;">
 [changeto_4]
-<a name=noautorun_ex>noautorun=1</a>
-; noautorun prevents auto-execution of a section in absence of bind
+noautorun=1
+<span style="color: green;">; noautorun prevents auto-execution of a section in absence of bind</span>
 run=changeChannel(4)
 tip=Channel changed to 4
 
 [actionmode_f10]
-; here I don't use noautorun as I want it to run at startup and make the change
+<span style="color: green;">; here I don't use noautorun as I want it to run at startup and make the change</span>
 ACTIONMODE.F10 = API.executeSection(changeto_4)
 ACTIONMODE.F10_caption = Change 2 my channel
 </pre>
@@ -168,7 +170,7 @@ You can use the inbuilt <code>inputbox</code> function to retrieve the 'clipno' 
 [paste_sig]
 bind = Ctrl+F8
 zClipno = 1
-; zClipno = %inputbox(Choose, Please write the clip number to be pasted)%
+<span style="color: green;">; zClipno = %inputbox(Choose, Please write the clip number to be pasted)%</span>
 run = API.paste( 2, %zClipno% )
 </pre>
 <ul>
