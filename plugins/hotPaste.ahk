@@ -1,7 +1,7 @@
 ﻿;@Plugin-Name Hotstring-Paste
-;@Plugin-Version 0.25
-;@Plugin-Description Edit this plugin file to add hotstrings (like hotkeys) that will paste the desired clip when you write a particular text.
-;@Plugin-Description Makes badass use of the awesome hotstrings feature in AutoHotkey
+;@Plugin-Version 0.26
+;@Plugin-Description Edit the file "plugins\hotPaste.lib\base.ahk" to add hotstrings (like hotkeys) that will paste the desired clip when you write a particular text.
+;@Plugin-Description Run this plugin once from here to have the 'base.ahk' file created.
 ;@Plugin-Author AutoHotkey, Avi
 ;@Plugin-Tags instant pasting
 

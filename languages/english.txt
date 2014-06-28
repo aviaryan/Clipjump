@@ -382,3 +382,11 @@ ORG_delete = Deletes selected item
 
 SET_revFormat2Def = Always start Paste mode with the default formatting
 SET_T_revFormat2Def = Checking this option will always start the paste mode with the default paste formatting (which is 'original'/'none' by default).
+ORG_clpdelmsg = Selected Clip Deleted
+ORG_copyingclp = Copying selected clip(s)
+ORG_movingclp = Moving selected clip(s)
+ORG_Editprops = Edit Clip properties
+ORG_oEditMsg = Hit Save when you're done.
+ABT_info = Clipjump is a Windows only Clipboard Manager created in AutoHotkey.
+        = It was inspired from Skrommel's application ClipStep.
+_Save = Save

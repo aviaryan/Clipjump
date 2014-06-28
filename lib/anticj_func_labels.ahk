@@ -143,7 +143,7 @@ multInputBox(Title, caption="", row=5, default="", owner=""){
 	Gui, Font, norm, Consolas
 	Gui, Add, Edit, xp y+30 w%kw% r%row% vtheEdit, % default
 	Gui, Add, Button, x5 y+30 Default, OK
-	Gui, Add, Button, x+30 yp, Cancel
+	Gui, Add, Button, x+30 yp, % TXT.SET_Cancel
 	if owner {
 		Gui, miBox:+owner%owner%
 		Gui, %owner%:+Disabled
@@ -175,15 +175,21 @@ ret := ObjectEditor(a)
 for k,v in ret
 	msgbox % k "`n" v
 return
+
+Options (opn)
+	1: Title
+	2: owner
+	3: prompt
+	4: width
 */
 
-ObjectEditor(obj, Title="Properties Editor", owner="", prompt="Edit Properties and hit Save", width=""){
+ObjectEditView(obj, opn, readonly=0){
 	global
 	local oDone
 
 	Gui, objEdit:new
 	Gui, Font, s10 underline, Consolas
-	Gui, Add, Text, x5 y5, % prompt
+	Gui, Add, Text, x5 y5, % opn.3
 	Gui, Add, Text, xp y+15 section,
 	Gui, Font, norm, Consolas
 
@@ -196,29 +202,30 @@ ObjectEditor(obj, Title="Properties Editor", owner="", prompt="Edit Properties a
 
 	for k,v in obj {
 		Gui, Add, Text, xs y+7, % k
-		Gui, Add, Edit, % "x" maxsize " yp vfield" A_index " w" (width ? width : 100), % v
+		Gui, Add, Edit, % "x" maxsize " yp vfield" A_index  (readonly ? " +Readonly" : "") " w" (opn.4 ? opn.4 : 100), % v
 	}
-	Gui, Add, Button, x5 y+30 Default, Save
-	Gui, Add, Button, x+30 yp, Cancel
-	if owner {
-		Gui, objEdit:+owner%owner%
-		Gui, %owner%:+Disabled
+	Gui, Add, Button, x5 y+30 Default gobjEditButtonSv, % readonly ? "OK" : TXT._save
+	Gui, Add, Button, x+30 yp, % TXT.SET_Cancel
+	if opn.2 {
+		Gui, % "objEdit:+owner" opn.2
+		Gui, % opn.2 ":+Disabled"
 	}
-	Gui, objEdit:Show,, % Title
+	Gui, objEdit:Show,, % opn.1
 
 	while !oDone
 		sleep 50
 	return obj
 
+objEditGuiEscape:
 objEditButtonCancel:
 objEditGuiClose:
-	if owner
-		Gui, %owner%:-Disabled
+	if opn.2
+		Gui, % opn.2 ":-Disabled"
 	Gui, objEdit:Destroy
 	oDone := 1
 	return
 
-objEditButtonSave:
+objEditButtonSv:
 	Gui, objEdit:Submit, nohide
 	for k in obj
 		obj[k] := field%A_index%

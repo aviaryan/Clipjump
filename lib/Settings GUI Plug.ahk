@@ -291,6 +291,8 @@ load_Settings(all=false)
 		try Process, Priority,, % Priority
 		;v10.7.3
 		ini_defImgEditor := (t:=ini_read("System", "default_image_editor")) ? t : "mspaint.exe"
+		ini_pstMode_X := ini_read("Advanced", "pstMode_X")
+		ini_pstMode_Y := ini_read("Advanced", "pstMode_Y")
 	}
 
 }
@@ -374,7 +376,7 @@ set_pformat(pst_format=""){
 }
 
 save_Default(full=1){
-; Saves the default settings for Clipjump
+; Saves the default settings for Clipjump. Runs at start-up on program update or new installation
 	
 	if (full){
 	IniWrite, 1, % CONFIGURATION_FILE, Main, limit_MaxClips
@@ -428,6 +430,8 @@ save_Default(full=1){
 	ini_write("Shortcuts", "chOrg_K", "")
 	ini_write("Main", "startSearch", 0)
 	ini_write("Main", "revFormat2def", 0)
+	ini_write("Advanced", "pstMode_X")
+	ini_write("Advanced", "pstMode_Y")
 }
 
 Ini_write(section, key, value="", ifblank=true){

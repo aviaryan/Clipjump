@@ -54,7 +54,7 @@ channelOrganizer(){
 	SB_SetParts(5+115)
 	Gui, chOrg:Show,, % TXT.ORG__name
 
-	GuiControl, chOrg:Choose, chOrg_Lb, % CN.NG+2
+	GuiControl, chOrg:Choose, chOrg_Lb, % ini_OpenAllChByDef ? 1 : CN.NG+2
 	gosub chOrg_Lb
 	GuiControl, chOrg:+AltSubmit, chOrg_Lv
 	; Gui Done
@@ -201,7 +201,7 @@ chOrgDelete:
 			return
 		}
 		API.deleteClip( ch := Substr(rSel, 1, Instr(rSel, "-")-1) , cl := Substr(rSel, Instr(rSel, "-")+1) )
-		chOrg_notification("Selected Clip Deleted")
+		chOrg_notification(TXT.ORG_clpdelMsg)
 		LV_Delete(last_Row)
 		loop % LV_GetCount()
 		{
@@ -227,7 +227,7 @@ chOrgDelete:
 				API.emptyChannel(chSel)
 			IfMsgBox, Cancel
 				chOrg_notification( TXT.TIP_cancelled)
-			else chOrg_notification("Channel Operation Done")
+			else chOrg_notification(TXT.TIP_done)
 		}
 	}
 	return
@@ -237,7 +237,7 @@ chOrgCopy:
 ; single cut/ multi copy supported
 	gosub chOrg_getSelected
 	flag := A_ThisLabel="chOrgCut" ? 0 : 1
-	chOrg_notification(flag ? "Copying selected clip(s)" : "Moving selected clip(s)", 99999999)
+	chOrg_notification(flag ? TXT.ORG_copyingclp : TXT.ORG_movingclp, 99999999)
 	if (A_ThisLabel="chOrgCut") && Instr(rSel, "`n")
 	{
 		chOrg_notification(TXT.ORG_error)
@@ -349,7 +349,7 @@ chOrg_props:
 	out_cl := API.getChStrength(out_ch)-out_cl+1
 	ClipPref_makeKeys(out_ch, out_cl)
 	SB_SetText(TXT._editing, 2)
-	CPS[out_ch][out_cl] := ObjectEditor(CPS[out_ch][out_cl], "Edit Clip properties", "chOrg", "Hit Save when you're done.", 150)
+	CPS[out_ch][out_cl] := ObjectEditView( CPS[out_ch][out_cl], Array(TXT.ORG_editprops, "chOrg", TXT.ORG_oEditMsg, 150), 0 )
 	prefs2Ini()
 	chOrg_notification(blank, 10)
 	return
@@ -500,56 +500,3 @@ chOrgLV_update(term="", channel=""){
 #If
 #If IsChOrgLBActive()
 #If
-
-; /// EDITED VERSION
-Anchor(i, a = "", guiName="") {
-; i = ClassNN OR variable
-	r := 1 ;redraw
-	static c, cs = 12, cx = 255, cl = 0, g, gs = 8, gl = 0, gpi, gw, gh, z = 0, k = 0xffff
-	If z = 0
-		VarSetCapacity(g, gs * 99, 0), VarSetCapacity(c, cs * cx, 0), z := true
-
-	GuiControlGet, t, %guiName%HWND, %i%
-	i := t
-
-	VarSetCapacity(gi, 68, 0), DllCall("GetWindowInfo", "UInt", gp := DllCall("GetParent", "UInt", i), "UInt", &gi)
-		, giw := NumGet(gi, 28, "Int") - NumGet(gi, 20, "Int"), gih := NumGet(gi, 32, "Int") - NumGet(gi, 24, "Int")
-	If (gp != gpi) {
-		gpi := gp
-		Loop, %gl%
-			If (NumGet(g, cb := gs * (A_Index - 1)) == gp) {
-				gw := NumGet(g, cb + 4, "Short"), gh := NumGet(g, cb + 6, "Short"), gf := 1
-				Break
-			}
-		If (!gf)
-			NumPut(gp, g, gl), NumPut(gw := giw, g, gl + 4, "Short"), NumPut(gh := gih, g, gl + 6, "Short"), gl += gs
-	}
-	ControlGetPos, dx, dy, dw, dh, , ahk_id %i%
-	Loop, %cl%
-		If (NumGet(c, cb := cs * (A_Index - 1)) == i) {
-			If a =
-			{
-				cf = 1
-				Break
-			}
-			giw -= gw, gih -= gh, as := 1, dx := NumGet(c, cb + 4, "Short"), dy := NumGet(c, cb + 6, "Short")
-				, cw := dw, dw := NumGet(c, cb + 8, "Short"), ch := dh, dh := NumGet(c, cb + 10, "Short")
-			Loop, Parse, a, xywh
-				If A_Index > 1
-					av := SubStr(a, as, 1), as += 1 + StrLen(A_LoopField)
-						, d%av% += (InStr("yh", av) ? gih : giw) * (A_LoopField + 0 ? A_LoopField : 1)
-			DllCall("SetWindowPos", "UInt", i, "Int", 0, "Int", dx, "Int", dy
-				, "Int", InStr(a, "w") ? dw : cw, "Int", InStr(a, "h") ? dh : ch, "Int", 4)
-			If r != 0
-				DllCall("RedrawWindow", "UInt", i, "UInt", 0, "UInt", 0, "UInt", 0x0101) ; RDW_UPDATENOW | RDW_INVALIDATE
-			Return
-		}
-	If cf != 1
-		cb := cl, cl += cs
-	bx := NumGet(gi, 48), by := NumGet(gi, 16, "Int") - NumGet(gi, 8, "Int") - gih - NumGet(gi, 52)
-	If cf = 1
-		dw -= giw - gw, dh -= gih - gh
-	NumPut(i, c, cb), NumPut(dx - bx, c, cb + 4, "Short"), NumPut(dy - by, c, cb + 6, "Short")
-		, NumPut(dw, c, cb + 8, "Short"), NumPut(dh, c, cb + 10, "Short")
-	Return, true
-}

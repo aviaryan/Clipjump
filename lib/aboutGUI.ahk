@@ -27,10 +27,7 @@ aboutGUI(){
 	Gui, 2:Add, Groupbox, x7 y130 w540 h100, About
 	Gui, 2:Font, S10, Arial
 	
-	Gui, 2:Add, Text, xp+10 y160 wp-10, % "
-	(LTrim`t , Join`s
-		Clipjump is a Windows only Clipboard Manager created in AutoHotkey. `nIt was inspired from Skrommel's application ClipStep.
-	)"
+	Gui, 2:Add, Text, xp+10 y160 wp-10, % TXT.ABT_info
 
 	Gui, 2:Font, S10, Arial
 	Gui, 2:Add, Button, xp-10 y+60 w70 g2GuiClose Default, OK

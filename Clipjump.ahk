@@ -135,7 +135,7 @@ else if (ini_Version != VERSION)
 global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_IsChannelMin , ini_isMessage, CopyMessage
 		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, channel_K, onetime_K, paste_k, actionmode_k, ini_is_duplicate_copied, ini_formatting
 		, ini_CopyBeep , beepFrequency , ignoreWindows, ini_defEditor, ini_defImgEditor, ini_def_Pformat, pluginManager_k, holdClip_K, ini_PreserveClipPos
-		, chOrg_K, ini_startSearch, ini_revFormat2def
+		, chOrg_K, ini_startSearch, ini_revFormat2def, ini_pstMode_X, ini_pstMode_Y
 
 ; (search) paste mode keys 
 global pastemodekey := {} , spmkey := {}
@@ -146,7 +146,7 @@ temp_keys := "Enter|Up|Down|Home"
 loop, parse, temp_keys,|
 	spmkey[A_LoopField] := A_LoopField
 
-global windows_copy_k, windows_cut_k
+global windows_copy_k, windows_cut_k, ini_OpenAllChbyDef := 0
 
 init_actionmode()
 ;Initialising Clipjump Channels
@@ -425,7 +425,7 @@ clipChange(CErrorlevel, clipboard_copy) {
 			}
 
 			TEMPSAVE := CURSAVE
-			if ( CURSAVE >= TOTALCLIPS )
+			while ( CURSAVE >= TOTALCLIPS )
 				compacter()
 
 			returnV := 1
@@ -449,7 +449,7 @@ clipChange(CErrorlevel, clipboard_copy) {
 			if NOINCOGNITO and ini_IsImageStored and ( CN.Name != "pit" )
 				FileCopy, %THUMBS_dir%\%CURSAVE%.jpg, cache\history\%A_Now%.jpg
 
-			if ( CURSAVE >= TOTALCLIPS )
+			while ( CURSAVE >= TOTALCLIPS )
 				compacter()
 
 			returnV := 2
@@ -754,21 +754,23 @@ fixCheck() {
 ;Shows tooltips in Clipjump Paste Modes
 PasteModeTooltip(cText, notpaste=0) {
 	global
+	local tx, ty
 	if STORE["pstTipRebuild"] {
 		Tooltip
 		STORE["pstTipRebuild"] := 0
 	}
-	if notpaste {
-		Tooltip, % cText, % SPM.X, % SPM.Y
-	}
+	; SPM.X and y contain place to show a/c searchbox
+	tx := ini_pstMode_X ? ini_pstMode_X : SPM.X , ty := ini_pstMode_Y ? ini_pstMode_Y : SPM.Y
+	if notpaste
+		Tooltip, % cText, % tx, % ty
 	else {
 		tagText := (t := CPS[CN.NG][realActive]["Tags"]) != "" ? "(" t ")" : ""
 		if cText =
 			ToolTip % "{" CN.Name "} Clip " realclipno " of " CURSAVE fillWithSpaces("",7) tagText " " fixStatus 
-		. (WinExist("Display_Cj") ? "" : "`n`n" MSG_ERROR "`n`n"), % SPM.X, % SPM.Y
+		. (WinExist("Display_Cj") ? "" : "`n`n" MSG_ERROR "`n`n"), % tx, % ty
 		else
 		ToolTip % "{" CN.Name "} Clip " realclipno " of " CURSAVE fillWithSpaces("",7) GetClipboardFormat() fillWithSpaces("",5) (curPformat ? "[" curPformat "]" : "") 
-			. fillWithSpaces("",5) tagText " " fixstatus "`n`n" halfclip, % SPM.X, % SPM.Y
+			. fillWithSpaces("",5) tagText " " fixstatus "`n`n" halfclip, % tx, % ty
 	}
 }
 
@@ -786,7 +788,7 @@ ctrlCheck:
 		; ---
 		if ctrlRef = cancel
 		{
-			ToolTip, %MSG_CANCELLED%
+			PasteModeTooltip(MSG_CANCELLED, 1)
 			sleeptime := 200
 		}
 		else if ctrlRef = deleteAll
@@ -797,11 +799,11 @@ ctrlCheck:
 			temp21 := TT_Console(TXT.TIP_delallprompt, "Y N")
 			if temp21 = Y
 			{
-				Tooltip, %MSG_ALL_DELETED%
+				PasteModeTooltip(MSG_ALL_DELETED,1)
 				clearData()
 			}
 			else
-				Tooltip, %MSG_CANCELLED%
+				PasteModeTooltip(MSG_CANCELLED,1)
 
 			Critical, On 			;Just in case this may be required.
 
@@ -809,7 +811,7 @@ ctrlCheck:
 		else if ctrlRef = delete
 		{
 			IScurCBACTIVE := 0
-			ToolTip, %MSG_DELETED%
+			PasteModeToolTip(MSG_DELETED,1)
 			clearClip(realActive)
 		}
 		else if ctrlRef in cut,copy
@@ -820,14 +822,14 @@ ctrlCheck:
 			if Instr(temp21, "-") != 1
 			{
 				API.manageClip( temp21 , empty, empty, ( ctrlref == "cut" ) ? 0 : 1 )
-				Tooltip, % TXT.TIP_done
+				PasteModeTooltip(TXT.TIP_done,1)
 			}
-			else Tooltip, % TXT.TIP_copycutfailed
+			else PasteModeTooltip(TXT.TIP_copycutfailed,1)
 			Critical, On
 		}
 		else if ctrlRef = pastemode
 		{
-			ToolTip, %MSG_PASTING%
+			PasteModeToolTip(MSG_PASTING,1)
 			if curPformat 	;use curpf to get the func
 			{
 				Critical, Off
@@ -1018,7 +1020,7 @@ compacter() {
 		FileMove, %A_WorkingDir%/%THUMBS_dir%/%avcnumber%.jpg, %A_WorkingDir%/%THUMBS_dir%/%A_Index%.jpg, 1
 		; Auto rmd := CPS[CN.NG].remove(avcnumber) , CPS[CN.NG][A_Index] := rmd
 	}
-	TEMPSAVE := CURSAVE := TOTALCLIPS - ini_Threshold
+	TEMPSAVE := CURSAVE := CURSAVE - ini_Threshold 	; dont use TOTALCLIPS, could be a late clip compaction due to ini
 }
 
 clearData() {
@@ -1157,7 +1159,7 @@ actionmode:
 init_actionmode() {
 	ACTIONMODE := {H: "history", S: "channelGUI", O: "channelOrganizer", C: "copyfile", X: "copyfolder", F: "CopyFileData", D: "disable_clipjump"
 		, P: "pitswap", T: "onetime", E: "settings", F1: "hlp", Esc: "Exit_actmd", M: "pluginManager_GUI()", F2: "OpenShortcutsHelp", L: "classTool"
-		, H_caption: TXT.HST__name, S_caption: TXT.SET_chnl, O_caption: TXT.ORG__name, C_caption: TXT._cfilep, X_caption: TXT._cfolderp, F_caption: cfiled 
+		, H_caption: TXT.HST__name, S_caption: TXT.SET_chnl, O_caption: TXT.ORG__name, C_caption: TXT._cfilep, X_caption: TXT._cfolderp, F_caption: TXT._cfiled 
 		, D_caption: TXT.ACT_disable " " PROGNAME, P_caption: TXT._pitswp, T_caption: TXT._ot, E_caption: TXT.SET__name
 		, F1_caption: TXT.TRY_help, Esc_caption: TXT.ACT_exit, M_caption: TXT.PLG__name, F2_caption: TXT.try_pstmdshorts, L_caption: TXT.IGN__name}
 }
@@ -1271,7 +1273,7 @@ updt:
 addToWinClip(lastEntry, extraTip)
 {
 	API.blockMonitoring()
-	ToolTip, System Clipboard %extraTip%
+	PasteModeToolTip( "System Clipboard " extraTip,1)
 	if CURSAVE
 		try FileRead, Clipboard, *c %A_WorkingDir%/%CLIPS_dir%/%lastentry%.avc
 	Sleep, 1000

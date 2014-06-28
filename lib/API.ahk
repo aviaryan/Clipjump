@@ -107,6 +107,7 @@ class API
 				CDS[channel][clip+A_index-1] := CDS[channel][clip+A_index] , CDS[channel][clip+A_index] := ""
 			}
 			manageFIXATE( nc_info.realCURSAVE + 1, new_channel, nc_info.p )
+			IsCurCBActive := 0
 		}
 		; fix vars
 		CN["CURSAVE" nc_info.p] += 1
@@ -197,8 +198,8 @@ class API
 				for k,v in parameters
 					funcps .= Regexreplace(v, ",", "ª") ","
 			}
-			returnV := runfunc(fpath "(" RTrim(funcps, ",") ")")
-			return returnV
+			ret := runfunc(fpath "(" RTrim(funcps, ",") ")")
+			return ret
 		}
 	}
 

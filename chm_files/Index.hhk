@@ -197,6 +197,10 @@
 		<param name="Local" value="docs/history.html#partial">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Show paste mode at fixed position">
+		<param name="Local" value="docs/ini.html#pst_custom_pos">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Action Mode">
 		<param name="Local" value="docs/basic_help.html#actmd">
 		</OBJECT>

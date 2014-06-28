@@ -9,7 +9,7 @@ pluginManagerGui:
 pluginManager_GUI(){
 	static wt, ht
 	static searchTerm, pluginMLV
-	wt := 600 ;(A_ScreenWidth/2.5) - 14
+	wt := 650 ;(A_ScreenWidth/2.5) - 14
 	ht := 400
 	DidDelete := 0
 
@@ -18,10 +18,10 @@ pluginManager_GUI(){
 	Gui, -MaximizeBox
 	Gui, Font,, Consolas
 	Gui, Add, Edit, % "x7 y7 w" wt " vsearchTerm gpluginMSearch", 
-	Gui, Font,, Courier New
+	;Gui, Font,, Courier New
 	Gui, Add, ListView, % "xp y+10 h" ht-40 " -LV0X10 vpluginMLV gpluginMLV -Multi w" wt, % TXT._name "|" TXT._tags "|" TXT._author "|hidden"
 	Gui, PluginM:Default
-	LV_ModifyCol(1, 5*wt/12) , LV_ModifyCol(2, 4*wt/12-4) , LV_ModifyCol(3, wt/4) , LV_ModifyCol(4, 0)
+	LV_ModifyCol(1, 4*wt/12) , LV_ModifyCol(2, 5*wt/12-4) , LV_ModifyCol(3, 3*wt/12) , LV_ModifyCol(4, 0)
 	updatePluginList()
 	Gui, Font
 	; The menu
@@ -66,6 +66,7 @@ plugin_Run:
 	Gui, pluginM:Default 	; set it def again incase gui was changed
 	if (ret != "") && !(Instr(filepath, "external.") == 1)
 		guiMsgBox(plugin_displayname " Return", ret, "pluginM")
+	Gui, pluginM:Default 	; for the SB cmd below to work
 	SB_SetText(TXT.PLG_sb_exit " - " plugin_displayname)
 	EmptyMem()
 	return
@@ -77,11 +78,12 @@ plugin_edit:
 
 plugin_showprops:
 	gosub plugin_getSelected
-	disText := ""
+	tempObj := {}
 	for key,value in PLUGINS["<>"][dirNum]
 		if key not in #,`*,silent,previewable
-			disText .= key "  -  " value "`n"
-	guiMsgbox(plugin_displayname " " TXT._properties, disText, "pluginM")
+			tempObj[key] := value
+	ObjectEditView( tempObj, Array(tempObj["Name"], "pluginM", TXT._properties, (A_ScreenWidth/2)>700 ? 620 : 500 ) , 1  )
+	;guiMsgbox(plugin_displayname " " TXT._properties, disText, "pluginM")
 	EmptyMem()
 	return
 
