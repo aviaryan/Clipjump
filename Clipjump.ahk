@@ -1,7 +1,7 @@
 /*
 	Clipjump
 
-	Copyright 2013 Avi Aryan
+	Copyright 2013-14 Avi Aryan
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -85,8 +85,7 @@ try Clipboard := ""
 
 ;Global Data Holders
 Sysget, temp, MonitorWorkArea
-global WORKINGHT := tempbottom-temptop
-global restoreCaller := 0
+global WORKINGHT := tempbottom-temptop, restoreCaller := 0, startUpComplete := 0
 
 ;Global Inits
 global CN := {}, CUSTOMS := {}, CDS := {}, CPS := {}, SEARCHOBJ := {}, HISTORYOBJ := {}, TOTALCLIPS, ACTIONMODE := {}, PLUGINS := {}, STORE := {}
@@ -126,7 +125,6 @@ If !FileExist(CONFIGURATION_FILE)
 else if (ini_Version != VERSION)
 {
 	save_default(0) 			;0 corresponds to selective save
-	FileDelete, lib\classTool.ahk 		; REMOVED
 	gosub Reload 		; Update plugin includes with what the user has incase he updates his Clipjump
 }
 
@@ -210,13 +208,14 @@ OnExit, exit
 fix_FixateFiles()
 
 EmptyMem()
+startUpComplete := 1
 return
 
 ;Tooltip No 1 is used for Paste Mode tips, 2 is used for notifications , 3 is used for updates , 4 is used in Settings , 5 is used in Action Mode
 ;6 used in Class Tool, 7 in API (Plugin) , 8 used in Customizer, 9 used in history tool, 10 in edit clips, 11 in Channel Organizer
 
 ;OLD VERSION COMPATIBILITES TO REMOVE
-; FIXATE
+; fix_FIXATEFiles()
 
 fix_FixateFiles(){
 	loop % CN.Total
