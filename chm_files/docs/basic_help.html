@@ -154,7 +154,7 @@ This means the Clip is Fixed there. As said above , <strong class="mild">pressin
 <h3><a name="editclip">Edit Clips in Paste Mode</a></h3>
 <i>[v10.6+]</i> Press <kbd>H</kbd> in <strong class="mild"><a href="#pastemd">[Paste Mode]</a></strong> to start editing a clip. <br/> 
 The <strong class="mild"><a href="#pastemd">[Paste mode]</a></strong> will end and your default_editor or default_image_editor will open the clip.
-<a name="default_editor">The default_editor and default_image_editor</a> can be configured from the System section of settings.ini. <br/> 
+<a name="default_editor">The default_editor and default_image_editor</a> can be configured from the System section of <a href=ini.html>settings.ini</a>. <br/> 
 Once the editor comes up, change the clip according to needs, save the changes and then <b>exit the editor</b>. <br/>
 Clipjump will respond to the exit and update the clip. Alternatively press Esc anytime to exit. 
 <br/>Editing works for all types of clips but for text clips all formatting will be lost when they are updated.
@@ -262,21 +262,27 @@ run = holdclip</pre>
 <br/><br/>
 
 <!-- ************************************************************************************************************************* -->
-<h2><a name="conf">Configuration</a></h2>
+<h2><a name="custom">Customization</a></h2>
 
 <!-- ------------------------------------------------------------------------------------------------------------------------- -->
 <h3><a name="paste">Changing Paste-Mode shortcut</a></h3>
-To force Clipjumps <strong class="mild"><a href="#pastemd">[Paste Mode]</a></strong> to be activated by some other key other than <kbd>Ctrl</kbd> + <kbd>V</kbd>, you can use the <a href="settings.html">Settings Editor</a>of Clipjump. <br/>
+To force Clipjumps <strong class="mild"><a href="#pastemd">[Paste Mode]</a></strong> to be activated by some other key other than <kbd>Ctrl</kbd> + <kbd>V</kbd>, you can use the <a href="settings.html">Settings Editor</a> of Clipjump. <br/>
 Simply open the editor and look for the <code>Paste Mode(Ctrl +..)</code> value in the <code>Shortcuts</code> group. Change the default <i>V</i> in the box to some other key to make the <strong class="mild"><a href="#pastemd">[Paste Mode]</a></strong> to be activated by the <kbd>Ctrl</kbd>-combination of that key. Make the value blank  to disable <strong class="mild"><a href="#pastemd">[Paste Mode]</a></strong>.
 <br/><br/>
 
 <!-- ------------------------------------------------------------------------------------------------------------------------- -->
 <h3><a name="beep">Sound when copied</a></h3>
 <i>[v9.8.1+]</i> Clipjump can be configured to make system beep when some data is copied to it. The setting can be found in the <a href="settings.html">Settings Editor</a> as "Beep when copied.<br/>
-To change the frequency of the beep played, navigate to the Advanced section of settings.ini and change the value of <code>beepFrequency</code> to your liking.
+To change the frequency of the beep played, navigate to the Advanced section of <a href=ini.html>settings.ini</a> and change the value of <code>beepFrequency</code> to your liking.
+<br/><br/>
+
+<!-- ------------------------------------------------------------------------------------------------------------------------- -->
+<h3><a name="paste">Overview</a></h3>
+
+Clipjump offers two main graphical interfaces to customization:
+<ul>
+</ul>
 <br/><br/><br/>
-
-
 <!-- ************************************************************************************************************************* -->
 <h2><a name="ctrl">Controlling Clipjump</a></h2>
 
@@ -291,7 +297,7 @@ To have more control over Clipjump, see <a href="../clipjumpcontroller.html">Cli
 Clipjump can be temporarily automatically suspended when a certain window is active with this feature. The feature requires the active window's class which can be very easily managed with the <b>Ignore(d) Windows Manager</b> located in the Tray Menu>Tools or in the <strong class="mild"><a href="#actmd">[Action Mode]</a></strong> with easy key <kbd>L</kbd>. <br/>
 Use the Add Class button in the manager to start a tooltip application that shows the class of the active window. To make a window active, simply make it foreground by left-clicking on it.<br/>
 Use Delete Class button to delete a value.<br/><br/>
-Note that you will have to restart Clipjump once you have made changes to the Settings.ini for them to take effect.
+Note that you will have to restart Clipjump once you have made changes to the <a href=ini.html>settings.ini</a> for them to take effect.
 <br/><br/>
 
 <!-- ------------------------------------------------------------------------------------------------------------------------- -->
