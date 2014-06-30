@@ -476,7 +476,7 @@ validate_Settings()
 	if ini_KeepSession is not integer
 		ini_KeepSession := 1
 
-	if !ini_KeepSession
+	if !ini_KeepSession && !startUpComplete
 		clearData()
 
 	TOTALCLIPS := ini_Threshold + ini_Maxclips
