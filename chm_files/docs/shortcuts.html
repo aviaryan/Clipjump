@@ -33,7 +33,7 @@ As releasing both keys inserts the current displayed clip (<b>Paste action</b>),
 <ul>
 	<li>Press <kbd>Ctrl</kbd> + <kbd>V</kbd></li>
 	<li>Keep <kbd>Ctrl</kbd> pressed</li>
-	<li>Release <kbd class="inverse">V</kbd></li>
+	<li>Release <kbda>V</kbda></li>
 </ul>
 enters the intrinsic <b>paste mode</b>. While being in <b>paste mode</b> ( <kbd>Ctrl</kbd> pressed) a few more actions can be performed by pressing keys:
 
@@ -63,9 +63,9 @@ The following key sequence enters <a href=basic_help.html#spm><b>Search Mode</b>
 <ul>
     <li>While <kbd>Ctrl</kbd> pressed ...</li>
     <li>Press <kbd>F</kbd></li>
-	<li>Release <kbd class="inverse">Ctrl</kbd> and <kbd  class="inverse">F</kbd></li>
+	<li>Release <kbda>Ctrl</kbda> and <kbda>F</kbda></li>
 </ul>
-Now you are in <b>Search Mode</b> within <b>Paste Mode</b> and several commands are available via keypress:
+Now you are in <b>Search-Paste Mode</b> and several commands are available via keypress:
 <pre>
 <kbd>Enter</kbd> - Paste
 <kbd>Home</kbd> / <kbd>Esc</kbd> - Cancel
@@ -75,7 +75,7 @@ Now you are in <b>Search Mode</b> within <b>Paste Mode</b> and several commands 
 
 See <a href=custom.html>ClipjumpCustom.ini</a> to change these keys<br>
 
-<h3>Cancel, Delete, Copy, Move and Delete All Mode</h3>
+<h3>Cancel Mode, Delete Mode, Copy Mode, Move Mode and Delete All Mode</h3>
 While being in <a href="#pstmd">Paste Mode</a>, pressing <kbd>X</kbd> repeatedly toogles between several modes:
 
 <pre>
@@ -84,8 +84,10 @@ While being in <a href="#pstmd">Paste Mode</a>, pressing <kbd>X</kbd> repeatedly
 <kbd>X</kbd> - <kbd>X</kbd> - <kbd>X</kbd> - Move Mode - Move clip to a different channel
 <kbd>X</kbd> - <kbd>X</kbd> - <kbd>X</kbd> - <kbd>X</kbd> - Copy Mode - copy clip to a different channel
 <kbd>X</kbd> - <kbd>X</kbd> - <kbd>X</kbd> - <kbd>X</kbd> - <kbd>X</kbd> - Delete All Mode - deletes all clips
-
 </pre>
+
+Note that <b>Cancel Mode</b>, <b>Delete Mode</b>, <b>Move Mode</b>, <b>Copy Mode</b> and <b>Delete All Mode</b> are inter-related. The program cycles through these modes when you press <kbd>X</kbd> while holding <kbd>Ctrl</kbd>.<br/>
+So, pressing <kbd>X</kbd> while holding <kbd>Ctrl</kbd> in <b>Delete All Mode</b> will switch back to <b>Cancel Mode</b>. 
 
 <h2>Action Mode</h2>
 <a name="actmd"></a>
