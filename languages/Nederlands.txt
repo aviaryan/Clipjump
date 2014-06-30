@@ -1,0 +1,384 @@
+;Nederlandse vertaling voor Clipjump
+;Voor het eerst gemaakt door Fred van Waard uit Hilversum, Nederland
+
+; OPMERKINGEN
+; Opmerkingen mogen alleen aan het begin van de regel staan
+; Nieuwe sleutels worden in de toekomstige versies aan de onderkant toegevoegd voor gemakkelijk en consistente ontwikkeling.
+; Voeg geen versie commentaar toe wanneer een nieuwe sleutel wordt toegevoegd in het vertaalbestand.
+; De meeste sleutels hebben het formaat XXX_ waar XXX staat is dat de component naam
+; Vertaal niet het woord 'Clipjump'
+; & in &Bekijk is om de sneltoest Alt+P aan te maken wanneer het venster actief is. Wanneer er vertaald wordt in een niet engelse taal, laat dan het '&' teken weg. En als het vertaald wordt in een engelse taal gebruik dan wel het '&' teken.
+; alleen wanneer u er zeker van bent.
+
+;======
+;v9.9.0.1
+;======
+
+TIP_text = Tekst
+TIP_file_folder = Bestand/Map
+TIP_copied = Verplaatst naar
+TIP_empty1 = Opname 0 van 0
+TIP_empty2 = is leeg
+TIP_error = [Het voorbeeld/pad kan niet geladen worden]
+TIP_more = [Meer]
+TIP_pasting = Doorgeven...
+TIP_deleted = Verwijderd
+TIP_alldeleted = Alle gegevens zijn verwijderd
+TIP_cancelled = Geannuleerd
+TIP_fixed = [GEMAAKT]
+TIP_noformatting = GEEN-INDELING
+TIP_filepath = Bestandspad(en) gekopieerd naar
+TIP_folderpath = Actieve map pad gekopieerd naar
+TIP_activated = GEACTIVEERD
+TIP_deactivated = GEDEACTIVEERD
+TIP_cancelm = Annuleer plak opdracht
+TIP_delm = Verwijder huidige
+TIP_delallm = Verwijder alles
+TIP_modem = Laat de Ctrl toets los om te bevestigen
+          = Druk op X om te schakelen van modus
+
+ABT__name = Over
+ABT_reset = Herstart Clipjump
+ABT_resetM = Weet u het zeker dat u Climpjump wilt resetten door alle opnames en instellingen te verwijderen?
+ABT_removeStart = Een opstart ingang voor Clipjump is gevonden. Wilt u deze ook verwijderen?
+ABT_resetfinal = zal nu gesloten worden.
+ABT_noupdate = Geen updates beschikbaar
+
+HST__name = Klembord historie
+HST_preview = Bekijk
+HST_del = Verwijder Item
+HST_clear = Schoon historie op
+HST_search = Zoek Filter
+HST_partial = Gedeeltelijk
+HST_clip = Opname
+HST_date = Datum
+HST_size = Grootte(B)
+HST_dconsump = Schijf gebruik
+HST_m_prev = Voorbeeld
+HST_m_copy = Kopie			(Ctrl+C)
+HST_m_insta = Insta-Plak 	(Spatie)
+HST_m_export = Exporteer opname 	(Ctrl+E)
+HST_m_ref = Ververs
+HST_m_del = Verwijder
+
+PRV__name = Voorbeeld
+PRV_copy = Kopieer naar klembord
+PRV_find = Vind
+
+SET__name = Instellingen
+SET_main = Hoofd
+SET_limitmaxclips = Limiteer het maximum aantal actieve klemborden
+SET_maxclips = Minimum aantal actieve klemborden
+SET_threshold = Klembord drempel
+SET_quality = Kwaliteit van het voorbeeld miniatuur
+SET_copybeep = Piep als er wordt gekopieerd
+SET_ismessage = Laat de verificatie Tooltip zien bij het kopieeren
+SET_keepsession = Behoud klembord gegevens totdat de toepassing opnieuw opstart
+SET_formatting = Begin met de niet opmaak modus ingeschakeld
+SET_cb = Klembord historie
+SET_daystostore = Aantal dagen om de items in de historie te bewaren
+SET_images = Bewaar plaatjes in historie
+SET_shortcuts = Sneltoetsen
+SET_pst = Plak-Modus (Ctrl + ..)
+SET_actmd = Actie Modus
+SET_chnl = Selecteer kanaal
+SET_channels = Kanalen
+SET_ischannelmin = Gebruik minimaal GUI
+SET_advanced = Zie geavanceerde instellingen
+SET_manageignore = Beheer genegeerde vensters
+SET_cancel = Annuleer
+SET_apply = Bevestig
+
+SET_advanced_error = kan het instellingenbestand (settings.ini) of Notepad niet vinden? Zorg ervoor dat beide bestaan op de juiste plaatsen.
+                   =
+                   = Probeer contact te leggen met de auteur als het probleem zich blijft voordoen.
+SET_T_limitmaxclips = Dient de Clipjump's klemborden te worden gelimiteerd?
+                    = Gecontroleerd = ja
+SET_T_maxclips = Wat is het minimale aantal klemborden die u gelijktijdig actief wilt hebben.
+               = Als u er 20 wilt, SPECIFICEER dan 20.
+SET_T_threshold = De drempel is het extra aantal Klembord dat actief zal zijn dan je minimale limiet..
+                = De best aanbevolen waarde is 10.
+                =
+                = [TIP] - Drempel = 1 zorgt ervoor dat Clipjump het exact maximum aantal klemborden zal bewaren.
+SET_T_quality = De kwaliteit van Tumbnail vertoningen die u wilt hebben.
+              = Aanbevolen waarde is 90
+              = Kan tussen de 1 - 100 zijn
+SET_T_copybeep = Controleer of u de aanpasbare pieptoon hoort wanneer er gegevens aan Clipjump worden toegevoegd.
+               =
+               = U kunt de piep frequentie wijzigen in de [Geavanceerde] sectie van Settings.ini
+SET_T_keepsession = Dient Clipjump door te gaan met de bewaarde opnames nadat het is herstart
+SET_T_ismessage = Deze waarde bepaalt of u het bevestigingsbericht wilt zien of niet tijdens het kopieer/knip opdracht.
+SET_T_daystostore = Aantal dagen dat de klembord opnames bewaart zullen worden
+SET_T_images = Dient de klembord opnames bewaart te worden in de historie ?
+SET_T_chnl = Sneltoest om het "Selecteer kanaal venster" te tonen
+           = De snelkoppeling instellen op Niets voor het uitschakelen van de toetsencombinatie
+SET_T_cfilep = Sneltoest om het geselecteerd bestandspad te kopiëren
+             = De snelkoppeling instellen op Niets voor het uitschakelen van de toetsencombinatie
+SET_T_cfolderp = Sneltoest om het geselecteerde mappad te kopiëren.
+               = De snelkoppeling instellen op Niets voor het uitschakelen van de toetsencombinatie
+SET_T_cfiled = Sneltoest om het geselecteerde bestands inhoud te kopiëren naar Clipjump.
+             = De snelkoppeling instellen op Niets voor het uitschakelen van de toetsencombinatie
+SET_T_ot = Selecteer sneltoets voor [één keer stoppen] functie.
+         = [One Time Stop] feature will make Clipjump ignore the next data that is transferred to the system Clipboards from the time it is activated.
+         = De snelkoppeling instellen op Niets om de toetsencombinatie vrij te maken
+SET_T_pitswp = De sneltoets om de PitSwap functie te activeren. (ook beschikbaar bij de Actie modus)
+             = Voor meer details over deze functie gebruik zie het Helpbestand.
+SET_T_ischannelmin = Maakt het kanaal GUI minimaal in details en meer productiever.
+                   = Het minimale GUI kanaal zal geen plaatjes bevatten en u dient de ENTER toets te gebruiken om te bevestigen.
+
+CNL__name = Kanalen
+CNL_choose = Kies een Meervoudig Klembord kanaal
+CNL_channelname = Kanaal naam
+CNL_advice1 = Kanaal 0 (Standaard) is het hoofdkanaal en dient normaal gebruikt te worden.
+CNL_advice2 = Kanaalnaam wijziging worden automatisch bewaart.
+CNL_advice3 = De volgende kanalen zijn beschikbaar alleen als de vorige is geactiveerd (gebruikt).
+CNL_use = Gebruik kanaal
+CNL_cancel = Annuleer
+CNL_statusbar = Opnames in het kanaal
+
+TRY_incognito = Incognito modus
+TRY_disable = Uitschakelen
+TRY_startup = Starten bij opstarten computer
+TRY_updates = Controleer voor updates
+TRY_help = Help
+TRY_restart = Opnieuw starten
+TRY_exit = Sluiten
+
+ACT__name = ACTIE MODUS
+ACT_enable = Inschakelen
+ACT_disable = Uitschakelen
+ACT_exit = Sluit venster
+
+IGN__name = Negeer Windows manager
+IGN_add = Voeg Windows soort toe
+IGN_delete = Verwijder soort
+
+LNG_error = Engelse taal bestand niet gevonden in languages/english.txt. Als je dit opzettelijk hebt gedaan, gelieve het terug te zetten.
+
+_cfilep = Kopieer bestand pad(en)
+_cfolderp = Kopieer actieve map pad
+_cfiled = Kopieer bestandsgegevens
+_ot = Eenmalige stop
+_pitswp = Start wisseling
+_exportedto = geëxporteerd naar
+
+
+;============
+;9.9.0.2
+;============
+
+IGN_Restartmsg = Het is nodig om Climpjump te herstarten voordat de wijzigingen effect hebben. Wilt u herstarten?
+IGN_tip = Druk op de spatiebalk om de soort toe te voegen.
+        = Druk op Esc om de soort overname tool te sluiten.
+
+;===========
+;9.9.1
+;===========
+
+TRY_options = Opties
+TRY_tools = Gereedschap
+HST_delall_msg = Weet u het zeker dat het de Clipjump's historie wilt leegmaken ?
+; de volgende sleutel is veranderd in versie 9.9.1 en zoals je ziet is de invoer hier
+SET_T_actmd = De sneltoets om Clipjump actie modus te openen.
+            = De actie modus biedt zoals u wellicht weet de interface voor bijna alle functionaliteit in Clipjump.
+            = Als u systeem niveau sneltoetsen wilt hebben voor deze functionaliteit, dan kunt u ze vinden in de Instellingen.
+
+;==========
+;9.9.1.9
+;==========
+
+CNL_delete = Verwijder het kanaal
+CNL_delmsg = Wilt u echt dit kanaal verwijderen? Opgemerkt dient te worden dat het proces onomkeerbaar is en dat alle opnames welke bewaart zijn in dit kanaal verloren gaan.
+CNL_del_default = Verwijderen van het standaard kanaal (#0) is niet toegestaan.
+TIP_empty3 = Gebruik de Ctrl toets om te sluiten.
+UPD_restart = Clipjump zal nu opnieuw opstarten om de update te bevestigen.
+UPD_automsg = Klik op Ja om Clipjump automatisch te updaten of Nee om naar de website te gaan.
+
+;=========
+;10
+;=========
+
+CHC_name = Selecteer kanaal
+TIP_done = Gedaan
+TIP_copycutfailed = Kopiëren/Verplaatsen niet gedaan
+TIP_copy = Kopieer huidige opname
+TIP_move = Verplaats huidige opname
+
+;========
+;10.5 beta
+;========
+
+TIP_delallprompt = WAARSCHUWING
+                 = Wilt u echt alle opnames verwijderen uit het huidige kanaal?
+                 = Druk op J om te bevestigen.
+                 = Druk op N om te annuleren.
+
+;=======
+;10.6
+;=======
+
+TIP_confirmcopy = U ziet deze vraag om bevestiging omdat dit een beschermd kanaal is.
+                = Gaat u akkoord met het kopiëren naar dit kanaal ?
+                = Druk op J voor Ja
+                = Druk op N voor Nee
+ABT_seehelp = Wilt u je de help van Clipjump zien ?
+ABT_runadmin = Clipjump wordt niet uitgevoerd met Beheerders (Administrator) rechten
+             = Dit kan mogelijk leiden tot het onjuist functioneren van het programma.
+             = 
+             = [Deze boodschap wordt maar eenmaal vertoont]
+ABT_cjready = Hi!
+            = Clipjump is nu geactiveerd.
+            = Probeer om snel te kopiëren en te plakken...
+TIP_editing = Bewerken....
+            = Druk op Esc om te annuleren
+TIP_editdone = Opname is bewerkt
+TIP_editnotdone = Opname is NIET bewerkt !
+
+;======
+;10.7
+;======
+
+HST_m_edit = Bewerk opname 		(Ctrl+H)
+
+;======
+;10.7.2.6b
+;======
+
+_name = Naam
+_tags = Labels
+_author = Auteur
+_run = Uitvoeren
+_properties = Eigenschappen
+PLG_properties = Eigenschappen (Alt+Enter)
+PLG__name = Plugin beheer
+PLG_fetchparam = parameter van de plug-in
+PLG_delmsg = Weet u het zeker dat u wilt doorgaan met het verwijderen van de volgende plugin?
+PLG_restartmsg = U heeft sommige plug-ins verwijderd.
+               = Houd er rekening mee dat plug-ins (behalve die van veiligheids klasse) pas van werken als het programma opnieuw wordt gestart.
+               = Wilt u doorgaan?
+API_extplugMiss = De volgende externe plug-in bestand wordt vermist.
+API_plugCorrupt = De volgende plug-in is beschadigd of wordt vermist.
+
+;=====
+;10.7.5
+;=====
+
+PLG_Sb_running = Uitvoeren Plug-in
+PLG_Sb_exit = Plug-in afgesloten
+PLG_Sb_deleted = Plug-in verwijderd
+SET_T_pst = Één teken combinatie om te gebruiken met Ctrl om de [PLAK MODUS] te activeren
+          = Opgemerkt dient te worden dat de letters  E C X Z S A F H zijn gereserveerd.
+          = 
+          = Zorg ook ervoor dat u 'Kopie omzeilen Clipjump' ziet in het help-bestand
+SET_pformat = Standaard Plak formaat
+SET_T_pformat = De indeling plakken wat u actief wilt hebben bij het opstarten van Clipjump. '-origineel' is de standaard Clipjump plaktechniek.
+SET_t_plugM = Sneltoest om de Plug-in beheer te openen
+PLG_edit = Bewerken (F2)
+CUS_error = Er was een fout in een ClipjumpCustom.ini routine?
+
+;=====
+;10.7.8
+;=====
+
+TRY_pstmdshorts = Plak modus sneltoetsen
+
+;=====
+;10.9
+;=====
+
+TIP_holdclip = Druk op Ctrl+V om te plakken
+             = Druk op Insert om de opname aan het kanaal toe te voegen
+             = Druk op Esc om te sluiten
+SET_holdclip = Houd Clip functie
+SET_T_holdclip = Kopieer de geselecteerde tekst of het item naar een buffer en voorkom dat het wordt worden vastgelegd door Clipjump.
+               = U kunt het dan vervolgens de opname plakken en verplaatsen naar een kanaal of het afwijzen.
+SET_keepactivepos = Huidige actieve opname positie behouden
+SET_T_keepactivepos = Wilt u dat Clipjump de laatste actieve opname in de plakmodus onthoudt?
+                    = het niet aanvinken zal er voor zorgen dat de Clipjump plakmodus altijd start vanaf Opname 1.
+
+;=====
+;11
+;=====
+
+HST_viewimage = [PLAATJE]
+ORG__name = Clipjump kanaal verzamelplaats
+ORG_m_inc = Omhoog verplaatsen    (Alt+Up)
+ORG_m_dec = Omlaag verplaatsen    (Alt+Down)
+ORG_error = Niet ondersteund
+ORG_countStatus = Objecten die worden aangeboden
+SET_org = Kanaal verzamelplaats
+ORG_delCnlMsgTitle = Kies kanaal operatie
+ORG_delCnlMsg = Wat wilt u doen met het geselecteerde kanaal ?
+      = Kanaal permanent verwijderen = Ja
+      = Het kanaal legen maken = Nee
+      = Doe niets = Annuleren
+_rename = Hernoem
+ORG_renameAsk = Geeft een nieuwe naam in voor kanaal nummer
+TIP_initMsg = Initialiseren Clipjump
+
+;======
+;11.2
+;======
+
+TIP_tagPrompt = Schrijfruimte gescheide tags voor deze opname
+SET_startSearch = Start plakmodus met zoeken ingeschakeld
+SET_T_startSearch = Maakt Ctrl+V beschikbaar voor de plakmodus met de zoek modus ingeschakeld. 
+                  = Dit zal je helpen als je niet de CTRL toets ingedrukt wil houden om door opnames te navigeren. Zie ook 'Zoek in plakken modus' in het Help-bestand.
+_editing = Bewerken
+
+; Note to Translator > please make sure the out in Ctrl+v+F1 is aligned properly in TIP_help
+TIP_help = 
+= Release Ctrl - Plakken
+= V            - Een opname naar voren verplaatsen
+= C            - Een opname naar achteren verplaatsen
+= X            - Annuleer modus, Verplaats Opname, Verwijder Opname, Kopieer Opname
+= Z            - Wijzig het plak formaat
+= Space        - HERSTEL
+= S            - Zet de huidige opname naar het systeem klembord
+= E            - Exporteer
+= Up/Down      - Wijzig kanaal +1/-1
+= A            - Verplaats de eerste opname van het kanaal
+= 1..9         - Spring naar de ..e opname van de actieve opname
+= F            - Zoek
+= H            - Bewerk
+= Enter        - Start meervoudig plak sessie
+= T            - Tag
+= F1           - Help
+= 
+= Druk op V om dit venster te sluiten
+
+;=======
+; 11.2.3
+;=======
+_more_options = Meer opties
+ORG_m_openpst = Open in Plak modus (Ctrl+O)
+_!x = Alt+X
+_!c = Alt+C
+ORG_m_insta = Insta-Plak (Spatiebalk)
+
+;=======
+; 11.3
+;=======
+_destChannel = Bestemmingskanaal
+_maintenance = Onderhoud
+_new = Nieuw
+ORG_createnew = Maak een nieuwe opname
+ORG_createnewpr = Nieuwe opname zal gemaakt worden in het volgende kanaal
+ORG_newchname = Nieuwe kanaal naam
+
+;========
+; 11.4 - Toegevoegd tooltips voor Kanaal verzamelplaats (hoppfrosch)
+;=======
+ORG_search = Zoek opname
+ORG_up = Verplaats de geselecteerde items een plaats omhoog
+ORG_down = Verplaats de geselecteerde items een plaats omlaag
+ORG_edit = Bewerk het geselecteerde item
+ORG_openPastemode = Opent de plak modus interface met de geselecteerde opname actief
+ORG_props = Bewerk de geselecteerde opname instellingen (tags, vaste kenmerken)
+ORG_cut = Knip de geselecteerde opname en plak deze in een ander kanaal
+ORG_copy = Kopieer de geselecteerde opname en dupliceer deze naar een ander kanaal
+ORG_delete = Verwijder het geselecteerde item
+; ----
+
+SET_revFormat2Def = Start de plak modus altijd met de standaard opmaak
+SET_T_revFormat2Def = Als deze optie is aangevinkt zal altijd de plak modus opstarten net de standaard opmaak (welke standaard 'origineel'/'geen' is).

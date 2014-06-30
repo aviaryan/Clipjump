@@ -141,14 +141,10 @@
 			<param name="Local" value="docs/basic_help.html#winclip">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Shortcut List">
-			<param name="Local" value="docs/basic_help.html#short">
+			<param name="Name" value="Paste Mode Keys">
+			<param name="Local" value="docs/shortcuts.html#pstmd">
 			</OBJECT>
 	</UL>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Shortcuts">
-		<param name="Local" value="docs\shortcuts.html">
-		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Accessory Features">
 		</OBJECT>
@@ -263,6 +259,10 @@
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Clipjump Controller">
 		<param name="Local" value="clipjumpcontroller.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Shortcuts">
+		<param name="Local" value="docs\shortcuts.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Changelog">

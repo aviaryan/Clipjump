@@ -1,6 +1,7 @@
 ;@Plugin-Name Common Formats
 ;@Plugin-Description Shows a gui to paste with a format from many types of predefined formats. Can be easily extended to include more formats. 
-;@Plugin-Description For that edit the pformat.commonformats.lib/user.ahk file. Only works for Text ([Text] or [File/Folder]) type data.
+;@Plugin-Description For that edit the pformat.commonformats.lib/user.ahk file. This file if needed is created when you run this plugin for the first time. 
+;@Plugin-Description Only works for Text ([Text] or [File/Folder]) type data.
 ;@Plugin-Author Avi
 ;@Plugin-Tags pformat
 ;@Plugin-version 0.4
@@ -10,7 +11,7 @@
 
 ;------------------------------------------------------------- Paste Formats ------------------------------------
 
-; ###### ADD USER paste formats in base.ahk file #####
+; ###### ADD USER paste formats in user.ahk file #####
 #Include *i %A_ScriptDir%\plugins\pformat.commonformats.lib\user.ahk
 ; ####################################################
 
@@ -94,6 +95,9 @@ plugin_pformat_commonformats(zin){
 		FileAppend, % "; Add User paste formats here", % ztF
 	}
 
+	GuiControl, ChooseString, zchosenformat, % zchosenformat="" ? "None" : zchosenformat ; choose the previous active format
+	gosub zchosenformat
+	
 	while !zDone
 		sleep 200
 	gosub plugin_pformat_commonformats_end
