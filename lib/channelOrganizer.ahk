@@ -192,6 +192,7 @@ chOrgDown: 	; dont make these labels critical
 
 
 chOrgDelete:
+	Critical
 	gosub chOrg_isChActive
 	if !isChActive {
 		gosub chOrg_getSelected
@@ -200,7 +201,8 @@ chOrgDelete:
 			chOrg_notification(TXT.ORG_error)
 			return
 		}
-		API.deleteClip( ch := Substr(rSel, 1, Instr(rSel, "-")-1) , cl := Substr(rSel, Instr(rSel, "-")+1) )
+		if !API.deleteClip( ch := Substr(rSel, 1, Instr(rSel, "-")-1) , cl := Substr(rSel, Instr(rSel, "-")+1) )
+			return
 		chOrg_notification(TXT.ORG_clpdelMsg)
 		LV_Delete(last_Row)
 		loop % LV_GetCount()
@@ -307,7 +309,7 @@ chOrg_isChActive:
 chOrg_getSelected:
 	Gui, chOrg:Default
 	temp_row_s := 0 , rSel := ""
-	while ( temp_row_s := LV_GetNext(temp_row_s) )
+	while ( temp_row_s := LV_GetNext(temp_row_s, "F") )
 	{
 		LV_GetText(out_ch, temp_row_s, 1) , LV_GetText(out_cl, temp_row_s, 2)
 		rSel .= out_ch "-" out_cl "`n"

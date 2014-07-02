@@ -390,3 +390,9 @@ ABT_info = Clipjump is a Windows only Clipboard Manager created in AutoHotkey.
         = It was inspired from Skrommel's application ClipStep.
 _Save = Save
 SET_T_keepsession = Should Clipjump continue with all the saved clipboards (only of default channel 0) after it's restart
+
+;========
+; 11.5
+;========
+_ClipjumpError = Clipjump Error
+TIP_genErrMsg = Please contact the author if you continue to have problems.

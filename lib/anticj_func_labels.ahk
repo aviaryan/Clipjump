@@ -169,6 +169,10 @@ mIboxbuttonCancel:
 
 }
 
+errMsgBox(Text){
+	MsgBox, 48, % TXT["_clipjumpError"], % text "`n`n" TXT.TIP_genErrMsg
+}
+
 /*
 a := {a: "b",c: "d"}
 ret := ObjectEditor(a)
