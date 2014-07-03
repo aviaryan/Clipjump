@@ -141,16 +141,17 @@ table{
 }
 
 /* **** kbd.css **/
-kbd{
+kbd, kbda
+{
     -moz-border-radius:3px;
     -moz-box-shadow:0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
     -webkit-border-radius:3px;
     -webkit-box-shadow:0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
-    background-color:#333;
-    border:1px solid #ccc;
+    background-color: #f7f7f7;
+    border:1px solid #333333;
     border-radius:3px;
     box-shadow:0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
-    color:#f7f7f7;
+    color:#333;
     display:inline-block;
     font-family:Arial,Helvetica,sans-serif;
     font-size:11px;
@@ -160,7 +161,6 @@ kbd{
     text-shadow:0 1px 0 #fff;
 }
 
-kbd.inverse{
-	background-color:#f7f7f7;
-	color:#333;
+kbd.inverse, kbda{
+	 border:1px solid #ccc;
 }
