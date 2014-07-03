@@ -15,6 +15,7 @@
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Getting Started">
+		<param name="Local" value="docs/basic_help.html">
 		</OBJECT>
 	<UL>
 		<LI> <OBJECT type="text/sitemap">
@@ -22,20 +23,28 @@
 			<param name="Local" value="docs/basic_help.html#bu">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Paste Mode">
+			<param name="Local" value="docs\basic_help.html#pastemd">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Action Mode">
 			<param name="Local" value="docs/basic_help.html#actmd">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Search in Paste mode">
-			<param name="Local" value="docs/basic_help.html#spm">
+			<param name="Name" value="Copy Clipboard to Buffer (Hold Clip)">
+			<param name="Local" value="docs/basic_help.html#holdclip">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Pasting Formats">
-			<param name="Local" value="docs/basic_help.html#pformat">
+			<param name="Name" value="Customization">
+			<param name="Local" value="docs/basic_help.html#custom">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Channel Organizer">
-			<param name="Local" value="docs/organizer.html">
+			<param name="Name" value="Controlling Clipjump">
+			<param name="Local" value="docs/basic_help.html#ctrl">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Shortcut List">
+			<param name="Local" value="docs\shortcuts.html">
 			</OBJECT>
 	</UL>
 	<LI> <OBJECT type="text/sitemap">
@@ -264,10 +273,20 @@
 		<param name="Name" value="Shortcuts">
 		<param name="Local" value="docs\shortcuts.html">
 		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Changelog">
-		<param name="Local" value="changelog.html">
-		</OBJECT>
+	<UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="General Shortcuts">
+			<param name="Local" value="docs\shortcuts.html#general">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Paste Mode">
+			<param name="Local" value="docs\shortcuts.html#pastemd">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Action Mode">
+			<param name="Local" value="docs\shortcuts.html#actmd">
+			</OBJECT>
+	</UL>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Screenshots (Online)">
 		<param name="Local" value="http://avi-win-tips.blogspot.in/2013/08/clipjumpscreens.html">
@@ -279,6 +298,10 @@
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="FAQ">
 		<param name="Local" value="docs/faq.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Changelog">
+		<param name="Local" value="changelog.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Contact">

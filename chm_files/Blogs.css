@@ -147,8 +147,8 @@ kbd, kbda
     -moz-box-shadow:0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
     -webkit-border-radius:3px;
     -webkit-box-shadow:0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
-    background-color:#f7f7f7;
-    border:1px solid #ccc;
+    background-color: #f7f7f7;
+    border:1px solid #333333;
     border-radius:3px;
     box-shadow:0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
     color:#333;
@@ -159,4 +159,8 @@ kbd, kbda
     margin:0 .1em;
     padding:.1em .6em;
     text-shadow:0 1px 0 #fff;
+}
+
+kbd.inverse, kbda{
+	 border:1px solid #ccc;
 }
