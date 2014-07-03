@@ -236,6 +236,9 @@ class API
 	
 	; deletes a clip
 	deleteClip(channel, clip){
+	Critical
+		if (channel = "") or (clip = "")
+			return 0
 		zbkCh := CN.NG , zbkClip := TEMPSAVE	; create backup of current channel
 		CN["CURSAVE" CN.N] := CURSAVE , CN["TEMPSAVE" CN.N] := TEMPSAVE
 		changeChannel(channel)
@@ -243,6 +246,7 @@ class API
 		changeChannel(zbkCh)
 		if (channel != zbkCh)
 			TEMPSAVE := zbkClip
+		return 1
 	}
 
 	; sets a variable
