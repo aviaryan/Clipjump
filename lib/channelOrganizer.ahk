@@ -15,9 +15,9 @@ channelOrganizer(){
 
 	wt := ini_read("Organizer", "w") , ht := ini_read("Organizer", "h")
 	if !wt
-		wt := A_ScreenWidth>1200 ? 800 : 700
+		wt := A_ScreenWidth>1300 ? 1000 : 850
 	if !ht
-		ht := A_ScreenHeight>800 ? 450 : 400
+		ht := A_ScreenHeight>800 ? 550 : 480
 	w_ofSearch := getControlInfo("button", TXT.HST_search, "w", "s10")
 
 	;enable tooltips
@@ -72,6 +72,7 @@ channelOrganizer(){
 		Menu, chOrgSubM, Add, % TXT.TIP_copy "    (" TXT["_!c"] ")" , chOrgCopy
 	Menu, chOrgLVMenu, Add, % TXT._more_options, :chOrgSubM
 	Menu, chOrgLVMenu, Add
+	Menu, chOrgLVMenu, Add, % TXT.HST_m_ref, chOrg_refresh
 	Menu, chOrgLVMenu, Add, % TXT.HST_m_del, chOrgDelete
 	Menu, chOrgLVMenu, Default, % TXT.HST_m_prev
 

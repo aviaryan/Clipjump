@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 11.4
+;@Ahk2Exe-SetVersion 11.5
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -42,7 +42,7 @@ global mainIconPath := H_Compiled || A_IsCompiled ? A_AhkPath : "icons/icon.ico"
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "11.4"
+global VERSION := "11.5"
 global CONFIGURATION_FILE := "settings.ini"
 
 ini_LANG := ini_read("System", "lang")
@@ -805,7 +805,6 @@ ctrlCheck:
 				PasteModeTooltip(MSG_CANCELLED,1)
 
 			Critical, On 			;Just in case this may be required.
-
 		}
 		else if ctrlRef = delete
 		{
@@ -834,7 +833,9 @@ ctrlCheck:
 				Critical, Off
 				API.blockMonitoring(1) 	; this is done to have the boomerang effect ONCLIPBOARD work.
 				STORE.ClipboardChanged := 0
-				try Coutput := %curPfunction%(Clipboard)
+				zCb := trygetVar("Clipboard")
+				if IsFunc(curPfunction)
+					Coutput := %curPfunction%(zCb) 	; don't try here, the exception in fileread-filemissing-commonformats will nt allow it.
 				if STORE.ClipboardChanged
 					try Clipboard := Coutput , IScurCBACTIVE := 0
 				else ONCLIPBOARD := 1

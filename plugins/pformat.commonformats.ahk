@@ -97,14 +97,14 @@ plugin_pformat_commonformats(zin){
 
 	GuiControl, ChooseString, zchosenformat, % zchosenformat="" ? "None" : zchosenformat ; choose the previous active format
 	gosub zchosenformat
-	
+	zDone := 0 	; used as an identifier in zchosenformat
 	while !zDone
 		sleep 200
 	gosub plugin_pformat_commonformats_end
 	return zOut
 
 commonformatbuttonOK:
-plugin_pformat_commonformats_dopaste:
+;plugin_pformat_commonformats_dopaste:
 	Gui, commonformat:Submit, nohide
 	STORE.ClipboardChanged := 1 , zOut := zedit
 	If (zchosenformat="None") or (zchosenformat="")
@@ -131,8 +131,7 @@ plugin_pformat_commonformats_end:
 
 zchosenformat:
 	Gui, commonformat:Submit, nohide
-
-	if A_GuiEvent=DoubleClick
+	if (A_GuiEvent="DoubleClick") && (zDone!="")
 		gosub commonformatbuttonOK
 	ELSE {
 		if zchosenformat=

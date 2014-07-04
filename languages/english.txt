@@ -396,3 +396,4 @@ SET_T_keepsession = Should Clipjump continue with all the saved clipboards (only
 ;========
 _ClipjumpError = Clipjump Error
 TIP_genErrMsg = Please contact the author if you continue to have problems.
+TRY_reloadcustom = Reload ClipjumpCustom.ini

@@ -101,8 +101,8 @@ trayMenu(destroy=0){
 		Menu, Options_Tray, Add, % TXT.TRY_disable " " PROGNAME, disable_clipjump
 		Menu, Options_Tray, Add, % TXT.TRY_startup, strtup
 	Menu, Tray, Add, % TXT.TRY_options, :Options_Tray
-		Menu, Tools_Tray, Add, % TXT.HST__name "`t" Hparse_Rev(history_K), history
 		Menu, Tools_Tray, Add, % TXT.ORG__name "`t" Hparse_Rev(chOrg_K), channelOrganizer
+		Menu, Tools_Tray, Add, % TXT.HST__name "`t" Hparse_Rev(history_K), history
 		Menu, Tools_Tray, Add, % TXT.SET_chnl "`t" Hparse_Rev(channel_K), channelGUI
 		Menu, Tools_Tray, Add, % TXT.IGN__name, classTool
 		Menu, Tools_Tray, Add, % TXT.PLG__name "`t" Hparse_Rev(pluginManager_k), pluginManagerGUI
@@ -115,6 +115,7 @@ trayMenu(destroy=0){
 	Menu, Tray, Add
 	Menu, Tray, Add, % TXT.TRY_help, :Help_Tray
 	Menu, Tray, Add
+	Menu, Tray, Add, % TXT.TRY_reloadcustom, reloadCustom
 	Menu, Tray, Add, % TXT.TRY_restart, reload
 	Menu, Tray, Add, % TXT.TRY_exit, exit
 	Menu, Tray, Default, % TXT.ABT__name " " PROGNAME

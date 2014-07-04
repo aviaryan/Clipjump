@@ -1,8 +1,8 @@
 ﻿;Swedish translation for Clipjump
 ;TranslatorName=Åke Engelbrektson
 ;TranslatorContact=eson57@gmail.com
-;TranslatorURL=http://svenskasprakfiler.se
-;LastUpdated=10 Jan 2014
+;TranslatorURL=https://svenskasprakfiler.se
+;LastUpdated=1 Jul 2014
 
 ;======
 ;v9.9.0.1
@@ -234,3 +234,161 @@ TIP_editing = Redigerar....
             = Tryck Esc för att avbryta
 TIP_editdone = Klippet har redigerats
 TIP_editnotdone = Klippet har INTE redigerats!
+
+;======
+;10.7
+;======
+
+HST_m_edit = Redigera klipp 		(Ctrl+H)
+
+;======
+;10.7.2.6b
+;======
+
+_name = Namn
+_tags = Taggar
+_author = Upphovsman
+_run = Kör
+_properties = Egenskaper
+PLG_properties = Egenskaper (Alt+Enter)
+PLG__name = Tilläggshanterare
+PLG_fetchparam = parameter för tillägget
+PLG_delmsg = Vill du verkligen ta bort följande tillägg?
+PLG_restartmsg = Du har tagit bort tillägg.
+               = Notera att tillägg, undantaget de från (external.) class, kräver omstart av programmet.
+               = Vill du fortsätta?
+API_extplugMiss = Följande externa tilläggsfil saknas.
+API_plugCorrupt = Följande tillägg är korrupt eller saknas.
+
+;=====
+;10.7.5
+;=====
+
+PLG_Sb_running = Kör tillägg
+PLG_Sb_exit = Tillägg raderat
+PLG_Sb_deleted = Tillägg borttaget
+SET_T_pst = Enkeltecken att kombinera med Ctrl för att aktivera [PASTE MODE]
+          = Notera att bokstäverna  E,C,X,Z,S,A,F och H är reserverade.
+          =
+          = Läs också "Copy bypassing Clipjump" i hjälpfilen.
+SET_pformat = Standard inklistringsformat
+SET_T_pformat = Det inklistringsformat du vill aktivera vid Clipjumps uppstart. '-original' är standard Clipjump inklistringsteknik.
+SET_t_plugM = Genväg för att öppna tilläggshanteringen.
+PLG_edit = Redigera (F2)
+CUS_error = Fel i rutinen för ClipjumpCustom.ini?
+
+;=====
+;10.7.8
+;=====
+
+TRY_pstmdshorts = Genvägar för inklistringsläget
+
+;=====
+;10.9
+;=====
+
+TIP_holdclip = Tryck Ctrl+V för att klistra in
+             = Tryck Insert to add clip to channel
+             = Tryck Esc för att avsluta
+SET_holdclip = Frys klippfunktion
+SET_T_holdclip = Kopierar markerad text eller objekt till en buffert, och förhindrar att den fångas upp av Clipjump.
+               = Du kan sedan klistra in klippet, flytta det till en kanal eller avvisa det.
+SET_keepactivepos = Bevara aktuell klipposition
+SET_T_keepactivepos = Vill du att Clipjump skall komma ihåg det senast aktiva klippet i inklistringsläget?
+                    = Unticking it will make Clipjump Paste Mode always start from Clip 1.
+
+;=====
+;11
+;=====
+
+HST_viewimage = [IMAGE]
+ORG__name = Clipjump kanalhanterare
+ORG_m_inc = Flytta upp    (Alt+Up)
+ORG_m_dec = Flytta ner   (Alt+Down)
+ORG_error = Stöd saknas
+ORG_countStatus = Listade objekt
+SET_org = Kanalhanterare
+ORG_delCnlMsgTitle = Välj kanalåtgärd
+ORG_delCnlMsg = Vad vill du göra med den valda kanalen?
+      = Ta bort kanalen permanent = Ja
+      = Rensa kanalen = Nej
+      = Gör ingenting = Avbryt
+_rename = Byt namn
+ORG_renameAsk = Ange nytt namn för kanal nummer
+TIP_initMsg = Startar Clipjump
+
+;======
+;11.2
+;======
+
+TIP_tagPrompt = Skriv taggar, separerade med mellanslag, för det här klippet.
+SET_startSearch = Starta inklistringsläget med sökläget aktiverat.
+SET_T_startSearch = Låt Ctrl+V öppna inklistringsläget, med sökläget aktiverat.
+                  = Detta är till hjälp om du inte vill hålla ner Ctrl för att navigera genom klippen. Läs också "Search in Paste Mode" i Hjälpfilen.
+_editing = Redigerar
+
+; Note to Translator > please make sure the out in Ctrl+v+F1 is aligned properly in TIP_help
+TIP_help =
+= Release Ctrl - Klistra in
+= V            - Flytta fram ett klipp
+= C            - Flytta bak ett klipp
+= X            - Avbryt, Flytta klipp, Ta bort klipp, Kopiera klipp
+= Z            - Byt inklistringsformat
+= Space        - FIX
+= S            - Skicka aktuellt klipp till Windows Urklipp
+= E            - Exportera
+= Up/Down      - Byt kanal +1/-1
+= A            - Flytta kanalens första klipp
+= 1..9         - Hoppa till det angivna klippet efter det aktiva klippet
+= F            - Sök
+= H            - Redigera
+= Enter        - Starta multipel inklistringssession
+= T            - Tagg
+= F1           - Hjälp
+=
+= Tryck V för att stänga det här fönstret
+
+;=======
+; 11.2.3
+;=======
+_more_options = Fler alternativ
+ORG_m_openpst = Öppna i inklistringsläge (Ctrl+O)
+_!x = Alt+X
+_!c = Alt+C
+ORG_m_insta = Snabbinklistring (Space)
+
+;=======
+; 11.3
+;=======
+_destChannel = Målkanal
+_maintenance = Underhåll
+_new = New
+ORG_createnew = Skapa nytt klipp i aktuell kanal
+ORG_createnewpr = Nytt klipp skapas i följande kanal
+ORG_newchname = Nytt kanalnamn
+
+;========
+; 11.4 - Added tooltips for Channel Organizer (hoppfrosch)
+;=======
+ORG_search = Sök klipp
+ORG_up = Flytta upp markerat objekt, en position
+ORG_down = Flytta ner markerat objekt, en position
+ORG_edit = Redigera markerat objekt
+ORG_openPastemode = Öppna inklistringsvyn med markerat klipp, aktivt.
+ORG_props = Redigera markerat klipps egenskaper (taggar, fasta attribut)
+ORG_cut = Klipp ut markerat klipp och infoga i annan kanal
+ORG_copy = Kopiera markerat klipp och duplicera i annan kanal
+ORG_delete = Ta bort markerat objekt
+; ----
+
+SET_revFormat2Def = Starta alltid inklistringsläget med standardformatering
+SET_T_revFormat2Def = Aktivering av det här alternativet startar alltid inklistringsläget i standardformatering (vilket är 'original'/'inget' som standard).
+ORG_clpdelmsg = Markerat klipp borttaget
+ORG_copyingclp = Kopierar markerade klipp
+ORG_movingclp = Flyttar markerade klipp
+ORG_Editprops = Redigera klippegenskaper
+ORG_oEditMsg = Tryck 'Spara' när du är klar.
+ABT_info = Clipjump är en urklippshanterare för Windows, skapad i AutoHotkey.
+        = Den inspirerades av Skrommels applikation, ClipStep.
+_Save = Spara
+SET_T_keepsession = Skall Clipjump fortsätta med alla sparade urklipp (endast från standardkanal 0) efter omstart av programmet?

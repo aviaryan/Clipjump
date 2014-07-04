@@ -33,6 +33,12 @@ exit:
 	ExitApp
 	return
 
+reloadCustom:
+	resetCustomizations()
+	loadCustomizations()
+	MsgBox, 0, % PROGNAME, % TXT.TIP_done
+	return
+
 Tooltip_setFont(font_options="", font_face=""){
 ;sets font for a tooltip
 	if (font_options) or (font_face)

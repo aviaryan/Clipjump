@@ -33,14 +33,25 @@ loadCustomizations(){
 				tobj.noautorun := v
 			else tobj[a k] := v
 		}
-		if !(tobj.noautorun) && (tobj.bind = "")
+		if !(tobj.noautorun) && (tobj.bind = "") && !startUpComplete
 			customization_Run(tobj)
-		else if Hparse(tobj.bind) 	; if key is valid
+		else if (tobj.bind != "") && (tobj.noautorun == 0) && !startUpComplete
+			customization_Run(tobj)
+		if Hparse(tobj.bind) 	; if key is valid
 			hkZ( tobj.bind := "$" Hparse(tobj.bind), "CustomHotkey", 1 ) ; create hotkey
 			, CUSTOMS[tobj.bind] := {}
 			, CUSTOMS[tobj.bind] := tobj.Clone()
 		CUSTOMS["_" A_LoopField] := tobj.Clone() 	; store section object for use later
 	}
+}
+
+resetCustomizations(){
+	for k,v in CUSTOMS
+	{
+		if InStr(k, "_") != 1
+			hkZ(v.bind, "CustomHotkey", 0) 	; unregister hk
+	}
+	CUSTOMS := {}
 }
 
 customization_Run(obj){
@@ -68,7 +79,7 @@ customization_Run(obj){
 			else $var := %$var%
 			StringReplace, v, v, % $match, % $var
 		}
-		
+
 		if k = run
 		{
 			if !Instr(v, "(")

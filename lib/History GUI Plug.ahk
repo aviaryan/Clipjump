@@ -7,12 +7,13 @@ gui_History()
 	global
 	static x, y, how_sort := 2_sort := 3_sort := 0, what_sort := 2
 	local selected_row, thisguisize
+	hst_genWt := 750
 	;2_3_sort are the vars storing how cols are sorted , 1 means in Sort ; 0 means SortDesc
 
 	Gui, History:new
 	Gui, Color, F6F8E1
 	Gui, Margin, 7, 7
-	Gui, +Resize +MinSize390x110
+	Gui, +Resize +MinSize600x400
 
 	Iniread, history_w, % CONFIGURATION_FILE, Clipboard_History_window, w, %A_Space%
 	Iniread, h, % CONFIGURATION_FILE, Clipboard_History_window, h, %A_Space%
@@ -25,7 +26,7 @@ gui_History()
 	Gui, Add, Edit, ys  	ghistory_SearchBox	vhistory_SearchBox
 	Gui, Font, s9, Courier New
 	Gui, Font, s9, Consolas
-	Gui, Add, ListView, % "xs+1 HWNDhistoryLV ghistoryLV vhistoryLV LV0x4000 w" (history_w ? history_w-25 : 675) , % TXT.HST_clip "|" TXT.HST_date "|" TXT.HST_size "|Hiddendate"
+	Gui, Add, ListView, % "xs+1 HWNDhistoryLV ghistoryLV vhistoryLV LV0x4000 w" (history_w ? history_w-25 : hst_genWt-25) , % TXT.HST_clip "|" TXT.HST_date "|" TXT.HST_size "|Hiddendate"
 
 	Gui, Add, StatusBar
 	Gui, Font
@@ -56,7 +57,7 @@ gui_History()
 		GuiControl, focus, history_SearchBox
 	}
 	else
-		Gui, History:Show,% ( x ? "x" x " y" y : "" ) " w" (history_w?history_w:700) " h" (h?h:500), % PROGNAME " " TXT.HST__name
+		Gui, History:Show,% ( x ? "x" x " y" y : "" ) " w" (history_w?history_w:hst_genWt) " h" (h?h:500), % PROGNAME " " TXT.HST__name
 
 	WinWaitActive, % PROGNAME " " TXT.HST__name
 	WinGetPos, x, y
@@ -172,7 +173,7 @@ historyGuiSize:
 
 		GuiControl, Move, historyLV, % "w" (gui_w - 15) " h" (gui_h - 65)     ;+20 H in no STatus Bar
 		LV_ModifyCol(1, gui_w-15-w2-w3-25) 				;gui_w - x  where   x  =  width of all cols + 25
-		GuiControl, Move, history_SearchBox, % " w" (gui_w - (history_SearchBoxx ?  history_SearchBoxx : 400)  -7) ; 7 for innermargin
+		GuiControl, Move, history_SearchBox, % " w" (gui_w - (history_SearchBoxx ?  history_SearchBoxx : hst_genWt-300)  -7) ; 7 for innermargin
 	}
 	return
 
