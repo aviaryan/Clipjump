@@ -46,27 +46,26 @@ Therefore you need to reload <em>ClipjumpCustom.ini</em> from the tray menu.<br>
 Here is an <a href="examples/ClipjumpCustom.ini">example <em>ClipjumpCustom.ini</em> file</a>
 <br><br>
 
+<a name=commands></a>
 <h2>Commands</h2>
 Here is the list of commands you can use in your ClipjumpCustom section (script). The syntax of all of these commands is 
 <code class="syntax"><var>command</var> = value</code>.
-<ol>
-<li>
+
+<dl>
 <a name=run></a><dt class="key">run</dt>
 <dd>Runs a label or function or API function distributed with Clipjump. For a complete list of these, see <a href="devList.html">API functions and routines list.</a>
-See an example of using Run command <a href=#ex1>here</a></dd></li>
-<li>
+See an example of using Run command <a href=#ex1>here</a></dd>
+
 <a name=bind></a><dt class="key">bind</dt>
 <dd>Binds a hotkey to the current section. This hotkey when pressed will execute that section. The bind command or rather the bind <i>key</i> can be present 
 anywhere in the section to be recognizable.<br>
 It should also be noted that a section having a <span class="key">bind</span> key doesn't autorun with Clipjump i.e. the section becomes non-auto-executing type.
 See <a href=#ex1>this</a> example using bind.</dd>
-</li>
-<li>
+
 <a name=tip></a><dt class="key">tip</dt>
 <dd>Shows a tooltip with the text which is passed as value.<br>
 Example - <code class="Syntax">tip = some text to show as tip</code></dd>
-</li>
-<li>
+
 <a name=send></a><dt class="key">send</dt>
 <dd>Artificially presses the key sequence that is passed as value. Example - 
 <pre>send = first line{enter}second line{tab}also in second line</pre>
@@ -74,19 +73,17 @@ The syntax is based on the AutoHotkey's <a href="http://www.autohotkey.com/docs/
 Example - <code>send = {Enter}</code> and <code>send = Enter</code> produce different results. The first one presses the key <span class="str">Enter</span> 
 whereas the second one writes "Enter".<br>
 See <a href=#send_ex>this</a> example on send to learn more.</dd>
-</li>
-<li>
+
 <a name=sleep></a><dt class="key">sleep</dt>
 <dd>Pauses the execution of section for the passed time in milliseconds.<br>
 Example - <code>sleep = 1500</code> pauses the execution of running thread for 1500 milliseconds i.e 1.5 seconds</dd>
-</li>
-<li>
+
 <a name=noautorun></a><dt class="key">noautorun</dt>
 <dd>If this variable is set to 1 anywhere in the section, the section <b>doesn't auto-execute</b> even without using the <a href=#bind>bind</a> command.<br>
 Example - <code class="Syntax"><var>noautorun</var>=1</code><br>
 Set this variable to 0 in a non-auto-executing section ( like the one using <em>bind</em> command ) to make it autorun.</dd>
-</li>
-</ol>
+</dl>
+
 <br>
 Besides this you can also change the inner variables of Clipjump by using the <code class="Syntax">variable = value</code> syntax. Some of the most common variables 
 needed to work highly requested features have been given in the following examples. Go through them and explore interesting tweaks and possibilities.<br>

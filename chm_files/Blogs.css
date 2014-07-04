@@ -161,7 +161,7 @@ span.ver {font-size: 90%;} /** version **/
 var { color: #478192; font-size: 110%;}  /** variables in explanation **/
 em {font-family: Courier New; font-size: 120%; font-style: normal;}  /** other constants like file names OR code strings **/
 .key {
-    font-family: Lucida Console; background-color: #FFFFFF; font-size: 110%; border: solid 1px #FFFFFF;
+    font-family: Lucida Console; background-color: #FFFFFF; font-size: 110%;
 } /** keywords **/
 
 /* **** kbd.css **/

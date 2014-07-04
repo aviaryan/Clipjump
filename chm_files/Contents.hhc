@@ -218,6 +218,10 @@
 			<param name="Local" value="docs/custom.html">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Commands">
+			<param name="Local" value="docs/custom.html#commands">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Examples">
 			<param name="Local" value="docs/custom.html#ex1">
 			</OBJECT>

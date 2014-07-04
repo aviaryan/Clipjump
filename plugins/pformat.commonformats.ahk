@@ -92,7 +92,7 @@ plugin_pformat_commonformats(zin){
 	if !FileExist(ztF)
 	{
 		FileCreateDir, % Substr(ztF, 1, Instr(ztF, "\", 0, 0)-1)
-		FileAppend, % "; Add User paste formats here", % ztF
+		FileAppend, % "; Add User paste formats here`n; Prefix - plugin_pformat_commonformats_", % ztF
 	}
 
 	GuiControl, ChooseString, zchosenformat, % zchosenformat="" ? "None" : zchosenformat ; choose the previous active format
