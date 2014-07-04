@@ -97,7 +97,7 @@ table.info td {
 }
 table.info th {
     background-color: #F6F6F6;
-	padding: 0.3em;
+    padding: 0.3em;
 }
 
 /* version number/requirement tag */
@@ -108,9 +108,10 @@ h2 .ver {color: lightgray; font-size: 80%;}
 .dull {color: gray;}
 .red {color: red;} /* used for highlight in various places */
 .blue {color: blue;}
+.green {color: green;}
 /* emphasized note */
 .note {border: 1px solid #99BB99; background-color: #E6FFE6;
-	color: #005500; padding: 0 3px; }
+    color: #005500; padding: 0 3px; }
 
 /* styles for briefly documenting multiple methods on one page: */
 .methodShort {
@@ -128,10 +129,17 @@ h2 .ver {color: lightgray; font-size: 80%;}
     border-color: black;
 }
 
-/** My **/
+/** FOR USE WITH DOCS **/
+
+/**
+SOME INSTRUCTIONS
+> Use code tag for text that is not a proper part of a sentence. 
+    Eg - You can make Clipjump show a <code>Pasting..</code> tip when you paste some data.
+**/
+
 dt{
   font-size: 105%;
-  background-color: #CFCFCF;
+  background-color: #E4E4E4;
 }
 dd{
   font-size: 100%;
@@ -139,6 +147,22 @@ dd{
 table{
   font-size: 95%;
 }
+code.key {
+    color: #2C7D17; font-weight: bold;
+}   /** Program keywords **/
+strong {
+    color: #2C7D17; font-size: 110%;
+}  /** Program keywords **/
+a strong, a code.key {
+   color: #0000AA;
+}
+span.ver {font-size: 90%;} /** version **/
+.str {color: #63475B; text-decoration: underline; } /** gui string, fixed text, caption **/
+var { color: #478192; font-size: 110%;}  /** variables in explanation **/
+em {font-family: Courier New; font-size: 120%; font-style: normal;}  /** other constants like file names OR code strings **/
+.key {
+    font-family: Lucida Console; background-color: #FFFFFF; font-size: 110%; border: solid 1px #FFFFFF;
+} /** keywords **/
 
 /* **** kbd.css **/
 kbd, kbda
@@ -147,8 +171,8 @@ kbd, kbda
     -moz-box-shadow:0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
     -webkit-border-radius:3px;
     -webkit-box-shadow:0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
-    background-color:#f7f7f7;
-    border:1px solid #ccc;
+    background-color: #f7f7f7;
+    border:1px solid #333333;
     border-radius:3px;
     box-shadow:0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
     color:#333;
@@ -159,4 +183,9 @@ kbd, kbda
     margin:0 .1em;
     padding:.1em .6em;
     text-shadow:0 1px 0 #fff;
+}
+
+kbd.inverse, kbda
+{
+   border:1px solid #ccc;
 }

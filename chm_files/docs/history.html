@@ -18,35 +18,33 @@
 
 <h2>Introduction</h2>
 Clipjump's Clipboard History tool can be a real life saver when it's time comes.<br>
-This tool stores record of all the clipboard items transfered to Clipjump in the last "x" days. The "x" days can be selected a/c your preference from
+This tool stores record of all the clipboard items transfered to Clipjump in the last <var>x</var> days. The <var>x</var> days can be selected a/c your preference from
  the settings editor.<br><br>
 To open the Clipboard History tool , you can also use the <b>keyboard shortcut</b> <kbd>Win</kbd>+<kbd>C</kbd> other than the Tray Menu shortcut.<br>
 To load full-size clip from the list provided by History tool, double-click on the item.<br>
-To delete a history item , Right-click on it and select "<b>Delete</b>".<br><br>
+To delete a history item , right-click on it and select "Delete".<br><br>
 
-<strong class=mild>Tip</strong> - To view only Clipboard images in the History list, you can filter the listing something like
-<code CLASS=syntax>[IMAGE]</code><br><br><br>
+<span class="red">Tip</span> - To view only Clipboard images in the History list, you can filter the listing something like <span class="str">[IMAGE]</span><br><br>
 
 <h4><a name=partial>Partial Searching</a></h4>
-When the checkbox 'Partial' is checked , the History Tool follows a partial checking pattern. Now you will be able to filter the Histroy List with <code>Space</code> delimited terms and only those clips will be shown which have all those space delimited terms in them. 
+When the checkbox 'Partial' is checked , the History Tool follows a partial checking pattern. Now you will be able to filter the Histroy List with <em>Space</em> delimited terms and only those clips will be shown which have all those space delimited terms in them. 
 <br><br><br>
 
 <h4><a name=preview>The Preview Window</a></h4>
 The History Preview Window previews the requested history clip. It supports preview of all types of clips from text to images. When previewing text , you have the option 
-to search for terms (Ctrl+F) and the searching algorithm inhibits the 'Partial Searching' setting from the History Tool. <br>
-When previewing images , you can enlarge the image by resizing the preview windows . Maximize it to see the maximum possible size of the image preview.
+to search for terms (Ctrl+F) and the searching algorithm inhibits the <span class="key">Partial Searching</span> setting from the History Tool. <br>
+When previewing images, you can enlarge the image by resizing the preview windows . Maximize it to see the maximum possible size of the image preview.
 <br><br><br>
 
 <h4><a name=ipaste>Insta-Paste</a></h4>
-Press Space or Middle Mouse Button after choosing your desired Clipboard item(s) in the history Gui to paste it directly to the underlying window.<br>
+Press <kbd>Space</kbd> or Middle Mouse Button after choosing your desired Clipboard item(s) in the history Gui to paste it directly to the underlying window. 
 This method necessarily closes the History GUI. When selecting multiple items and then Insta-pasti'ng, the listing order is the order in which the clips are pasted. <br>
-<strong class=mild>TIP</strong> - To force Insta-Paste to write to Clipboard (Clipjump) when it is used, change instapaste_write_clipboard to 1 in the [Advanced] section of Settings.ini file.
+<b>TIP</b> - To force Insta-Paste to write to Clipboard (Clipjump) when it is used, change <var>instapaste_write_clipboard</var> to 1 in the <em>[Advanced]</em> section of Settings.ini file.
 <br><br><br>
 
 <h4><a name=incog>Incognito Mode</a></h4>
-When in Incognito mode, the Clipboard history will not be captured by Clipjump and the Clipjump icon in the System tray will fade (become greyyish).<BR>
-This feature can be very useful for maintaining Privacy.<br>
-To ever enable Incognito mode, use the Tray menu.<br><br><br>
+When in Incognito mode, the Clipboard history will not be captured by Clipjump and the Clipjump icon in the System tray will fade (become greyyish). This feature can be 
+very useful for maintaining Privacy. To enable Incognito mode, use the Tray menu.<br><br><br>
 
 <h4><a name=more>More Features</a></h4>
 Right Click on an item in the Clipboard History list to view more options like Export Clip, Edit Clip and Delete Clip(s).
@@ -58,16 +56,16 @@ When the editor window shows up, you can make any changes and <b>save (Ctrl+S) t
 Note that this option works for images too.
 <br><br><br>
 
-<a name=dis_his><h4>Disabling the History tool</h4></a> - Change the <code>Number of days to keep items in History</code> setting to 0 to permanently 
-disable History tool. This will make Clipjump automatically start with the <b>Incognito Mode</b> ON as a symbol to show that History is not captured. <br>
-Please note that disabling the history tool in the way as said above will not delete old history items unlike to the fact that if you change the <code>Number of days to keep items in History</code> from 50 to 2, the history older than 2 days will be deleted by Clipjump.
+<a name=dis_his><h4>Disabling the History tool</h4></a> - Change the <span class="str">Number of days to keep items in History</span> setting to 0 to permanently 
+disable History tool. This will make Clipjump automatically start with the <b>Incognito Mode</b> on as a symbol to show that History is not captured. <br>
+Please note that disabling the history tool in the way as said above will not delete old history items unlike to the fact that if you change the <span class="str">Number of days to keep items in History</span> from 50 to 2, the history older than 2 days will be deleted by Clipjump.
 <br><br><br>
 
-<a name=his_short><h4>Changing History Tool shortcut</h4></a> - The History tool shortcut (Win + C) can be changed or disabled via the Clipjump 
-Settings (Setting.ini) file. Just open the file and search for the key <code>history_K</code> in section <code>[Advanced]</code>. <br>
-By default, you will see the <i>history_K</i> key with the value <code>Win + C</code>. Empty this value to disable shortcut for History Tool or change this value to a 
+<a name=his_short><h4>Changing History Tool shortcut</h4></a> - The History tool shortcut (Win + C) can be changed or disabled via the <em>Settings.ini</em> file. 
+Just open the file and search for the key <var>history_K</var> in section <em>[Advanced]</em>. <br>
+By default, you will see the history_K key with the value <code>Win + C</code>. Empty this value to disable shortcut for History Tool or change this value to a 
 preferred shortcut to change the History tool shortcut.<br>
-Example values of <i>history_K</i> are -
+Example values of <var>history_K</var> are -
 <pre>Shift+C
 Win+Alt+H
 

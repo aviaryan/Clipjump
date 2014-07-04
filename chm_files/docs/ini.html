@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>Clipjump : Settings.ini Specific Settings</title>
+  <title>Clipjump : Settings.ini Advanced Settings</title>
   <link rel="stylesheet" href="../Blogs.css" type="text/css">
 </head>
 
@@ -9,8 +9,8 @@
 <br><br>
 
 <h3><a name="syscopy">Setting shortcut to copy to system Clipboard (bypassing Clipjump)</a></h3> - You can also create a unique shortcut in Clipjump to copy/cut data only to System Clipboard 
-and not Clipjump. To create these shortcuts, open the [Advanced] section of Settings.ini and write down shortcut values for <code>windows_copy_shortcut</code> and 
-<code>windows_cut_shortcut</code>. As you may have guessed, these shortcuts are disabled by default and by writing shortcut values for them in the ini you create them.
+and not Clipjump. To create these shortcuts, open the [Advanced] section of Settings.ini and write down shortcut values for <var>windows_copy_shortcut</var> and 
+<var>windows_cut_shortcut</var>. As you may have guessed, these shortcuts are disabled by default and by writing shortcut values for them in the ini you create them.
 <br>These shortcuts can be very useful when in need to copy sensitive or crap information of the Clipboard.
 
 <br><br><br>
@@ -24,17 +24,18 @@ ACTIONMODE.L=</pre>
 
 <br><br>
 
-<h3>Showing the Pasting tooltip</h3> - You can make Clipjump show a <code>Pasting..</code> tip when you paste some data. To do so, change the value of <code>Show_pasting_tip</code> in the [Advanced] section of Settings.ini to 1.
+<h3>Showing the Pasting tooltip</h3> - You can make Clipjump show a <code>Pasting..</code> tip when you paste some data. To do so, change the value of 
+<var>Show_pasting_tip</var> in the <em>[Advanced]</em> section of Settings.ini to 1.
 
 <br><br><br>
 
 <h3><a name="prior">Changing default Task Priority</a></h3> - You can change default Clipjump Task priority from the Priority key in the System section of the Ini.
 <br>Set Priority to H (high) to make Clipjump most responsive.<br> Priority Values can be-<br>
-<code>L (or Low), B (or BelowNormal), N (or Normal), A (or AboveNormal), H (or High), R (or Realtime)</code>
+<pre>L (or Low), B (or BelowNormal), N (or Normal), A (or AboveNormal), H (or High), R (or Realtime)</pre>
 <br><br><br>
 
 <h3><a name="pst_custom_pos">Show paste mode at fixed position</a></h3>
-You can fix the Paste Mode's screen position by adding values to variables <code>pstMode_X</code> and <code>pstMode_Y</code> in the Advanced section of the Ini.<br>
+You can fix the Paste Mode's screen position by adding values to variables <var>pstMode_X</var> and <var>pstMode_Y</var> in the Advanced section of the Ini.<br>
 The X coord is pixels from left of the screen whereas the Y coord is pixels from top of the screen.<br>
 You can also leave either of the coords blank and only the specified axes (X or Y) will be fixed for the paste mode.
 

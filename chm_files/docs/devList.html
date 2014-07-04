@@ -20,7 +20,7 @@
 
 <h2><a name=api>API functions</a></h2>
 All the functions under the file API.ahk<br>
-They should be accessed as <code>API.function_name()</code> . For example <code>API.paste()</code>
+They should be accessed as <code class="Syntax">API.function_name()</code> . For example <code>API.paste()</code>
 <ol>
 	<li><code>paste(channel="", clipno="")</code><br>
 	- Pastes clips from a certain postion in a certain channel. If both are blank, paste 1st clip from currently active channel.<br>
@@ -147,7 +147,7 @@ They should be accessed as <code>API.function_name()</code> . For example <code>
 <br>
 <h2><a name=funcs>More functions</a></h2>
 Other interesting functions that are not a part of API.<br>
-Unlike API, they should be accessed normally as <code>function_name()</code> . For example <code>changeChannel(2)</code>
+Unlike API, they should be accessed normally as <code class="Syntax">function_name()</code> . For example <code>changeChannel(2)</code>
 <ol>
 	<li><code>BeepAt(value, freq, duration=150)</code><br>
 	- Make a beep system sound.<br>
@@ -202,7 +202,7 @@ Unlike API, they should be accessed normally as <code>function_name()</code> . F
 </ol>
 <br>
 <h2><a name=labels>Labels/Routines</a></h2>
-Labels should be accessed as <code>run = label_name</code> in ClipjumpCustom and <code>gosub label_name</code> in AhkScript.<br>
+Labels should be accessed as <code class="Syntax">run = label_name</code> in ClipjumpCustom and <code class="Syntax">gosub label_name</code> in AhkScript.<br>
 <ol>
 	<li>These are the labels to open various dialogs and gui in Clipjump. You can easily guess their functions from their names.<br>
 		<ol><li>actionmode
@@ -220,28 +220,28 @@ Labels should be accessed as <code>run = label_name</code> in ClipjumpCustom and
 			<li>pitswap
 			<li>incognito</ol>
 	<br>
-	<li><code>disable_clipjump</code><br>
+	<li><em>disable_clipjump</em><br>
 	- Toggles Clipjump Status i.e. Enabled or disabled (same like Options > Disable Clipjump in Tray Menu)
 	<br>
 	<br>
-	<li><code>endPasteMode</code><br>
+	<li><em>endPasteMode</em><br>
 	- Ends Paste Mode forcibly. 
 	<br>
 	<br>
-	<li><code>simplePaste</code><br>
+	<li><em>simplePaste</em><br>
 	- Pastes the current active content on System Clipboard
 	<br>
 	<br>
-	<li><code>windows_copy</code> and <code>windows_cut</code><br>
+	<li><em>windows_copy</em> and <em>windows_cut</em><br>
 	- Copies / Cuts the selected text or file without copying to Clipjump i.e. only System Clipboard is affected. This is what is used inside <a href="ini.html#syscopy">
 	Copy to System Clipboard bypassing Clipjump</a>
 	<br>
 	<br>
-	<li><code>updt</code><br>
+	<li><em>updt</em><br>
 	- Check for Updates
 	<br>
 	<br>
-	<li><code>exit</code><br>
+	<li><em>exit</em><br>
 	- Exits Clipjump properly
 	<br>
 	<br>
@@ -250,26 +250,26 @@ Labels should be accessed as <code>run = label_name</code> in ClipjumpCustom and
 <h2><a name=vars>Variables</a></h2>
 The important variables in Clipjump which can be changed to customize much of the behavior in the program are listed below. Please note that only selected variables 
 have been listed to prevent any issues with the core functionality of Clipjump.<br>
-Changing a variable in ClipjumpCustom is done as <code>variable = value</code> and in AHKScript is done as <code>variable := "value"</code>
+Changing a variable in ClipjumpCustom is done as <code class="Syntax">variable = value</code> and in AHKScript is done as <code class="Syntax">variable := "value"</code>
 <ol>
 	<li>Channel Object
-		<ol><li><code>CN.NG</code> - Holds the channel number that is currently active.
-			<li><code>CN.Name</code> - The name of the channel that is currently active.
-			<li><code>CN.Total</code> - Total number of channels that are currently created by the user.</ol>
+		<ol><li><em>CN.NG</em> - Holds the channel number that is currently active.
+			<li><em>CN.Name</em> - The name of the channel that is currently active.
+			<li><em>CN.Total</em> - Total number of channels that are currently created by the user.</ol>
 	<br>
-	<li><code>STORE</code> Object<br>
-	- Public Storage Space. Use as <code>STORE.var := "value"</code> and <code>msgbox % STORE.var</code><br>
+	<li><em>STORE</em> Object<br>
+	- Public Storage Space. Use as <code class="Syntax">STORE.var := "value"</code> and <code class="Syntax">msgbox % STORE.var</code><br>
 	See also <a href=custom.html#store>STORE in ClipjumpCustom</a>.
 	<br>
 	<br>
-	<li><code>curPformat</code> - Holds the current active paste format.
+	<li><em>curPformat</em> - Holds the current active paste format.
 	<br>
 	<br>
-	<li><code>CALLER</code> - Holds 1 if Clipboard Monitoring is on by Clipjump and 0 if not.
+	<li><em>CALLER</em> - Holds 1 if Clipboard Monitoring is on by Clipjump and 0 if not.
 	<br>
 	<br>
-	<li><code>pastemodekey</code> and <code>spmkey</code><br>
-	- Use as pastemodekey.(key) OR spmkey.(key) to change keys currently used in PasteMode and Search-PasteMode.<br>
+	<li><em>pastemodekey</em> and <em>spmkey</em><br>
+	- Use as <code>pastemodekey.(key)</code> OR <code>spmkey.(key)</code> to change keys currently used in PasteMode and Search-PasteMode.<br>
 	See <a href=custom.html#change_mode_key>here</a> for an example.
 	<br>
 	<br>
@@ -283,13 +283,13 @@ changing and reading variables to running function and labels. It is by default 
 <br>
 An external plugin can include publicapi as <code class=syntax>#Include %A_ScriptDir%\..\publicAPI.ahk</code><br>
 Once publicAPI is included in the script, you will have to initialize it.<br>
-<code class="syntax">cj := new Clipjump()     ; The name 'cj' doesnt matter</code>
+<pre>cj := new Clipjump()     <span class="green">; The name 'cj' doesnt matter</span></pre>
 Then you can call API methods, set variables, get variables and so on using the 'cj' object. Here are few examples -<br>
 <pre>msgbox % cj.version
 cj["pastemodekey.z"] := "^y"
 msgbox % cj.getClipLoc(1, 5)
 cj.runFunction("set_pformat(NO-FORMATTING)")
-cj.runLabel("exit") 		; closes Clipjump</pre>
+cj.runLabel("exit") 		<span class="green">; closes Clipjump</span></pre>
 
 <br>
 <br>
@@ -300,9 +300,6 @@ cj.runLabel("exit") 		; closes Clipjump</pre>
 
 <br><br>
 
-
-It is likely that the page will be updated with more valuable information. Here in the <a href="http://clipjump.sourceforge.net/docs/devList.html">online link</a> in case 
-you want to stay in touch.<br>
 <hr noshade=noshade size=5 color=yellow>
 <br>
 <a href="http://translate.google.com/translate?hl=en&sl=en&u=clipjump.sourceforge.net/docs/devList.html" id="translate">Translate</a>

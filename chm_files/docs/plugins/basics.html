@@ -5,7 +5,7 @@
 </head>
 
 <body>
-<h1>Plugins Basic Tutorial</h1>
+<h1>Making a Clipjump plugin</h1>
 <br>
 
 <ol>
@@ -30,72 +30,72 @@ the Plugin Manager (ActionMode = M)
 <br><br><br>
 
 <h2><a name=filename>The Filename</a></h2>
-The filename of the plugin symbolizes the function it is supposed to contain. <br> If filename is <code>myplugin.ahk</code> , it means the plugin file contains a 
-<code>plugin_myplugin()</code> that is run by the Plugin Manager or <code>API.runPlugin()</code>. IF the filename is <code>pformat.noformatting.ahk</code> , the 
+The filename of the plugin symbolizes the function it is supposed to contain. <br> If filename is <em>myplugin.ahk</em> , it means the plugin file contains a 
+<code>plugin_myplugin()</code> that is run by the Plugin Manager or <code>API.runPlugin()</code>. If the filename is <em>pformat.noformatting.ahk</em> , the 
  main function the file has is <code>plugin_pformat_noformatting()</code>.
 <br><br><br>
 
 <h2><a name=params>Plugin Parameters</a></h2>
 If you open any of the officially distributed plugins in Notepad, you will see lines starting with <code>;@Plugin-</code>. These hold the key-value pairs that 
 have information about the Plugins.<br>
-So <code>;@Plugin-Name myplugin</code> gives the key <code>name</code> for the plugin the value <code>myplugin</code>. As you may have guessed this is the 
+So <code class="Syntax">;@Plugin-Name myplugin</code> gives the key <var>name</var> for the plugin the value <var>myplugin</var>. As you may have guessed this is the 
 same thing you see when you click on Properties in the Plugin Manager.<br>
 There is no limit on what can be the 'key' here. Even <code>;@Plugin-authorSite http://mysite.com</code> also works and is shown in the Properties window.
 <br><br><br>
 
 <h2><a name=funcparams>Script/Function parameters</a></h2>
-The Plugin parameters like <code>;@Plugin-param(N)</code> where (N) is a natural number are the Function parameters. (like <code class=syntax>;@Plugin-Param1</code>) 
-They hold information about the Nth parameter of the main function in the plugin file.<br>
-When you run a plugin with <code class=syntax>API.runPlugin( plugin_filename , param1, param2 ....)</code> without any 'param's , the function auto-asks you the parameters showing these 
-informations if they are present.<br>
-You can provide a parameter as <code class=syntax>;@Plugin-Silent 1</code> to force API.runPlugin() to <b>NOT ask</b> the user for parameters even if no parameter is passed to it.<br>
+The Plugin parameters like <code class="syntax">;@Plugin-param(N)</code> where <var>N</var> is a natural number are the Function parameters (like <code>;@Plugin-Param1</code>). 
+They hold information about the <var>Nth</var> parameter of the main function in the plugin file. 
+When you run a plugin with <code class=syntax>API.runPlugin( plugin_filename , param1, param2 ....)</code> without any 'param's , the function auto-asks you the parameters 
+ showing these informations if they are present. 
+You can provide a parameter as <code class=syntax>;@Plugin-Silent 1</code> to force <code>API.runPlugin()</code> to <b>not ask</b> the user for parameters even if no parameter is passed to it.<br>
 Function parameters are not Mandatory but it is recommended to provide them.
 <br><br><br>
 
 <h2><a name=conventions>Conventions</a></h2>
 <ol>
-	<li>Variable Names in plugin files that are included (not external) should start with <code>z</code>. This is because Clipjump doesn't uses any variable starting with 
+	<li>Variable Names in plugin files that are included (not external) should start with <em>z</em>. This is because Clipjump doesn't uses any variable starting with 
 		'z' and so this is the best option to avoid variable conflicts.
 	<li>The parameter names in the function definition ( <code class=syntax>plugin_myplugin(zParam1, zParam2)</code> ) should also start with 'z'.
 </ol>
-<b>TIP-</b> You can use the STORE object to also store variables. It is a <code>global</code> object and is totally meant for storing by plugins and through
- ClipjumpCustom.ini. Eg> <code>STORE.myvar := "text"</code> and <code class=syntax>zVar := STORE.myvar</code>
+<b>TIP-</b> You can use the STORE object to also store variables. It is a <b>global</b> object and is totally meant for storing by plugins and through
+ ClipjumpCustom.ini. Eg> <code class=Syntax>STORE.myvar := "text"</code> and <code class=Syntax>zVar := STORE.myvar</code>
 <br><br><br>
 
 <h2><a name=classes>Plugin Classes</a></h2>
-'Classes' is a way to distinguish certain plugins from normal plugins. All the plugins whose name is like <code>a.b.ahk</code> and not <code>b.ahk</code> mean they belong 
-to a class (here 'a').<br>
+'Classes' is a way to distinguish certain plugins from normal plugins. All the plugins whose name is like <em>a.b.ahk</em> and not <em>b.ahk</em> mean they belong 
+to a class (here <var>a</var>).<br>
 As already said, these files have main function like <code class=syntax>plugin_a_b()</code>.
 Currently Clipjump has 2 defined classes. User is not allowed to create them. (i.e. create a file like xyzPlugin.coreScript.ahk)
 <br><br>
 
 <h3><a name=class_pformat>pformat</a></h3>
-The plugins in this class are used in the paste-format option in Paste mode (key = Z). Officially distributed plugins like <code>pformat.uppercase.ahk</code> and 
-<code>pformat.noformatting.ahk</code> belong to this class.<br>
+The plugins in this class are used in the paste-format option in Paste mode (key = Z). Officially distributed plugins like <em>pformat.uppercase.ahk</em> and 
+<em>pformat.noformatting.ahk</em> belong to this class.<br>
 <ol>
 	<li>These plugins also have a custom mandatory parameter <code>;@Plugin-Previewable</code> which should hold 1 if the paste format is previewable in Paste Mode. 
 		It is 1 for UPPERCASE and SentenceCase.</li>
 	<li>These Plugins should make <code>STORE.ClipboardChanged</code> true if they have successfully changed the input variable and thus what is going to be pasted.
-		<br>For example <code>STORE.ClipboardChanged := true</code>
+		<br>For example <code class="Syntax">STORE.ClipboardChanged := true</code>
 	<li>It should be noted that these plugins (should) have 1 input parameter. See the file 'pformat.uppercase.ahk' for example.</li>
-	<li>When toggling and when pasting, Clipjump inputs the <code>Clipboard</code> variable and not the <code>ClipboardAll</code> variable as the first parameter. 
-		If the plugin needs the 'ClipboardAll' variable, it can consult it anytime as it will be the same as what current active</li>
+	<li>When toggling and when pasting, Clipjump inputs the <em>Clipboard</em> variable and not the <em>ClipboardAll</em> variable as the first parameter. 
+		If the plugin needs the <em>ClipboardAll</em> variable, it can consult it anytime as it will be the same as what current active</li>
 </ol>
 <br>
 
 <h3><a name=class_ext>external</a></h3>
-Plugins whose name starts with <code>external.</code> belong to the 'external' class. They are not included in Clipjump at runtime and solely run through the 
+Plugins whose name starts with <em>external.</em> belong to the 'external' class. They are not included in Clipjump at runtime and solely run through the 
 AutoHotkey.exe (i.e. Clipjump.exe) when needed.<br>
 <b>The Parameters in external plugins ? </b> Like <a href=#funcparams>Function parameters</a> , the external script file can contain <code>-Param1</code>, 
-<code>-Param2</code> and so.. for the <code class=syntax>API.runPlugin()</code> to take them as Script parameters and thus ask the user if they pass no paramter.<br>
-For example try running the <code>external.controller.ahk</code> and then seeing its source code.
+<code>-Param2</code> and so.. for the <code>API.runPlugin()</code> to take them as Script parameters and thus ask the user if they pass no paramter.<br>
+For example try running the <em>external.controller.ahk</em> and then seeing its source code.
 <br><br><br>
 
 <h2><a name=things>Things to Note</a></h2>
 <ol>
-	<li>Use <code>;@Plugin-Silent 1</code> to make <code class=syntax>API.runPlugin()</code> not ask the user for parameters even if user doesn't enters them.
-	<li>It will be a good idea to use <code class=syntax>API.showTip</code> and 
-		<code class=syntax>API.removeTip</code> (<a href=../devList.html#showtip>Link</a>)
+	<li>Use <code>;@Plugin-Silent 1</code> to make <code>API.runPlugin()</code> not ask the user for parameters even if user doesn't enters them.
+	<li>It will be a good idea to use <code>API.showTip()</code> and 
+		<code>API.removeTip()</code> (<a href=../devList.html#showtip>Link</a>)
 	<li>While testing keep in mind that your plugin will be included in Clipjump.ahk and thus run from the directory of Clipjump.ahk. So be careful with the WorkingDir 
 		factor.
 	<li>There will be no auto-execution of any plugin as a non-external plugin will be included at the bottom of Clipjump.ahk
@@ -105,8 +105,8 @@ For example try running the <code>external.controller.ahk</code> and then seeing
 <br><br>
 
 <h2><a name=libs>Libs</a></h2>
-If your plugin file requires more files as #Includes, consider keeping them in (file_name).lib directory. So for the plugin <code>external.controller.ahk</code> 
-we have <code>external.controller.lib</code> as the lib directory. This makes the Delete Plugin option in Plugin Manager work.
+If your plugin file requires more files as #Includes, consider keeping them in (file_name).lib directory. So for the plugin <em>external.controller.ahk</em> 
+we have <em>external.controller.lib</em> as the lib directory. This makes the Delete Plugin option in Plugin Manager work.
 <br><br><br>
 
 <hr noshade=noshade size=5 color=yellow>

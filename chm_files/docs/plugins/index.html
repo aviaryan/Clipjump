@@ -15,11 +15,11 @@ They can be accessed from the Plugin Manager that runs with the <kbd>M</kbd> key
 Simply copy the .ahk file with all other dependent files in the plugins directory and <b>restart Clipjump</b>.<br>
 <b>Note</b> - Clipjump lists all plugins to use at ExitTime and <b>not at runTime</b>. Thus Restarting Clipjump after making changes to plugins is necessary.
 <br>
-<b>TIP</b> - To disable a plugin temporarily, create a folder named (for example) '_Disabled' in the plugins folder and move the plugin to it.
+<b>TIP</b> - To disable a plugin temporarily, create a folder named (for example) <em>_Disabled</em> in the plugins folder and move the plugin to it.
 <br><br><br>
 
 <h2><a name=run>Running a plugin from ClipjumpCustom</a></h2>
-The <code class=syntax>API.runPlugin( plugin_file_name , param1 , param2 , param3 , ..... )</code> can be used to run a plugin.<br>
+The <code class=Syntax>API.runPlugin( plugin_file_name , param1 , param2 , param3 , ..... )</code> can be used to run a plugin.<br>
 If <b>no</b> parameter (param) is passed at all , then the user will be automatically asked for the needed number of parameters. Below are suitable examples -
 <pre>
 [some_section]
@@ -35,7 +35,7 @@ run = API.runPlugin( some_plugin.ahk , the_text , the_title )
 <h2>Creating your own plugins</h2>
 If you know the AutoHotkey language, you won't take a minute starting creating your first plugins. If you are not familiar with AutoHotkey, I recommended 
 <a href="http://ahkscript.org">trying it</a> as it is the ever so easy and suprisingly powerful programming langauge. You <b>won't</b> regret.<br>
-See <a href="basics.html">Plugins Basic Guide</a>
+See <a href="basics.html">Plugins Basics</a>
 <br><br><br>
 
 <h2><a name=def>Officially Distributed Plugins</a></h2>
@@ -46,7 +46,7 @@ See <a href="basics.html">Plugins Basic Guide</a>
 		<li>Delete [File/Folder] - Deletes clips of data type <code>[File/Folder]</code> from selected or all channels.
 	</ol>
 	<li><a name=def_pformat>Paste Formats</a>
-	<ol><li><a href=plugin_commonformats.html>Common Formats</a> (<a href=http://clipjump.sourceforge.net/docs/plugins/plugin_commonformats.html>Online Link</a>)
+	<ol><li><a href=plugin_commonformats.html>Common Formats</a>
 		<li>NO-FORMATTING
 		<li>SentenceCase
 		<li>UPPERCASE
@@ -55,6 +55,7 @@ See <a href="basics.html">Plugins Basic Guide</a>
 	<ol><li>Ini Editor - by rbrtryn, Added as a secondary interface to edit Settings.ini
 		<li><a href=../basic_help.html#ignorew>Ignored Windows Manager</a> - by fump2000, allows you to manage windows which will be automatically ignored by Clipjump
 		<li><a href=../../clipjumpcontroller.html>Controller</a> - Clipjump Controller, as a plugin
+		<li>History file paths cleaner - Deletes copied file and folder paths from clipboard history
 	</ol>
 </ol>
 <br><br>
