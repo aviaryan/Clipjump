@@ -397,3 +397,10 @@ SET_T_keepsession = Should Clipjump continue with all the saved clipboards (only
 _ClipjumpError = Clipjump Error
 TIP_genErrMsg = Please contact the author if you continue to have problems.
 TRY_reloadcustom = Reload ClipjumpCustom.ini
+
+;=======
+_language = Language
+_disabled = Disabled
+PLG_delfilefolder = Delete [File/Folder]
+ABT_chmErr = There was a problem.
+   = Please check that Clipjump.chm exists in the root folder.
