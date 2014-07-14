@@ -108,15 +108,9 @@ SET_T_quality = Die Qualität der Bilder in der Bildvorschau.
 SET_T_copybeep = Aktivieren Sie diese Option und Sie hören fortan einen Ton wenn Clipjump Daten aufnimmt.
                =
                = Sie können die Ton Frequenz in der [Advanced] Sektion der Settings.ini verändern.
-SET_T_keepsession = Clips beibehalten? Aktivieren Sie diese Option gehen die Clips auch nach einen Neustart von Clipjump nicht verloren.
 SET_T_ismessage = Möchten Sie beim Kopieren oder Ausschneiden per ToolTip informiert werden?
-				= Markiert = Aktiv
-SET_T_formatting = Wenn Sie es wünschen kann Clipjump beim Start schon in den OHNE-FORMATIERUNG Modus wechseln.
-                 = Markiert = Aktiv
 SET_T_daystostore = Anzahl der Tage für die Clips in der Historie gespeichert werden sollen.
-				  = Es muss ein Zahl angegeben werden, es ist kein Maximum vorgegeben.
 SET_T_images = Sollen auch Bilder in der Historie gespeichert werden?
-			 = Markiert = Aktiv
 SET_T_chnl = Hotkey um das Channel Wählen Fenster zu öffnen.
            = Geben Sie keinen Buchstaben an wird der Hotkey deaktiviert.
 SET_T_cfilep = Hotkey um den Pfad der ausgewählten Datei zu kopieren.
@@ -169,6 +163,7 @@ _ot = One Time Stop
 _pitswp = PitSwap
 _exportedto = Exportiert
 
+
 ;============
 ;9.9.0.2
 ;============
@@ -205,19 +200,14 @@ UPD_automsg = Klicke auf Ja um ein Autoupdate durchzuführen oder klicke auf Nei
 ;10
 ;=========
 
-; the following key was modified in v10 and so you see its entry here
-SET_T_pst = Geben Sie hier einen einzelnen Buchstaben an um mit diesem in Verbindung mit STRG Clipjump zu nutzen.
-          = Beachten Sie bitte, die Tasten  E C X Z S A  sind reserviert.
-          =
-          = Lesen Sie bitte außerdem den Teil "Copy bypassing Clipjump" in der Hilfedatei.
-CHC_name = Wähle Channel
-TIP_done = Erledigt
-TIP_copycutfailed = Kopieren/Verschieben nicht erfolgreich
-TIP_copy = Kopiere aktuellen Clip
-TIP_move = Verschiebe aktuellen Clip
+CHC_name = Select Channel
+TIP_done = Done
+TIP_copycutfailed = Copy/Move Not Done
+TIP_copy = Copy current Clip
+TIP_move = Move current Clip
 
 ;========
-;10.5
+;10.5 beta
 ;========
 
 TIP_delallprompt = WARNUNG
@@ -245,6 +235,7 @@ TIP_editing = Bearbeiten....
             = Drücke Esc zum abbrechen.
 TIP_editdone = Clip wurde bearbeitet!
 TIP_editnotdone = Clip wurde NICHT bearbeitet!
+
 ;======
 ;10.7
 ;======
@@ -350,7 +341,7 @@ TIP_help =
 = Up/Down      - Wechsle Channel +1/-1
 = A            - Springe zum ersten Clip im Channel
 = 1..9         - Springe n Clips weiter vom aktiven Clip
-= F            - Suchee
+= F            - Suche
 = H            - Bearbeite
 = Enter        - Start Multiple Pasting Session
 = T            - Tag
@@ -390,3 +381,30 @@ ORG_props = Bearbeite Eigenschaften des selektierten Clip
 ORG_cut = Schneidet den selektierten Clip aus und fügt ihm einem anderen Channel hinzu
 ORG_copy = Kopiert den selektierten Clip aus und fügt Kopie einem anderen Channel hinzu
 ORG_delete = Löscht den selektierten Clip
+; ----
+
+SET_revFormat2Def = Starte Paste mode immer mit der Default-Formatierung
+SET_T_revFormat2Def = Option, damit der Paste Mode immer mit der Default-Formatierung gestartet wird (Defaultwert: 'original'/'none' ).
+ORG_clpdelmsg = Ausgewählter Clip wurde gelöscht
+ORG_copyingclp = Kopiere selektierte(n) Clip(s)
+ORG_movingclp = Bewege selectierte(n) Clip(s)
+ORG_Editprops = Bearbeite Clip Eigenschaften
+ORG_oEditMsg = Drücke Save um zu beenden
+ABT_info = Clipjump ist ein reiner Windows Clipboard Manager, erstellt in AutoHotkey.
+        = Er wurde inspiriert durch Skrommel's Anwendung ClipStep.
+_Save = Speichern
+SET_T_keepsession = Soll Clipjump mit allen gespeicherten Clips nach einem Restart fortfahren? (betrifft nur Default Channel 0)
+
+;========
+; 11.5
+;========
+_ClipjumpError = Clipjump Fehler
+TIP_genErrMsg = Bitte Programmautor kontaktieren, falls weiterhin Probleme bestehen.
+TRY_reloadcustom = Neuladen von ClipjumpCustom.ini
+
+;=======
+_language = Sprache
+_disabled = Abgeschaltet
+PLG_delfilefolder = Lösche [File/Folder]
+ABT_chmErr = Ein Problem ist aufgetreten.
+   = Bitte überprüfen, ob Clipjump.chm im Basisverzeichnis existiert.
