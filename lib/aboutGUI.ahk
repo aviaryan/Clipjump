@@ -18,13 +18,13 @@ aboutGUI(){
 	Gui, 2:Add, Link, x180 y+3 gblog, <a href="%AUTHOR_PAGE%">Avi Aryan</a> (C) %A_year%
 
 	Gui, 2:Font, S11 norm, Arial
-	Gui, 2:Add, Text, y+30 x10, Language
+	Gui, 2:Add, Text, y+30 x10, % TXT._language
 	Gui, 2:Font, s9
 	Gui, 2:Add, DropDownList, yp x+20 vini_LANG gupdateLang,
 	Translations_loadlist() 			;loads the list in the above ddl
 	
 	Gui, 2:Font, s11, Courier New
-	Gui, 2:Add, Groupbox, x7 y130 w540 h100, About
+	Gui, 2:Add, Groupbox, x7 y130 w540 h100, % TXT.ABT__name
 	Gui, 2:Font, S10, Arial
 	
 	Gui, 2:Add, Text, xp+10 y160 wp-10, % TXT.ABT_info
@@ -34,7 +34,7 @@ aboutGUI(){
 	Gui, 2:Add, Button, % "x" 552-w_ofreset-5 " yp greset", % TXT.ABT_reset 		;leaving 5 as margin
 	Gui, 2:Add, Text, y+0 h0,
 
-	Gui, 2:Show, w552, % PROGNAME " " (!CLIPJUMP_STATUS ? "{Disabled}" : "") " [ Channel: " CN.Name " ]"
+	Gui, 2:Show, w552, % PROGNAME " [ Channel: " CN.Name " ]"
 	return
 
 blog:
@@ -94,7 +94,7 @@ trayMenu(destroy=0){
 	Menu, Tray, Add
 	Menu, Tray, Add,% TXT.SET_actmd "`t" Hparse_Rev(actionmode_k), actionmode
 	Menu, Tray, Add		; separator
-		Menu, Maintanence_Tray, Add, % "Delete [File/Folder]", plugin_deleteFileFolder
+		Menu, Maintanence_Tray, Add, % TXT.PLG_delFileFolder, plugin_deleteFileFolder
 		Menu, Maintanence_Tray, Add, % TXT.TRY_updates, updt
 	Menu, Tray, Add, % TXT._maintenance, :Maintanence_Tray
 		Menu, Options_Tray, Add, % TXT.TRY_incognito, incognito
@@ -126,13 +126,13 @@ trayMenu(destroy=0){
 openFaq:
 	try run hh.exe mk:@MSITStore:%A_WorkingDir%\Clipjump.chm::/docs/faq.html
 	catch
-		MsgBox, 16, Clipjump, There was a problem.`nPlease check that Clipjump.chm exists in the root folder.
+		MsgBox, 16, % PROGNAME, % TXT.ABT_chmErr
 	return
 
 openShortcutsHelp:
 	try run hh.exe mk:@MSITStore:%A_WorkingDir%\Clipjump.chm::/docs/shortcuts.html#pstmd
 	catch
-		MsgBox, 16, Clipjump, There was a problem.`nPlease check that Clipjump.chm exists in the root folder.
+		MsgBox, 16, % PROGNAME, % TXT.ABT_chmErr
 	return
 
 reload:

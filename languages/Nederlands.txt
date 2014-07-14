@@ -382,3 +382,19 @@ ORG_delete = Verwijder het geselecteerde item
 
 SET_revFormat2Def = Start de plak modus altijd met de standaard opmaak
 SET_T_revFormat2Def = Als deze optie is aangevinkt zal altijd de plak modus opstarten net de standaard opmaak (welke standaard 'origineel'/'geen' is).
+ORG_clpdelmsg = Geselecteerde opname is verwijderd
+ORG_copyingclp = Kopieer de geselecteerde opname(s)
+ORG_movingclp = Verplaats geselecvteerde opname(s)
+ORG_Editprops = Bewerk opnmae instellingen
+ORG_oEditMsg = Klik op bewaren als u klaar bent.
+ABT_info = Clipjump is een Windows klembord manager gemaakt in AutoHotkey.
+        = Het is geïnspireerd op Skrommel's applicatie ClipStep.
+_Save = Bewareb
+SET_T_keepsession = Dient Clipjump voortgezet te worden met alle bewaarde klemborden (alleen van het standaard kanaal 0) nadat het is herstart.
+
+;========
+; 11.5
+;========
+_ClipjumpError = Clipjump fout
+TIP_genErrMsg = Neem contact op met de auteur als u problemen blijft houden.
+TRY_reloadcustom = Laad ClipjumpCustom.ini opnieuw

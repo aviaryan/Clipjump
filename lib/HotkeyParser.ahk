@@ -2,7 +2,7 @@
 HParse()
 © Avi Aryan
 
-4th Revision - 21/6/13
+5th Revision - 8/7/14
 =========================================================================
 Extract Autohotkey hotkeys from user-friendly shortcuts reliably and V.V
 =========================================================================
@@ -10,31 +10,32 @@ Extract Autohotkey hotkeys from user-friendly shortcuts reliably and V.V
 EXAMPLES - Pre-Runs
 ==========================================
 
-• Hparse("Cntrol + ass + S", false)		;returns <blank>   	As 'ass' is out of scope and RemoveInvaild := false
-• Hparse("Contrl + At + S")		;returns ^!s
-• Hparse("^!s")			;returns	^!s		as the function-feed is already in Autohotkey format.
-• Hparse("LeftContrl + X")		;returns Lcontrol & X
-• Hparse("Contrl + Pageup + S")		;returns <blank>  As the hotkey is invalid
-• HParse("PagUp + Ctrl", true)		;returns  ^PgUp  	as  ManageOrder is true (by default)
-• HParse("PagUp + Ctrl", true, false)		;returns  <blank>  	as ManageOrder is false and hotkey is invalid	
-• Hparse("Ctrl + Alt + Ctrl + K")		;returns  <blank> 	as two Ctrls are wrong
-• HParse("Control + Alt")		;returns  ^Alt and NOT ^!
-• HParse("Ctrl + F1 + Nmpd1")		;returns <blank>	As the hotkey is invalid
-• HParse("Prbitscreen + f1")		;returns	PrintScreen & F1
-• HParse("Prbitscreen + yyy")		;returns	PrintScreen		As RemoveInvalid is enabled by default.
-• HParse("f1+ browser_srch")		;returns	F1 & Browser_Search
-• HParse("Ctrl + joy1")			;returns	Ctrl & Joy1
-• Hparse("pagup & paegdown")		;returns	PgUp & PgDn
-
-• Hparse_rev("^!s")		;returns Ctrl+Alt+S
-• Hparse_rev("Pgup & PgDn")		;returns Pageup & PgDn
-
+msgbox % Hparse("Cntrol + ass + S", false)		;returns <blank>   	As 'ass' is out of scope and RemoveInvaild := false
+msgbox % Hparse("Contrl + At + S")		;returns ^!s
+msgbox % Hparse("^!s")			;returns	^!s		as the function-feed is already in Autohotkey format.
+msgbox % Hparse("LeftContrl + X")		;returns Lcontrol & X
+msgbox % Hparse("Contrl + Pageup + S")		;returns <blank>  As the hotkey is invalid
+msgbox % HParse("PagUp + Ctrl", true)		;returns  ^PgUp  	as  ManageOrder is true (by default)
+msgbox % HParse("PagUp + Ctrl", true, false)		;returns  <blank>  	as ManageOrder is false and hotkey is invalid	
+msgbox % Hparse("Ctrl + Alt + Ctrl + K")		;returns  <blank> 	as two Ctrls are wrong
+msgbox % HParse("Control + Alt")		;returns  ^Alt and NOT ^!
+msgbox % HParse("Ctrl + F1 + Nmpd1")		;returns <blank>	As the hotkey is invalid
+msgbox % HParse("Prbitscreen + f1")		;returns	PrintScreen & F1
+msgbox % HParse("Prbitscreen + yyy")		;returns	PrintScreen		As RemoveInvalid is enabled by default.
+msgbox % HParse("f1+ browser_srch")		;returns	F1 & Browser_Search
+msgbox % HParse("Ctrl + joy1")			;returns	Ctrl & Joy1
+msgbox % Hparse("pagup & paegdown")		;returns	PgUp & PgDn
+MsgBox % HParse("Ctrl + printskreen", 1, 1, 1) 	; SEND Mode - on returns ^{printscreen}
+msgbox % Hparse_rev("^!s")		;returns Ctrl+Alt+S
+msgbox % Hparse_rev("Pgup & PgDn")		;returns Pageup & PgDn
 */
+
+
 
 ;###################################################################
 ;PARAMETERS - HParse() 		[See also Hparse_Rev() below]
 ;-------------------------------
-;HParse(Hotkey, RemoveInvalid, ManageOrder)
+;HParse(Hotkey, RemoveInvalid, ManageOrder, sendMd)
 ;###################################################################
 
 ;• Hotkey - The user shortcut such as (Control + Alt + X) to be converted
@@ -44,7 +45,9 @@ EXAMPLES - Pre-Runs
   
 ;• ManageOrder(true) - Change (X + Control) to ^x and not x^ so that you are free from errors. If false, a <blank> value is returned when the hotkey is found un-ordered.
 
-HParse(Hotkey, RemoveInvaild = true,ManageOrder = true, useBraces=false)
+;+ SendMd(true) - returns ^{printscreen} instead of ^printscreen so that the hotkey properly works with the Send command
+
+HParse(Hotkey, RemoveInvaild = true, ManageOrder = true, sendMd=false)
 {
 
 firstkey := Substr(Hotkey, 1, 1)
@@ -56,7 +59,7 @@ loop,parse,Hotkey,+-&,%a_space%
 	if (Strlen(A_LoopField) != 1)
 	{
 		parsed := Hparse_LiteRegexM(A_LoopField)
-		if useBraces && (StrLen(parsed)>1) && (Instr(parsed, "vk") != 1)
+		if sendMd && (StrLen(parsed)>1) && (Instr(parsed, "vk") != 1)
 			parsed := "{" parsed "}"
 		If !(RemoveInvaild)
 		{

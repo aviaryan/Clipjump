@@ -1,5 +1,5 @@
-﻿;chinese translation for Clipjump
-;first made by tuzi
+﻿;Chinese translation for Clipjump
+;first made by 兔子
 
 ; NOTES
 ; Comments should only be at the start of the line
@@ -10,10 +10,12 @@
 ; & in &Preview is to create shortcut Alt+P when the window is active. When translating into a non-english language, omit '&' and when in a english type language, use '&'
 ; only when you are sure you are right.
 
-;======
+;======*
 ;v9.9.0.1
 ;======
 
+;以下是我在使用过程中发现的各种bug。这些bug基本上记录于9.9版，之后由于各种原因并未验证这些bug是否依然存在。同样需要注意的是，有些bug仅存于xp，例如忽略窗口管理器的卡死bug。
+;版本号中带*的段落表明此段落翻译已在程序中实际检查并与效果对应的翻译，换句话说，就是很好的翻译
 ;**首次启动程序后，切换到中文后托盘右键菜单会多出几项英文
 ;*剪贴板历史，预览框中的查找
 ;**活动命令常常定位到鼠标所在位置
@@ -25,8 +27,16 @@
 ;**频道1中，剪贴板不遵循最大限制的问题
 ;频道1中，有时未松开CTRL 提示信息就消失了
 ;**添加忽略窗口后存在延迟
-;忽略窗口管理器，删除空条目后再点选一个条目，再次卡住
+;忽略窗口管理，删除空条目后再点选一个条目，再次卡住
 ;活动命令存在BUG显示在桌面右上角
+;设置窗口标题
+;设置窗口，频道前面的英文
+;频道组织，新建一条剪贴板信息下的取消按钮无效
+;频道组织，编辑属性下的取消按钮无效
+;插件管理，编辑属性下的取消按钮无效
+;活动命令下的文本不整齐
+;频道组织，选中多个项目进行频道间转移会失败
+;PLG_properties被同时使用在插件管理和频道组织中是不合理的，因为前者不可编辑，后者可编辑
 
 TIP_text = 文本
 TIP_file_folder = 文件/文件夹
@@ -35,11 +45,11 @@ TIP_empty1 = 第 0 总 0
 TIP_empty2 = 没有可粘贴的内容
 TIP_error = [预览/路径 载入失败]
 TIP_more = [更多]
-TIP_pasting = 粘贴中...
+TIP_pasting = 粘贴中…
 TIP_deleted = 已删除
 TIP_alldeleted = 全部信息已删除
 TIP_cancelled = 已取消
-TIP_fixed = [修正]
+TIP_fixed = [固定]
 TIP_noformatting = 原始数据
 TIP_filepath = 文件路径复制到
 TIP_folderpath = 文件所在目录复制到
@@ -53,7 +63,7 @@ TIP_modem = 松开 Ctrl 确认
 
 ABT__name = 关于
 ABT_reset = 重置 &Clipjump
-ABT_resetM = 确定要重置 Clipjump 以便移除所有保存的剪贴板信息并恢复默认设置吗？
+ABT_resetM = 确定要重置 Clipjump 吗？(将移除所有保存的剪贴板信息并恢复默认设置)
 ABT_removeStart = 发现 Clipjump 已设为自启动，想一并移除吗？
 ABT_resetfinal = 将被关闭。
 ABT_noupdate = 已是最新版本。
@@ -68,10 +78,9 @@ HST_clip = 剪贴板内容
 HST_date = 时间
 HST_size = 大小(B)
 HST_dconsump = 占用硬盘
-HST_viewimage = [双击预览图片]
 HST_m_prev = 预览(&P)
 HST_m_copy = 复制(&C)	(Ctrl+C)
-HST_m_insta = 粘贴(&I)	(Space)
+HST_m_insta = 快速粘贴(&I)	(Space)
 HST_m_export = 导出(&E)	(Ctrl+E)
 HST_m_ref = 刷新(&R)
 HST_m_del = 删除(&D)
@@ -83,24 +92,24 @@ PRV_find = 查找(&D)
 SET__name = 设置
 SET_main = 主要设置
 SET_limitmaxclips = 限制剪贴板信息最大数量(&L)
-SET_maxclips = 最大数量基础值(&M)
-SET_threshold = 最大数量阈值(&T)
+SET_maxclips = 基础值(&M)
+SET_threshold = 阈值(&T)
 SET_quality = 用于预览的缩略图质量(&Q)
 SET_copybeep = 复制成功时声音提示(&B)
 SET_ismessage = 复制成功时文字提示(&S)
 SET_keepsession = 保存剪贴板信息以便重启后继续使用(&R)
 SET_formatting = 启动时使用原始数据模式(&F)
 SET_cb = 剪贴板历史
-SET_daystostore = 历史剪贴板信息保留天数(&H)
-SET_images = 在历史剪贴板信息中存储图片(&I)
+SET_daystostore = 历史信息保留天数(&H)
+SET_images = 历史信息中存储图片(&I)
 SET_shortcuts = 快捷键
-SET_pst = 粘贴 (Ctrl + ..)
+SET_pst = 粘贴 (Ctrl + …)
 SET_actmd = 活动命令
-SET_chnl = 选择频道
+SET_chnl = 频道切换
 SET_channels = 频道
 SET_ischannelmin = 使用迷你界面
 SET_advanced = 高级设置
-SET_manageignore = 管理忽略窗口（不想 Clipjump 起作用的窗口）
+SET_manageignore = 管理忽略窗口(不想 Clipjump 起作用的窗口)
 SET_cancel = 取消(&C)
 SET_apply = 应用(&A)
 
@@ -109,8 +118,8 @@ SET_advanced_error = 无法找到设置文件(settings.ini) 或 记事本程序�
                    = 如果问题仍然存在，请联系作者。
 SET_T_limitmaxclips = Clipjump 的剪贴板信息数量是否存在最大限制。
                     = 选中 = 是
-SET_T_maxclips = 最大数量 = 基础值+阈值 比如基础值为10，阈值为5；当 Clipjump 中已存在14条剪贴板信息后，此时再进行一次复制操作，剪贴板数量将变为10而非15。
-               = 如果你想要 20个，指定 20。
+SET_T_maxclips = 最大数量 = 基础值+阈值
+               = 比如基础值为10，阈值为5；当 Clipjump 中已存在14条剪贴板信息后，此时再进行一次复制操作，剪贴板数量将变为10而非15。
 SET_T_threshold = 阈值的详细作用参见基础值的解释；简单理解可视为基础值之上临时增加的数量。
                 = 多数时候推荐值是10。
                 =
@@ -121,19 +130,9 @@ SET_T_quality = 你希望用于预览的缩略图的质量。
 SET_T_copybeep = 当复制成功时，可听到一个定制的声响。
                =
                = 你可以在 Settings.ini 的 [Advanced] 段中修改声响频率。
-SET_T_keepsession = 选中后 Clipjump 将保存剪贴板信息，使得重启后依然可以使用上次剪贴板中的数据。
 SET_T_ismessage = 这个值决定了当 复制/粘贴 操作成功时，你是否想看到确认消息。
-SET_T_formatting = 想要 Clipjump 以原始数据模式启动吗？所谓 原始数据模式，就是不格式化任何数据。
-                 = 建议选是。
 SET_T_daystostore = 剪贴板信息将被保留的天数。
 SET_T_images = 剪贴板中的图片也要保留在历史信息中吗？
-SET_T_pst = 粘贴时使用 Ctrl + 哪个键
-          = 注意 E C X Z S 是保留的。
-          = 
-          = 详细信息请看帮助中“Copy bypassing Clipjump”一节。
-SET_T_actmd = 这个快捷键用于打开 活动命令。
-            = 活动命令状态下，可快速调用程序提供的几乎所有功能。
-            = 建议使用活动命令代替禁用很少使用的快捷键。
 SET_T_chnl = 这个快捷键用于打开 频道
            = 设置快捷键为 无 将只能通过 托盘右键菜单 或 活动命令 打开频道
 SET_T_cfilep = 这个快捷键用于 复制选中文件路径
@@ -154,7 +153,7 @@ CNL__name = 频道
 CNL_choose = 选择频道(&C)
 CNL_channelname = 频道名(&N)
 CNL_advice1 = 频道 0 (Default) 是通常使用下的主频道。
-CNL_advice2 = 频道名将在改变时自动保存。
+CNL_advice2 = 频道名将在修改时自动保存。
 CNL_advice3 = 只有前一个频道被激活(使用)后，下一个频道才可用。
 CNL_use = 使用频道(&U)
 CNL_cancel = 取消(&L)
@@ -173,7 +172,7 @@ ACT_enable = 启用
 ACT_disable = 停用
 ACT_exit = 退出活动命令
 
-IGN__name = 忽略窗口管理器 
+IGN__name = 忽略窗口管理
 IGN_add = 添加窗口(&A) Class
 IGN_delete = 删除窗口(&D) Class
 
@@ -185,9 +184,238 @@ _cfiled = 复制文件内容
 _ot = One Time Stop
 _pitswp = PitSwap
 _exportedto = 导出到
-;============
+;============*
 ;9.9.0.2
 ;============
+
 IGN_Restartmsg = 需要重启 Clipjump 以使更改生效。确认重启？
 IGN_tip = 鼠标点选窗口后，按 空格 即可添加。
         = 按 Esc 返回。
+;===========*
+;9.9.1
+;===========
+
+TRY_options = 设置(&O)
+TRY_tools = 工具(&T)
+HST_delall_msg = 确定要清空 Clipjump 的历史记录？
+; the following key was modified in v9.9.1 and so you see its entry here
+SET_T_actmd = 这个快捷键用于打开 活动命令。
+            = 活动命令状态下，可快速调用程序提供的几乎所有功能。
+            = 如果想使用系统级的快捷键调用那些功能，可以在下面设置。
+
+;==========*
+;9.9.1.9
+;==========
+
+CNL_delete = 删除频道(&D)
+CNL_delmsg = 你真的想删除这个频道吗？请注意这个过程是不可逆的，并且将删除存储在该频道中的所有剪贴板信息。
+CNL_del_default = 不允许删除默认频道(#0)。
+TIP_empty3 = 松开 Ctrl 退出。
+UPD_restart = Clipjump 现在将重启以便应用更新。
+UPD_automsg = 点击 是 将自动更新 Clipjump 点击 否 将前往主页。
+
+;=========*
+;10
+;=========
+
+CHC_name = 选择频道
+TIP_done = 完成
+TIP_copycutfailed = 复制/移动 未完成
+TIP_copy = 复制到
+TIP_move = 移动到
+
+;========*
+;10.5 beta
+;========
+
+TIP_delallprompt = 警告
+                 = 你真的想删除当前频道下的全部剪贴板信息？
+                 = 按 Y 确认。
+                 = 按 N 取消。
+
+;=======*
+;10.6
+;=======
+
+TIP_confirmcopy = 你看到这条确认消息是因为这是个受保护的频道。
+                = 确认允许它被复制到此频道吗？
+                = 按 Y 确认
+                = 按 N 取消
+ABT_seehelp = 你想看看 Clipjump 的帮助吗？
+ABT_runadmin = Clipjump 没有以管理员权限运行
+             = 这(可能)是因为程序功能不正常。
+             = 
+             = [这条消息只会显示一次]
+ABT_cjready = 嗨！
+            = Clipjump 已经激活了。
+            = 现在试试复制粘贴点东西…
+TIP_editing = 编辑中…
+            = 按 Esc 取消
+	    = 按 保存 键保存修改
+TIP_editdone = 剪贴板信息已被编辑
+TIP_editnotdone = 剪贴板信息未被编辑！
+
+;======*
+;10.7
+;======
+
+HST_m_edit = 编辑	(Ctrl+H)
+
+;======*
+;10.7.2.6b
+;======
+
+_name = 插件
+_tags = 标签
+_author = 作者
+_run = 运行
+_properties = 属性
+PLG_properties = 编辑属性	(Alt+Enter)
+PLG__name = 插件管理
+PLG_fetchparam = 设置插件参数
+PLG_delmsg = 你确定要删除下列插件？
+PLG_restartmsg = 插件已删除。
+               = 请注意插件将在程序重启后生效。
+               = 想继续吗？
+API_extplugMiss = 以下外部插件文件丢失。
+API_plugCorrupt = 以下插件损坏或丢失。
+
+;=====*
+;10.7.5
+;=====
+
+PLG_Sb_running = 插件运行中
+PLG_Sb_exit = 插件已终止
+PLG_Sb_deleted = 插件已删除
+SET_T_pst = 粘贴时使用 Ctrl + 哪个键(即粘贴模式)
+          = 注意 E C X Z S A F H 是保留的。
+          = 
+          = 详细信息请看帮助文件中“Copy bypassing Clipjump”一节。
+SET_pformat = 粘贴格式
+SET_T_pformat = 你想要 Clipjump 启动后激活的粘贴格式。默认值是“-original”。
+SET_t_plugM = 打开插件管理的快捷键
+PLG_edit = 编辑 (F2)
+CUS_error = ClipjumpCustom.ini 中存在错误？
+
+;=====*
+;10.7.8
+;=====
+
+TRY_pstmdshorts = 粘贴模式快捷键
+
+;=====*
+;10.9
+;=====
+
+TIP_holdclip = 按 Ctrl+V 粘贴
+             = 按 Insert 将剪贴板信息添加到频道中
+             = 按 Esc 退出
+SET_holdclip = 临时复制
+SET_T_holdclip = 复制选中的文本或项目到缓冲区，防止被 Clipjump 捕获。
+               = 然后你可以粘贴、舍弃、或添加到 Clipjump 中。
+SET_keepactivepos = 记住当前活动剪贴板信息序号
+SET_T_keepactivepos = 选中此项将使 Clipjump 记住最后被使用的剪贴板信息的序号。
+                    = 不勾选将使粘贴模式总是从序号1开始。
+
+;=====*
+;11
+;=====
+
+HST_viewimage = [图片]
+ORG__name = 频道组织
+ORG_m_inc = 上移	(Alt+Up)
+ORG_m_dec = 下移	(Alt+Down)
+ORG_error = 不支持
+ORG_countStatus = 项目数量
+SET_org = 频道组织
+ORG_delCnlMsgTitle = 选择频道操作
+ORG_delCnlMsg = 你想对选中频道进行何种操作？
+      = 永久删除频道 = 是
+      = 清空频道 = 否
+      = 什么也不做 = 取消
+_rename = 重命名
+ORG_renameAsk = 请为以下编号频道输入新名字
+TIP_initMsg = 正在初始化 Clipjump
+
+;======*
+;11.2
+;======
+
+TIP_tagPrompt = 输入标签(多个标签使用 空格 分隔)
+SET_startSearch = 粘贴模式开启搜索功能
+SET_T_startSearch = 选中此项将使粘贴模式启动后搜索功能亦随之开启。
+                  = 如果你不喜欢按住 Ctrl 切换剪贴板信息的方式，这个设置将很有用。也可以在帮助文件中搜索“Search in Paste Mode”。
+_editing = 编辑中
+
+; Note to Translator > please make sure the out in Ctrl+v+F1 is aligned properly in TIP_help
+TIP_help =
+= 松开 Ctrl    - 粘贴
+= V            - 下一条剪贴板信息
+= C            - 前一条剪贴板信息
+= X            - 取消粘贴、移动、复制、删除剪贴板信息
+= Z            - 切换粘贴格式
+= Space        - 固定
+= S            - 将当前剪贴板信息存入系统剪贴板
+= E            - 导出
+= Up/Down      - 切换频道 +1/-1
+= A            - 跳至首条剪贴板信息
+= 1…9          - 以 n 为步长进行跳至
+= F            - 搜索
+= H            - 编辑
+= Enter        - 重复粘贴当前剪贴板信息
+= T            - 标签
+= F1           - 帮助
+=
+= 按 V 退出此窗口
+
+;=======*
+; 11.2.3
+;=======
+_more_options = 更多设置
+ORG_m_openpst = 在粘贴模式中打开	(Ctrl+O)
+_!x = Alt+X
+_!c = Alt+C
+ORG_m_insta = 快速粘贴	(Space)
+
+;=======*
+; 11.3
+;=======
+_destChannel = 目标频道
+_maintenance = 维护
+_new = 新建
+ORG_createnew = 新建一条剪贴板信息
+ORG_createnewpr = 剪贴板信息将被创建于频道
+ORG_newchname = 新频道名称
+
+;=======*
+; 11.4 - Added tooltips for Channel Organizer (hoppfrosch)
+;=======
+ORG_search = 搜索
+ORG_up = 上移
+ORG_down = 下移
+ORG_edit = 编辑
+ORG_openPastemode = 在粘贴模式中打开
+ORG_props = 编辑属性
+ORG_cut = 剪切到
+ORG_copy = 复制到
+ORG_delete = 删除
+; ----
+
+SET_revFormat2Def = 总是使用默认粘贴格式
+SET_T_revFormat2Def = 选中此项将使粘贴格式总是使用“-original”。
+ORG_clpdelmsg = 已删除
+ORG_copyingclp = 复制中
+ORG_movingclp = 移动中
+ORG_Editprops = 编辑属性
+ORG_oEditMsg = 完成后请点击保存。
+ABT_info = Clipjump 是一款使用 AutoHotkey 编写的 Windows 平台剪贴板管理软件。
+        = 它的灵感来自于 Skrommel 的程序 ClipStep。
+_Save = 保存
+SET_T_keepsession = 选中此项将使 Clipjump 在重启后可以继续使用之前保存的全部剪贴板信息(仅默认频道 0)。
+
+;========
+; 11.5
+;========
+_ClipjumpError = Clipjump 错误
+TIP_genErrMsg = 如果你持续遇到这个问题请联系作者。
+TRY_reloadcustom = 重载 ClipjumpCustom.ini

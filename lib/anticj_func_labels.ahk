@@ -36,7 +36,7 @@ exit:
 reloadCustom:
 	resetCustomizations()
 	loadCustomizations()
-	MsgBox, 0, % PROGNAME, % TXT.TIP_done
+	MsgBox, 64, % PROGNAME, % TXT.TIP_done
 	return
 
 Tooltip_setFont(font_options="", font_face=""){
@@ -149,7 +149,7 @@ multInputBox(Title, caption="", row=5, default="", owner=""){
 	Gui, Font, norm, Consolas
 	Gui, Add, Edit, xp y+30 w%kw% r%row% vtheEdit, % default
 	Gui, Add, Button, x5 y+30 Default, OK
-	Gui, Add, Button, x+30 yp, % TXT.SET_Cancel
+	Gui, Add, Button, x+30 yp gmIboxbuttonCancel, % TXT.SET_Cancel
 	if owner {
 		Gui, miBox:+owner%owner%
 		Gui, %owner%:+Disabled
@@ -215,7 +215,7 @@ ObjectEditView(obj, opn, readonly=0){
 		Gui, Add, Edit, % "x" maxsize " yp vfield" A_index  (readonly ? " +Readonly" : "") " w" (opn.4 ? opn.4 : 100), % v
 	}
 	Gui, Add, Button, x5 y+30 Default gobjEditButtonSv, % readonly ? "OK" : TXT._save
-	Gui, Add, Button, x+30 yp, % TXT.SET_Cancel
+	Gui, Add, Button, x+30 yp gobjEditButtoncancel, % TXT.SET_Cancel
 	if opn.2 {
 		Gui, % "objEdit:+owner" opn.2
 		Gui, % opn.2 ":+Disabled"
