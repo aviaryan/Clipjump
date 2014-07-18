@@ -38,6 +38,7 @@ gui_History()
 	;Use a Space and a tab to separate
 	Menu, HisMenu, Add, % TXT.HST_m_copy , history_clipboard
 	Menu, HisMenu, Add, % TXT.HST_m_insta , history_InstaPaste
+	Menu, HisMenu, Add, % TXT.SET_HoldClip " `t(" TXT["_!c"] ")", history_HoldClip
 	Menu, HisMenu, Add, % TXT.HST_m_edit , history_EditClip
 	Menu, HisMenu, Add, % TXT.HST_m_export , history_exportclip
 	Menu, HisMenu, Add
@@ -77,6 +78,7 @@ gui_History()
 	hkZ("^h", "history_EditClip")
 	hkZ("!d", "historySearchfocus")
 	hkZ("^f", "historySearchfocus")
+	hkZ("!c", "history_holdClip")
 	Hotkey, If
 	Hotkey, If, IsPrevActive()
 	hkZ("^f", "prevSearchfocus")
@@ -152,6 +154,16 @@ history_EditClip: 		; label inside to call history_searchbox which uses local fu
 	runwait % ( Instr(clip_file_path, ".jpg") ? ini_defImgEditor : ini_defEditor ) " """ A_WorkingDir "\cache\history\" clip_file_path """"
 	HISTORYOBJ[clip_file_path "_data"] := HISTORYOBJ[clip_file_path "_date"] := ""  	; free to rebuild them
 	gosub history_SearchBox
+	return
+
+history_HoldClip:
+	while !IsHisListViewActive()
+		sleep 50
+	Gui, History:Default
+	LV_GetText(clip_file_path, LV_GetNext(0), hidden_date_no)
+	FileRead, tmp, % "cache\history\" clip_file_path
+	STORE.holdClip_preText := tmp
+	gosub holdclip
 	return
 
 historyGuiContextMenu:

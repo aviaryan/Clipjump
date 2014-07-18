@@ -288,7 +288,6 @@ TRY_pstmdshorts = Paste Mode shortcuts
 TIP_holdclip = Press Ctrl+V to paste
              = Press Insert to add clip to channel
              = Press Esc to exit
-SET_holdclip = Hold Clip Feature
 SET_T_holdclip = Copies the selected text or item to a buffer and prevents it from being captured by Clipjump.
                = You can then paste the clip, move it to a channel or reject it.
 SET_keepactivepos = Preserve Current Active Clip position
@@ -361,7 +360,6 @@ ORG_m_insta = Insta-Paste (Space)
 _destChannel = Destination Channel
 _maintenance = Maintenance
 _new = New
-ORG_createnew = Create New Clip in current channel
 ORG_createnewpr = New Clip will be created in the following channel
 ORG_newchname = New channel name
 
@@ -404,3 +402,13 @@ _disabled = Disabled
 PLG_delfilefolder = Delete [File/Folder]
 ABT_chmErr = There was a problem.
    = Please check that Clipjump.chm exists in the root folder.
+
+;=======
+; 11.6
+;=======
+ORG_createnew = Create New Clip
+ORG_chooseCh = Active Channel
+ABT_errorFontIcon = The file %GHICON_path% is missing. This can lead to display problems in some user interfaces. Please replace the file.
+CNL_chngMsg = Channel %cv1% active
+CNL_chNtExst = Channel %cv1% doesn't exists !
+SET_holdclip = Hold Clip
