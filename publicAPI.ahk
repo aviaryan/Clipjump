@@ -29,6 +29,7 @@ msgbox % cj.version
 
 ;cj := new Clipjump()
 ;cj.runFunction("set_pformat(NO-FORMATTING)")
+;cj.getClipAt(0, 7)
 ;msgbox % cj.author_page
 
 class Clipjump

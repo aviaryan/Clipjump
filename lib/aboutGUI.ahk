@@ -84,6 +84,8 @@ trayMenu(destroy=0){
 		Menu, Tray, DeleteAll
 		Menu, Options_Tray, Delete
 		Menu, Tools_Tray, Delete
+		Menu, Maintanence_Tray, Delete
+		Menu, Help_Tray, Delete
 	}
 
 	;Tray Icon

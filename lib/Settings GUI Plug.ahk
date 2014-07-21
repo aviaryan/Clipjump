@@ -217,11 +217,12 @@ settingsButtonApply:
 settings_open_advanced:
 	try {
 		run % "notepad.exe " CONFIGURATION_FILE
-		WinWaitActive, ahk_class Notepad
-		Send ^{vk47} 					;^g
-		;Winwait, Go To Line
-		Send % NUMBER_ADVANCED "{vk0d}"
-	} 
+		;WinWaitActive, ahk_class Notepad
+		;Send ^{vk47} 					;^g
+		;sleep 100
+		;;Winwait, Go To Line
+		;Send % NUMBER_ADVANCED "{vk0d}"
+	}
 	catch {
 		MsgBox, 16, ERROR, % PROGNAME " " TXT.SET_advanced_error
 	}

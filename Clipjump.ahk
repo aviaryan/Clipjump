@@ -68,7 +68,7 @@ global MSG_FOLDER_PATH_COPIED := TXT.TIP_folderpath " " PROGNAME
 
 ;History Tool
 global hidden_date_no := 4 , history_w , history_partial := 1 ;start off with partial=1 <> much better
-global PREV_FILE := "cache\prev.html"
+global PREV_FILE := "cache\prev.html" , GHICON_PATH := A_ScriptDir "\icons\octicons-local.ttf"
 
 ;*******************************************************************************
 
@@ -206,12 +206,15 @@ loadClipboardDataS()
 OnExit, exit
 
 fix_FixateFiles()
-
+if FileExist(GHICON_PATH)
+	DllCall("GDI32.DLL\AddFontResourceEx", Str, GHICON_PATH ,UInt,(FR_PRIVATE:=0x10), Int,0)
+else
+	MsgBox, 16, % PROGNAME, % valueof(TXT.ABT_errorFontIcon)
 EmptyMem()
 startUpComplete := 1
 return
 
-;Tooltip No 1 is used for Paste Mode tips, 2 is used for notifications , 3 is used for updates , 4 is used in Settings , 5 is used in Action Mode
+;Tooltip No 1 is used for Paste Mode tips, 2 is used for notifications , 3 is used for updates , 4 is used in WM_MOUSEMOVE , 5 is used in Action Mode
 ;6 used in Class Tool, 7 in API (Plugin) , 8 used in Customizer, 9 used in history tool, 10 in edit clips, 11 in Channel Organizer
 
 ;OLD VERSION COMPATIBILITES TO REMOVE
@@ -658,6 +661,7 @@ setClipTag:
 	if !ErrorLevel
 		AddClipPref(CN.NG, realActive, "Tags", ov), Prefs2Ini() , autoTooltip(TXT.TIP_done, 800, 2)
 	else autoTooltip(TXT.TIP_cancelled, 800, 2)
+	EmptyMem()
 	return
 
 clipSaver() {
@@ -962,13 +966,18 @@ pitSwap:
 	else
 		CN.pit_NG := CN.NG , changeChannel(temp)
 		, autoTooltip("PitSwap Activated", 500)
+	EmptyMem()
 	return
 
 holdClip:
 	; cut - make own by clipjump custom ---- send = this, then del
 	API.blockMonitoring(1) , ONCLIPBOARD := 0 , IScurCBACTIVE := 0
-	Send % ( STORE.holdClip_send ? STORE.holdClip_send : "^{vk43}" )
-	STORE.holdClip_send := "^{vk43}" 	; change it quickly
+	if ( STORE.holdClip_preText == "" )
+		Send % ( STORE.holdClip_send ? STORE.holdClip_send : "^{vk43}" )
+	else
+		try Clipboard := STORE.holdClip_preText
+	STORE.holdClip_send := "^{vk43}" , STORE.holdClip_preText := "" 	; default
+
 	while !ONCLIPBOARD
 	{
 		if A_Index>20
@@ -1149,8 +1158,9 @@ actionmode:
 		else if ACTIONMODE[temp_am]
 			gosub % ACTIONMODE[temp_am]
 		else if temp_am is Integer 			; give user chance to override setting
-			changeChannel(temp_am)
-			, autoTooltip("Channel " temp_am " active", 800, 2)
+			if changeChannel(temp_am)
+				autoTooltip( RegExReplace(TXT.CNL_chngMsg, "%cv1%", temp_am), 800, 2)
+			else autoTooltip( RegExReplace(TXT.CNL_chNtExst, "%cv1%", temp_am), 800, 2)
 	}
 	else
 		EmptyMem()
@@ -1447,6 +1457,7 @@ routines_Exit() {
 	Ini_write("Clipboard_history_window", "partial", history_partial, 0)
 	Prefs2Ini()
 	updatePluginIncludes()
+	DllCall( "GDI32.DLL\RemoveFontResourceEx",Str, GHICON_PATH,UInt,(FR_PRIVATE:=0x10),Int,0)
 }
 
 ;#################### COMMUNICATION ##########################################

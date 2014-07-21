@@ -17,14 +17,14 @@ channelOrganizer(){
 	if !wt
 		wt := A_ScreenWidth>1300 ? 1000 : 850
 	if !ht
-		ht := A_ScreenHeight>800 ? 550 : 480
+		ht := A_ScreenHeight>800 ? 850 : 600
 	w_ofSearch := getControlInfo("button", TXT.HST_search, "w", "s10")
 
 	;enable tooltips
 	OnMessage(0x200, "WM_MOUSEMOVE")
 
 	Gui, chOrg:New
-	Gui, +Resize +MinSize625x400
+	Gui, +Resize +MinSize825x600
 	Gui, Color, D2D2D2
 	Gui, Font, s10
 	Gui, Add, Text, % "x" wt - w_ofSearch - 200 " y10", % TXT.HST_search
@@ -32,20 +32,22 @@ channelOrganizer(){
 	Gui, Add, Edit, % "x" wt-200 " yp w200 vchOrg_search gchOrg_search", 		; width of EDIT is fixed = 200
 	Gui, Font, s10
 	Gui, Add, Button, % "x" 5+115+4+30+4 " yp vchorgNew gchorgNew ", % TXT._new
-
+	Gui, Add, Text, x+30 yp+4, % TXT.ORG_chooseCh
+	Gui, Add, DropDownList, x+10 w150 yp-3 vchorg_useCh gchorg_useCh,
+	gosub chOrg_addChUseList
 	Gui, Add, ListBox, section x5 y+10 w115 h%ht% gchOrg_Lb vchOrg_Lb -LV0X10 AltSubmit, ;% "|" chList 	; width of LB is fixed = 115
 	gosub chOrg_addChList
 
-	Gui, Font, s12, Wingdings
-	Gui, Add, Button, x+4 yp+20 w30 +Disabled, % chr(231)
-	Gui, Add, Button, xp y+20 w30 gchOrgUp vchOrgUp, % chr(233) 			; buttons width = 30
-	Gui, Add, Button, xp y+2 w30 gchOrgDown vchOrgDown, % chr(234)
-	Gui, Add, Button, xp y+2 w30 gchOrgEdit vchOrgEdit, % chr(33)
-	Gui, Add, Button, xp y+2 w30 gchorg_openPastemode vchorg_openPastemode, % chr(49)
-	Gui, Add, Button, xp y+2 w30 gchOrg_props vchOrg_props, % chr(50)
-	Gui, Add, Button, xp y+2 w30 gchOrgCut vchOrgCut, % chr(34)
-	Gui, Add, Button, xp y+2 w30 gchOrgCopy vchOrgCopy, % chr(52)
-	Gui, Add, Button, xp y+2 w30 gchOrgDelete vchOrgDelete, % chr(251)
+	Gui, Font, s16, github-octicons
+	Gui, Add, Button, x+4 yp+20 w30 h35 +Disabled, % chrhex("f040")
+	Gui, Add, Button, xp y+20 w30 gchOrgUp vchOrgUp, % chrhex("f03d")			; buttons width = 30
+	Gui, Add, Button, xp y+2 w30 gchOrgDown vchOrgDown, % chrhex("f03f")
+	Gui, Add, Button, xp y+2 w30 gchOrgEdit vchOrgEdit, % chrhex("f058")
+	Gui, Add, Button, xp y+2 w30 gchorg_openPastemode vchorg_openPastemode, % chrhex("f032")
+	Gui, Add, Button, xp y+2 w30 gchOrg_props vchOrg_props, % chrhex("f015")
+	Gui, Add, Button, xp y+2 w30 gchOrgCut vchOrgCut, % chrhex("f035")
+	Gui, Add, Button, xp y+2 w30 gchOrgCopy vchOrgCopy, % chrhex("f04d")
+	Gui, Add, Button, xp y+2 w30 gchOrgDelete vchOrgDelete, % chrhex("f0d0")
 	; x = 5+115 + 4 + 30 = 154 + 4
 	Gui, Font
 	Gui, Add, ListView, % "x+4 ys w" wt-158 " h" ht " HWNDchOrg_Lv vchOrg_Lv gchOrg_Lv", % "Ch|#|" TXT.HST_clip
@@ -88,6 +90,7 @@ channelOrganizer(){
 	hkZ("F5", "chOrg_refresh")
 	hkZ("^f", "chOrg_searchfocus")
 	hkZ("^n", "chOrgNew")
+	hkZ("F4", "chOrg_useChFocus")
 	Hotkey, If
 	Hotkey, If, IsChOrgLVActive()
 	hkZ("Enter", "chOrg_preview")
@@ -112,10 +115,6 @@ channelOrganizer(){
 	Hotkey, If
 	return
 
-MenuHandler:
-	return
-MenuFileOpen:
-	return
 
 chOrg_addChList:
 	chList := RegexReplace( Trim( channel_find(), "`n" ), "`n", "|" )
@@ -125,18 +124,11 @@ chOrg_addChList:
 
 chOrgGuiSize:
 	if (A_EventInfo != 1){
-		;Anchor("SysListView321", "wh", "chOrg:")
 		gui_w := A_GuiWidth , gui_h := A_GuiHeight
 		GuiControl, move, SysListView321, % "w" gui_w-158-5-2 " h" gui_h-80
-		;Anchor("ListBox1", "h", "chOrg:")
 		GuiControl, move, ListBox1, % "h" gui_h-80
-		;Anchor("Edit1", "x", "chOrg:")
 		GuiControl, move, Edit1, % "x" gui_w-200-5
-		;Anchor("Static1", "x", "chOrg:")
 		GuiControl, movedraw, Static1, % "x" gui_w- w_ofsearch-200-5
-		;Gui, chOrg:Default
-		;ControlGetPos, , , Width,, SysListView321
-		;ControlGetPos, , , , Height, ListBox1
 		width := gui_w-158-5-2
 		height := gui_h-80
 		LV_ModifyCol(3, Width -60 -10)
@@ -147,7 +139,11 @@ chOrgGuiContextMenu:
 	if (A_GuiControl == "chOrg_Lv")
 		Menu, chOrgLVMenu, Show, %A_GuiX%, %A_GuiY%
 	else if (A_GuiControl == "chOrg_Lb")
-		Menu, chOrgLBMenu, Show, %A_GuiX%, %A_GuiY%
+	{
+		gosub chOrg_isChActive
+		if isChActive
+			Menu, chOrgLBMenu, Show, %A_GuiX%, %A_GuiY%
+	}
 	return
 
 chOrgGuiEscape:
@@ -158,6 +154,7 @@ chOrgGuiClose:
 	Menu, chOrgLBMenu, DeleteAll
 	Menu, chOrgSubM, DeleteAll
 	OnMessage(0x200, "") 		; This will conflict in case both settings and chorg are active at the same time
+	Tooltip,,,, 4
 	EmptyMem()
 	return
 
@@ -167,7 +164,13 @@ chOrgDown: 	; dont make these labels critical
 	t_Up := A_ThisLabel="chOrgUp" ? 1 : 0
 	gosub chOrg_isChActive
 	if !isChActive {
-		temp_row_s := LV_GetNext(0) ;0
+		gosub chOrg_getSelected
+		if Instr(rSel, "`n")
+		{
+			chOrg_notification(TXT.ORG_error)
+			return
+		}
+		temp_row_s := LV_GetNext(0)
 		;while (temp_row_s := LV_GetNext(temp_row_s)) {
 			LV_GetText(fch, temp_row_s, 1) , LV_GetText(fcl, temp_row_s, 2)
 			spRow := t_Up ? temp_row_s-1 : temp_row_s+1
@@ -227,7 +230,11 @@ chOrgDelete:
 				gosub chOrg_addChList
 			}
 			IfMsgBox, No
+			{
 				API.emptyChannel(chSel)
+				Gui, chorg:Default
+				LV_Delete()
+			}
 			IfMsgBox, Cancel
 				chOrg_notification( TXT.TIP_cancelled)
 			else chOrg_notification(TXT.TIP_done)
@@ -265,19 +272,12 @@ chOrgCopy:
 chOrgNew:
 	gosub chorg_getChSelected
 	if chSel<0
-		chSel := 0
+		chSel := CN.NG
 	STORE.ErrorLevel := 0
 	out := multInputBox(TXT.ORG_createnew, TXT.ORG_createnewpr " - " chSel, 15, blank, "chOrg")
 	if STORE.ErrorLevel
 	{
-		cInfo := API.getChInfo(chSel)
-		API.Text2Binary(out, ret)
-		FileAppend, %ret%, % "cache\clips" cInfo.p "\" cInfo.realCURSAVE+1 ".avc"
-		CDS[chSel][cInfo.realCURSAVE+1] := out
-		manageFIXATE( cInfo.realCURSAVE + 1, chSel, cInfo.p )
-		CN["CURSAVE" cInfo.p] += 1
-		if cInfo.isactive
-			CURSAVE += 1 	; also cursave if it is active
+		API.addClip(chSel, out)
 		gosub chOrg_refresh
 	} Else
 		chOrg_notification(TXT.TIP_cancelled)
@@ -302,7 +302,7 @@ chorg_getChSelected:
 chOrg_isChActive:
 	Gui, chorg:Default
 	GuiControlGet, isChActive, chOrg:, % "Button" t_startBtn 		; Cut button not enabled when LB is active
-	if (isChActive == chr(231))
+	if (isChActive == chrhex("f040"))
 		isChActive := 1
 	else isChActive := 0
 	return
@@ -310,7 +310,7 @@ chOrg_isChActive:
 chOrg_getSelected:
 	Gui, chOrg:Default
 	temp_row_s := 0 , rSel := ""
-	while ( temp_row_s := LV_GetNext(temp_row_s, "F") )
+	while ( temp_row_s := LV_GetNext(temp_row_s) )
 	{
 		LV_GetText(out_ch, temp_row_s, 1) , LV_GetText(out_cl, temp_row_s, 2)
 		rSel .= out_ch "-" out_cl "`n"
@@ -364,7 +364,7 @@ chOrg_preview:
 	if FileExist(clippath := "cache\thumbs" out_ch "\" out_cl ".jpg")
 		gui_Clip_preview(clippath, blank, "chOrg")
 	else {
-		LV_GetText(clipdata, last_Row, 3)
+		clipdata := CDS[out_ch ? out_ch : 0][out_cl] 	; dont use LV here, limit of 8192 chrs
 		genHTMLforPreview(clipdata)
 		gui_Clip_preview(PREV_FILE, chOrg_search, "chOrg")
 	}
@@ -379,9 +379,14 @@ chOrg_renameCh:
 	gosub chOrg_addChList
 	return
 
+chorg_UseCh:
+	Gui, chorg:Submit, nohide
+	changeChannel(channel_find(chorg_UseCh)) 	; chChannel() will handle that list
+	return
+
 chOrg_Lv:
 	Gui, chOrg:Default
-	GuiControl, , % "Button" t_startBtn, % chr(232)
+	GuiControl, , % "Button" t_startBtn, % chrhex("f03e")
 	loop % t_horizButtons
 		GuiControl, Enable, % "Button"  A_index+t_startBtn
 	if A_GuiEvent = DoubleClick
@@ -392,7 +397,7 @@ chOrg_refresh:
 chOrg_search:
 chOrg_Lb:
 	Gui, chOrg:submit, nohide
-	GuiControl, ,% "Button" t_startBtn, % chr(231)
+	GuiControl, ,% "Button" t_startBtn, % chrhex("f040")
 
 	if chOrg_Lb=1
 		loop % t_horizButtons 		; in case all channels are selected
@@ -408,6 +413,18 @@ chOrg_Lb:
 	return
 
 }
+
+chOrg_addChUseList:
+	chList := RegexReplace( Trim( channel_find(), "`n" ), "im)\d+.*?-\s*", "")
+	chList := RegexReplace(Trim(chList), "`n", "|")
+	StringReplace, chList, chList, % CN.Name, % CN.Name "|", All
+	chList .= (Substr(chList, 0) == "|") ? "|" : ""
+	GuiControl, chOrg:, ComboBox1, % "|" chList
+	return
+
+chOrg_useChFocus:
+	GuiControl, chOrg:focus, ComboBox1
+	return
 
 chOrg_searchfocus:
 	GuiControl, chOrg:Focus, Edit1

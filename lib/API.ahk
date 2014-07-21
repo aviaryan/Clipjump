@@ -249,6 +249,19 @@ class API
 		return 1
 	}
 
+	; adds clip to a chanel
+	; text = the string that is created as a new clip
+	addClip(channel, text){
+		cInfo := API.getChInfo(channel)
+		API.Text2Binary(text, ret)
+		FileAppend, %ret%, % "cache\clips" cInfo.p "\" cInfo.realCURSAVE+1 ".avc"
+		CDS[channel][cInfo.realCURSAVE+1] := text
+		manageFIXATE( cInfo.realCURSAVE + 1, channel, cInfo.p )
+		CN["CURSAVE" cInfo.p] += 1
+		if cInfo.isactive
+			CURSAVE += 1 	; also cursave if it is active
+	}
+
 	; sets a variable
 	setVar(var, value){
 		global

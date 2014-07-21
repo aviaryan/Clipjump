@@ -39,6 +39,10 @@ reloadCustom:
 	MsgBox, 64, % PROGNAME, % TXT.TIP_done
 	return
 
+chrHex(n){
+	return chr( base2Number(n, 16) )
+}
+
 Tooltip_setFont(font_options="", font_face=""){
 ;sets font for a tooltip
 	if (font_options) or (font_face)
@@ -327,8 +331,9 @@ genHTMLforPreview(code){
 }
 
 deactivateHtml(code){
-	code := RegExReplace(code, ">", "&gt;")
-	return RegExReplace(code, "<", "&lt;")
+	StringReplace, code, code, >, % "&gt;", All
+	StringReplace, code, code, <, % "&lt;", All
+	return code
 }
 
 ;GetFile()
@@ -665,6 +670,13 @@ inputBox(title, text){
 	Inputbox, o, % title, % text
 	if !ErrorLevel
 		return o
+}
+
+Base2Number(H, base=16){
+	S:=Strlen(H),N:=0
+	loop,parse,H
+		N+=((A_LoopField*1="")?Asc(A_LoopField)-87:A_LoopField)*base**(S-A_index)
+	return N
 }
 
 ; Code by deo http://www.autohotkey.com/board/topic/74348-send-command-when-switching-to-russian-input-language/#entry474543

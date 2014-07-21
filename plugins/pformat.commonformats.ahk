@@ -4,7 +4,7 @@
 ;@Plugin-Description Only works for Text ([Text] or [File/Folder]) type data.
 ;@Plugin-Author Avi
 ;@Plugin-Tags pformat
-;@Plugin-version 0.4
+;@Plugin-version 0.5
 ;@Plugin-Previewable 0
 
 ;@Plugin-Param1 The Input Text
@@ -43,6 +43,17 @@ plugin_pformat_commonformats_NumberedList(zin){
 plugin_pformat_commonformats_Lowercase(zin){
 	StringLower, zout, zin
 	return zout , STORE.ClipboardChanged := 1
+}
+
+plugin_pformat_commonformats_TrimWhiteSpace(zin){
+	return Trim(zin, "`r`n `t") , STORE.ClipboardChanged := 1
+}
+
+plugin_pformat_commonformats_DeHTML(zin){
+	STORE["commonformats_DeHTML"] := "All ""&<> are translated to &quot;&amp;&lt;&gt; and linefeed \n to <br>. If you don't want <br>, apply changes and "
+	. "then RegexReplace <br> with none."
+	Transform, o, HTML, % zin
+	return plugin_pformat_commonformats_TrimWhiteSpace(o)
 }
 
 plugin_pformat_commonformats_UpperCase(zin){

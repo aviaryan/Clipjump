@@ -167,11 +167,12 @@ initChannels(){
 changeChannel(cIndex, backup_old:=1){
 	if cIndex is not Integer
 		return 0
-	if ( cIndex >= CN.Total ) 	; new channel create
+	if ( cIndex == CN.Total ) 	; new channel create
 	{
 		CN.Total+=1 , CDS[cIndex] := {} , CPS[cIndex] := {} 	; create storage objs
 		CN["TEMPSAVE" cIndex] := CN["CURSAVE" cIndex] := 0
-	}
+	} else if ( cIndex > CN.Total )
+		return 0
 	Iniread, temp, %CONFIGURATION_FILE%, channels, %cIndex%, %A_space%
 	CN.Name := (temp=="") or (temp==A_temp) ? (!cIndex ? "Default" : cIndex) : temp
 
@@ -200,6 +201,10 @@ changeChannel(cIndex, backup_old:=1){
 
 	LASTCLIP := LASTFORMAT := IScurCBACTIVE := "" 								;make all false as they are different for other channels
 	renameChannel(CN.NG, CN.Name)
+	if WinExist(TXT.ORG__name " ahk_class AutoHotkeyGUI")
+		gosub chorg_addchUseList
+	EmptyMem()
+	return 1
 }
 
 renameChannel(ch, nm){
