@@ -333,10 +333,16 @@ chOrgEdit:
 	}
 	return
 
-chOrg_openPasteMode:
+chOrg_openPasteMode: ; Toggles the interface
 	gosub chOrg_getSelected
-	;WinGetPos, x, y,,, % TXT.ORG__name " ahk_class AutoHotkeyGUI"
-	API.showPasteTipAt(out_ch, out_cl) ;, x+100, y+160)
+	opnPstMd_cn := out_ch , opnPstMd_cl := API.getChStrength(out_ch)-out_cl+1
+	if ( opnPstMd_cn == CN.NG ) && ( opnPstMd_cl == realActive ) && SPM.ACTIVE
+	{
+		gosub endPasteMode
+		opnPstMd_cn := opnPstMd_cl := ""
+	}
+	else ;WinGetPos, x, y,,, % TXT.ORG__name " ahk_class AutoHotkeyGUI"
+		API.showPasteTipAt(out_ch, out_cl) ;, x+100, y+160)
 	return
 
 chOrg_paste:

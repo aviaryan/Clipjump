@@ -250,12 +250,18 @@ class API
 	}
 
 	; adds clip to a chanel
-	; text = the string that is created as a new clip
-	addClip(channel, text){
+	; input = the string that is created as a new clip
+	; isbinary = 1 - makes the function take 'input' as binary
+	addClip(channel, byref input, isbinary := 0){
 		cInfo := API.getChInfo(channel)
-		API.Text2Binary(text, ret)
+		if isbinary {
+			ret := input
+			input := this.Binary2Text(ret)
+		}
+		else
+			API.Text2Binary(input, ret)
 		FileAppend, %ret%, % "cache\clips" cInfo.p "\" cInfo.realCURSAVE+1 ".avc"
-		CDS[channel][cInfo.realCURSAVE+1] := text
+		CDS[channel][cInfo.realCURSAVE+1] := input
 		manageFIXATE( cInfo.realCURSAVE + 1, channel, cInfo.p )
 		CN["CURSAVE" cInfo.p] += 1
 		if cInfo.isactive
@@ -366,9 +372,19 @@ class API
 		ToolTip,,,, 7
 	}
 
+	Binary2Text(byref binary){
+		this.blockMonitoring(1)
+		try 
+			Clipboard := binary
+		out := trygetvar("Clipboard")
+		this.blockMonitoring(0)
+		return out
+	}
+
 	;------------------------
 	;---- API HELPER FUNCS --	
 	;------------------------
+
 
 	getChInfo(c="", ret=1){
 		; returns obj full of channel information data

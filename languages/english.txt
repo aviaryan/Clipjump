@@ -216,10 +216,6 @@ TIP_delallprompt = WARNING
 ;10.6
 ;=======
 
-TIP_confirmcopy = You see this confirmation because this is a protected channel.
-                = Do you approve this copy to the channel ?
-                = Press Y for Yes
-                = Press N for No
 ABT_seehelp = Do you want to see the Clipjump help ?
 ABT_runadmin = Clipjump is not running as Administrator
              = This (may) cause improper functioning of the program.
@@ -370,7 +366,6 @@ ORG_search = Search Clip
 ORG_up = Move selected item upwards one position
 ORG_down = Move selected item downwards one position
 ORG_edit = Edit selected item
-ORG_openPastemode = Opens the paste mode interface with the selected clip active
 ORG_props = Edit selected clip properties (tags, fixed attribute)
 ORG_cut = Cuts selected clip and insert into another channel
 ORG_copy = Copies selected clip and duplicate to another channel
@@ -412,3 +407,11 @@ ABT_errorFontIcon = The file %GHICON_path% is missing. This can lead to display 
 CNL_chngMsg = Channel %cv1% active
 CNL_chNtExst = Channel %cv1% doesn't exists !
 SET_holdclip = Hold Clip
+ORG_openPastemode = Opens (toggles) the paste mode interface with the selected clip active
+TIP_confirmcopy = You see this confirmation because this is a protected channel.
+                = Do you approve this copy to the channel ?
+                = Press Y for Yes
+                = Press N for No
+                = Press Insert to transfer this clip to channel 0, the default channel
+_processing = Processing
+TIP_protectedMoved = Clip transferred to channel 0 !
