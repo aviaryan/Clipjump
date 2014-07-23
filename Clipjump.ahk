@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 11.5
+;@Ahk2Exe-SetVersion 11.6
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -42,7 +42,7 @@ global mainIconPath := H_Compiled || A_IsCompiled ? A_AhkPath : "icons/icon.ico"
 ; Capitalised variables (here and everywhere) indicate that they are global
 
 global PROGNAME := "Clipjump"
-global VERSION := "11.5"
+global VERSION := "11.6"
 global CONFIGURATION_FILE := "settings.ini"
 
 ini_LANG := ini_read("System", "lang")
@@ -357,6 +357,7 @@ onClipboardChange:
 
 	If CALLER
 	{
+		STORE.CBCaptured := 0
 		if !WinActive("ahk_class XLMAIN")
 			 try   clipboard_copy := makeClipboardAvailable() , ISACTIVEEXCEL := 0
 		else try   clipboard_copy := LASTCLIP , ISACTIVEEXCEL := 1  	;so that Cj doesnt open excel clipboard (for a longer time) and cause problems 
@@ -377,6 +378,7 @@ onClipboardChange:
 			IScurCBACTIVE := 0
 		if !ISACTIVEEXCEL 				;excel has known bugs with AHK and manipulating clipboard *infront* of it will cause errors
 			makeClipboardAvailable(0) 						;close clipboard in case it is still opened by clipjump
+		STORE.CBCaptured := 1
 	}
 	else
 	{
@@ -668,7 +670,7 @@ clipSaver() {
 	FileDelete, %CLIPS_dir%/%CURSAVE%.avc
 	HASCOPYFAILED := 0
 
-	Tooltip, Processing,,, 7
+	Tooltip, % TXT["_processing"],,, 7
 	while !copied
 	{
 		if ( A_index=100 ) or HASCOPYFAILED {
@@ -691,7 +693,7 @@ clipSaver() {
 			{
 				Critical, Off
 				BeepAt(protected_DoBeep, 2000, 200)
-				temp21 := TT_Console("{" CN.Name "} " TXT.TIP_confirmcopy, "Y N")
+				temp21 := TT_Console("{" CN.Name "}`n " TXT.TIP_confirmcopy, "Y N Insert")
 				Critical, On
 			}
 			if (temp21 = "Y") or (temp21 = "")
@@ -700,8 +702,13 @@ clipSaver() {
 				CDS[CN.NG][CURSAVE] := ISACTIVEEXCEL ? tempCB : Clipboard
 				copied := 1
 			}
-			else LASTCLIP := "" , LASTFORMAT := "" , HASCOPYFAILED := 1 	; lastclip was not captured by cj
-
+			else {
+				LASTCLIP := "" , LASTFORMAT := "" , HASCOPYFAILED := 1 	; lastclip was not captured by cj
+				if (temp21 = "Insert") {
+					Tooltip, % TXT["_processing"]
+					SetTimer, addClipLater, -50
+				}
+			}
 		} catch {
 			if ISACTIVEEXCEL
 				foolGUI(0)
@@ -915,6 +922,14 @@ Ssuspnd:
 pstMode_Help:
 	PasteModeTooltip(TXT.SET_shortcuts "`n" TXT.TIP_help, 1) , Tooltip_setFont("s8", "Courier New|Consolas")
 	STORE["pstTipRebuild"] := 1
+	return
+
+addClipLater:
+	while !STORE.CBCaptured 	; wait for capture to over
+		sleep 50
+	tempVar := ClipboardAll
+	API.AddClip(0, tempVar, 1)
+	autoTooltip(TXT.TIP_protectedMoved, 700)
 	return
 
 hkZ_pasteMode(mode=0, disableAll=1){
