@@ -19,10 +19,10 @@
 
 <body>
 <h1>Clipjump Custom</h1>
-<span class="ver">[v10.6+]</span></br></br>
+<span class="ver">[v10.6+]</span><br><br>
 
-<em>ClipjumpCustom.ini</em> can be configured to change hidden variables in Clipjump to make Clipjump totally custom for a user.</br>
-The file is created and loaded when you start Clipjump.</br>
+<em>ClipjumpCustom.ini</em> can be configured to change hidden variables in Clipjump to make Clipjump totally custom for a user.<br>
+The file is created and loaded when you start Clipjump.<br>
 It gives power to-
 <ul>
 	<li>Change previously unchangeable shortcuts
@@ -33,17 +33,17 @@ It gives power to-
 </ul>
 
 <h2>The basics</h2>
-<strong>Clipjump Custom</strong> works on the principle of Sections (<code>[section_name]</code>) in Ini's. Each section in ClipjumpCustom.ini behaves as an independent script. You can add commands which is a <code class="Syntax">key=value</code> pair in these sections and they will be executed one by one when the section runs.</br> 
-The sections are of 2 types - Auto-executing and Non-auto-executing . </br>
-The only difference between them, as the name suggests is that an <em>Auto-executing</em> section runs at Clipjump startup whereas it is not so for the other type.</br>
-A section becomes <em>non-auto-executing</em> only when it has a hotkey linked to it or when <var>noautorun</var> is set to 1 in that section. You will learn more on this topic later.</br>
-</br>
+<strong>Clipjump Custom</strong> works on the principle of Sections (<code>[section_name]</code>) in Ini's. Each section in ClipjumpCustom.ini behaves as an independent script. You can add commands which is a <code class="Syntax">key=value</code> pair in these sections and they will be executed one by one when the section runs.<br> 
+The sections are of 2 types - Auto-executing and Non-auto-executing . <br>
+The only difference between them, as the name suggests is that an <em>Auto-executing</em> section runs at Clipjump startup whereas it is not so for the other type.<br>
+A section becomes <em>non-auto-executing</em> only when it has a hotkey linked to it or when <var>noautorun</var> is set to 1 in that section. You will learn more on this topic later.<br>
+<br>
 
 <h4>How it works ?</h4>
-<em>ClipjumpCustom.ini</em> is interpreted by Clipjump at its startup. The ini is scanned for auto-executing sections and these are executed as soon as they are found. All sections are then kept in memory and executed later on when called. </br>
-So if you edit the ClipjumpCustom.ini while Clipjump is running, the change is not recorded by Clipjump. Therefore you need to reload <em>ClipjumpCustom.ini</em> from the tray menu.</br>
+<em>ClipjumpCustom.ini</em> is interpreted by Clipjump at its startup. The ini is scanned for auto-executing sections and these are executed as soon as they are found. All sections are then kept in memory and executed later on when called. <br>
+So if you edit the ClipjumpCustom.ini while Clipjump is running, the change is not recorded by Clipjump. Therefore you need to reload <em>ClipjumpCustom.ini</em> from the tray menu.<br>
 Here is an <a href="examples/ClipjumpCustom.ini">example <em>ClipjumpCustom.ini</em> file</a>
-</br></br>
+<br><br>
 
 <a name=commands></a>
 <h2>Commands</h2>
@@ -57,38 +57,38 @@ See an example of using Run command <a href=#ex1>here</a></dd>
 
 <a name=bind></a><dt class="key">bind</dt>
 <dd>Binds a hotkey to the current section. This hotkey when pressed will execute that section. The bind command or rather the bind <i>key</i> can be present 
-anywhere in the section to be recognizable.</br>
+anywhere in the section to be recognizable.<br>
 It should also be noted that a section having a <span class="key">bind</span> key doesn't autorun with Clipjump i.e. the section becomes non-auto-executing type.
 See <a href=#ex1>this</a> example using bind.</dd>
 
 <a name=tip></a><dt class="key">tip</dt>
-<dd>Shows a tooltip with the text which is passed as value.</br>
+<dd>Shows a tooltip with the text which is passed as value.<br>
 Example - <code class="Syntax">tip = some text to show as tip</code></dd>
 
 <a name=send></a><dt class="key">send</dt>
 <dd>Artificially presses the key sequence that is passed as value. Example - 
 <pre>send = first line{enter}second line{tab}also in second line</pre>
-The syntax is based on the AutoHotkey's <a href="http://www.autohotkey.com/docs/commands/Send.htm">send command</a>. Use braces <code>{}</code> when you want to press the actual key. </br>
+The syntax is based on the AutoHotkey's <a href="http://www.autohotkey.com/docs/commands/Send.htm">send command</a>. Use braces <code>{}</code> when you want to press the actual key. <br>
 Example - <code>send = {Enter}</code> and <code>send = Enter</code> produce different results. The first one presses the key <span class="str">Enter</span> 
-whereas the second one writes "Enter".</br>
+whereas the second one writes "Enter".<br>
 See <a href=#send_ex>this</a> example on send to learn more.</dd>
 
 <a name=sleep></a><dt class="key">sleep</dt>
-<dd>Pauses the execution of section for the passed time in milliseconds.</br>
+<dd>Pauses the execution of section for the passed time in milliseconds.<br>
 Example - <code>sleep = 1500</code> pauses the execution of running thread for 1500 milliseconds i.e 1.5 seconds</dd>
 
 <a name=noautorun></a><dt class="key">noautorun</dt>
-<dd>If this variable is set to 1 anywhere in the section, the section <b>doesn't auto-execute</b> even without using the <a href=#bind>bind</a> command.</br>
-Example - <code class="Syntax"><var>noautorun</var>=1</code></br>
+<dd>If this variable is set to 1 anywhere in the section, the section <b>doesn't auto-execute</b> even without using the <a href=#bind>bind</a> command.<br>
+Example - <code class="Syntax"><var>noautorun</var>=1</code><br>
 Set this variable to 0 in a non-auto-executing section ( like the one using <em>bind</em> command ) to make it autorun.</dd>
 </dl>
 
-</br>
+<br>
 Besides this you can also change the inner variables of Clipjump by using the <code class="Syntax">variable = value</code> syntax. Some of the most common variables 
-needed to work highly requested features have been given in the following examples. Go through them and explore interesting tweaks and possibilities.</br>
+needed to work highly requested features have been given in the following examples. Go through them and explore interesting tweaks and possibilities.<br>
 <font class=red>Note</font> - The option to reload <em>ClipjumpCustom.ini</em> provided in the tray menu doesn't execute the auto-executing sections of the ini. 
 If you change/add an auto-executing section in the ini, you will have to restart Clipjump to load them.
-</br></br>
+<br><br>
 
 <h2>Examples</h2>
 <h3><a name=ex1>Example 1 (Shortcut to toggle Incognito Mode)</a></h3>
@@ -98,7 +98,7 @@ bind=Win+Alt+I
 run=incognito
 tip=Incognito Mode toggled
 </pre>
-The above code uses 3 commands, bind, run and tip.</br>
+The above code uses 3 commands, bind, run and tip.<br>
 <ol>
 	<li><span class="key"><a href=#bind>Bind</a></span> creates a shortcut for the section meaning that the section will not <b>auto-execute at Clipjump start</b>.
 	Here that shortcut is <kbd>Win</kbd> + <kbd>Alt</kbd> + <kbd>I</kbd>.
@@ -107,7 +107,7 @@ The above code uses 3 commands, bind, run and tip.</br>
 		<span class="str">Incognito Mode toggled</span>.
 </ol>
 Note that you can also use <code>noautorun=1</code> to prevent auto-execution of section even if it doesn't have a 'bind'.
-</br></br></br>
+<br><br><br>
 
 
 <h3><a name=change_mode_key><a name=2>Example 2 (changing paste-format key to <kbd>Y</kbd>)</a></a></h3>
@@ -115,8 +115,8 @@ Note that you can also use <code>noautorun=1</code> to prevent auto-execution of
 [AutoRun]
 pastemodekey.z=^y
 </pre>
-The above code changes the inbuilt variable <code>pastemodekey.z</code> to '^y'. </br>
-If you remember, <kbd>Z</kbd> is the default key for toggling <a href="basic_help.html#pformat">Paste formats</a> in <strong><a href="basic_help.html#pstmd">Paste Mode</a></strong>. The above code changes it to <kbd>Y</kbd>.</br>
+The above code changes the inbuilt variable <code>pastemodekey.z</code> to '^y'. <br>
+If you remember, <kbd>Z</kbd> is the default key for toggling <a href="basic_help.html#pformat">Paste formats</a> in <strong><a href="basic_help.html#pstmd">Paste Mode</a></strong>. The above code changes it to <kbd>Y</kbd>.<br>
 The Pastemode group has all variables as pastemodekey.<var>key</var> where <var>key</var> is the original key. Same is for <a href="shorcuts.html#spm">[Search-Paste Mode]</a>. It has all variables as spmkey.<var>key</var>. So the following code will change <code>Channel up</code>, <code>Channel down</code> and <code>paste-format</code> shortcut in <a href="shorcuts.html#pastemd">[Paste-Mode]</a> and <code>cancel</code> shortcut in <a href="shortcuts.html#spm">[Search-Paste Mode]</a>.
 <pre class="brush: ini;">
 [AutoRun]
@@ -126,7 +126,7 @@ pastemodekey.down=^d
 spmkey.home=PgDn</pre>
 The key names are according to the <a href="http://www.autohotkey.com/docs/KeyList.htm">AutoHotkey key list</a>. 
 
-</br></br>
+<br><br>
 
 
 <h3>Example 3 (Shortcut to check for updates)</h3>
@@ -139,7 +139,7 @@ bind=Win+Alt+U
 	<li><var>updt</var> is label used in Clipjump to update and the <a href=#run>run</a> command runs it.
 	<li>As you see, it is not necessary to keep <a href=#bind>bind</a> at the first line of the section. It can be anywhere.
 </ul>
-</br></br>
+<br><br>
 
 <h3>Example 4 (Shortcut to paste current content on system clipboard instantly [without formatting])</h3>
 <pre class="brush: ini;">
@@ -157,7 +157,7 @@ without formatting.
 	<li><em>simplePaste</em> is label in Clipjump to paste current content on Clipboard.
 	<li><code>API.runPlugin( plugin_path )</code> runs a plugin file. Here in the 2nd section, it runs the plugin file <em>noformatting_paste.ahk</em> which is supposed to contain the code to paste without formatting. Learn more about <a href="plugins/index.html#run">API.runPlugin()</a>.
 </ul>
-</br></br>
+<br><br>
 
 <h3>Example 5 (Instantly switching to your fav channel)</h3>
 Suppose your fav channel is #4 as it stores some important web links. We will use the inbuilt changeChannel function in Clipjump to do the purpose.
@@ -167,7 +167,7 @@ bind=Win+4
 run=changeChannel(4)
 tip=Channel changed to 4
 </pre>
-</br></br>
+<br><br>
 
 <h3><a name=actmd>Example 6 (Running a section with Action Mode)</a></h3>
 Suppose you don't want to create a separate shortcut <kbd>Win</kbd>+<kbd>V</kbd> for the above example. Here is how to create a <a href=shorcuts.html#actmd>[Action Mode]</a> shortcut for it.
@@ -189,10 +189,10 @@ ACTIONMODE.F10_caption = Change 2 my channel
 	<li><a href=shorcuts.html#actmd>[Action-Mode]</a> keys are customizable with the <code>ACTIONMODE.<var>key</var></code> variable. The <code>ACTIONMODE.<var>key</var>_caption</code> variable holds the caption for the action shown in [Action-Mode].
 	<li>The <code>ACTIONMODE.<var>key</var></code> on the other hand holds the label/function/routine to be executed when the key is pressed. Here we are executing the function <code>API.executeSection()</code> with the first parameter as <em>changeto_4</em>
 </ul>
-</br></br>
+<br><br>
 
 <h3>Example 7 (Paste Signature)</h3>
-So you have your signature <span class="str">FIXED</span> in the Clip 1 position of 2nd channel as you use it always. </br>
+So you have your signature <span class="str">FIXED</span> in the Clip 1 position of 2nd channel as you use it always. <br>
 Here is an awesome customization for you-
 <pre class="brush: ini;">
 [paste_sig]
@@ -201,7 +201,7 @@ run=API.paste(2,1)
 </pre>
 <code class="Syntax">API.Paste(channel_number, clip_number)</code> is a function that pastes <var>clip_number</var> from <var>channel_number</var> in Clipjump. 
 Pressing <kbd>>Ctrl</kbd> + <kbd>F8</kbd> will automatically paste your signature now.
-</br></br></br>
+<br><br><br>
 
 <h3><a name=inputbox>Example 7.5 (Getting the clip to paste)</a></h3>
 You can use the inbuilt <code>inputbox()</code> function to retrieve the <var>clipno</var> to paste. This procedure can also be done for the <var>channelno</var>.
@@ -218,17 +218,17 @@ run = API.paste( 2, %zClipno% )
 	<li>In the commented line containing <code>%inputbox...%</code> the variable zClipno is assigned the return value of inputbox() function. As the whole function call is NOT supposed to be A FIXED TEXT, we have used %...% over it. You can try un-commenting that line and then restarting Clipjump to see what happens.
 	<li><code class=syntax>inputbox( title , caption_text )</code> is basically a function that shows a dialog box for the user to enter text. Once text is entered and OK is pressed, the function returns the text entered by user to the variable calling it.
 </ul>
-</br></br>
+<br><br>
 
 <h3><a name=send_ex>Example 8 [SEND] (Filling Form)</a></h3>
-The first example using <a href=#send>Send</a>. As briefed above, the command sends or stimulates a key press.</br>
-So to get started, know that 'Send' has some rules which must be noted.</br>
+The first example using <a href=#send>Send</a>. As briefed above, the command sends or stimulates a key press.<br>
+So to get started, know that 'Send' has some rules which must be noted.<br>
 <ul>
 	<li>To simulate key combination press like <kbd>Win</kbd> + <kbd>C</kbd>, use <code>send=Win+C</code>. When pressing key combination using send, keep it in a single line.
 	<li>To simulate a key press like <kbd>Tab</kbd> or <kbd>PageDown</kbd>, use <code>send={Tab}</code> or <code>send={Enter}</code> or <code>send={tab}{enter}</code> if you want both.
 	<li>To write text using send command like 'Hi there', use <code>send=Hi there</code>.
 </ul>
-</br>
+<br>
 <b>Situation</b> - Suppose you want to fill a web form with 4 fields and the fields focus can be switched with <kbd>TAB</kbd>, here is the customization to use -
 <pre class="brush: ini;">
 [fill_that_form]
@@ -246,13 +246,13 @@ run=API.paste(,4)
 	<li>As you may have read in example 7, API.paste() pastes clipno from channelno. If channelno is blank (like here), it defaults to the current active channel.
 	<li>You may use <code>sleep=500</code> to wait for a particular time in milliseconds.
 </ul>
-</br></br>
+<br><br>
 
 <h3>Example 9 (moving clips)</h3>
 We will use the <code class=syntax>API.manageClip(new_channel, channel, clip, flag)</code> function here. <var>channel</var> and <var>clip</var> default to the 
-current active ones if no value for them is passed. </br>
+current active ones if no value for them is passed. <br>
 <b>Situation</b> - Suppose you copied a trash / incorrect information in the current protected / normal channel accidentally. Here is the code to move it to 
-<a href="channels.html#Pit">Pit</a> channel which is say at channel number 2</br>
+<a href="channels.html#Pit">Pit</a> channel which is say at channel number 2<br>
 <pre class="brush: ini;">
 [trash_clip]
 bind=Ctrl+Win+Del
@@ -260,8 +260,8 @@ run=API.manageClip(2,,,0)
 tip=The current active clip was gvdlfe off!
 </pre>
 The last parameter <em>flag</em> is 0 for move and 1 for copy. Here we are moving the clip.
-</br></br>
-</br>
+<br><br>
+<br>
 
 <h3><a name=autoPastemode>Example 10 (paste mode with search enabled; no need to hold Ctrl)</a></h3>
 If you don't like holding down <kbd>Ctrl</kbd> to navigate clips, this if for you. This Customization will bind <kbd>Win</kbd> + <kbd>V</kbd> to open paste mode with Search enabled so you will be able to use <kbd>Up</kbd>/<kbd>Down</kbd> keys to navigate through the clips.
@@ -272,7 +272,7 @@ spm.active=1
 run=paste
 run=searchpm
 </pre>
-</br></br>
+<br><br>
 
 <h3>Example 11 (emptying a channel)</h3>
 <pre class="brush: ini;">
@@ -285,8 +285,8 @@ The above uses the <code class=syntax>API.emptyChannel(channel_no)</code> functi
 parameter , the current active channel is taken into account. 
 If <var>channel_no</var> is not number, a channel with name as <var>channel_no</var> is taken into account. If <var>channel_no</var> is 
 number, it is supposed that <var>channel_no</var> contains a channel number to be used.
-</br></br>
-</br>
+<br><br>
+<br>
 
 <h3><a name=vars><a name=store>Example 12 (Variables concept and STORE.)</a></a></h3>
 <pre class="brush: ini;">
@@ -314,20 +314,20 @@ sleep = 1000
 	<li>%STORE.myVar% on the other hand will be active at all times and you will see its tip in SEC2.
 </ul>
 
-</br>
+<br>
 
 <span class=red>Note</span> - A list of all API functions, key label, routines and general functions and Interesing Variables can be found on <a href="devList.html">
-Developer's Reference Page</a>.</br>
+Developer's Reference Page</a>.<br>
 It is recommended to have a look at them when you complete this guide.
 
-</br></br>
+<br><br>
 If you need help on Customizations, you can ask in comments on the <a href="http://clipjump.sourceforge.net">main site</a> or from any of links in the 
 <a href="../contact.html">contact</a> page.
-</br></br>
+<br><br>
 <hr noshade=noshade size=5 color=yellow>
-</br>
+<br>
 <a href="http://translate.google.com/translate?hl=en&sl=en&u=clipjump.sourceforge.net/docs/custom.html" id="translate">Translate</a>
-</br></br>
+<br><br>
 </body>
 
 </html>

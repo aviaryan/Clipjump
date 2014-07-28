@@ -11,7 +11,7 @@
 
 <body>
 <h1>Complete Developer's API functions and other routines list</h1>
-</br>
+<br>
 <ul>
 	<li><a href=#api>API functions</a></li>
 	<li><a href=#funcs>More functions</a></li>
@@ -19,193 +19,193 @@
 	<li><a href=#vars>Variables</a></li>
 	<li><a href=#pubapi>The Public API</a></li>
 </ul>
-</br>
+<br>
 
 <h2><a name=api>API functions</a></h2>
-All the functions under the file API.ahk</br>
+All the functions under the file API.ahk<br>
 They should be accessed as <code class="Syntax">API.function_name()</code> . For example <code>API.paste()</code>
 <ol>
-	<li><code>paste(channel="", clipno="")</code></br>
-	- Pastes clips from a certain postion in a certain channel. If both are blank, paste 1st clip from currently active channel.</br>
+	<li><code>paste(channel="", clipno="")</code><br>
+	- Pastes clips from a certain postion in a certain channel. If both are blank, paste 1st clip from currently active channel.<br>
 	Example - <code>API.paste(1, 14)</code> pastes clip 14 of channel 1
-	</br>
-	</br>
+	<br>
+	<br>
 
-	<li><code>getClipAt(channel=0, clipno=1, toreturn=1)</code></br>
-	- Get a Clip's content i.e. what is contained in that clip. 'channel' and 'clipno' are the channel number and clip number respectively.</br>
-	If toreturn = 1 then return Clipboard text data</br>
+	<li><code>getClipAt(channel=0, clipno=1, toreturn=1)</code><br>
+	- Get a Clip's content i.e. what is contained in that clip. 'channel' and 'clipno' are the channel number and clip number respectively.<br>
+	If toreturn = 1 then return Clipboard text data<br>
 	If toreturn = 2 then return ClipboardAll binary data.
-	</br>
-	</br>
+	<br>
+	<br>
 
-	<li><code>manageClip(new_channel=0, channel="", clip="", flag=0)</code></br>
-	- Cut/Copy Clip from one channel to other. 'new_channel' is the new channel to place the clip in. Note that the clip will always be placed at clip 1 of new channel. </br>
-	If flag = 0 then cut , if flag = 1 then copy</br>
-	If channel is empty, active channel is used.</br>
+	<li><code>manageClip(new_channel=0, channel="", clip="", flag=0)</code><br>
+	- Cut/Copy Clip from one channel to other. 'new_channel' is the new channel to place the clip in. Note that the clip will always be placed at clip 1 of new channel. <br>
+	If flag = 0 then cut , if flag = 1 then copy<br>
+	If channel is empty, active channel is used.<br>
 	If clip is empty, active clip in <a href=shorcuts.html#pstmd>[Paste-Mode]</a> (Clip x of y, "x") is used.
-	</br>
-	</br>
+	<br>
+	<br>
 
-	<li><code>emptyChannel(chno="")</code></br>
-	- Empties a particular channel (chno)</br>
-	If 'chno' is empty, it DEFAULTS to current channel.</br>
+	<li><code>emptyChannel(chno="")</code><br>
+	- Empties a particular channel (chno)<br>
+	If 'chno' is empty, it DEFAULTS to current channel.<br>
 	You can also use name of a channel like <code>API.emptyChannel(web)</code> or <code>API.emptyChannel(pit)</code> or <code>API.emptyChannel(default)</code> . <b>Note</b> that if you are creating an AHK Script i.e. a plugin you will have to surround the channel name by quotes ("") to take it as string.
-	</br>
-	</br>
+	<br>
+	<br>
 
-	<li><code>runPlugin(filename, parameters*)</code></br>
+	<li><code>runPlugin(filename, parameters*)</code><br>
 	- Runs a plugin. See <a href="plugins/index.html#run">here</a> and then <a href="plugins/basics.html#funcparams">here</a>.
-	</br>
-	</br>
+	<br>
+	<br>
 
-	<li><code>runFunction(function_string)</code></br>
-	- Runs a <a href=#funcs>function</a></br>
-	function_string - The string containing the function with parameters, like <code>changeChannel(1)</code> , <code>inputBox(mytitle, some text to desc)</code></br>
-	Example - <code>API.runFunction("changeChannel(1)")</code></br>
+	<li><code>runFunction(function_string)</code><br>
+	- Runs a <a href=#funcs>function</a><br>
+	function_string - The string containing the function with parameters, like <code>changeChannel(1)</code> , <code>inputBox(mytitle, some text to desc)</code><br>
+	Example - <code>API.runFunction("changeChannel(1)")</code><br>
 	Note - <a href=custom.html>ClipjumpCustom</a> users are requested to use <code>run=changeChannel(1)</code> rather than this.
-	</br>
-	</br>
+	<br>
+	<br>
 	
-	<li><code>showPasteTipAt(channel, clip)</code></br>
+	<li><code>showPasteTipAt(channel, clip)</code><br>
 	- Opens <a href=shorcuts.html#pstmd>[Paste-Mode]</a> with clip number 'clip' of channel 'channel' active. 
-	</br>
-	</br>
+	<br>
+	<br>
 
-	<li><code>ExecuteSection(secName)</code></br>
+	<li><code>ExecuteSection(secName)</code><br>
 	- Executes a section in the <a href=custom.html>ClipjumpCustom.ini</a>
-	</br>
-	</br>
+	<br>
+	<br>
 
-	<li><code>IncognitoMode(p=1)</code></br>
-	- Enable/disable Incognito Mode. Pass 1 to disable.</br>
-	If p = 1 enable incognito mode</br>
+	<li><code>IncognitoMode(p=1)</code><br>
+	- Enable/disable Incognito Mode. Pass 1 to disable.<br>
+	If p = 1 enable incognito mode<br>
 	If p = 0 disable
-	</br>
-	</br>
+	<br>
+	<br>
 
-	<li><code>getClipLoc(channel="", clipno="")</code></br>
-	- get a Clip exact file location or the file in which the clip is saved</br>
-	channel - The channel the clip belongs to</br>
+	<li><code>getClipLoc(channel="", clipno="")</code><br>
+	- get a Clip exact file location or the file in which the clip is saved<br>
+	channel - The channel the clip belongs to<br>
 	clipno - Clip number of the Clip
-	</br>
-	</br>
+	<br>
+	<br>
 
-	<li><code>blockMonitoring(yes=1)</code></br>
-	- blocks Clipjump Clipboard monitoring. Useful when you are changing clipboard content such that you don't want it to be accounted by Clipjump</br>
-	If first parameter i.e. yes = 1 , then block Monitoring.</br>
+	<li><code>blockMonitoring(yes=1)</code><br>
+	- blocks Clipjump Clipboard monitoring. Useful when you are changing clipboard content such that you don't want it to be accounted by Clipjump<br>
+	If first parameter i.e. yes = 1 , then block Monitoring.<br>
 	If 0 , then unblock (or enable Clipboard monitoring)
-	</br>
-	</br>
+	<br>
+	<br>
 
-	<li><code>runLabel(name)</code></br>
-	- runs a <a href=#labels>label/routine</a></br>
+	<li><code>runLabel(name)</code><br>
+	- runs a <a href=#labels>label/routine</a><br>
 	name - The name of the label to be run.
-	</br>
-	</br>
+	<br>
+	<br>
 	
-	<li><code>deleteClip(channel, clip)</code></br>
-	- deletes a clip from a channel</br>
-	channel - The <b>channel number</b> whose clip is to be deleted</br>
+	<li><code>deleteClip(channel, clip)</code><br>
+	- deletes a clip from a channel<br>
+	channel - The <b>channel number</b> whose clip is to be deleted<br>
 	clip - The Clip number to be deleted.
-	</br>
-	</br>
+	<br>
+	<br>
 
-	<li><a name=showtip><code>showTip(Text, forTime="")</code></a></br>
-	- shows a Tip (with a different font). recommended when creating a plugin</br>
-	Text - the text to show in the tip</br>
+	<li><a name=showtip><code>showTip(Text, forTime="")</code></a><br>
+	- shows a Tip (with a different font). recommended when creating a plugin<br>
+	Text - the text to show in the tip<br>
 	forTime - time for which the tip is to be shown, if the paramter is not passed i.e. blank, the tip becomes permanent
-	</br>
-	</br>
+	<br>
+	<br>
 
-	<li><code>removeTip()</code></br>
+	<li><code>removeTip()</code><br>
 	- removes the Plugin API Tip i.e. the tip created using the above function API.showTip()
-	</br>
-	</br>
+	<br>
+	<br>
 
-	<li><code>pasteText(Text)</code></br>
-	- pastes the 'Text' that is passed to the function.</br>
+	<li><code>pasteText(Text)</code><br>
+	- pastes the 'Text' that is passed to the function.<br>
 	Text - the text/string you want to paste
-	</br>
-	</br>
+	<br>
+	<br>
 
-	<li><code>getChStrength(channel)</code></br>
+	<li><code>getChStrength(channel)</code><br>
 	- gets total number of clips in a channel i.e. population of a channel
-	</br>
-	</br>
+	<br>
+	<br>
 
-	<li><code>Text2Binary(Text, byref returnVar)</code></br>
-	- gets binary ClipboardAll data from simple text i.e. string. You pass it a string and it converts it into binary data and returns it via byref variable returnVar</br>
-	Text = the string you want to convert to ClipboardAll type data</br>
+	<li><code>Text2Binary(Text, byref returnVar)</code><br>
+	- gets binary ClipboardAll data from simple text i.e. string. You pass it a string and it converts it into binary data and returns it via byref variable returnVar<br>
+	Text = the string you want to convert to ClipboardAll type data<br>
 	returnVar = byref variable to return ClipboardAll data
-	</br>
-	</br>
+	<br>
+	<br>
 
-	<li><code>getVar(var)</code> and <code>setVar(var, value)</code></br>
-	- gets the value of variable 'var'</br>
+	<li><code>getVar(var)</code> and <code>setVar(var, value)</code><br>
+	- gets the value of variable 'var'<br>
 	- sets the value of variable 'var' to 'value'
-	</br>
-	</br>
+	<br>
+	<br>
 </ol>
-</br>
+<br>
 <h2><a name=funcs>More functions</a></h2>
-Other interesting functions that are not a part of API.</br>
+Other interesting functions that are not a part of API.<br>
 Unlike API, they should be accessed normally as <code class="Syntax">function_name()</code> . For example <code>changeChannel(2)</code>
 <ol>
-	<li><code>BeepAt(value, freq, duration=150)</code></br>
-	- Make a beep system sound.</br>
-	If 'value' = 1 , then the function will beep else it will not.</br>
-	freq - frequency of the beep</br>
+	<li><code>BeepAt(value, freq, duration=150)</code><br>
+	- Make a beep system sound.<br>
+	If 'value' = 1 , then the function will beep else it will not.<br>
+	freq - frequency of the beep<br>
 	duration - duration of the beep to be played in milliseconds
-	</br>
-	</br>
-	<li><code>getClipboardFormat(type=1)</code></br>
-	- gets the type of data on Clipboard</br>
-	If 'type' = 1 , then the function returns the type of data a/c <a href=shorcuts.html#pstmd>Paste-Mode</a> i.e. "[Text]" for text data including HTML , "[File/Folder]" for file,folder copied data and (blank) for Picture type data.</br>
+	<br>
+	<br>
+	<li><code>getClipboardFormat(type=1)</code><br>
+	- gets the type of data on Clipboard<br>
+	If 'type' = 1 , then the function returns the type of data a/c <a href=shorcuts.html#pstmd>Paste-Mode</a> i.e. "[Text]" for text data including HTML , "[File/Folder]" for file,folder copied data and (blank) for Picture type data.<br>
 	If 'type' = 0 , then the function returns the data type formats ID's on Clipboard as per the Microsoft list.
-	</br>
-	</br>
-	<li><code>inputBox(title, text)</code></br>
+	<br>
+	<br>
+	<li><code>inputBox(title, text)</code><br>
 	- shows a dialog for user to enter any text and the function returns that text. See <a href="custom.html#inputbox">More</a>
-	</br>
-	</br>
-	<li><code>HParse(hotkey)</code></br>
-	- converts a normal hotkey like 'Win+Alt+Z' or 'Ctrl+PrintScreen' to AutoHotkey format like '#!z' or '^Printscreen'.</br>
-	hotkey - The Standard hotkey to convert to AHK form.</br>
+	<br>
+	<br>
+	<li><code>HParse(hotkey)</code><br>
+	- converts a normal hotkey like 'Win+Alt+Z' or 'Ctrl+PrintScreen' to AutoHotkey format like '#!z' or '^Printscreen'.<br>
+	hotkey - The Standard hotkey to convert to AHK form.<br>
 	The function returns the AHK formatted hotkey of the input hotkey.
-	</br>
-	</br>
-	<li><code>changeChannel(channelno)</code></br>
+	<br>
+	<br>
+	<li><code>changeChannel(channelno)</code><br>
 	- Changes channel to 'channelno'
-	</br>
-	</br>
-	<li><code>channel_find( name )</code></br>
-	- Finds the channel corresponding to the 'name' and returns its channel number.</br>
+	<br>
+	<br>
+	<li><code>channel_find( name )</code><br>
+	- Finds the channel corresponding to the 'name' and returns its channel number.<br>
 	name - The name of the channel like 'Default'
-	</br>
-	</br>
-	<li><code>chooseChannelgui()</code></br>
-	- Shows a GUI for the user to select channel, if he selects a channel the function returns the selected channel number.</br>
-	USAGE-ClipjumpCustom <code>tip = %chooseChannelgui()%</code></br>
+	<br>
+	<br>
+	<li><code>chooseChannelgui()</code><br>
+	- Shows a GUI for the user to select channel, if he selects a channel the function returns the selected channel number.<br>
+	USAGE-ClipjumpCustom <code>tip = %chooseChannelgui()%</code><br>
 	USAGE-AhkScript(Plugin) <code>zSelectedCh := chooseChannelgui()</code>
-	</br>
-	</br>
-	<li><code>manageChannel(channel)</code></br>
-	- Deletes a channel with the channel number 'channel'</br>
+	<br>
+	<br>
+	<li><code>manageChannel(channel)</code><br>
+	- Deletes a channel with the channel number 'channel'<br>
 	channel - The Channel Number of the channel to be deleted.
-	</br>
-	</br>
-	<li><code>set_pformat( paste_format )</code></br>
-	- Sets the Paste format which is currently active.</br>
-	paste_format - The name of paste format (like 'UPPERCASE') to be made active.</br>
+	<br>
+	<br>
+	<li><code>set_pformat( paste_format )</code><br>
+	- Sets the Paste format which is currently active.<br>
+	paste_format - The name of paste format (like 'UPPERCASE') to be made active.<br>
 	USAGE - <code>set_pformat(SentenceCase)</code>
-	</br>
-	</br>
+	<br>
+	<br>
 </ol>
-</br>
+<br>
 <h2><a name=labels>Labels/Routines</a></h2>
-Labels should be accessed as <code class="Syntax">run = label_name</code> in <a href=custom.html>ClipjumpCustom</a> and <code class="Syntax">gosub label_name</code> in AhkScript.</br>
+Labels should be accessed as <code class="Syntax">run = label_name</code> in <a href=custom.html>ClipjumpCustom</a> and <code class="Syntax">gosub label_name</code> in AhkScript.<br>
 <ol>
-	<li>These are the labels to open various dialogs and gui in Clipjump. You can easily guess their functions from their names.</br>
+	<li>These are the labels to open various dialogs and gui in Clipjump. You can easily guess their functions from their names.<br>
 		<ol><li>actionmode
 			<li>settings
 			<li>history
@@ -214,89 +214,89 @@ Labels should be accessed as <code class="Syntax">run = label_name</code> in <a 
 			<li>channelGUI
 			<li>pluginManagerGui
 			<li>channelOrganizer</ol>
-	</br>
-	<li>These are the labels corresponding to various features of Clipjump. Again, the name itself should be explanatory.</br>
+	<br>
+	<li>These are the labels corresponding to various features of Clipjump. Again, the name itself should be explanatory.<br>
 		<ol><li>onetime
 			<li>holdClip
 			<li>pitswap
 			<li>incognito</ol>
-	</br>
-	<li><em>disable_clipjump</em></br>
+	<br>
+	<li><em>disable_clipjump</em><br>
 	- Toggles Clipjump Status i.e. Enabled or disabled (same like Options > Disable Clipjump in Tray Menu)
-	</br>
-	</br>
-	<li><em>endPasteMode</em></br>
+	<br>
+	<br>
+	<li><em>endPasteMode</em><br>
 	- Ends <a href=shorcuts.html#pstmd>[Paste-Mode]</a> forcibly. 
-	</br>
-	</br>
-	<li><em>simplePaste</em></br>
+	<br>
+	<br>
+	<li><em>simplePaste</em><br>
 	- Pastes the current active content on System Clipboard
-	</br>
-	</br>
-	<li><em>windows_copy</em> and <em>windows_cut</em></br>
+	<br>
+	<br>
+	<li><em>windows_copy</em> and <em>windows_cut</em><br>
 	- Copies / Cuts the selected text or file without copying to Clipjump i.e. only System Clipboard is affected. This is what is used inside <a href="ini.html#syscopy">
 	Copy to System Clipboard bypassing Clipjump</a>
-	</br>
-	</br>
-	<li><em>updt</em></br>
+	<br>
+	<br>
+	<li><em>updt</em><br>
 	- Check for Updates
-	</br>
-	</br>
-	<li><em>exit</em></br>
+	<br>
+	<br>
+	<li><em>exit</em><br>
 	- Exits Clipjump properly
-	</br>
-	</br>
+	<br>
+	<br>
 </ol>
-</br>
+<br>
 <h2><a name=vars>Variables</a></h2>
 The important variables in Clipjump which can be changed to customize much of the behavior in the program are listed below. Please note that only selected variables 
-have been listed to prevent any issues with the core functionality of Clipjump.</br>
+have been listed to prevent any issues with the core functionality of Clipjump.<br>
 Changing a variable in <a href=custom.html>ClipjumpCustom</a> is done as <code class="Syntax">variable = value</code> and in AHKScript is done as <code class="Syntax">variable := "value"</code>
 <ol>
 	<li>Channel Object
 		<ol><li><em>CN.NG</em> - Holds the channel number that is currently active.
 			<li><em>CN.Name</em> - The name of the channel that is currently active.
 			<li><em>CN.Total</em> - Total number of channels that are currently created by the user.</ol>
-	</br>
-	<li><em>STORE</em> Object</br>
-	- Public Storage Space. Use as <code class="Syntax">STORE.var := "value"</code> and <code class="Syntax">msgbox % STORE.var</code></br>
+	<br>
+	<li><em>STORE</em> Object<br>
+	- Public Storage Space. Use as <code class="Syntax">STORE.var := "value"</code> and <code class="Syntax">msgbox % STORE.var</code><br>
 	See also <a href=custom.html#store>STORE in ClipjumpCustom</a>.
-	</br>
-	</br>
+	<br>
+	<br>
 	<li><em>curPformat</em> - Holds the current active paste format.
-	</br>
-	</br>
+	<br>
+	<br>
 	<li><em>CALLER</em> - Holds 1 if clipboard is monitored by Clipjump and 0 if not.
-	</br>
-	</br>
-	<li><em>pastemodekey</em> and <em>spmkey</em></br>
+	<br>
+	<br>
+	<li><em>pastemodekey</em> and <em>spmkey</em><br>
 	- Use as <code>pastemodekey.<var>key</var></code> OR <code>spmkey.<var>key</var></code> to change keys currently used in [Paste Mode] and [Search-Paste Mode].<br>
 	See <a href=custom.html#change_mode_key>here</a> for an example.
-	</br>
+	<br>
 </ol>
-</br>
+<br>
 
 <h2><a name=pubapi>Public API</a></h2>
 Public API (publicAPI.ahk) gives power to any Ahk Script as well an <a href=plugins/basics.html#class_ext>external plugin</a> to control all aspects of Clipjump from 
-changing and reading variables to running function and labels. It is by default distibuted with Clipjump and present in the Clipjump.exe directory.</br>
-<a href=https://github.com/aviaryan/Clipjump/blob/master/publicAPI.ahk>Here</a> is the online github link in case it ever updates</br>
-</br>
-An external plugin can include publicapi as <code class=syntax>#Include %A_ScriptDir%\..\publicAPI.ahk</code></br>
-Once publicAPI is included in the script, you will have to initialize it.</br>
+changing and reading variables to running function and labels. It is by default distibuted with Clipjump and present in the Clipjump.exe directory.<br>
+<a href=https://github.com/aviaryan/Clipjump/blob/master/publicAPI.ahk>Here</a> is the online github link in case it ever updates<br>
+<br>
+An external plugin can include publicapi as <code class=syntax>#Include %A_ScriptDir%\..\publicAPI.ahk</code><br>
+Once publicAPI is included in the script, you will have to initialize it.<br>
 <pre>cj := new Clipjump()     <span class="green">; The name 'cj' doesnt matter</span></pre>
-Then you can call API methods, set variables, get variables and so on using the 'cj' object. Here are few examples -</br>
+Then you can call API methods, set variables, get variables and so on using the 'cj' object. Here are few examples -<br>
 <pre>msgbox % cj.version
 cj["pastemodekey.z"] := "^y"
 msgbox % cj.getClipLoc(1, 5)
 cj.runFunction("set_pformat(NO-FORMATTING)")
 cj.runLabel("exit") 		<span class="green">; closes Clipjump</span></pre>
 
-</br></br>
+<br><br>
 
 <hr noshade=noshade size=5 color=yellow>
-</br>
+<br>
 <a href="http://translate.google.com/translate?hl=en&sl=en&u=clipjump.sourceforge.net/docs/devList.html" id="translate">Translate</a>
-</br></br>
+<br><br>
 </body>
 
 </html>
