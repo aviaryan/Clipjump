@@ -24,7 +24,7 @@ channelOrganizer(){
 	OnMessage(0x200, "WM_MOUSEMOVE")
 
 	Gui, chOrg:New
-	Gui, +Resize +MinSize825x600
+	Gui, +Resize +MinSize825x500
 	Gui, Color, D2D2D2
 	Gui, Font, s10
 	Gui, Add, Text, % "x" wt - w_ofSearch - 200 " y10", % TXT.HST_search

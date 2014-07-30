@@ -13,7 +13,7 @@ gui_History()
 	Gui, History:new
 	Gui, Color, F6F8E1
 	Gui, Margin, 7, 7
-	Gui, +Resize +MinSize600x400
+	Gui, +Resize +MinSize500x300
 
 	Iniread, history_w, % CONFIGURATION_FILE, Clipboard_History_window, w, %A_Space%
 	Iniread, h, % CONFIGURATION_FILE, Clipboard_History_window, h, %A_Space%
