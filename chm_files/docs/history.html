@@ -13,7 +13,9 @@
 <li><a href=#ipaste>Insta Paste</a>
 <li><a href=#incog>Incognito Mode</a>
 <li><a href=#more>More Features</a>
-<ul><li><a href=#editclip>Edit Clip</a></li></ul>
+<ul><li><a href=#editclip>Edit Clip</a></li>
+<li><a href=#export>Export Clip</a></li>
+<li><a href=#holdclip>Hold Clip</a></li></ul>
 <li><a href=#dis_his>Disable History keeping</a>
 <li><a href=#his_short>Change/disable History Tool shortcut(Win+C)</a></ul>
 <br>
@@ -28,42 +30,51 @@ To delete a history item , right-click on it and select "Delete".<br><br>
 
 <span class="red">Tip</span> - To view only Clipboard images in the History list, you can filter the listing something like <span class="str">[IMAGE]</span><br><br>
 
-<h4><a name=partial>Partial Searching</a></h4>
+<h3><a name=partial>Partial Searching</a></h3>
 When the checkbox 'Partial' is checked , the History Tool follows a partial checking pattern. Now you will be able to filter the Histroy List with <em>Space</em> delimited terms and only those clips will be shown which have all those space delimited terms in them. 
-<br><br><br>
+<br><br>
 
-<h4><a name=preview>The Preview Window</a></h4>
+<h3><a name=preview>The Preview Window</a></h3>
 The History Preview Window previews the requested history clip. It supports preview of all types of clips from text to images. When previewing text , you have the option 
 to search for terms (Ctrl+F) and the searching algorithm inhibits the <span class="key">Partial Searching</span> setting from the History Tool. <br>
 When previewing images, you can enlarge the image by resizing the preview windows . Maximize it to see the maximum possible size of the image preview.
-<br><br><br>
+<br><br>
 
-<h4><a name=ipaste>Insta-Paste</a></h4>
+<h3><a name=ipaste>Insta-Paste</a></h3>
 Press <kbd>Space</kbd> or Middle Mouse Button after choosing your desired Clipboard item(s) in the history Gui to paste it directly to the underlying window. 
 This method necessarily closes the History GUI. When selecting multiple items and then Insta-pasti'ng, the listing order is the order in which the clips are pasted. <br>
 <b>TIP</b> - To force Insta-Paste to write to Clipboard (Clipjump) when it is used, change <var>instapaste_write_clipboard</var> to 1 in the <em>[Advanced]</em> section of Settings.ini file.
-<br><br><br>
+<br><br>
 
-<h4><a name=incog>Incognito Mode</a></h4>
+<h3><a name=incog>Incognito Mode</a></h3>
 When in Incognito mode, the Clipboard history will not be captured by Clipjump and the Clipjump icon in the System tray will fade (become greyyish). This feature can be 
-very useful for maintaining Privacy. To enable Incognito mode, use the Tray menu.<br><br><br>
+very useful for maintaining Privacy. To enable Incognito mode, use the Tray menu.<br><br>
 
-<h4><a name=more>More Features</a></h4>
+<h3><a name=more>More Features</a></h3>
 Right Click on an item in the Clipboard History list to view more options like Export Clip, Edit Clip and Delete Clip(s).
-<br><br><br>
+<br><br>
 
 <h4><a name=editclip>Edit Clip</a></h4> - With the Edit Clip option option, you can edit any clip with the 
 <a href=basic_help.html#default_editor>default Editor</a> or the default Image Editor. 
-When the editor window shows up, you can make any changes and <b>save (Ctrl+S) the file</b>. The clip will be reloaded in the History List once you have closed the editor.<br>
-Note that this option works for images too.
+When the editor window shows up, you can make any changes and <b>save (Ctrl+S) the file</b>. The clip will be reloaded in the History List once you have closed the editor.
+<br>Note that this option works for images too.
+<br>
+
+<h4><a name=export>Export Clip</a></h4> - Exports the clip to <span class="str">My Documents</span> with the name of <em>export<var>x</var>.cj</em> where <var>x</var> is 
+an incremented natural number. <a href="basic_help.html#export">The same feature</a> is also available for channel clips through <strong>Paste Mode</strong>. An exported 
+clip can then be loaded back into Clipjump using the <a href="basic_help.html#fdata">Copy File Data</a> feature.
+<br>
+
+<h4><a name=holdclip>Hold Clip</a></h4> <span class="ver">[v11.6+]</span> Hold Clip copies the selected clip to buffer and then allows you to paste it in any window without 
+disturbing the Clipjump clipboards. <a href=basic_help.html#holdclip>The same feature</a> is also available globally.
 <br><br><br>
 
-<a name=dis_his><h4>Disabling the History tool</h4></a> - Change the <span class="str">Number of days to keep items in History</span> setting to 0 to permanently 
+<a name=dis_his><h3>Disabling the History tool</h3></a> - Change the <span class="str">Number of days to keep items in History</span> setting to 0 to permanently 
 disable History tool. This will make Clipjump automatically start with the <b>Incognito Mode</b> on as a symbol to show that History is not captured. <br>
 Please note that disabling the history tool in the way as said above will not delete old history items unlike to the fact that if you change the <span class="str">Number of days to keep items in History</span> from 50 to 2, the history older than 2 days will be deleted by Clipjump.
-<br><br><br>
+<br><br>
 
-<a name=his_short><h4>Changing History Tool shortcut</h4></a> - The History tool shortcut (Win + C) can be changed or disabled via the <em>Settings.ini</em> file. 
+<a name=his_short><h3>Changing History Tool shortcut</h3></a> - The History tool shortcut (Win + C) can be changed or disabled via the <em>Settings.ini</em> file. 
 Just open the file and search for the key <var>history_K</var> in section <em>[Advanced]</em>. <br>
 By default, you will see the history_K key with the value <code>Win + C</code>. Empty this value to disable shortcut for History Tool or change this value to a 
 preferred shortcut to change the History tool shortcut.<br>

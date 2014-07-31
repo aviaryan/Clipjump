@@ -476,9 +476,9 @@ history_exportclip:
 	loop
 		if !FileExist(temp := A_MyDocuments "\export" A_index ".cj")
 			break
-	autoTooltip("Selected Clip " TXT._exportedto "`n" temp, 1000, 9)
 	try FileAppend, %ClipboardAll%, %temp%
 	CALLER := CALLER_STATUS
+	MsgBox, 64, % PROGNAME " " TXT.HST__name, % "Selected Clip " TXT._exportedto "`n" temp
 	return
 
 

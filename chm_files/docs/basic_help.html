@@ -95,13 +95,14 @@ From here, you can search for specific text among all the clips in all the chann
 The search follows the partial search methodology <a href="history.html#partial">as seen</a> in the History Tool.<br>
 <br>
 <h4>Important Info</h4>
-When using Search-Paste mode, the clip pointer will not be affected provided you end the activity with Search-Paste Mode. That is you use 
+When using Search-Paste mode, the <em>clip pointer</em> will not be affected provided you end the activity with Search-Paste Mode. That is you use 
 either <kbd>Enter</kbd> to paste or <kbd>Home</kbd>/<kbd>Esc</kbd> to cancel.
 <br><br>
-<b>Example</b> - The active clip will stay as it is (eg > Clip 4 of channel 0 ) even if you search something and that is in 5th clip of {6} channel. Use <kbd>Enter</kbd> to paste it and you will find that the active clip in <a href="#pastemd">Paste Mode</a> is still clip 4 of channel {0} if you reopen it with <kbd>Ctrl</kbd> + <kbd>V</kbd>.
+<b>Example</b> - The active clip will stay as it is (like <span class="str">Clip 4 of channel 0</span>) even if you search something and that is in 5th clip of {6} channel. Use <kbd>Enter</kbd> to paste it and you will find that the active clip in <a href="#pastemd">Paste Mode</a> is still clip 4 of channel {0} when you reopen it with <kbd>Ctrl</kbd> + <kbd>V</kbd>.
 <br>
 Clip pointer is not kept (updated) if you press <kbd>Ctrl</kbd> + <kbd>F</kbd> in Search-Paste Mode to close the search window. 
-All other <a href="#pastemd">Paste Mode</a> shortcuts, <kbd>Ctrl</kbd> + <kbd>E</kbd> for export, <kbd>Ctrl</kbd> + <kbd>Space</kbd> for fixate are still valid in Search-Paste Mode. While searching if you arrive at a tip you want to paste with a custom paste formatting, you can use <kbd>Ctrl</kbd> + <kbd>Z</kbd> and then <kbd>Enter</kbd> instead of <kbd>Ctrl</kbd> + <kbd>F</kbd>  to close search window, then <kbd>Ctrl</kbd> + <kbd>Z</kbd> to a paste format and then release of <kbda>Ctrl</kbda>. The former method here will keep the clip pointer preserved as it ends with an action of the Search-Paste Mode.
+All other <a href="#pastemd">Paste Mode</a> shortcuts like <kbd>Ctrl</kbd> + <kbd>E</kbd> for export, <kbd>Ctrl</kbd> + <kbd>Space</kbd> for fixate are still valid in Search-Paste Mode. While searching if you arrive at a tip you want to paste with a custom paste formatting, you can use <kbd>Ctrl</kbd> + <kbd>Z</kbd> and then <kbd>Enter</kbd> instead of <kbd>Ctrl</kbd> + <kbd>F</kbd>  to close search window, then <kbd>Ctrl</kbd> + <kbd>Z</kbd> to a paste format and then release of <kbda>Ctrl</kbda>. The former method here will keep the clip pointer preserved <b>as it ends with an action of the Search-Paste Mode</b> and that's the <u>rule of thumb</u> to understand this topic.
+
 <br><br>
 <b>Tip</b> - You can change shortcuts in Search-Paste Mode through <a href=custom.html#2>ClipjumpCustom.ini</a>.<br>
 <b>Tip</b> - Search for <em>IMAGE</em> to find images.<br>
@@ -167,9 +168,9 @@ from the tip will disappear.
 
 
 <h2><a name=editclip>Edit Clips in Paste Mode</a></h2>
-<span class="ver">[v10.6+]</span> Press <kbd>H</kbd> in <a href="#pastemd">Paste Mode</a> to start editing a clip. <br> 
+<span class="ver">[v10.6+]</span> Press <kbd>H</kbd> in <a href="#pastemd">Paste Mode</a> to start editing a clip.<br> 
 The Paste mode will end and your <var>default_editor</var> or <var>default_image_editor</var> will open the clip.
-<a name=default_editor>The default_editor and default_image_editor</a> can be configured from the System section of settings.ini. 
+<a name=default_editor></a>The <var>default_editor</var> and <var>default_image_editor</var> can be configured from the <em>System</em> section of <em>settings.ini</em>. 
 Once the editor comes up, change the clip according to needs, save the changes and then <b>exit the editor</b>. Clipjump will respond to the exit and update the clip.
 Alternatively press Esc anytime to exit. 
 <br>Editing works for all types of clips but for text clips all formatting will be lost when they are updated.

@@ -1338,7 +1338,7 @@ export:
 		if !FileExist(temp := A_MyDocuments "\export" A_index ".cj")
 			break
 	Tooltip % "{" CN.Name "} Clip " realClipNo " " TXT._exportedto "`n" temp
-	SetTimer, TooltipOff, 1000
+	SetTimer, TooltipOff, 2500
 	try FileAppend, %ClipboardAll%, % temp
 	return
 
