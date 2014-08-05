@@ -43,10 +43,10 @@ Translations_apply(){
 
 Translations_fixglobalvars(){
 	global
-	MSG_TRANSFER_COMPLETE := TXT.TIP_copied " " PROGNAME    ;not space
+	MSG_TRANSFER_COMPLETE := valueof(TXT.TIP_copied_2)
 	CopyMessage := !ini_IsMessage ? "" : MSG_TRANSFER_COMPLETE " {" CN.Name "}"
 	
-	MSG_CLIPJUMP_EMPTY := TXT.TIP_empty1 "`n`n" PROGNAME " " TXT.TIP_empty2 "`n`n" TXT.TIP_empty3 ;not `n`n
+	MSG_CLIPJUMP_EMPTY := TXT.TIP_empty1 "`n`n" valueof(TXT.TIP_empty2_2) "`n`n" TXT.TIP_empty3 ;not `n`n
 	MSG_ERROR := TXT.TIP_error
 	MSG_MORE_PREVIEW := TXT.TIP_more
 	MSG_PASTING := TXT.TIP_pasting

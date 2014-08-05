@@ -17,7 +17,7 @@
 
 
 plugin_pformat_commonformats_None(zin){
-	STORE["commonformats_None"] := "This pastes the original clip rejecting any change made to the clip."
+	STORE["commonformats_None"] := "This returns the original clip rejecting any change made to the clip."
 	return zin , STORE.ClipboardChanged := 0
 }
 
@@ -95,9 +95,12 @@ plugin_pformat_commonformats(zin){
 	Gui, Add, Edit, xp+5 yp+15 w640 h50 +ReadOnly -Border vzinfo,
 
 	Gui, Add, Button, xs y+40 +Default, OK
-	Gui, Add, Button, x+30 yp gplugin_pformat_commonformats_apply, &Apply
+	Gui, Add, Button, x+30 yp gplugin_pformat_commonformats_apply, % TXT.SET_apply
 	Gui, Add, Text, x+55 yp-15, Input Field
+	Gui, Font, s10, Lucida Console
+	Gui, Font, s10, Consolas
 	Gui, Add, Edit, x+10 yp-2 w441 h40 gzchosenformat vzinputfield, 
+	Gui, Font
 	Gui, commonformat:Show,, Choose Format
 
 	if !FileExist(ztF)

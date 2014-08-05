@@ -459,12 +459,18 @@ history_InstaPaste:
 			, temp_curRow := history_clipboard(temp_curRow)
 		if !temp_curRow
 			break
-		Send, % ( A_index>1 ? "{Enter}" : "" ) "^{vk56}"
+		SendInput, % ( A_index>1 ? "{Enter}" : "" ) "^{vk56}"
 		sleep 110
 	}
 	API.blockMonitoring(0)
-	WinClose, % PROGNAME " " TXT.HST__name
-	WinWaitClose, % PROGNAME " " TXT.HST__name
+	if ini_HisCloseOnInstaPaste
+	{
+		WinClose, % PROGNAME " " TXT.HST__name
+		WinWaitClose, % PROGNAME " " TXT.HST__name
+	} else {
+		sleep 200 	; extra layer
+		WinShow, % PROGNAME " " TXT.HST__name
+	}
 	return
 
 history_exportclip:

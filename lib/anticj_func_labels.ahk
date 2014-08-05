@@ -644,7 +644,7 @@ guiMsgBox(title, text, owner="" ,isEditable=0, wait=0, w="", h=""){
 
 	Gui, guiMsgBox:New
 	Gui, guiMsgBox:+Owner%owner%
-	Gui, -MaximizeBox
+	Gui, -MaximizeBox +AlwaysOnTop
 	Gui, Font, s9, Lucida Console
 	Gui, Add, Edit, % "x5 y5 w" w-10 " h" h-35 (isEditable ? " -" : " +") "Readonly vthebox +multi -Border", % text
 	Gui, Add, button, % "x" w/2-20 " w40 y+5", OK

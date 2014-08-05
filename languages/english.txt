@@ -9,6 +9,7 @@
 ; Dont translate 'Clipjump'
 ; & in &Preview is to create shortcut Alt+P when the window is active. When translating into a non-english language, omit '&' and when in a english type language, use '&'
 ; only when you are sure you are right.
+; Words inside %..% are variables. Take them as constants and translate them accordingly.
 
 ;======
 ;v9.9.0.1
@@ -16,9 +17,7 @@
 
 TIP_text = Text
 TIP_file_folder = File/Folder
-TIP_copied = Transferred to
 TIP_empty1 = Clip 0 of 0
-TIP_empty2 = is empty
 TIP_error = [The preview/path cannot be loaded]
 TIP_more = [More]
 TIP_pasting = Pasting...
@@ -281,9 +280,6 @@ TRY_pstmdshorts = Paste Mode shortcuts
 ;10.9
 ;=====
 
-TIP_holdclip = Press Ctrl+V to paste
-             = Press Insert to add clip to channel
-             = Press Esc to exit
 SET_T_holdclip = Copies the selected text or item to a buffer and prevents it from being captured by Clipjump.
                = You can then paste the clip, move it to a channel or reject it.
 SET_keepactivepos = Preserve Current Active Clip position
@@ -415,3 +411,10 @@ TIP_confirmcopy = You see this confirmation because this is a protected channel.
                 = Press Insert to transfer this clip to channel 0, the default channel
 _processing = Processing
 TIP_protectedMoved = Clip transferred to channel 0 !
+TIP_holdclip = Press Ctrl+V to paste
+             = Press Insert to add clip to channel
+             = Press F2 to open clip in Common Formats GUI
+             = Press Esc to exit
+_output = Output
+TIP_copied_2 = Transferred to %PROGNAME%
+TIP_empty2_2 = %PROGNAME% is empty
