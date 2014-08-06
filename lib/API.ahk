@@ -334,9 +334,13 @@ class API
 	;pastes the given text without copying it to clipjump
 	pasteText(Text){
 		this.blockMonitoring(1)
+		try 
+			oldclip := ClipboardAll
 		Clipboard := Text
 		sleep 100
 		Send ^{vk56}
+		sleep 100
+		Clipboard := oldclip
 		this.blockMonitoring(0)
 	}
 

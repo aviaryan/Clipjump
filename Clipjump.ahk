@@ -53,18 +53,19 @@ global PRODUCT_PAGE := "http://clipjump.sourceforge.net"
 global HELP_PAGE := "http://clipjump.sourceforge.net/docs"
 global AUTHOR_PAGE := "http://aviaryan.github.io"
 
-global MSG_TRANSFER_COMPLETE := TXT.TIP_copied " " PROGNAME    ;not space
-global MSG_CLIPJUMP_EMPTY := TXT.TIP_empty1 "`n`n" PROGNAME " " TXT.TIP_empty2 "`n`n" TXT.TIP_empty3 ;not `n`n
-global MSG_ERROR := TXT.TIP_error
-global MSG_MORE_PREVIEW := TXT.TIP_more
-global MSG_PASTING := TXT.TIP_pasting
-global MSG_DELETED := TXT.TIP_deleted
-global MSG_ALL_DELETED := TXT.TIP_alldeleted
-global MSG_CANCELLED := TXT.TIP_cancelled
-global MSG_FIXED := TXT.TIP_fixed
-global MSG_HISTORY_PREVIEW_IMAGE := TXT.HST_viewimage
-global MSG_FILE_PATH_COPIED := TXT.TIP_filepath " " PROGNAME
-global MSG_FOLDER_PATH_COPIED := TXT.TIP_folderpath " " PROGNAME
+global MSG_TRANSFER_COMPLETE
+ , MSG_CLIPJUMP_EMPTY
+ , MSG_ERROR
+ , MSG_MORE_PREVIEW
+ , MSG_PASTING
+ , MSG_DELETED
+ , MSG_ALL_DELETED
+ , MSG_CANCELLED
+ , MSG_FIXED
+ , MSG_HISTORY_PREVIEW_IMAGE
+ , MSG_FILE_PATH_COPIED
+ , MSG_FOLDER_PATH_COPIED
+ Translations_fixglobalVars() ; copymessage will be globalized and fixed in validateSettings()
 
 ;History Tool
 global hidden_date_no := 4 , history_w , history_partial := 1 ;start off with partial=1 <> much better
@@ -133,7 +134,7 @@ else if (ini_Version != VERSION)
 global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_IsChannelMin , ini_isMessage, CopyMessage
 		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, channel_K, onetime_K, paste_k, actionmode_k, ini_is_duplicate_copied, ini_formatting
 		, ini_CopyBeep , beepFrequency , ignoreWindows, ini_defEditor, ini_defImgEditor, ini_def_Pformat, pluginManager_k, holdClip_K, ini_PreserveClipPos
-		, chOrg_K, ini_startSearch, ini_revFormat2def, ini_pstMode_X, ini_pstMode_Y
+		, chOrg_K, ini_startSearch, ini_revFormat2def, ini_pstMode_X, ini_pstMode_Y, ini_HisCloseOnInstaPaste
 
 ; (search) paste mode keys 
 global pastemodekey := {} , spmkey := {}
@@ -1004,8 +1005,12 @@ holdClip:
 	}
 	holdclip_continue := 1 , hkZ( ( paste_k ? "$^" paste_k : emptyvar ) , "Paste", 0) 	; disable paste mode
 	try temp_cb := trygetVar("Clipboard")
-	keyPressed := TT_Console(TXT.TIP_holdclip "`n`n" Substr(temp_cb, 1, 200) " ...", "Insert Esc",,,,,, 1)
-	if keyPressed = Insert
+	keyPressed := TT_Console(TXT.TIP_holdclip "`n`n" Substr(temp_cb, 1, 200) " ...", "Insert F2 Esc",,,,,, 1)
+	if keyPressed = F2
+	{
+		guiMsgBox(TXT["_output"], API.runPlugin("pformat.commonformats.ahk", Clipboard) )
+	}
+	else if keyPressed = Insert
 	{
 		try t_cb := ClipboardAll
 		try Clipboard := ""
@@ -1013,7 +1018,7 @@ holdClip:
 	API.blockMonitoring(0)
 	if keyPressed = Insert
 		try Clipboard := t_cb
-	hkZ( ( paste_k ? "$^" paste_k : emptyvar ) , "Paste")
+	hkZ( ( paste_k && CLIPJUMP_STATUS ? "$^" paste_k : emptyvar ) , "Paste")
 	EmptyMem()
 	return
 
@@ -1338,7 +1343,7 @@ export:
 		if !FileExist(temp := A_MyDocuments "\export" A_index ".cj")
 			break
 	Tooltip % "{" CN.Name "} Clip " realClipNo " " TXT._exportedto "`n" temp
-	SetTimer, TooltipOff, 1000
+	SetTimer, TooltipOff, 2500
 	try FileAppend, %ClipboardAll%, % temp
 	return
 

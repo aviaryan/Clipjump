@@ -10,7 +10,7 @@ The program records changes in the system clipboard, stores them without any lim
   
 
 #### Running from the Source
-1. Get [AutoHotkey](http://www.autohotkey.com) and install it.
+1. Get [AutoHotkey](http://www.ahkscript.org) and install it.
 2. Then double-click `Clipjump.ahk` to run it with AutoHotkey.exe
   
 #### Distribution

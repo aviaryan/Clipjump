@@ -13,7 +13,7 @@ gui_History()
 	Gui, History:new
 	Gui, Color, F6F8E1
 	Gui, Margin, 7, 7
-	Gui, +Resize +MinSize600x400
+	Gui, +Resize +MinSize500x300
 
 	Iniread, history_w, % CONFIGURATION_FILE, Clipboard_History_window, w, %A_Space%
 	Iniread, h, % CONFIGURATION_FILE, Clipboard_History_window, h, %A_Space%
@@ -459,12 +459,18 @@ history_InstaPaste:
 			, temp_curRow := history_clipboard(temp_curRow)
 		if !temp_curRow
 			break
-		Send, % ( A_index>1 ? "{Enter}" : "" ) "^{vk56}"
+		SendInput, % ( A_index>1 ? "{Enter}" : "" ) "^{vk56}"
 		sleep 110
 	}
 	API.blockMonitoring(0)
-	WinClose, % PROGNAME " " TXT.HST__name
-	WinWaitClose, % PROGNAME " " TXT.HST__name
+	if ini_HisCloseOnInstaPaste
+	{
+		WinClose, % PROGNAME " " TXT.HST__name
+		WinWaitClose, % PROGNAME " " TXT.HST__name
+	} else {
+		sleep 200 	; extra layer
+		WinShow, % PROGNAME " " TXT.HST__name
+	}
 	return
 
 history_exportclip:
@@ -476,9 +482,9 @@ history_exportclip:
 	loop
 		if !FileExist(temp := A_MyDocuments "\export" A_index ".cj")
 			break
-	autoTooltip("Selected Clip " TXT._exportedto "`n" temp, 1000, 9)
 	try FileAppend, %ClipboardAll%, %temp%
 	CALLER := CALLER_STATUS
+	MsgBox, 64, % PROGNAME " " TXT.HST__name, % "Selected Clip " TXT._exportedto "`n" temp
 	return
 
 

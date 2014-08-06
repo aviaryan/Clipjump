@@ -294,6 +294,7 @@ load_Settings(all=false)
 		ini_defImgEditor := (t:=ini_read("System", "default_image_editor")) ? t : "mspaint.exe"
 		ini_pstMode_X := ini_read("Advanced", "pstMode_X")
 		ini_pstMode_Y := ini_read("Advanced", "pstMode_Y")
+		ini_HisCloseOnInstaPaste := ini_read("Advanced", "HisCloseOnInstaPaste")
 	}
 
 }
@@ -345,12 +346,12 @@ save_Settings()
 	, hkZ(chOrg_K, "channelOrganizer", 0)
 
 	;Re-create shortcuts
-	  hkZ(Cfilep_K, "CopyFile", 1) 
+	  hkZ(Cfilep_K, "CopyFile", 1)
 	, hkZ(Cfolderp_K, "CopyFolder", 1)
 	, hkZ(Cfiled_K,   "CopyFileData", 1)
 	, hkZ(chnl_K, "channelGUI",  1)
 	, hkZ(hldClip_K,	"holdClip",		1)
-	, hkZ(pst_k ? "$^" pst_k : emptyvar, "paste", CLIPJUMP_STATUS )
+	, hkZ(pst_k && CLIPJUMP_STATUS ? "$^" pst_k : emptyvar, "paste", CLIPJUMP_STATUS )
 	, hkZ(pitswp_K, "PitSwap", 1)
 	, hkZ(actmd_k, "actionmode", 1)
 	, hkZ(plugM_k, "pluginManagerGUI", 1)
@@ -433,6 +434,7 @@ save_Default(full=1){
 	ini_write("Main", "revFormat2def", 0)
 	ini_write("Advanced", "pstMode_X")
 	ini_write("Advanced", "pstMode_Y")
+	ini_write("Advanced", "HisCloseOnInstaPaste", 1)
 }
 
 Ini_write(section, key, value="", ifblank=true){

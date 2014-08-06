@@ -5,12 +5,22 @@
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=9" >
 	<meta http-equiv="X-UA-Compatible" content="IE=8" >
-  <title>Clipjump Shortcuts</title>
+  <title>Shortcuts</title>
   <link rel="stylesheet" href="../Blogs.css" type="text/css">
 </head>
 <body>
-<h1><a name=short>Shortcut List</a></h1>
-<h2>General (System Wide)</h2>
+<h1><a name="short">Shortcut List</a></h1>
+<ul>
+	<li><a href="#general">General</a></li>
+	<li><a href="#pstmd">Paste Mode</a>
+	<ul>
+		<li><a href="#spm">Search-Paste Mode</a></li>
+		<li><a href="#miscmd">Cancel, Delete, Copy, Move and Delete All Mode</a></li>
+	</ul>
+	<li><a href="#actmd">Action Mode</a></li>
+</ul>
+
+<h2><a name="general">General (System Wide)</a></h2>
 <table>
 	<tr><th width="150px"></th><th></th></tr>
 	<tr>
@@ -28,16 +38,15 @@
 </table>
 
 
-<h2>Paste Mode</h2>
-<a name="pstmd"></a>
-<kbd>Ctrl</kbd> + <kbd>V</kbd> is used to enter the <a href=basic_help.html#pastemd><code class="key">Paste Mode</code></a>.<br>
-To activate Paste Mode, go through the following sequence -
+<h2><a name="pstmd">Paste Mode</a></h2>
+<kbd>Ctrl</kbd> + <kbd>V</kbd> is used to enter the <strong class="mild">[Paste Mode]</strong> (see also <a href=basic_help.html#pastemd>here</a>).<br>
+As releasing both keys inserts the current displayed clip, the key sequence 
 <ul>
 	<li>Press <kbd>Ctrl</kbd> + <kbd>V</kbd></li>
 	<li>Keep <kbd>Ctrl</kbd> pressed</li>
 	<li>Release <kbd class="inverse">V</kbd></li>
 </ul>
-While being in paste mode ( <kbd>Ctrl</kbd> pressed ), following are the actions available -
+enters the intrinsic [Paste Mode]. While being in Paste Mode (<kbd>Ctrl</kbd> pressed) a few more actions can be performed by pressing keys:
 
 <pre>
 <kbd>V</kbd> - Move forward through Multiple Clipboards (from 1 to 2 , 2 to 3, &hellip;)
@@ -46,7 +55,7 @@ While being in paste mode ( <kbd>Ctrl</kbd> pressed ), following are the actions
 <kbd>X</kbd> - Toggle between Cancel, Delete, Copy, Move and Delete All MODE 
 <kbd>E</kbd> - <a href="basic_help.html#export">Export</a> current clip
 <kbd>A</kbd> - Jump to first clip
-<kbd>F</kbd> - Activate <a href="basic_help.html#spm">Search / Entering <b>Search Mode</b></a>
+<kbd>F</kbd> - Activate <a href="basic_help.html#spm">Search / Entering [Search-Paste Mode]</a>
 <kbd>H</kbd> - <a href="basic_help.html#editclip">Edit Clip</a>
 <kbd>Z</kbd> - Toggle <a href="basic_help.html#pformat">pasting formats</a>
 <kbd>T</kbd> - Add <a href="basic_help.html#tags">tags</a> to clips
@@ -60,41 +69,43 @@ While being in paste mode ( <kbd>Ctrl</kbd> pressed ), following are the actions
 
 See <a href=custom.html#2>this ClipjumpCustom.ini</a> example to change these keys<br>
 
-<h3>Search in Paste Mode</h3>
-The following key sequence enters <a href=basic_help.html#spm><strong>Search Mode</strong></a> while being in <a href="#pstmd">Paste Mode</a>:
+<h3><a name="spm">Search in Paste Mode (Search-Paste Mode)</a></h3>
+The following key sequence enters <strong class="mild">[Search-Paste Mode]</strong> while being in <a href="#pstmd">[Paste Mode]</a> (see also <a href=basic_help.html#spm>here</a>):
 <ul>
-    <li>While <kbd>Ctrl</kbd> pressed ...</li>
+    <li>While <kbd>Ctrl</kbd> pressed ... (i.e. while being in [Paste Mode])</li>
     <li>Press <kbd>F</kbd></li>
 	<li>Release <kbd class="inverse">Ctrl</kbd> and <kbd  class="inverse">F</kbd></li>
 </ul>
-Now you are in <strong>Search Mode</strong> within <strong>Paste Mode</strong> and several commands are available via keypress:
+Now you are in [Search-Paste Mode] and several commands are available via keypress:
 <pre>
 <kbd>Enter</kbd> - Paste
 <kbd>Home</kbd> / <kbd>Esc</kbd> - Cancel
 <kbd>&#8593;</kbd> (i.e. <kbd>Up</kbd>) - Move one clip up (+1)
-<kbd>&#8595;</kbd> (i.e. <kbd>Down</kbd>) -Move one clip down (-1)
+<kbd>&#8595;</kbd> (i.e. <kbd>Down</kbd>) - Move one clip down (-1)
+<kbd>Ctrl</kbd>+<a href="#pstmd">[Paste Mode] key</a> - execute a [Paste Mode] feature when [Search-Paste Mode] is active
+<kbd>Ctrl</kbd> + <kbd>Enter</kbd> - <strong class="mild">[Multipaste Mode]</strong> within [Search-Paste Mode]- Paste without closing the [Search-Paste Mode] (releasing <kbd class="inverse">Ctrl</kbd> does NOT cancel the [Search-Paste Mode] here)
+<kbd>Ctrl</kbd> + <kbd>F</kbd>, then release <kbd class="inverse">F</kbd> - Switch back to [Paste Mode]
 </pre>
 
 See <a href=custom.html>ClipjumpCustom.ini</a> to change these keys<br>
 
-<h3>Cancel, Delete, Copy, Move and Delete All Mode</h3>
-While being in <a href="#pstmd">Paste Mode</a>, pressing <kbd>X</kbd> repeatedly toogles between several modes:
+<h3><a name="miscmd">Cancel, Delete, Copy, Move and Delete All Mode</a></h3>
+While being in <a href="#pstmd">Paste Mode</a>, pressing <kbd>X</kbd> repeatedly toggles between several modes:
 
 <pre>
-<kbd>X</kbd> - Cancel Mode - cancel the current paste operation
-<kbd>X</kbd> - <kbd>X</kbd> - Delete Mode - delete current clip
-<kbd>X</kbd> - <kbd>X</kbd> - <kbd>X</kbd> - Move Mode - Move clip to a different channel
-<kbd>X</kbd> - <kbd>X</kbd> - <kbd>X</kbd> - <kbd>X</kbd> - Copy Mode - copy clip to a different channel
-<kbd>X</kbd> - <kbd>X</kbd> - <kbd>X</kbd> - <kbd>X</kbd> - <kbd>X</kbd> - Delete All Mode - deletes all clips
-
+<kbd>X</kbd> - <strong class="mild">[Cancel Mode]</strong> - cancel the current paste operation
+<kbd>X</kbd> - <kbd>X</kbd> - <strong class="mild">[Delete Mode]</strong> - delete current clip
+<kbd>X</kbd> - <kbd>X</kbd> - <kbd>X</kbd> - <strong class="mild">[Move Mode]</strong> - Move clip to a different channel
+<kbd>X</kbd> - <kbd>X</kbd> - <kbd>X</kbd> - <kbd>X</kbd> - <strong class="mild">[Copy Mode]</strong> - copy clip to a different channel
+<kbd>X</kbd> - <kbd>X</kbd> - <kbd>X</kbd> - <kbd>X</kbd> - <kbd>X</kbd> - <strong class="mild">[Delete All Mode]</strong> - deletes all clips
 </pre>
 
-<h2>Action Mode</h2>
-<a name="actmd"></a>
+Note that [Cancel Mode], [Delete Mode], [Move Mode], [Copy Mode] and [Delete All Mode] are inter-related. The program cycles through these modes when you press <kbd>X</kbd> while holding <kbd>Ctrl</kbd>.<br>
+So, pressing <kbd>X</kbd> while holding <kbd>Ctrl</kbd> in [Delete All Mode] will switch back to [Cancel Mode]. 
 
-You can find <a href=basic_help.html#actmd>here</a> a few more details about <strong>Action Mode</strong><br>
+<h2><a name="actmd">Action Mode</a></h2>
 
-<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>A</kbd> is used to enter the Action Mode. A dialog box pops up, offering a lot more "actions" which can be performed. These "actions" can be accessed via keypress:
+<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>A</kbd> is used to enter the <strong class="mild">[Action Mode]</strong> (see also <a href=basic_help.html#actmd>here</a>). A dialog box pops up, offering a lot more "actions" which can be performed. These actions can be accessed via keypress:
 
 <pre>
 <kbd>C</kbd> - <a href=basic_help.html#path>Copy File path(s)</a>
@@ -112,9 +123,13 @@ You can find <a href=basic_help.html#actmd>here</a> a few more details about <st
 <kbd>T</kbd> - <a href=basic_help.html#ot>One Time Stop</a>
 <kbd>X</kbd> - <a href=basic_help.html#path>Copy active folder path</a>
 <kbd>Esc</kbd> - Exit Action Mode Window
+<br>
+<kbd>0</kbd>..<kbd>9</kbd> - Activate channel whose ID (number) is pressed
 </pre>
 
-Related - <a href=ini.html#actmd_keys>Changing Action mode keys</a><br>
+The hotkey for [Action Mode] can be user defined. (see: <a href=custom.html>ClipjumpCustom</a> and <a href=settings.html>Settings Editor</a> to change this key)<br>
+
+To change Action Mode easy keys, see <a href=ini.html#actmd_keys>Changing Action mode keys</a><br>
 
 <br>
 <hr noshade=noshade size=5 color=yellow>
@@ -125,3 +140,4 @@ Related - <a href=ini.html#actmd_keys>Changing Action mode keys</a><br>
 </body>
 
 </html>
+

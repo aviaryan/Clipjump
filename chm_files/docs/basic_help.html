@@ -53,7 +53,7 @@ Release <kbda>Ctrl</kbda> and then confirm the confirmation tip with <kbd>Y</kbd
 </ul>
 
 <li>Use <kbd>F</kbd> while holding <kbd>Ctrl</kbd> in <a href="#pastemd">Paste Mode</a> to search through clips. A search box is activated when you press <kbd>F</kbd>. 
-Release <kbda>Ctrl</kbda> and type to filter clips containing the typed text. Use <kbd>Up</kbd> and <kbd>Down</kbd> keys to jump through the results, <kbd>Enter</kbd> to paste and <kbd>Esc</kbd>/<kbd>Home</kbd> to cancel. More in-depth info of this feature can be found <a href=#spm>here</a>.</li> 
+Release <kbda>Ctrl</kbda> and type to filter clips containing the typed text. Use <kbd>Up</kbd> and <kbd>Down</kbd> keys to jump through the results, <kbd>Enter</kbd> to paste and <kbd>Esc</kbd>/<kbd>Home</kbd> to cancel. More in-depth info of this feature can be found <a href=#spmd>here</a>.</li> 
 <br><br>
 </ul>
 
@@ -81,8 +81,8 @@ Action Mode easy keys <a href=ini.html#actmd_keys>can be totally configured</a> 
 Just press <var>channel number</var> when ActionMode popup is active. These keys can be overwritten through ClipjumpCustom.ini .
 <br><br><br>
 
-<!-- spm -->
-<h2><a name=spm>Search in Paste mode</a></h2>
+<!-- spmd -->
+<h2><a name=spmd>Search in Paste mode (Search-Paste Mode)</a></h2>
 <span class="ver">[v10.6+]</span> Press <kbd>F</kbd> to activate the Search feature in <a href="#pastemd">Paste mode</a> (This is <strong>Search-Paste Mode</strong>). A box should come above the tip.<br>
 From here, you can search for specific text among all the clips in all the channels. Here are the key points-
 <ul>
@@ -95,15 +95,14 @@ From here, you can search for specific text among all the clips in all the chann
 The search follows the partial search methodology <a href="history.html#partial">as seen</a> in the History Tool.<br>
 <br>
 <h4>Important Info</h4>
-When using Search-Paste mode, the clip pointer will not be affected provided you end the activity with Search-Paste Mode. That is you use 
+When using Search-Paste mode, the <em>clip pointer</em> will not be affected provided you end the activity with Search-Paste Mode. That is you use 
 either <kbd>Enter</kbd> to paste or <kbd>Home</kbd>/<kbd>Esc</kbd> to cancel.
 <br><br>
-<b>Example</b> - The active clip will stay as it is (eg > Clip 4 of channel 0 ) even if you search something and that is in 5th clip of {6} channel. Use <kbd>Enter</kbd> to paste it and you will find that the active clip in <a href="#pastemd">Paste Mode</a> is still clip 4 of channel {0} if you reopen it with <kbd>Ctrl</kbd> + <kbd>V</kbd>.
+<b>Example</b> - The active clip will stay as it is (like <span class="str">Clip 4 of channel 0</span>) even if you search something and that is in 5th clip of {6} channel. Use <kbd>Enter</kbd> to paste it and you will find that the active clip in <a href="#pastemd">Paste Mode</a> is still clip 4 of channel {0} when you reopen it with <kbd>Ctrl</kbd> + <kbd>V</kbd>.
 <br>
 Clip pointer is not kept (updated) if you press <kbd>Ctrl</kbd> + <kbd>F</kbd> in Search-Paste Mode to close the search window. 
-All other <a href="#pastemd">Paste Mode</a> shortcuts, <kbd>Ctrl</kbd> + <kbd>E</kbd> for export, <kbd>Ctrl</kbd> + <kbd>Space</kbd> for fixate are still valid in Search-Paste Mode. 
-While searching if you arrive at a tip you want to paste with a custom paste formatting, you can use <kbd>Ctrl</kbd> + <kbd>Z</kbd> and then <kbd>Enter</kbd> instead of <kbd>Ctrl</kbd> + <kbd>F</kbd>  to close search window, then <kbd>Ctrl</kbd> + <kbd>Z</kbd> to a paste format and then release of <kbda>Ctrl</kbda>. 
-The former method here will keep the clip pointer preserved as it ends with an action of the Search-Paste Mode.
+All other <a href="#pastemd">Paste Mode</a> shortcuts like <kbd>Ctrl</kbd> + <kbd>E</kbd> for export, <kbd>Ctrl</kbd> + <kbd>Space</kbd> for fixate are still valid in Search-Paste Mode. While searching if you arrive at a tip you want to paste with a custom paste formatting, you can use <kbd>Ctrl</kbd> + <kbd>Z</kbd> and then <kbd>Enter</kbd> instead of <kbd>Ctrl</kbd> + <kbd>F</kbd>  to close search window, then <kbd>Ctrl</kbd> + <kbd>Z</kbd> to a paste format and then release of <kbda>Ctrl</kbda>. The former method here will keep the clip pointer preserved <b>as it ends with an action of the Search-Paste Mode</b> and that's the <u>rule of thumb</u> to understand this topic.
+
 <br><br>
 <b>Tip</b> - You can change shortcuts in Search-Paste Mode through <a href=custom.html#2>ClipjumpCustom.ini</a>.<br>
 <b>Tip</b> - Search for <em>IMAGE</em> to find images.<br>
@@ -112,7 +111,7 @@ The former method here will keep the clip pointer preserved as it ends with an a
 
 
 <a name=spm_multipaste><h4>Multipaste in Search-Paste Mode</h4></a>
-You can use <kbd>Ctrl</kbd> + <kbd>Enter</kbd> when search is active in <a href="#pastemd">Paste Mode</a> to paste without closing the paste and search mode. <a href=#multipaste>Unlike Paste Mode</a>, here after first paste with <kbd>Ctrl</kbd> + <kbd>Enter</kbd>, the release <kbda>Ctrl</kbda> action will not change to cancel. So you don't need to hold <kbd>Ctrl</kbd> as you always do when search mode is active.
+You can use <kbd>Ctrl</kbd> + <kbd>Enter</kbd> when search is active in <a href="#pastemd">Paste Mode</a> to paste without closing the paste and Search-Paste Mode. <a href=#multipaste>Unlike Paste Mode</a>, here after first paste with <kbd>Ctrl</kbd> + <kbd>Enter</kbd>, the release <kbda>Ctrl</kbda> action will not change to cancel. So you don't need to hold <kbd>Ctrl</kbd> as you always do when [Search-Paste Mode] is active.
 <br><br><br>
 <!-- -->
 
@@ -133,7 +132,7 @@ formatting</span>.<br>
 <h4>How it works?</h4>
 All paste formats are powered by their respective plugins. Clipjump loads all the available paste formats from the plugin folder, creates a list and accesses them when 
 user demands pasting/previewing from a plugin. You can too <a href="plugins/basics.html#class_pformat">create your own paste format</a> provided you know 
-<a href="http://www.autohotkey.com">AutoHotkey</a>, the simplest programming language.<br><br>
+<a href="http://www.ahkscript.org">AutoHotkey</a>, the simplest programming language.<br><br>
 
 <a name="pf_notes">Note that</a> that Paste formats don't permanently change the clips. They are copied into memory and the 'memory-copy' 
 is what is changed at the time of action.<br>
@@ -169,9 +168,9 @@ from the tip will disappear.
 
 
 <h2><a name=editclip>Edit Clips in Paste Mode</a></h2>
-<span class="ver">[v10.6+]</span> Press <kbd>H</kbd> in <a href="#pastemd">Paste Mode</a> to start editing a clip. <br> 
+<span class="ver">[v10.6+]</span> Press <kbd>H</kbd> in <a href="#pastemd">Paste Mode</a> to start editing a clip.<br> 
 The Paste mode will end and your <var>default_editor</var> or <var>default_image_editor</var> will open the clip.
-<a name=default_editor>The default_editor and default_image_editor</a> can be configured from the System section of settings.ini. 
+<a name=default_editor></a>The <var>default_editor</var> and <var>default_image_editor</var> can be configured from the <em>System</em> section of <em>settings.ini</em>. 
 Once the editor comes up, change the clip according to needs, save the changes and then <b>exit the editor</b>. Clipjump will respond to the exit and update the clip.
 Alternatively press Esc anytime to exit. 
 <br>Editing works for all types of clips but for text clips all formatting will be lost when they are updated.
@@ -242,6 +241,10 @@ You will see a Confirmation <span class="str">System Clipboard has Clip x</span>
 <span class="ver">[v10.9+]</span> Hold Clip feature allows you to copy clipboard to a buffer location from where you can either paste the data or copy it to the currently active channel.
 <br>No shortcut for holdclip is assigned by default but the option has been provided in the Settings Editor. Once you have created a shortcut for holdclip, use it copy 
 the selected text/file/folder/<i>anything</i> to the buffer.<br>
+When copied, you will see a tip previewing the clip and all available options. Press <kbd>F2</kbd> to open clip in <a href="plugins\plugin_commonformats.html">Common 
+Formats GUI</a>, <kbd>Ins</kbd> to insert clip to channel and <kbd>Ctrl</kbd>+<kbd>V</kbd> to paste it. <br>
+<b>Note : </b> Pressing <span class="str">OK</span> in Common formats <b>exits</b> <strong>Hold Clip</strong>. So you can reuse Hold Clip on the output message box.
+<br>
 <span class="red">Tip</span> - Want HoldClip feature to cut rather than copy data to buffer. Try this <a href=custom.html>Customization</a> --
 <pre>[cut_to_buffer]
 bind = Ctrl + Win + X
