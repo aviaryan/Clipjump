@@ -10,16 +10,13 @@
 ; & in &Vorschau dient dazu den Shortcut Alt+V zu erstellen wenn das Fenster aktiv ist.
 ; Bei der Übersetzung in eine andere Sprache als Deutsch lasse das '&' weg. Verwende '&' nur wenn du dir sicher bist das du richtig liegts.
 
-
 ;======
 ;v9.9.0.1
 ;======
 
 TIP_text = Text
 TIP_file_folder = Datei/Ordner
-TIP_copied = Übertragen an
 TIP_empty1 = Clip 0 von 0
-TIP_empty2 = ist leer
 TIP_error = [Die Vorschau/Pfad konnte nicht geladen werden]
 TIP_more = [Mehr]
 TIP_pasting = Einfügen...
@@ -282,9 +279,6 @@ TRY_pstmdshorts = Paste Mode Tastaturkürzel
 ;10.9
 ;=====
 
-TIP_holdclip = Drücken Sie Strg+V um einzufügen
-             = Drücken Sie Einfg um einem Clip einem Channel hinzuzufügen
-             = Drücken Sie Esc um abzubrechen
 SET_T_holdclip = Kopiert den selektierten Text in einen Buffer und verhindert, dass Clipjump den Text auffängt.
 			   = Sie können dann den Clip entweder einfügen, in einen Channel verschieben oder zurückweisen
 SET_keepactivepos = Bewahre die Position des aktuell aktiven Clips
@@ -345,7 +339,7 @@ TIP_help =
 ;=======
 ; 11.2.3
 ;=======
-_more_options = Mehr Optionen
+_more_options = Weitere Optionen
 ORG_m_openpst = Öffne im Paste Mode (Strg+O)
 _!x = Alt+X
 _!c = Alt+C
@@ -381,9 +375,9 @@ ORG_movingclp = Bewege selectierte(n) Clip(s)
 ORG_Editprops = Bearbeite Clip Eigenschaften
 ORG_oEditMsg = Drücke Save um zu beenden
 ABT_info = Clipjump ist ein reiner Windows Clipboard Manager, erstellt in AutoHotkey.
-        = Er wurde inspiriert durch Skrommel's Anwendung ClipStep.
+        = Inspiriert wurde Clipjump durch Skrommel's Anwendung ClipStep.
 _Save = Speichern
-SET_T_keepsession = Soll Clipjump mit allen gespeicherten Clips nach einem Restart fortfahren? (betrifft nur Default Channel 0)
+SET_T_keepsession = Soll Clipjump nach einem Restart mit allen gespeicherten Clips (betrifft nur Default Channel 0) fortfahren?
 
 ;========
 ; 11.5
@@ -397,7 +391,7 @@ _language = Sprache
 _disabled = Abgeschaltet
 PLG_delfilefolder = Lösche [File/Folder]
 ABT_chmErr = Ein Problem ist aufgetreten.
-   = Bitte überprüfen, ob Clipjump.chm im Basisverzeichnis existiert.
+   = Bitte überprüfen Sie, ob Clipjump.chm im Basisverzeichnis existiert.
 
 ;=======
 ; 11.6
@@ -408,7 +402,7 @@ ABT_errorFontIcon = Die Datei %GHICON_path% fehlt. Dies kann zu Schwierigkeiten 
 CNL_chngMsg = Channel %cv1% aktiv
 CNL_chNtExst = Channel %cv1% existiert nicht !
 SET_holdclip = Halte Clip
-ORG_openPastemode = Öffnet (scahaltet um) Paste Mode Iterface mit dem dem selektierten Clip als aktivem Clip.
+ORG_openPastemode = Öffnet (schaltet um) Paste Mode Iterface mit dem selektierten Clip als aktivem Clip.
 TIP_confirmcopy = Diese Bestätigung wird angezeigt, weil dies ein geschützter Channel ist.
                 = Soll das Kopieren trotzdem durchgeführt werden?
                 = Drücke Y für Ja
@@ -416,3 +410,10 @@ TIP_confirmcopy = Diese Bestätigung wird angezeigt, weil dies ein geschützter 
                 = Drücke Insert um den Clip in Channel 0 zu kopieren (Default Channel)
 _processing = In Arbeit
 TIP_protectedMoved = Clip in Channel 0 übertragen!
+TIP_holdclip = Drücke Ctrl+V um einzufügen
+             = Drücke Insert um den Clip zum Channel hinzuzufügen
+             = Drücke F2 um den Clip in der Common Formats GUI zu öffnen
+             = Drücke Esc zum beenden
+_output = Ausgabe
+TIP_copied_2 = Übertragen an %PROGNAME%
+TIP_empty2_2 = %PROGNAME% ist leer
