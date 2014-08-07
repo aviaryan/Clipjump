@@ -1,5 +1,6 @@
 ;@Plugin-Name NoFormatting Paste
 ;@Plugin-Description Pastes current clipboard without formatting. Make first parameter 1 to trim all types of whitespace.
+;@Plugin-version 0.2
 ;@Plugin-Author Avi
 ;@Plugin-Tags no-format paste
 ;@Plugin-Silent 1
