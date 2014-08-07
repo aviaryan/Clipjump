@@ -244,7 +244,7 @@ class API
 		changeChannel(channel)
 		clearClip( API.getChStrength(channel) - clip + 1 )
 		changeChannel(zbkCh)
-		if (channel != zbkCh)
+		;if (channel != zbkCh)  ; this was bcuz when clip from channel that was already active was deleted, tempsave can get invalid
 			TEMPSAVE := zbkClip
 		return 1
 	}

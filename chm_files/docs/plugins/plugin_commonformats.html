@@ -8,41 +8,46 @@
 
 <body>
 <h1>Common Formats Paste Format</h1>
-<b>version 0.4</b><br>
-<a href=https://raw.github.com/aviaryan/Clipjump/master/plugins/pformat.commonformats.ahk>Github</a> (This plugin is included in Clipjump download)
-<br><br>
+<b>version 0.5</b>
+<br>
 
 <h2>Introduction</h2>
-'Common Formats' is a pformat plugin that lets you paste the clip with various inbuilt paste formatting. 
-Users can add more formats in the 'pformat.commonformats.lib/<b>user</b>.ahk' file. <br>
+<strong>Common Formats</strong> is a pformat plugin that lets you paste the clip with various inbuilt paste formatting. 
+Users can add more formats in the <em>pformat.commonformats.lib/<b>user</b>.ahk</em> file. <br>
 <span class="red">Note</span> - This file is not present by default. It is created when the Common Formats plugin runs for the first time ( either from the plugin manager or paste mode ).<br><br>
 
  <h2>Using</h2>
- Once you have selected the common format <a href="../basic_help.html#pformat">paste-format</a>, releasing Ctrl to paste will bring up the GUI. Use Up/Down keys or mouse to select 
- your needed format and press 'Enter' or OK button to paste.<br>
- You can press 'Esc' or simply close the GUI to cancel the paste operation.<br>
- Selecting the paste-format <b>'None'</b> will paste the original clip without making any changes.
+ Once you have selected the <strong>Common Formats</strong> <a href="../basic_help.html#pformat">paste-format</a>, releasing <kbd class="inverse">Ctrl</kbd> to paste will bring up the GUI.
+ <br>Use <kbd>Up</kbd> or <kbd>Down</kbd> keys or mouse to select your needed format and press <kbd>Enter</kbd> or <span class="str">OK</span> button to paste.<br>
+ You can press <kbd>Esc</kbd> or simply close the GUI to cancel the paste operation.
+ Selecting the paste-format <b><span class="str">None</span></b> will paste the original clip without making any changes.
  <br><br>
 
- <b>The Apply button</b> (Alt+A) applies the current changes made the the formatting to the clip to be pasted. Thus it helps you in applying multiple formats to a clip in 
- the needed order. Note that the 'None' paste format will still paste the real original clip and the 'apply' won't be undertaken.
+ <b>The Apply button</b> applies the current changes made the the formatting to the clip to be pasted. Thus it helps you in applying multiple formats to a clip in 
+ the needed order. Note that the <span class="str">None</span> paste format will still paste the real original clip and the 'apply' won't be undertaken.
  <br><br>
 
-<b>Input Field</b> is used by formats that have parameters in addition to the input text. <b>RegExReplace</b> for example uses input field to get the other 2 parameters, 
-the match needle and the replacement text AND the users are supposed to enter them line by line.
+<b>Input Field</b> is used by formats that have parameters in addition to the input text. <span class="str">RegExReplace</span> for example uses input field to get the other 2 parameters, 
+the match needle and the replacement text and the users are supposed to enter these two paramters one in a line (line by line).
 <br><br>
 
 <h2>Porting an existing pformat to under Common Formats</h2>
- To make any independent pformat a part of the common format, you can simply copy its code to the pformat.commonformats.lib/user.ahk file. <br>
- Then replace the main function name <code>plugin_pformat_name</code> by <code>plugin_pformat_commonformats_name</code> where 'name' is the name of that independent 
- pformat. It is recommend to study the code of <code>pformat.commonformats.ahk</code> first.
- <br><br>
+To make any independent pformat a part of the <strong>Common Formats</strong>, you can simply copy its code to the <em>pformat.commonformats.lib/user.ahk</em> file. <br>
+Then replace the main function name <code>plugin_pformat_<var>name</var></code> by <code>plugin_pformat_commonformats_<var>name</var></code> where <var>name</var> is the name of that independent pformat. Also it will be a good idea to study the code of <em>pformat.commonformats.ahk</em> first.
+<br><br>
 
-OR you can create a new format under the 'Common Formats' plugin. It should be easy provided you know <a href=http://www.ahkscript.org>AutoHotkey</a>. Just make sure
- you name the new format function as <code>plugin_pformat_commonformats_MYNAME</code> where 'MYNAME' is the unique name of your format and this is what that will 
- appear in the GUI. (Related: <a href=basics.html#class_pformat>pformat</a>)
+You can also create a new format under the <strong>Common Formats</strong> user file. It should be easy provided you know <a href=http://www.ahkscript.org>AutoHotkey</a>. 
+Just make sure you name the new format function as <code>plugin_pformat_commonformats_<var>MYNAME</var></code> where <var>MYNAME</var> is the unique name of your format and this is what that will appear in the GUI. (Related: <a href=basics.html#class_pformat>pformat</a>)
 
 <br><br>
 <b>Info Data</b> for the format shown in the respective field is nothing but data stored in <code>STORE</code> object as <code>STORE["commonformats_" formatName]</code> 
-where formatName is the name of the format such as 'RegexReplace'.
+where formatName is the name of the format such as <span class="str">RegexReplace</span>.
+<br><br>
+
+<hr noshade=noshade size=5 color=yellow>
 <br>
+<a href="http://translate.google.com/translate?hl=en&sl=en&u=clipjump.sourceforge.net/docs/plugins/plugin_commonformats.html" id="translate">Translate</a>
+<br><br>
+</body>
+
+</html>

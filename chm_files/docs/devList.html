@@ -25,7 +25,7 @@
 All the functions under the file API.ahk<br>
 They should be accessed as <code class="Syntax">API.function_name()</code> . For example <code>API.paste()</code>
 <ol>
-	<li><code>paste(channel="", clipno="")</code><br>
+	<li><a name="api-paste"></a><code>paste(channel="", clipno="")</code><br>
 	- Pastes clips from a certain postion in a certain channel. If both are blank, paste 1st clip from currently active channel.<br>
 	Example - <code>API.paste(1, 14)</code> pastes clip 14 of channel 1
 	<br>
@@ -129,7 +129,7 @@ They should be accessed as <code class="Syntax">API.function_name()</code> . For
 	<br>
 	<br>
 
-	<li><code>pasteText(Text)</code><br>
+	<li><a name="api-pastetext"></a><code>pasteText(Text)</code><br>
 	- pastes the 'Text' that is passed to the function.<br>
 	Text - the text/string you want to paste
 	<br>
@@ -233,7 +233,7 @@ Labels should be accessed as <code class="Syntax">run = label_name</code> in <a 
 	<br>
 	<br>
 	<li><em>endPasteMode</em><br>
-	- Ends <a href=shorcuts.html#pstmd>[Paste-Mode]</a> forcibly. 
+	- Ends <a href="shortcuts.html#pstmd">[Paste-Mode]</a> forcibly. 
 	<br>
 	<br>
 	<li><em>simplePaste</em><br>
@@ -292,12 +292,23 @@ An external plugin can include publicapi as <code class=syntax>#Include %A_Scrip
 Once publicAPI is included in the script, you will have to initialize it.<br>
 <pre>cj := new Clipjump()     <span class="green">; The name 'cj' doesnt matter</span></pre>
 Then you can call API methods, set variables, get variables and so on using the 'cj' object. Here are few examples -<br>
-<pre>msgbox % cj.version
-cj["pastemodekey.z"] := "^y"
-msgbox % cj.getClipLoc(1, 5)
-cj.runFunction("set_pformat(NO-FORMATTING)")
-cj.runLabel("exit") 		<span class="green">; closes Clipjump</span></pre>
 
+<pre>
+<span class="green">; getting value of internal variable VERSION</span>
+msgbox % cj.version
+<span class="green">; getting value of internal variable CN.NG</span>
+msgbox % cj["CN.NG"]
+<span class="green">; setting internal variable PASTEMODEKEY.Z to ^Y</span>
+cj["pastemodekey.z"] := "^y"
+<span class="green">; running a <a href=#api>API</a> function GETCLIPLOC</span>
+msgbox % cj.getClipLoc(1, 5)
+<span class="green">; running a normal function SET_PFORMAT that is not part of API</span>
+cj.runFunction("set_pformat(NO-FORMATTING)")
+<span class="green">; running the label EXIT</span>
+cj.runLabel("exit") 		<span class="green">; closes Clipjump</span>
+</pre>
+
+The plugin <span class="str">Ignored Windows Manager</span> uses the publicAPI. It will be a good idea to read its code ( <em>external.ignoreWManager.ahk</em> ).
 <br><br>
 
 <hr noshade=noshade size=5 color=yellow>

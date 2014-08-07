@@ -1,0 +1,96 @@
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=9" >
+	<meta http-equiv="X-UA-Compatible" content="IE=8" >
+  <title>Clipjump : HotPaste plugin</title>
+  <link rel="stylesheet" href="../../Blogs.css" type="text/css">
+</head>
+
+<body>
+<h1>HotPaste</h1>
+<ul>
+<li><a href=#intro>Introduction</a>
+<li><a href=#syntax>Basic syntax and Usage</a>
+<li><a href=#examples>Examples</a>
+<li><a href=#notes>End notes</a>
+</ul>
+
+<a name=intro></a><h2>Introduction</h2>
+HotPaste plugin, an idea inspired from AutoHotkey hotstrings helps you create hot-words that perform action when you type. The basic actions can be pasting a text from a 
+Clipjump channel or through a function.<br>
+Raw strings can be pasted from <code>API.pasteText()</code> function whereas clips can be pasted from <code>API.paste(channel, clip)</code> function. The 
+<code>pasteText()</code> will only be able to paste unformatted text so for any HTML or picture type of clip, you will have to rely on <code>paste()</code>.
+<br>You can create Hotpastes (i.e. "Hot-words") in the <em>plugins\hotpaste.lib\base.ahk</em> file. This file in <b>not distributed</b> by default and you will have 
+to run <strong>HotPaste</strong> from the Plugin Manager to have this file created. Once created, you will have to edit the file to add your HotPastes.<br>
+After editing <em>base.ahk</em>, <b>restart Clipjump</b> to have your edits loaded.
+<br>
+
+<a name=syntax></a><h2>Basic syntax and Usage</h2>
+A simple <em>base.ahk</em> goes as-
+<pre>
+<span class="green">; writing 'cj_site' followed by a space/Enter/Tab will PASTE the site URL</span>
+::cj_site::
+	API.PasteText("http://clipjump.sourceforge.net")
+	return
+
+<span class="green">; writing 'my_add' followed by a space/Enter/Tab will PASTE 2nd clip of channel 0</span>
+::my_add::
+	API.Paste(0, 2)
+ 	return
+</pre>
+
+The above code creates two HotPastes - <code>cj_site</code> and <code>my_add</code>.
+<ul>
+	<li>As the comments read, writing <code>cj_site</code> and then pressing <kbd>Enter</kbd> or <kbd>Space</kbd> or <kbd>Tab</kbd> will replace the typed 'cj_site' by 
+	<span class="str">http://clipjump.sourceforge.net</span>. The <code><a href="../devList.html#api-pastetext">PasteText()</a></code> function is responsible for pasting this plain text. Note that I have surrounded the literal string in quotes ("").</li>
+	<li>The 2nd HotPaste <code>my_add</code> when typed invokes <code><a href="../devList.html#api-paste">Paste()</a></code> function of the API to paste clip 2 of channel 0. The typed text 'my_add' will be replaced by the clip 2 of channel 0 in this case.
+		As this time there is no literal string as input, I have not used quotes.</li>
+</ul>
+<br>
+So the basic syntax is - 
+<pre>
+::HOTPASTE::
+	API.Paste or API.pasteText
+	return
+</pre>
+If you have knoweledge of <a href="http://ahkscript.org">AutoHotkey</a>, there is no limit to what HotPaste can do for you. After all, HotPaste is a simple plugin that uses the core feature of AutoHotkey for its purpose.<br>
+BTW, this doesn't mean you will have to learn AutoHotkey (AHK) to use it. This simple tutorial will be sufficient.
+<br>
+
+<a name=examples></a><h2>Examples</h2>
+<h4>Pasting multi-line text</h4>
+Multiline separator in Autohotkey is <code>`n</code>. 
+<pre>
+::longstr::
+	API.PasteText("103, Abc road`nCantt. Area`nXyz`nIndia")
+	return
+</pre>
+
+<br>
+
+<h4>Pasting 2nd clip of current channel</h4>
+<code>CN.NG</code> variable contains the current active channel number. See <a href="../devList.html#vars">more variables</a>.
+<pre>
+::2ndlast::
+	API.Paste( CN.NG, 2 )
+	return
+</pre>
+<br>
+
+<a name=notes></a><h2>End notes</h2>
+<ul>
+<li>Make sure you <b>resart Clipjump</b> after changing <em>base.ahk</em> to have the changes loaded.
+<li>It will be a good idea to <a href="../basic_help.html#fixate">fix</a> clips that you access through <code>API.Paste()</code> because of the simple reason that 
+	clip number will change on addition of new clips. It would be better if you maintain all such FIXED clips in an entirely different channel to avoid workflow problems.
+</ul>
+
+<br><br>
+
+
+<hr noshade=noshade size=5 color=yellow>
+<br>
+<a href="http://translate.google.com/translate?hl=en&sl=en&u=clipjump.sourceforge.net/docs/plugins/plugin_hotpaste.html" id="translate">Translate</a>
+<br><br>
+</body>
+
+</html>

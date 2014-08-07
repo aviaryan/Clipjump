@@ -614,9 +614,14 @@ IsLatestRelease(prog_ver, cur_ver, exclude_keys="b|a") {
 	StringSplit, prog_ver_array, prog_ver,`.
 	StringSplit, cur_ver_array, cur_ver  ,`.
 
+	loop % cur_ver_array0 - prog_ver_array0
+		var := prog_ver_array0+A_index , prog_ver_array%var% := 0
+
 	Loop % cur_ver_array0
 		if !( prog_ver_array%A_index% >= cur_ver_array%A_index% )
 			return 0
+		else if ( prog_ver_array%A_index% > cur_ver_array%A_index% ) 	; in case cur_ver supplied is of old file
+			return 1
 	return 1
 }
 

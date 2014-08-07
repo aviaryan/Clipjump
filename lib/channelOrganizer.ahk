@@ -90,7 +90,7 @@ channelOrganizer(){
 	hkZ("F5", "chOrg_refresh")
 	hkZ("^f", "chOrg_searchfocus")
 	hkZ("^n", "chOrgNew")
-	hkZ("F4", "chOrg_useChFocus")
+	hkZ("^g", "chOrg_useChFocus")
 	Hotkey, If
 	Hotkey, If, IsChOrgLVActive()
 	hkZ("Enter", "chOrg_preview")

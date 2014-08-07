@@ -31,8 +31,8 @@ test := "
 	if !FileExist( zPath := "plugins\hotPaste.lib\base.ahk" )
 		FileAppend, % test, % zPath
 
-	MsgBox, 64, Hello, % "Please edit the plugins\hotPaste.lib\base.ahk file to meet your needs. The Comments in the file will guide you through.`n"
-	 . "A Gui will be added to this plugin in the future versions."
+	MsgBox, 64, Hello, % "Please edit the plugins\hotPaste.lib\base.ahk file to meet your needs. See the documentation of HotPaste in help file for more info."
+	; . "A Gui will be added to this plugin in the future versions."
 	Run % ini_defEditor " """ "plugins\hotPaste.lib\base.ahk"""
 }
 

@@ -33,10 +33,6 @@
 			<param name="Name" value="Pasting Formats">
 			<param name="Local" value="docs/basic_help.html#pformat">
 			</OBJECT>
-		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Channel Organizer">
-			<param name="Local" value="docs/organizer.html">
-			</OBJECT>
 	</UL>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Clipjump Channels">
@@ -47,20 +43,28 @@
 			<param name="Local" value="docs/channels.html">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Changing Channels in Paste Mode">
-			<param name="Local" value="docs/channels.html#chnljumps">
+			<param name="Name" value="Using Channels">
+			<param name="Local" value="docs/channels.html#using">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="The Pit channel">
-			<param name="Local" value="docs/channels.html#pit">
+			<param name="Name" value="Changing Channels in Paste Mode">
+			<param name="Local" value="docs/channels.html#chnljumps">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Protected Channels">
 			<param name="Local" value="docs/channels.html#protected">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="The Pit channel">
+			<param name="Local" value="docs/channels.html#pit">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="PitSwap">
 			<param name="Local" value="docs/channels.html#pitswap">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Channel Organizer">
+			<param name="Local" value="docs/organizer.html">
 			</OBJECT>
 	</UL>
 	<LI> <OBJECT type="text/sitemap">
@@ -92,12 +96,16 @@
 			<param name="Local" value="docs/history.html#editclip">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Disable History keeping">
+			<param name="Local" value="docs/history.html#dis_his">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Modify/Disable History tool shortcut">
 			<param name="Local" value="docs/history.html#his_short">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Disable History keeping">
-			<param name="Local" value="docs/history.html#dis_his">
+			<param name="Name" value="Global Window Shortcuts">
+			<param name="Local" value="docs/history.html#shorts">
 			</OBJECT>
 	</UL>
 	<LI> <OBJECT type="text/sitemap">
@@ -247,6 +255,16 @@
 			<param name="Name" value="Official Plugins">
 			<param name="Local" value="docs/plugins/index.html#def">
 			</OBJECT>
+		<UL>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Common Formats">
+				<param name="Local" value="docs/plugins/plugin_commonformats.html">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="HotPaste">
+				<param name="Local" value="docs/plugins/plugin_hotpaste.html">
+				</OBJECT>
+		</UL>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Creating your own plugin">
 			<param name="Local" value="docs/plugins/basics.html">

@@ -95,6 +95,14 @@
 			<param name="Name" value="Creating your own plugin">
 			<param name="Local" value="docs/plugins/basics.html">
 			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Common Formats">
+			<param name="Local" value="docs/plugins/plugin_commonformats.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="HotPaste">
+			<param name="Local" value="docs/plugins/plugin_hotpaste.html">
+			</OBJECT>
 	</UL>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Settings Editor">

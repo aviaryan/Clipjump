@@ -1189,7 +1189,7 @@ actionmode:
 init_actionmode() {
 	ACTIONMODE := {H: "history", S: "channelGUI", O: "channelOrganizer", C: "copyfile", X: "copyfolder", F: "CopyFileData", D: "disable_clipjump"
 		, P: "pitswap", T: "onetime", E: "settings", F1: "hlp", Esc: "Exit_actmd", M: "pluginManager_GUI()", F2: "OpenShortcutsHelp", L: "classTool"
-		, H_caption: TXT.HST__name, S_caption: TXT.SET_chnl, O_caption: TXT.ORG__name, C_caption: TXT._cfilep, X_caption: TXT._cfolderp, F_caption: TXT._cfiled 
+		, H_caption: TXT.HST__name, S_caption: TXT.SET_chnl, O_caption: TXT.SET_org, C_caption: TXT._cfilep, X_caption: TXT._cfolderp, F_caption: TXT._cfiled 
 		, D_caption: TXT.ACT_disable " " PROGNAME, P_caption: TXT._pitswp, T_caption: TXT._ot, E_caption: TXT.SET__name
 		, F1_caption: TXT.TRY_help, Esc_caption: TXT.ACT_exit, M_caption: TXT.PLG__name, F2_caption: TXT.try_pstmdshorts, L_caption: TXT.IGN__name}
 }
