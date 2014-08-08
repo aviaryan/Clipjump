@@ -4,10 +4,10 @@
 ; OPMERKINGEN
 ; Opmerkingen mogen alleen aan het begin van de regel staan
 ; Nieuwe sleutels worden in de toekomstige versies aan de onderkant toegevoegd voor gemakkelijk en consistente ontwikkeling.
-; Voeg geen versie commentaar toe wanneer een nieuwe sleutel wordt toegevoegd in het vertaalbestand.
+; Voeg geen versie commentaar toe wanneer een nieuwe sleutel wordt toegevoegd in het vertaal bestand.
 ; De meeste sleutels hebben het formaat XXX_ waar XXX staat is dat de component naam
 ; Vertaal niet het woord 'Clipjump'
-; & in &Bekijk is om de sneltoest Alt+P aan te maken wanneer het venster actief is. Wanneer er vertaald wordt in een niet engelse taal, laat dan het '&' teken weg. En als het vertaald wordt in een engelse taal gebruik dan wel het '&' teken.
+; & in &Bekijk is om de sneltoest Alt+P aan te maken wanneer het venster actief is. Wanneer er vertaald wordt in een niet Engelse taal, laat dan het '&' teken weg. En als het vertaald wordt in een engelse taal gebruik dan wel het '&' teken.
 ; alleen wanneer u er zeker van bent.
 
 ;======
@@ -100,7 +100,7 @@ SET_T_threshold = De drempel is het extra aantal Klembord dat actief zal zijn da
                 = De best aanbevolen waarde is 10.
                 =
                 = [TIP] - Drempel = 1 zorgt ervoor dat Clipjump het exact maximum aantal klemborden zal bewaren.
-SET_T_quality = De kwaliteit van Tumbnail vertoningen die u wilt hebben.
+SET_T_quality = De kwaliteit van miniatuuropname die u wilt hebben.
               = Aanbevolen waarde is 90
               = Kan tussen de 1 - 100 zijn
 SET_T_copybeep = Controleer of u de aanpasbare pieptoon hoort wanneer er gegevens aan Clipjump worden toegevoegd.
@@ -114,15 +114,15 @@ SET_T_chnl = Sneltoest om het "Selecteer kanaal venster" te tonen
            = De snelkoppeling instellen op Niets voor het uitschakelen van de toetsencombinatie
 SET_T_cfilep = Sneltoest om het geselecteerd bestandspad te kopiëren
              = De snelkoppeling instellen op Niets voor het uitschakelen van de toetsencombinatie
-SET_T_cfolderp = Sneltoest om het geselecteerde mappad te kopiëren.
+SET_T_cfolderp = Sneltoest om het geselecteerde map pad te kopiëren.
                = De snelkoppeling instellen op Niets voor het uitschakelen van de toetsencombinatie
 SET_T_cfiled = Sneltoest om het geselecteerde bestands inhoud te kopiëren naar Clipjump.
              = De snelkoppeling instellen op Niets voor het uitschakelen van de toetsencombinatie
 SET_T_ot = Selecteer sneltoets voor [één keer stoppen] functie.
-         = [One Time Stop] feature will make Clipjump ignore the next data that is transferred to the system Clipboards from the time it is activated.
+         = [De eenmalige stop] functie zal ervoor zorgen dat Climpjump de volgende gegevens negeert welke overgedragen wordt naar het systeem klembord zolang het geactiveerd is.
          = De snelkoppeling instellen op Niets om de toetsencombinatie vrij te maken
 SET_T_pitswp = De sneltoets om de PitSwap functie te activeren. (ook beschikbaar bij de Actie modus)
-             = Voor meer details over deze functie gebruik zie het Helpbestand.
+             = Voor meer details over deze functie gebruik zie het Help bestand.
 SET_T_ischannelmin = Maakt het kanaal GUI minimaal in details en meer productiever.
                    = Het minimale GUI kanaal zal geen plaatjes bevatten en u dient de ENTER toets te gebruiken om te bevestigen.
 
@@ -169,7 +169,7 @@ _exportedto = geëxporteerd naar
 
 IGN_Restartmsg = Het is nodig om Climpjump te herstarten voordat de wijzigingen effect hebben. Wilt u herstarten?
 IGN_tip = Druk op de spatiebalk om de soort toe te voegen.
-        = Druk op Esc om de soort overname tool te sluiten.
+        = Druk op Esc om de soort opname tool te sluiten.
 
 ;===========
 ;9.9.1
@@ -287,7 +287,7 @@ TRY_pstmdshorts = Plak modus sneltoetsen
 ;=====
 
 TIP_holdclip = Druk op Ctrl+V om te plakken
-             = Druk op Insert om de opname aan het kanaal toe te voegen
+             = Druk op Invoegen om de opname aan het kanaal toe te voegen
              = Druk op Esc om te sluiten
 SET_holdclip = Houd Clip functie
 SET_T_holdclip = Kopieer de geselecteerde tekst of het item naar een buffer en voorkom dat het wordt worden vastgelegd door Clipjump.
@@ -384,12 +384,12 @@ SET_revFormat2Def = Start de plak modus altijd met de standaard opmaak
 SET_T_revFormat2Def = Als deze optie is aangevinkt zal altijd de plak modus opstarten net de standaard opmaak (welke standaard 'origineel'/'geen' is).
 ORG_clpdelmsg = Geselecteerde opname is verwijderd
 ORG_copyingclp = Kopieer de geselecteerde opname(s)
-ORG_movingclp = Verplaats geselecvteerde opname(s)
-ORG_Editprops = Bewerk opnmae instellingen
+ORG_movingclp = Verplaats geselecteerde opname(s)
+ORG_Editprops = Bewerk opname instellingen
 ORG_oEditMsg = Klik op bewaren als u klaar bent.
 ABT_info = Clipjump is een Windows klembord manager gemaakt in AutoHotkey.
-        = Het is geïnspireerd op Skrommel's applicatie ClipStep.
-_Save = Bewareb
+        = Het is ge-inspireerd op Skrommel's applicatie ClipStep.
+_Save = Bewaren
 SET_T_keepsession = Dient Clipjump voortgezet te worden met alle bewaarde klemborden (alleen van het standaard kanaal 0) nadat het is herstart.
 
 ;========
@@ -398,3 +398,28 @@ SET_T_keepsession = Dient Clipjump voortgezet te worden met alle bewaarde klembo
 _ClipjumpError = Clipjump fout
 TIP_genErrMsg = Neem contact op met de auteur als u problemen blijft houden.
 TRY_reloadcustom = Laad ClipjumpCustom.ini opnieuw
+
+;=======
+; 11.6
+;=======
+ORG_createnew = Maak een nieuwe opname
+ORG_chooseCh = Actieve kanaal
+ABT_errorFontIcon = Het bestand %GHICON_path% bestaat niet. Dit kan leiden tot problemen bij het tonen in sommige gebruikers koppelingen. Plaats het bestand terug.
+CNL_chngMsg = Kanaal %cv1% is actief
+CNL_chNtExst = Kanaal %cv1% bestaat niet!
+SET_holdclip = Behoud opname
+ORG_openPastemode = Opent (wisselt) de plak modus koppeling met de geselecteerde opname actief
+TIP_confirmcopy = Je ziet deze bevestiging omdat dit een beveiligd kanaal is.
+                = Keur je deze kopie goed goed voor naar het kanaal?
+                = Druk op J voor Ja
+                = Druk op N voor Nee
+                = Druk op invoegen om de opname over te zetten naar kanaal 0, het standaard kanaal
+_processing = Verwerking
+TIP_protectedMoved = Opname overgezet naar kanaal 0 !
+TIP_holdclip = Druk op Ctrl+V om te plakken
+             = Druk op invoegen om de opname toe te voegen aan het kanaal
+             = Druk op F2 om de opname te openen in een openbare opmaak GUI
+             = Druk op Esc om af te sluiten
+_output = Output
+TIP_copied_2 = Overgezet naar %PROGNAME%
+TIP_empty2_2 = %PROGNAME% is leeg
