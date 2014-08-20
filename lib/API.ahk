@@ -337,6 +337,7 @@ class API
 		try 
 			oldclip := ClipboardAll
 		Clipboard := Text
+		this.blockMonitoring(0) , this.blockMonitoring(1) 	;2 times cb change, so reset onclipboard var
 		sleep 100
 		Send ^{vk56}
 		sleep 100

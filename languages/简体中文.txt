@@ -9,6 +9,7 @@
 ; Dont translate 'Clipjump'
 ; & in &Preview is to create shortcut Alt+P when the window is active. When translating into a non-english language, omit '&' and when in a english type language, use '&'
 ; only when you are sure you are right.
+; Words inside %..% are variables. Take them as constants and translate them accordingly.
 
 ;======*
 ;v9.9.0.1
@@ -37,12 +38,12 @@
 ;活动命令下的文本不整齐
 ;频道组织，选中多个项目进行频道间转移会失败
 ;PLG_properties被同时使用在插件管理和频道组织中是不合理的，因为前者不可编辑，后者可编辑
+;编辑属性界面中存在一堆英文
+;频道组织，一切为空时图标无法正常显示
 
 TIP_text = 文本
 TIP_file_folder = 文件/文件夹
-TIP_copied = 复制到
 TIP_empty1 = 第 0 总 0
-TIP_empty2 = 没有可粘贴的内容
 TIP_error = [预览/路径 载入失败]
 TIP_more = [更多]
 TIP_pasting = 粘贴中…
@@ -155,7 +156,7 @@ CNL_channelname = 频道名(&N)
 CNL_advice1 = 频道 0 (Default) 是通常使用下的主频道。
 CNL_advice2 = 频道名将在修改时自动保存。
 CNL_advice3 = 只有前一个频道被激活(使用)后，下一个频道才可用。
-CNL_use = 使用频道(&U)
+CNL_use = 激活频道(&U)
 CNL_cancel = 取消(&L)
 CNL_statusbar = 当前频道中剪贴板信息数量
 
@@ -237,10 +238,6 @@ TIP_delallprompt = 警告
 ;10.6
 ;=======
 
-TIP_confirmcopy = 你看到这条确认消息是因为这是个受保护的频道。
-                = 确认允许它被复制到此频道吗？
-                = 按 Y 确认
-                = 按 N 取消
 ABT_seehelp = 你想看看 Clipjump 的帮助吗？
 ABT_runadmin = Clipjump 没有以管理员权限运行
              = 这(可能)是因为程序功能不正常。
@@ -307,10 +304,6 @@ TRY_pstmdshorts = 粘贴模式快捷键
 ;10.9
 ;=====
 
-TIP_holdclip = 按 Ctrl+V 粘贴
-             = 按 Insert 将剪贴板信息添加到频道中
-             = 按 Esc 退出
-SET_holdclip = 临时复制
 SET_T_holdclip = 复制选中的文本或项目到缓冲区，防止被 Clipjump 捕获。
                = 然后你可以粘贴、舍弃、或添加到 Clipjump 中。
 SET_keepactivepos = 记住当前活动剪贴板信息序号
@@ -383,7 +376,6 @@ ORG_m_insta = 快速粘贴	(Space)
 _destChannel = 目标频道
 _maintenance = 维护
 _new = 新建
-ORG_createnew = 新建一条剪贴板信息
 ORG_createnewpr = 剪贴板信息将被创建于频道
 ORG_newchname = 新频道名称
 
@@ -394,7 +386,6 @@ ORG_search = 搜索
 ORG_up = 上移
 ORG_down = 下移
 ORG_edit = 编辑
-ORG_openPastemode = 在粘贴模式中打开
 ORG_props = 编辑属性
 ORG_cut = 剪切到
 ORG_copy = 复制到
@@ -419,3 +410,35 @@ SET_T_keepsession = 选中此项将使 Clipjump 在重启后可以继续使用�
 _ClipjumpError = Clipjump 错误
 TIP_genErrMsg = 如果你持续遇到这个问题请联系作者。
 TRY_reloadcustom = 重载 ClipjumpCustom.ini
+
+;=======
+_language = 语言
+_disabled = 禁用
+PLG_delfilefolder = 删除 [文件/文件夹]
+ABT_chmErr = 出现问题了。
+   = 请检查文件 Clipjump.chm 是否存在于程序根目录。
+
+;=======
+; 11.6
+;=======
+ORG_createnew = 新建一条剪贴板信息
+ORG_chooseCh = 激活频道
+ABT_errorFontIcon = 文件 %GHICON_path% 丢失。这将导致某些用户界面的显示出现问题。请将文件移回原位。
+CNL_chngMsg = 频道 %cv1% 被激活
+CNL_chNtExst = 频道 %cv1% 不存在！
+SET_holdclip = 临时复制
+ORG_openPastemode = 在粘贴模式中打开
+TIP_confirmcopy = 你看到这条确认消息是因为这是个受保护的频道。
+                = 确认允许它被复制到此频道吗？
+                = 按 Y 确认
+                = 按 N 取消
+		= 按 Insert 复制到频道 0
+_processing = 处理中
+TIP_protectedMoved = 已复制到频道 0 ！
+TIP_holdclip = 按 Ctrl+V 粘贴
+             = 按 Insert 将剪贴板信息添加到频道中
+             = 按 F2 在格式化界面中打开
+             = 按 Esc 退出
+_output = 输出
+TIP_copied_2 = 复制到 %PROGNAME%
+TIP_empty2_2 = %PROGNAME% 没有可粘贴的内容
