@@ -100,10 +100,6 @@
 			<param name="Local" value="docs/history.html#dis_his">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
-			<param name="Name" value="Modify/Disable History tool shortcut">
-			<param name="Local" value="docs/history.html#his_short">
-			</OBJECT>
-		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Global Window Shortcuts">
 			<param name="Local" value="docs/history.html#shorts">
 			</OBJECT>

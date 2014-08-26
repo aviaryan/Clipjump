@@ -82,7 +82,7 @@ Just press <var>channel number</var> when ActionMode popup is active. These keys
 <br><br><br>
 
 <!-- spmd -->
-<h2><a name=spmd>Search in Paste mode (Search-Paste Mode)</a></h2>
+<h2><a name=spm></a><a name=spmd>Search in Paste mode (Search-Paste Mode)</a></h2>
 <span class="ver">[v10.6+]</span> Press <kbd>F</kbd> to activate the Search feature in <a href="#pastemd">Paste mode</a> (This is <strong>Search-Paste Mode</strong>). A box should come above the tip.<br>
 From here, you can search for specific text among all the clips in all the channels. Here are the key points-
 <ul>
@@ -243,8 +243,9 @@ You will see a Confirmation <span class="str">System Clipboard has Clip x</span>
 the selected text/file/folder/<i>anything</i> to the buffer.<br>
 When copied, you will see a tip previewing the clip and all available options. Press <kbd>F2</kbd> to open clip in <a href="plugins\plugin_commonformats.html">Common 
 Formats GUI</a>, <kbd>Ins</kbd> to insert clip to channel and <kbd>Ctrl</kbd>+<kbd>V</kbd> to paste it. <br>
-<b>Note : </b> Pressing <span class="str">OK</span> in Common formats <b>exits</b> <strong>Hold Clip</strong>. So you can reuse Hold Clip on the output message box.
-<br>
+<b>Note : </b> Pressing <span class="str">OK</span> in Common formats GUI <b>exits</b> Hold Clip. So you can reuse Hold Clip when the output message box
+ is shown.
+<br><br>
 <span class="red">Tip</span> - Want HoldClip feature to cut rather than copy data to buffer. Try this <a href=custom.html>Customization</a> --
 <pre>[cut_to_buffer]
 bind = Ctrl + Win + X
@@ -252,7 +253,6 @@ STORE.holdClip_send = ^{vk58}
 <span class="green">; virtual key 58 is X , so ^x = Ctrl+X</span>
 run = holdclip</pre>
 <br><br>
-
 
 <a name=beep><h2>Sound when copied</h2></a>
 <span class="ver">[v9.8.1+]</span> Clipjump can be configured to make system beep when some data is copied to it. The setting can be found in the Settings editor as 
