@@ -17,20 +17,19 @@
 <li><a href=#export>Export Clip</a></li>
 <li><a href=#holdclip>Hold Clip</a></li></ul>
 <li><a href=#dis_his>Disable History keeping</a>
-<li><a href=#his_short>Change/disable History Tool shortcut(Win+C)</a></li>
 <br>
 <li><a href=#shorts>Global Window Shortcuts</a></li></ul>
 <br>
 
 <h2>Introduction</h2>
-Clipjump's Clipboard History tool can be a real life saver when it's time comes.<br>
-This tool stores record of all the clipboard items transfered to Clipjump in the last <var>x</var> days. The <var>x</var> days can be selected a/c your preference from
- the settings editor.<br><br>
-To open the Clipboard History tool , you can also use the <b>keyboard shortcut</b> <kbd>Win</kbd>+<kbd>C</kbd> other than the Tray Menu shortcut.<br>
-To load full-size clip from the list provided by History tool, double-click on the item.<br>
-To delete a history item , right-click on it and select "Delete".<br><br>
-
-<span class="red">Tip</span> - To view only Clipboard images in the History list, you can filter the listing something like <span class="str">[IMAGE]</span><br><br>
+Clipboard History tool stores record of all the clipboard items transfered to Clipjump in the last <var>x</var> days. It stores them as a listing in the order of recent first. 
+The <var>x</var> days can be selected a/c your preference from the settings editor.<br><br>
+To open the Clipboard History tool , you can also use the <kbd>H</kbd> key in <strong><a href="basic_help.html#actmd">Action Mode</a></strong> other than the Tray Menu shortcut. A system level shortcut for the tool can be created from the Settings Editor.<br>
+To load full-size clip from the list provided by History tool, double-click on the item. 
+To delete a history item , right-click on it and select <span class="str">Delete</span> or select and press <kbd>Del</kbd>.<br>
+<br>
+<span class="red">Tip</span> - To view only Clipboard images in the History list, you can filter the listing something like <span class="str">[IMAGE]</span><br>
+<span class="red">Note</span> - Old users should note that the default system level shortcut <code>Win+C</code> was discontinued from <span class="ver">v11.6.1</span><br><br>
 
 <h3><a name=partial>Partial Searching</a></h3>
 When the checkbox 'Partial' is checked , the History Tool follows a partial checking pattern. Now you will be able to filter the Histroy List with <em>Space</em> delimited terms and only those clips will be shown which have all those space delimited terms in them. 
@@ -75,20 +74,6 @@ disturbing the Clipjump clipboards. <a href=basic_help.html#holdclip>The same fe
 <a name=dis_his><h3>Disabling the History tool</h3></a> - Change the <span class="str">Number of days to keep items in History</span> setting to 0 to permanently 
 disable History tool. This will make Clipjump automatically start with the <b>Incognito Mode</b> on as a symbol to show that History is not captured. <br>
 Please note that disabling the history tool in the way as said above will not delete old history items unlike to the fact that if you change the <span class="str">Number of days to keep items in History</span> from 50 to 2, the history older than 2 days will be deleted by Clipjump.
-<br><br>
-
-<a name=his_short><h3>Changing History Tool shortcut</h3></a> - The History tool shortcut (Win + C) can be changed or disabled via the <em>Settings.ini</em> file. 
-Just open the file and search for the key <var>history_K</var> in section <em>[Advanced]</em>. <br>
-By default, you will see the history_K key with the value <code>Win + C</code>. Empty this value to disable shortcut for History Tool or change this value to a 
-preferred shortcut to change the History tool shortcut.<br>
-Example values of <var>history_K</var> are -
-<pre>Shift+C
-Win+Alt+H
-
-Ctrl+Home
-F9</pre>
-The 3rd value is kept blank to demonstrate the NULL value which disables the History Tool shortcut.
-
 <br><br><br>
 
 <a name=shorts></a><h2>Global Window Shortcuts</h2>

@@ -24,6 +24,10 @@ classTool:
 	API.runPlugin("external.ignoreWmanager.ahk")
 	return
 
+plugin_deleteFileFolder:
+	API.runPlugin("deleteFileFolder.ahk")
+	return
+
 main:
 	aboutGUI()
 	return

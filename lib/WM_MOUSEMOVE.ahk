@@ -41,6 +41,7 @@ WM_MOUSEMOVE()
 	org_K_TT := TXT.SET_org
 	new_startSearch_TT := TXT.SET_T_startSearch
 	new_revFormat2def_TT := TXT.SET_T_revFormat2def
+	hst_K_TT := TXT.SET_T_histshort
 
 	; **** Channel Organizer *********************
 	chOrgToggleLeftRight_TT := TXT.ORG_toggleLeftRight

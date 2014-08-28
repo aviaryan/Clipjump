@@ -62,7 +62,3 @@ plugin_deleteFileFolder(zchannels=""){
 	changeChannel(zbkCh) 		;change channel back
 	API.blockMonitoring(0)
 }
-
-plugin_deleteFileFolder:
-	API.runPlugin("deleteFileFolder.ahk")
-	return

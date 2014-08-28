@@ -418,3 +418,10 @@ TIP_holdclip = Press Ctrl+V to paste
 _output = Output
 TIP_copied_2 = Transferred to %PROGNAME%
 TIP_empty2_2 = %PROGNAME% is empty
+
+;====
+; 11.6.1
+;====
+
+SET_T_histshort = Shortcut for Clipboard History Tool
+PLG_sync_cb = Sync Clipjump Clipboard

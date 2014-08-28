@@ -71,6 +71,8 @@ gui_Settings()
 	Gui, Add, Edit, %	"Limit1 Uppercase -Wantreturn x" x_ofhotkeys " yp-3 w120 vpst_K ghotkey_paste", % paste_k
 	Gui, Add, Text, 	xs y+8,		% TXT.SET_actmd
 	Gui, Add, Hotkey, 	x%x_ofhotkeys% yp-3 vactmd_K   ghotkey_actmd, % Actionmode_K
+	Gui, Add, Text,		xs y+8,		% TXT.HST__name
+	Gui, Add, Hotkey, 	x%x_ofhotkeys% yp-3 vhst_K	gsettingsChanged, % history_k 
 	Gui, Add, Text, 	xs y+8, 	% TXT.SET_org
 	Gui, Add, Hotkey, 	x%x_ofhotkeys% yp-3 vorg_K 		gsettingsChanged, % chOrg_K
 	Gui, Add, Text, 	xs y+8,		% TXT._cfilep
@@ -188,6 +190,7 @@ settingsButtonOk:
 	{
 		save_Settings()
 		load_Settings() , validate_Settings()
+		trayMenu(1) 	;update Tray menu
 		settingsHaveChanged := false
 	}
 	Gui, Settings:Destroy
@@ -263,12 +266,11 @@ load_Settings(all=false)
 	chOrg_K := ini_read("Shortcuts", "chOrg_K")
 	ini_startSearch := ini_read("Main", "startSearch")
 	ini_revFormat2def := ini_read("Main", "revFormat2def")
+	history_k := ini_read("Shortcuts", "history_k")
 
 	; // below are INI only settings , not loaded by settings editor
 
 	if (all) {
-		Iniread, history_K,  % CONFIGURATION_FILE, Advanced, history_K
-		history_K := HParse(history_K)
 		history_partial := Ini_read("Clipboard_history_window", "partial") ? 1 : 0 	; Important as the use of the var in History tool is such that false = 0 .
 
 		Iniread, MSG_PASTING_t,% CONFIGURATION_FILE, Advanced, Show_pasting_tip, %A_space%
@@ -332,6 +334,7 @@ save_Settings()
 	ini_write("Shortcuts", "chOrg_K", org_k, 0)
 	ini_write("Main", "startSearch", new_startSearch, 0)
 	ini_write("Main", "revFormat2def", new_revFormat2def, 0)
+	ini_write("Shortcuts", "history_k", hst_k, 0)
 
 	;Disable old shortcuts
 	  hkZ(Copyfilepath_K, 	"CopyFile", 0)
@@ -344,6 +347,7 @@ save_Settings()
 	, hkZ(actionmode_K, 	"actionmode", 0)
 	, hkZ(pluginManager_K, 	"pluginManagerGUI", 0)
 	, hkZ(chOrg_K, "channelOrganizer", 0)
+	, hkZ(history_K, "history", 0)
 
 	;Re-create shortcuts
 	  hkZ(Cfilep_K, "CopyFile", 1)
@@ -356,6 +360,7 @@ save_Settings()
 	, hkZ(actmd_k, "actionmode", 1)
 	, hkZ(plugM_k, "pluginManagerGUI", 1)
 	, hkZ(org_K, "channelOrganizer", 1)
+	, hkZ(hst_k, "history", 1)
 
 	;Load settings will load correct values for vars
 }
@@ -407,8 +412,7 @@ save_Default(full=1){
 	ini_write("Channels",  "pitswap_K")
 	Ini_Write("Channels", "IsChannelMin", "0")
 	;---- Non GUI
-	Ini_write(s := "Advanced", "history_k", "Win + c")
-	Ini_write(s, "instapaste_write_clipboard", "0")
+	Ini_write(s := "Advanced", "instapaste_write_clipboard", "0")
 	ini_write(s, "Show_pasting_tip", "0")
 	ini_write(s, "windows_copy_shortcut")
 	ini_write(s, "windows_cut_shortcut")
@@ -418,9 +422,6 @@ save_Default(full=1){
 
 	ini_write("Main", "CopyBeep", "0")
 	ini_write("Advanced", "cut_equalto_delete", cut_is_delete_windows)
-	; delete removed v10.7.2.6
-	Ini_delete("Advanced", "Start_with_formatting")
-	Ini_delete("Advanced", "Actionmode_keys")
 	; v10.7.3 added
 	ini_write("Main", "default_pformat", "")
 	ini_write("Shortcuts", "pluginManager_K", "")
@@ -435,6 +436,12 @@ save_Default(full=1){
 	ini_write("Advanced", "pstMode_X")
 	ini_write("Advanced", "pstMode_Y")
 	ini_write("Advanced", "HisCloseOnInstaPaste", 1)
+
+
+	; DELETE KEYS removed v10.7.2.6
+	Ini_delete("Advanced", "Start_with_formatting")
+	Ini_delete("Advanced", "Actionmode_keys")
+	Ini_delete("Advanced", "history_k") 	; v11.6.1
 }
 
 Ini_write(section, key, value="", ifblank=true){

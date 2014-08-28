@@ -6,7 +6,7 @@
 
 ;@Plugin-param1 Text to convert in Upper case
 
-plugin_pformat_uppercase(zin){
+plugin_pformat_UPPERCASE(zin){
 	zCS := getClipboardFormat()
 	if (zCS== "[" TXT.TIP_text "]")
 	{

@@ -40,25 +40,32 @@ plugin_pformat_commonformats_NumberedList(zin){
 	return zout , STORE.ClipboardChanged := 1
 }
 
-plugin_pformat_commonformats_Lowercase(zin){
+plugin_pformat_commonformats_lowercase(zin){
 	StringLower, zout, zin
 	return zout , STORE.ClipboardChanged := 1
 }
 
 plugin_pformat_commonformats_TrimWhiteSpace(zin){
+	STORE["commonformats_TrimWhiteSpace"] := "Trims white space from the beginning and end of string"
 	return Trim(zin, "`r`n `t") , STORE.ClipboardChanged := 1
 }
 
 plugin_pformat_commonformats_DeHTML(zin){
-	STORE["commonformats_DeHTML"] := "All ""&<> are translated to &quot;&amp;&lt;&gt; and linefeed \n to <br>. If you don't want <br>, apply changes and "
+	STORE["commonformats_DeHTML"] := "Deactivates HTML code. All ("" & < >) are translated to (&quot; &amp; &lt; &gt;) and linefeed \n to <br>. If you don't want <br>, apply changes and "
 	. "then RegexReplace <br> with none."
 	Transform, o, HTML, % zin
 	return plugin_pformat_commonformats_TrimWhiteSpace(o)
 }
 
-plugin_pformat_commonformats_UpperCase(zin){
+plugin_pformat_commonformats_UPPERCASE(zin){
 	StringUpper, zout, zin
 	return zout , STORE.ClipboardChanged := 1
+}
+
+#Include *i %A_ScriptDir%\plugins\pformat.commonformats.lib\unhtml.ahk
+plugin_pformat_commonformats_UnHTML(zin){
+	STORE["commonformats_unhtml"] := "Removes tags from HTML code and converts unicode sequences to characters"
+	return unhtml(zin) , STORE.ClipboardChanged := 1
 }
 
 plugin_pformat_commonformats_RegexReplace(zin, zps){
