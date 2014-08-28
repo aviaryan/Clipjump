@@ -142,8 +142,8 @@ TRY_restart = Neustarten
 TRY_exit = Beenden
 
 ACT__name = AKTIONSMODUS
-ACT_enable = Aktivieren
-ACT_disable = Deaktivieren
+ACT_enable = Aktiviere
+ACT_disable = Deaktiviere
 ACT_exit = Fenster schließen
 
 IGN__name = Ignorierte Fenster
@@ -402,7 +402,7 @@ ABT_errorFontIcon = Die Datei %GHICON_path% fehlt. Dies kann zu Schwierigkeiten 
 CNL_chngMsg = Channel %cv1% aktiv
 CNL_chNtExst = Channel %cv1% existiert nicht !
 SET_holdclip = Halte Clip
-ORG_openPastemode = Öffnet (schaltet um) Paste Mode Iterface mit dem selektierten Clip als aktivem Clip.
+ORG_openPastemode = Öffnet Paste Mode Interface mit dem selektierten Clip als aktivem Clip.
 TIP_confirmcopy = Diese Bestätigung wird angezeigt, weil dies ein geschützter Channel ist.
                 = Soll das Kopieren trotzdem durchgeführt werden?
                 = Drücke Y für Ja
