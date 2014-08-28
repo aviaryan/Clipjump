@@ -52,7 +52,6 @@ HST_clip = Clip
 HST_date = Datum
 HST_size = Größe(B)
 HST_dconsump = Speicherverbrauch
-HST_viewimage = [Doppelklick für Bildvorschau]
 HST_m_prev = &Vorschau
 HST_m_copy = &Kopieren		(Ctrl+C)
 HST_m_insta = &Instant-Einfügen		(Space)
@@ -417,3 +416,10 @@ TIP_holdclip = Drücke Ctrl+V um einzufügen
 _output = Ausgabe
 TIP_copied_2 = Übertragen an %PROGNAME%
 TIP_empty2_2 = %PROGNAME% ist leer
+
+;====
+; 11.6.1
+;====
+
+SET_T_histshort = Shortcut für das Clipboard History Tool
+PLG_sync_cb = Sync Clipjump Clipboard
