@@ -155,10 +155,11 @@ load_Settings(1)
 validate_Settings()
 ;load plugins
 loadPlugins()
+
+trayMenu() ; before customization as customization can affect tray
 ;load custom settings
 loadCustomizations()
 
-trayMenu()
 
 loop
 {

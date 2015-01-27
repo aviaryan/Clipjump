@@ -1,0 +1,427 @@
+﻿; Tradução para o português para o Clipjump
+; Feita pela primeira vez por Avi Aryan
+
+; NOTAS
+; Comentários só devem ser colocados no início da linha
+; Adicionar novas chaves nas versões futuras na parte inferior para facilitar e deixar consistente o desenvolvimento
+; Adicionar número da versão no comentário ao adicionar uma nova chave no arquivo de tradução.
+; A maioria das teclas têm o formato XXX_ onde XXX é o nome do componente
+; Não traduzir 'Clipjump'
+; & em &Preview serve para criar um atalho Alt + P quando a janela estiver ativa. Ao traduzir para uma linguagem não-Inglesa, omitir o '&' e, ao utilizar um idioma baseado no Inglês, use '&'
+; somente quando tiver certeza de que você está certo.
+; Palavras dentro de %..% são variáveis. Trate-as como constantes e traduza-as de acordo.
+
+; ======
+; V9.9.0.1
+; ======
+
+TIP_text = Texto
+TIP_file_folder = Arquivo/Pasta
+TIP_empty1 = Clipe 0 de 0
+TIP_error = [O visualização/caminho não pode ser carregado]
+TIP_more = [Mais]
+TIP_pasting = Colando...
+TIP_deleted = Apagado
+TIP_alldeleted = Todos os dados foram apagados
+TIP_cancelled = Cancelado
+TIP_fixed = [FIXADO]
+TIP_noformatting = SEM-formatação
+TIP_filepath = caminho(s) de arquivo copiado(s) para
+TIP_folderpath = caminho da pasta ativa copiado para
+TIP_activated = Ativado
+TIP_deactivated = Desativado
+TIP_cancelm = Cancelar operação de colar
+TIP_delm = Apagar atual
+TIP_delallm = Apagar tudo
+TIP_modem = Solte o Ctrl para confirmar
+          = Pressione X para alternar entre os modos
+
+ABT__name = Sobre
+ABT_reset = Redefinir &Clipjump
+ABT_resetM = Tem certeza de que deseja redefinir Clipjump removendo assim todos os seus clipes e configurações?
+ABT_removeStart = Uma entrada de inicialização para Clipjump foi encontrada. Você deseja removê-la também?
+ABT_resetfinal = será fechado agora.
+ABT_noupdate = Não há atualizações disponíveis
+
+HST__name = Histórico da Área de Transferência
+HST_preview = Vis&ualizar
+HST_del = Apa&gar Item
+HST_clear = Limpar &Histórico
+HST_search = &Filtros de Pesquisa
+HST_partial = Pa&rcial
+HST_clip = Clipe
+HST_date = Data
+HST_size = Tamanho(B)
+HST_dconsump = Espaço do Disco
+HST_m_prev = Vis&ualizar
+HST_m_copy = &Copiar (Ctrl + C)
+HST_m_insta = &Insta-Colar (Espaço)
+HST_m_export = &Exportar Clipe (Ctrl + E)
+HST_m_ref = &Atualizar
+HST_m_del = A&pagar
+
+PRV__name = Visualizar
+PRV_copy = Copiar para Área de Transferência
+PRV_find = &Localizar
+
+SET__name = Configurações
+SET_main = Principal
+SET_limitmaxclips = Li&mitar o número máximo de áreas de transferência ativas
+SET_maxclips = &Número mínimo de áreas de transferência ativas
+SET_threshold = Tamanh&o Máximo da Área de Transferência 
+SET_quality = &Qualidade das miniaturas de visualização
+SET_copybeep = &Bipar quando copiar
+SET_ismessage = Mostr&ar dica de verificação ao copiar
+SET_keepsession = Mant&er dados da área de transferência ao reinicializar aplicação
+SET_formatting = Comece com o modo Sem &Formatação Ativado
+SET_cb = Histórico da Área de Transferência
+SET_daystostore = Número de dias que devem ser mantidos os itens no &histórico
+SET_images = Guardar imagens no histórico
+SET_shortcuts = Atalhos
+SET_pst = Modo de Colagem (Ctrl + ..)
+SET_actmd = Modo de Ação
+SET_chnl = Selecionar Canal
+SET_channels = Canais
+SET_ischannelmin = Use GUI Compacta
+SET_advanced = Mostrar Configurações Avançadas
+SET_manageignore = Gerenciar Janelas Que Devem Ser Ignoradas
+Set_cancel = &Cancelar
+SET_apply = &Aplicar
+
+SET_advanced_error = não foi capaz de encontrar o arquivo de configurações (settings.ini) ou o Bloco de Notas? Certifique-se que ambos existem em seus respectivos lugares.
+                   =
+                   = Tente entrar em contato com o autor, se o problema persistir.
+SET_T_limitmaxclips = As Áreas de Transferência do Clipjump devem ser limitadas?
+                    = Verificado = yes
+SET_T_maxclips = É o número mínimo de Áreas de Transferência simultaneamente ativas.
+               = Se você quiser 20, especifique 20.
+SET_T_threshold = Tamanho máximo é o número extra de Áreas de Transferência que estarão ativas além do seu limite mínimo...
+                = O valor mais recomendado é 10.
+                =
+                = [DICA] - Tamanho máximo = 1 fará o Clipjump armazenar o número exato do que foi especificado como o máximo de Áreas de Transferência.
+SET_T_quality = A qualidade das visualizações em miniatura que você quer ter.
+              = Valor recomendado é 90
+              = Pode ser entre 1 - 100
+SET_T_copybeep = Selecione se deseja ouvir um sinal sonoro personalizável quando os dados da área de transferência forem adicionados ao Clipjump.
+               =
+               = Você pode alterar a freqüencia do Bipe na seção [Avançado] do Settings.ini
+SET_T_ismessage = Esse valor determina se você deseja ver ou não a mensagem de confirmação durante as operações de copiar/cortar.
+SET_T_daystostore = Número de dias em que o registro da área de transferência será armazenado
+SET_T_images = As imagens da Área de Transferência devem ser armazenadas no histórico?
+SET_T_chnl = Atalho para mostrar a Janela "Selecionar Canal"
+           = Defina o atalho para Nenhum para desativar a combinação de teclas
+SET_T_cfilep = Atalho para copiar o caminho de arquivo selecionado
+             = Defina o atalho para Nenhum para desativar a combinação de teclas
+SET_T_cfolderp = Atalho para copiar o caminho de pasta selecionado.
+               = Defina o atalho para Nenhum para desativar a combinação de teclas
+SET_T_cfiled = Atalho para copiar o conteúdo selecionado do arquivo para o Clipjump.
+             = Defina-o como Nenhum para desativar a combinação de teclas
+SET_T_ot = Selecionar atalho para o recurso [Parada Única].
+         = O recurso de [Parada Única] fará com que o Clipjump ignore o próximo dado que for transferido para as Áreas de Transferência do sistema a partir do momento em que for ativado.
+         = Defina a chave como Nenhum para liberar a combinação de teclas
+SET_T_pitswp = O atalho para ativar o recurso PitSwap. (Também disponível a partir do Modo de Ação)
+             = Para mais detalhes sobre o recurso verifique o arquivo de Ajuda.
+SET_T_ischannelmin = Faz com que a GUI de Canais fique com menos detalhes e mais produtiva.
+                   = A GUI compacta não conterá nenhum botão, você terá que usar ENTER para confirmar.
+
+CNL__name = Canais
+CNL_choose = &Escolha o Canal Multi-Área de Transferência
+CNL_channelname = &Nome do Canal
+CNL_advice1 = O canal 0 (Padrão) é o canal principal e deve ser usado normalmente.
+CNL_advice2 = Alterações nos nomes de Canais são salvas automaticamente.
+CNL_advice3 = Os Próximos Canais estarão disponíveis somente se o anterior tiver sido ativado (usado).
+CNL_use = &Usar Canal
+CNL_cancel = Cance&lar
+CNL_statusbar = Clipes no Canal
+
+TRY_incognito = &Modo Incógnito
+TRY_disable = &Desativar
+TRY_startup = Executar na inicialização
+TRY_updates = Verificar at&ualizações
+TRY_help = Ajuda
+TRY_restart = &Reinicializar
+TRY_exit = &Sair
+
+ACT__name = MODO DE AÇÃO 
+ACT_enable = Ativar
+ACT_disable = Desativar
+ACT_exit = Fechar Janela
+
+IGN__name = Gerenciador de Janelas Ignoradas
+IGN_add = & Adicionar Classe de Janela
+IGN_delete = Apa&gar Classe
+
+LNG_error = Arquivo em idioma Inglês não encontrado em languages/english.txt. Se você fez isso intencionalmente, por favor, coloque-o de volta.
+
+_cfilep = Copiar Caminho(s) de Arquivo
+_cfolderp = Copiar Caminho da Pasta Ativa
+_cfiled = Copiar dados do Arquivo
+_ot = Parada Única
+_pitswp = PitSwap
+_exportedto = exportado para
+
+
+; ============
+; 9.9.0.2
+; ============
+
+IGN_Restartmsg = É necessário que o Clipjump seja reiniciado para que as alterações entrem em vigor. Reiniciar?
+IGN_tip = Pressione Espaço para adicionar Classe.
+        = Pressione Esc para sair da Ferramenta de Captura de Classe.
+
+; ===========
+; 9.9.1
+; ===========
+
+TRY_options = &Opções
+TRY_tools = &Ferramentas
+HST_delall_msg = Tem certeza de que deseja apagar permanentemente o histórico do Clipjump?
+; a chave seguinte foi modificada na v9.9.1 e então você verá a sua entrada aqui
+SET_T_actmd = O atalho para abrir o Modo de Ação do Clipjump.
+            = O Modo de Ação fornece a interface para quase todas as funcionalidades do Clipjump.
+            = Se você quiser atalhos ao nível do Sistema para essas funcionalidades, você pode encontrá-los aqui no Editor de Configurações.
+
+; ==========
+; 9.9.1.9
+; ==========
+
+CNL_delete = Apa&gar Canal
+CNL_delmsg = Você realmente quer apagar este canal? Observe que o processo é irreversível e você perderá todos os clipes armazenados nele.
+CNL_del_default = Não é permitido apagar o canal padrão (0).
+TIP_empty3 = Solte o Ctrl para sair.
+UPD_restart = O Clipjump será reiniciado para aplicar as atualizações.
+UPD_automsg = Clique em Sim para auto atualização do Clipjump ou Não para ir para o site.
+
+; =========
+; 10
+; =========
+
+CHC_name = Selecionar Canal
+TIP_done = Concluído
+TIP_copycutfailed = Copiar/Mover Não Concluído
+TIP_copy = Copiar Clipe Atual
+TIP_move = Mover Clipe Atual
+
+; ========
+; 10.5 beta
+; ========
+
+TIP_delallprompt = ATENÇÃO
+                 = Você realmente deseja apagar todos os clipes no canal atual?
+                 = Pressione Y para confirmar.
+                 = Pressione N para cancelar.
+
+; =======
+; 10,6
+; =======
+
+ABT_seehelp = Você deseja ver a ajuda do Clipjump?
+ABT_runadmin = O Clipjump não está sendo executado como Administrador
+             = Se não for executado neste modo, (pode) ocorrerá o mau funcionamento do programa.
+             =
+             = [Esta mensagem será exibida apenas uma vez]
+ABT_cjready = Oi!
+            = O Clipjump agora está ativado.
+            = Tente fazer algumas cópias e colas rápidas ...
+TIP_editing = Editando ...
+            = Pressione Esc para cancelar
+TIP_editdone = O clipe foi editado
+TIP_editnotdone = Clipe não editado!
+
+; ======
+; 10,7
+; ======
+
+HST_m_edit = Editar Clipe (Ctrl + H)
+
+; ======
+; 10.7.2.6b
+; ======
+
+_name = Nome
+_tags = Rótulos
+_author = Autor
+_run = Executar
+_properties = Propriedades
+PLG_properties = Propriedades (Alt + Enter)
+PLG__name = Gerenciador de Plugins
+PLG_fetchparam = parâmetro para o plugin
+PLG_delmsg = Tem certeza de que deseja continuar com a exclusão do plugin a seguir?
+PLG_restartmsg = Você excluiu alguns plugins.
+               = Por favor, note que os plugins só terão efeito após o reinício do programa, com excepção dos da classe (external.).
+               = Você quer continuar?
+API_extplugMiss = O seguinte arquivo de plugin externo está faltando.
+API_plugCorrupt = O plugin a seguir está corrompido ou ausente.
+
+; =====
+; 10.7.5
+; =====
+
+PLG_Sb_running = Executando o Plugin
+PLG_Sb_exit = O Plugin Terminou de Executar
+PLG_Sb_deleted = Plugin Apagado
+SET_T_pst = Combinação de caracteres única para usar com o Ctrl na ativação do [MODO DE COLAGEM]
+          = Note que letras ECXZSAFH são reservadas ao programa.
+          =
+          = Também certifique-se de ver "Copy bypassing Clipjump" no arquivo de ajuda
+SET_pformat = Formato Padrão de Colagem
+SET_T_pformat = O formato de Colagem ativo desejado ao inicializar o Clipjump. '-Original' É a técnica de colagem Clipjump padrão.
+SET_t_plugM = Atalho para abrir o Gerenciador de Plugins
+PLG_edit = Editar (F2)
+CUS_error = Houve um erro em uma rotina do ClipjumpCustom.ini?
+
+; =====
+; 10.7.8
+; =====
+
+TRY_pstmdshorts = Atalhos do Modo de Colagem
+
+; =====
+; 10,9
+; =====
+
+SET_T_holdclip = Copia o texto ou item selecionado para um buffer e impede que ele seja capturado pelo Clipjump.
+               = Você pode, em seguida, colar o clipe, movê-lo para um canal ou rejeitá-lo.
+SET_keepactivepos = Preserve a posição atual do Clipe Ativo
+SET_T_keepactivepos = Você deseja que o Clipjump lembre o último clipe ativo no Modo de Colagem?
+                    = Ao desmarcá-lo, o Modo de Colagem do Clipjump sempre começará do Clipe 1.
+
+; =====
+; 11
+; =====
+
+HST_viewimage = [IMAGEM]
+ORG__name = Organizador de Canais do Clipjump
+ORG_m_inc = Mover para cima (Alt + Up)
+ORG_m_dec = Mover para baixo (Alt + Baixo)
+ORG_error = Não Suportado
+ORG_countStatus = Itens listados
+SET_org = Organizador de Canais
+ORG_delCnlMsgTitle = Escolha a Operação do Canal
+ORG_delCnlMsg = O que você quer fazer com o canal selecionado?
+      = Apagar o canal permanentemente = Sim
+      = Esvaziar o canal = Não
+      = Não fazer nada = Cancelar
+_rename = Renamear
+ORG_renameAsk = Por favor, escreva o novo nome para o canal
+TIP_initMsg = Iniciando o Clipjump
+
+; ======
+; 11,2
+; ======
+
+TIP_tagPrompt = Escreva rótulos separados por espaços para este clipe
+SET_startSearch = Iniciar o Modo de Colagem com a Pesquisa habilitada
+SET_T_startSearch = Faça o Ctrl + V iniciar o Modo de Colagem com o modo de pesquisa ativado.
+                  = Isso vai ajudar se você não gosta de segurar a tecla Ctrl para navegar pelos clipes. Veja também "Search in Paste Mode" no arquivo de Ajuda.
+_editing = Editando
+
+; Nota para o Tradutor > por favor, certifique-se de que o Ctrl + v + F1 esteja alinhado corretamente em TIP_help
+TIP_help =
+= Soltar o Ctrl - Cola
+= V - Avança para o clipe seguinte
+= C - Retrocede um clipe
+= X - Cancela o modo, Move o Clipe, Apaga o clipe, Copia o Clipe
+= Z - Muda o Formato de Colagem
+= Space - FIXO (mantém o clipe no programa)
+= S - Coloca o clipe atual na área de transferência do sistema
+= E - Exporta
+= Up / Down - Muda de canal (+1 / -1)
+= A - Move para primeiro clipe do canal
+= 1..9 - Vai para o enésimo Clipe à frente do clipe ativo
+= F - Pesquisa
+= H - Editar
+= Enter - Iniciar Sessão de Colagem Múltipla
+= T - Rótular
+= F1 - Ajuda
+=
+= Pressione V para sair desta janela
+
+; =======
+; 11.2.3
+; =======
+_more_options = Mais opções
+ORG_m_openpst = Abrir no Modo de Colagem (Ctrl + O)
+_! X = Alt + X
+_! C = Alt + C
+ORG_m_insta = Insta-Colar (Space)
+
+; =======
+; 11.3
+; =======
+_destChannel = Canal de Destino
+_Manutenção = Manutenção
+_new = Novo
+ORG_createnewpr = Novo clipe será criado no canal a seguir
+ORG_newchname = Novo nome do canal
+
+; ========
+; 11.4 - Dicas adicionadas para o Organizador de Canais (hoppfrosch)
+; =======
+ORG_search = Pesquisar por Clipe
+ORG_up = Mover item selecionado uma posição para cima
+ORG_down = Mover item selecionado uma posição para baixo
+ORG_edit = Editar item selecionado
+ORG_props = Editar propriedades do clipe selecionado (rótulos, atributo fixo)
+ORG_cut = Recorta o clipe selecionado e insere em outro canal
+ORG_copy = Copia o clipe selecionado e duplica para outro canal
+ORG_delete = Apaga o item selecionado
+; ----
+
+SET_revFormat2Def = Sempre iniciar o Modo de Colagem com a formatação padrão
+SET_T_revFormat2Def = Ao assinalar esta opção irá começar sempre no modo de colagem com a formatação de colagem padrão (que é 'original'/'none' por padrão).
+ORG_clpdelmsg = Clipe(s) seleccionado(s) foi(foram) apagado(s)
+ORG_copyingclp = Copiando o(s) clipe(s) selecionado(s)
+ORG_movingclp = Movendo o(s) clipe(s) selecionado(s)
+ORG_Editprops = Editar as propriedades do Clipe
+ORG_oEditMsg = Clique em Salvar quando você acabar.
+ABT_info = O Clipjump é um gerenciador de área de transferência que funciona apenas no Windows, e foi criado com o AutoHotkey.
+        = Ele foi inspirado na aplicação ClipStep de Skrommel.
+_save = Salvar
+SET_T_keepsession = O Clipjump deve continuar com todas as Áreas de Transferência (só o canal padrão 0) após a reinicialização
+
+; ========
+; 11.5
+; ========
+_ClipjumpError = Erro do Clipjump
+TIP_genErrMsg = Por favor, entre em contato com o autor, se você continuar a ter problemas.
+TRY_reloadcustom = Recarregar ClipjumpCustom.ini
+
+; =======
+_language = Idioma
+_disabled = Desativado
+PLG_delfilefolder = Apagar [Arquivo/Pasta]
+ABT_chmErr = Houve um problema.
+   = Por favor verifique se Clipjump.chm existe na pasta de instalação.
+
+; =======
+; 11.6
+; =======
+ORG_createnew = Criar Novo Clipe
+ORG_chooseCh = Ativar Canal
+ABT_errorFontIcon = O arquivo %GHICON_path% sumiu. Isto pode conduzir a problemas de visualização em algumas interfaces do usuário. Por favor, substituir o arquivo.
+CNL_chngMsg = Canal %cv1% ativo
+CNL_chNtExst = Canal %cv1% não existe!
+SET_holdclip = Guardar Clipe
+ORG_openPastemode = Abre (alterna) a interface do modo de colagem com o clipe selecionado ativo
+TIP_confirmcopy = Você vê essa confirmação, porque este é um canal protegido.
+                = Você aprova a cópia para esse canal?
+                = Pressione Y para Yes
+                = Pressione N para Não
+                = Pressione Insert para transferir este clipe para o canal 0, o canal padrão
+_processing = Processando
+TIP_protectedMoved = Clipe transferido para o canal 0!
+TIP_holdclip = Pressione Ctrl + V para colar
+             = Pressione Insert para adicionar clipe no canal
+             = Pressione F2 para abrir clipe na GUI de Formatos Comuns
+             = Pressione Esc para sair
+_output = Saída
+TIP_copied_2 = Transferido para %PROGNAME%
+TIP_empty2_2 = %PROGNAME% está vazio
+
+; ====
+; 11.6.1
+; ====
+
+SET_T_histshort = Atalho para a Ferramenta do Histórico da Área de Transferência
+PLG_sync_cb = Sincronizar Área de Transferência do Clipjump

@@ -504,7 +504,7 @@ validate_Settings()
 		NOINCOGNITO := false
 		if CALLER_STATUS
 			Menu, tray, icon, icons\no_history.ico
-		Menu, Tray, check, % TXT.TRY_incognito
+		Menu, Options_Tray, check, % TXT.TRY_incognito
 	}
 
 	if paste_K = ERROR

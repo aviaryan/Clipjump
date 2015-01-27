@@ -174,6 +174,8 @@ chOrgDown: 	; dont make these labels critical
 		;while (temp_row_s := LV_GetNext(temp_row_s)) {
 			LV_GetText(fch, temp_row_s, 1) , LV_GetText(fcl, temp_row_s, 2)
 			spRow := t_Up ? temp_row_s-1 : temp_row_s+1
+			if (fcl==1) && (t_Up==1) 	; 1st clip not go up - thanks to fump2000
+				return
 			sch := scl := ""
 			LV_GetText(sch, spRow, 1) , LV_GetText(scl, spRow, 2)
 			if (sch != "") {
