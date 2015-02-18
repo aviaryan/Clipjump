@@ -110,6 +110,10 @@ FileInstall, icons\no_monitoring.ico, icons\no_monitoring.ico, 0
 ;Ini Configurations
 Iniread, ini_Version, %CONFIGURATION_FILE%, System, Version
 
+;FileCreateDir, plugins/pformat
+;FileCreateDir, plugins/external
+;migratePlugins()
+
 If !FileExist(CONFIGURATION_FILE)
 {
 	save_default(1)
@@ -150,13 +154,14 @@ global windows_copy_k, windows_cut_k, ini_OpenAllChbyDef := 0
 init_actionmode()
 ;Initialising Clipjump Channels
 initChannels()
+
+trayMenu() ; before customization and settings as customization can affect tray
 ;loading Settings
 load_Settings(1)
 validate_Settings()
 ;load plugins
 loadPlugins()
 
-trayMenu() ; before customization as customization can affect tray
 ;load custom settings
 loadCustomizations()
 
@@ -1189,7 +1194,7 @@ actionmode:
 		EmptyMem()
 	return
 
-init_actionmode() {
+init_actionmode(){
 	ACTIONMODE := {H: "history", S: "channelGUI", O: "channelOrganizer", C: "copyfile", X: "copyfolder", F: "CopyFileData", D: "disable_clipjump"
 		, P: "pitswap", T: "onetime", E: "settings", F1: "hlp", Esc: "Exit_actmd", M: "pluginManager_GUI()", F2: "OpenShortcutsHelp", L: "classTool"
 		, U: "API.runPlugin(updateClipjumpClipboard.ahk)", B: "holdclip"
@@ -1305,8 +1310,7 @@ updt:
 
 ;************************************** Helper FUNCTIONS ****************************************
 
-addToWinClip(lastEntry, extraTip)
-{
+addToWinClip(lastEntry, extraTip){
 	API.blockMonitoring()
 	PasteModeToolTip( "System Clipboard " extraTip,1)
 	if CURSAVE
