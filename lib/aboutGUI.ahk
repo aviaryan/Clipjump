@@ -105,7 +105,7 @@ trayMenu(destroy=0){
 	Menu, Tray, Add, % TXT.TRY_options, :Options_Tray
 		Menu, Tools_Tray, Add, % TXT.SET_org "`t" Hparse_Rev(chOrg_K), channelOrganizer
 		Menu, Tools_Tray, Add, % TXT.HST__name "`t" Hparse_Rev(history_K), history
-		Menu, Tools_Tray, Add, % TXT.SET_chnl "`t" Hparse_Rev(channel_K), channelGUI
+		;Menu, Tools_Tray, Add, % TXT.SET_chnl "`t" Hparse_Rev(channel_K), channelGUI
 		Menu, Tools_Tray, Add, % TXT.IGN__name, classTool
 		Menu, Tools_Tray, Add, % TXT.PLG__name "`t" Hparse_Rev(pluginManager_k), pluginManagerGUI
 		Menu, Tools_Tray, Add, % TXT.SET__name, settings

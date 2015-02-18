@@ -90,6 +90,7 @@ channelOrganizer(){
 	hkZ("F5", "chOrg_refresh")
 	hkZ("^f", "chOrg_searchfocus")
 	hkZ("^n", "chOrgNew")
+	hkZ("^+n", "chOrgNewCh")
 	hkZ("^g", "chOrg_useChFocus")
 	Hotkey, If
 	Hotkey, If, IsChOrgLVActive()
@@ -99,6 +100,7 @@ channelOrganizer(){
 	hkZ("^o", "chOrg_openPasteMode")
 	hkZ("^h", "chOrgEdit")
 	hkZ("Del", "chOrgDelete")
+	hkZ("+tab", "chOrg_activateLB")
 	hkZ("!Up", "chOrgUp")
 	hkZ("!Down", "chOrgDown")
 	hkZ("!x", "chOrgCut")
@@ -401,12 +403,16 @@ chOrg_Lv:
 		gosub chOrg_preview
 	return
 
+chOrg_activateLB:
+	
+	;gosub chOrg_Lb
+	return
+
 chOrg_refresh:
 chOrg_search:
 chOrg_Lb:
 	Gui, chOrg:submit, nohide
 	GuiControl, ,% "Button" t_startBtn, % chrhex("f040")
-
 	if chOrg_Lb=1
 		loop % t_horizButtons 		; in case all channels are selected
 			GuiControl, Disable, % "Button"  A_index+t_startBtn

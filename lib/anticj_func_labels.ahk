@@ -17,7 +17,7 @@ history:
 	return
 
 channelGUI:
-	channelGUI()
+	;channelGUI()
 	return
 
 classTool:

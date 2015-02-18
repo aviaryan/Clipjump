@@ -14,128 +14,128 @@
 ;   out of these CN.Total and TEMPSAVE,CURSAVE are only permananent var, all others are temporarily created at channel change.
 ;----------------------------------------------------------------------
 
-channelGUI(destroygui=0){
-	global
-	static local_ini_IsChannelMin, advice3wt, advice1wt, advicewidth, cancelwt, deletewt
+; channelGUI(destroygui=0){
+; 	global
+; 	static local_ini_IsChannelMin, advice3wt, advice1wt, advicewidth, cancelwt, deletewt
 
-	if (destroygui) {
-		local_ini_IsChannelMin := ""
-		return
-	}
+; 	if (destroygui) {
+; 		local_ini_IsChannelMin := ""
+; 		return
+; 	}
 
-	advice3wt := getControlInfo("text", TXT.CNL_advice3, "w", "s8", "Lucida Console")
-	advice1wt := getControlInfo("text", TXT.CNL_advice1, "w", "s8", "Lucida Console")
-	deletewt := getControlInfo("button", TXT.CNL_delete, "w", "s10", "Arial")
-	cancelwt := getControlInfo("button", TXT.CNL_cancel, "w", "s10", "Arial")
+; 	advice3wt := getControlInfo("text", TXT.CNL_advice3, "w", "s8", "Lucida Console")
+; 	advice1wt := getControlInfo("text", TXT.CNL_advice1, "w", "s8", "Lucida Console")
+; 	deletewt := getControlInfo("button", TXT.CNL_delete, "w", "s10", "Arial")
+; 	cancelwt := getControlInfo("button", TXT.CNL_cancel, "w", "s10", "Arial")
 
-	advicewidth := advice3wt >= advice1wt ? advice3wt : advice1wt
-	advicewidth := advicewidth<450 ? 400 : advicewidth
-	try Gui, Channel:Default 			; just incase no gui exists
+; 	advicewidth := advice3wt >= advice1wt ? advice3wt : advice1wt
+; 	advicewidth := advicewidth<450 ? 400 : advicewidth
+; 	try Gui, Channel:Default 			; just incase no gui exists
 
-	If ( ini_IsChannelMin != local_ini_IsChannelMin )
-	{
-			Gui, Channel:New  ;Total width ~ 549
-			Gui, Font, S12
-			Gui, Add, Text, x4 y6, % TXT.CNL_choose
+; 	If ( ini_IsChannelMin != local_ini_IsChannelMin )
+; 	{
+; 			Gui, Channel:New  ;Total width ~ 549
+; 			Gui, Font, S12
+; 			Gui, Add, Text, x4 y6, % TXT.CNL_choose
 
-			Gui, Font, S10
-			Gui, Add, Edit, % "x" advicewidth-150-4 " w150 section yp-2 +Readonly vcIndex"
-			Gui, Add, Updown,% "Wrap Range0-" CN.Total " gChannelupdown vChannelupdown", 0
+; 			Gui, Font, S10
+; 			Gui, Add, Edit, % "x" advicewidth-150-4 " w150 section yp-2 +Readonly vcIndex"
+; 			Gui, Add, Updown,% "Wrap Range0-" CN.Total " gChannelupdown vChannelupdown", 0
 
-			Gui, Font, S12
-			Gui, Add, Text, x4 y+10, % TXT.CNL_channelname
-			Gui, Font, S10
-			Gui, Add, Edit, xs yp-2 w150 vcname -Multi gedit_cname, % CN.Name
+; 			Gui, Font, S12
+; 			Gui, Add, Text, x4 y+10, % TXT.CNL_channelname
+; 			Gui, Font, S10
+; 			Gui, Add, Edit, xs yp-2 w150 vcname -Multi gedit_cname, % CN.Name
 
-		if !ini_IsChannelMin
-		{
-			Gui, Font, S8, Lucida Console
-			Gui, Add, Text, x4 y+25 section vtxt_cnladvice, % TXT.CNL_advice1
-			Gui, Add, Text, y+5, % TXT.CNL_advice2
-			Gui, Add, Text, y+5, % TXT.CNL_advice3
-			; see top for the width calculation
-			Gui, Font, S10, Arial
-			Gui, Add, Button, x4 y+25 gchannel_Usebutton Default, % TXT.CNL_use
-			; see top for widths
-			Gui, Add, Button, % "x" advicewidth -4 -deletewt -cancelwt " yp+0 gchannel_deleteButton", % TXT.CNL_delete
-			Gui, Add, Button, % "x" advicewidth -cancelwt " yp+0 gchannel_Cancelbutton", % TXT.CNL_cancel
-			Gui, Add, StatusBar
+; 		if !ini_IsChannelMin
+; 		{
+; 			Gui, Font, S8, Lucida Console
+; 			Gui, Add, Text, x4 y+25 section vtxt_cnladvice, % TXT.CNL_advice1
+; 			Gui, Add, Text, y+5, % TXT.CNL_advice2
+; 			Gui, Add, Text, y+5, % TXT.CNL_advice3
+; 			; see top for the width calculation
+; 			Gui, Font, S10, Arial
+; 			Gui, Add, Button, x4 y+25 gchannel_Usebutton Default, % TXT.CNL_use
+; 			; see top for widths
+; 			Gui, Add, Button, % "x" advicewidth -4 -deletewt -cancelwt " yp+0 gchannel_deleteButton", % TXT.CNL_delete
+; 			Gui, Add, Button, % "x" advicewidth -cancelwt " yp+0 gchannel_Cancelbutton", % TXT.CNL_cancel
+; 			Gui, Add, StatusBar
 
-			Hotkey, Enter, Channel_usebutton, Off
-		}
-		else
-		{
-			Gui, Add, StatusBar
+; 			Hotkey, Enter, Channel_usebutton, Off
+; 		}
+; 		else
+; 		{
+; 			Gui, Add, StatusBar
 
-			Hotkey, IfWinActive, % PROGNAME " " TXT.CNL__name
-			Hotkey, Enter, Channel_usebutton, On
-			Hotkey, Del, Channel_deletebutton, On
-			Hotkey, IfWinActive
-		}
+; 			Hotkey, IfWinActive, % PROGNAME " " TXT.CNL__name
+; 			Hotkey, Enter, Channel_usebutton, On
+; 			Hotkey, Del, Channel_deletebutton, On
+; 			Hotkey, IfWinActive
+; 		}
 
-		local_ini_IsChannelMin := ini_IsChannelMin
-	}
+; 		local_ini_IsChannelMin := ini_IsChannelMin
+; 	}
 
-	CN["TEMPSAVE" CN.N] := TEMPSAVE , CN["CURSAVE" CN.N] := CURSAVE
+; 	CN["TEMPSAVE" CN.N] := TEMPSAVE , CN["CURSAVE" CN.N] := CURSAVE
 
-	Gui, Channel:Default
-	GuiControl,, cIndex, % CN.NG
-	GuiControl,, cName , % CN.Name
-	Gui, Show, , % PROGNAME " " TXT.CNL__name
+; 	Gui, Channel:Default
+; 	GuiControl,, cIndex, % CN.NG
+; 	GuiControl,, cName , % CN.Name
+; 	Gui, Show, , % PROGNAME " " TXT.CNL__name
 
-	SB_SetText(TXT.CNL_statusbar " - " CN["CURSAVE" CN.N])
-	return
+; 	SB_SetText(TXT.CNL_statusbar " - " CN["CURSAVE" CN.N])
+; 	return
 
-edit_cname:
-	Gui, Channel:submit, nohide
-	ini_write("Channels", cIndex, cName, 0)
-	return
+; edit_cname:
+; 	Gui, Channel:submit, nohide
+; 	ini_write("Channels", cIndex, cName, 0)
+; 	return
 
-Channel_usebutton:
-	Gui, Channel:Submit, nohide
-	changeChannel(cIndex) , CN.pit_NG := ""
-	if ( cIndex == CN.Total-1 )  			; -1 as CN.tOTAL is already updated in changeChannel()
-		local_ini_IsChannelMin := "x" 		;force re-building Gui
+; Channel_usebutton:
+; 	Gui, Channel:Submit, nohide
+; 	changeChannel(cIndex) , CN.pit_NG := ""
+; 	if ( cIndex == CN.Total-1 )  			; -1 as CN.tOTAL is already updated in changeChannel()
+; 		local_ini_IsChannelMin := "x" 		;force re-building Gui
 
-	ToolTip % "Channel " CN.Name " active"
-	setTimer, TooltipOff, 500
-Channel_cancelbutton:
-	Gui, Channel:hide
-	GuiControl, , cIndex, % CN.NG
-	GuiControl, , cName,  % CN.Name
-	return
+; 	ToolTip % "Channel " CN.Name " active"
+; 	setTimer, TooltipOff, 500
+; Channel_cancelbutton:
+; 	Gui, Channel:hide
+; 	GuiControl, , cIndex, % CN.NG
+; 	GuiControl, , cName,  % CN.Name
+; 	return
 
-;delete routine
-Channel_deletebutton:
-	Gui, Channel:submit, nohide
-	if !cIndex
-		MsgBox, 48, Clipjump Channels, % TXT.CNL_del_default
-	else if (cIndex<CN.Total) 	; filter out cases when a not created channel is deleted	
-	{
-		MsgBox, 52, % "Clipjump Channel : " cname , % TXT.CNL_delmsg
-		IfMsgBox, Yes
-		{
-			manageChannel(cIndex)
-			GuiControl, channel: , cIndex, % cIndex-1
-			gosub ChannelUpdown
-		}
-	}
-	return
+; ;delete routine
+; Channel_deletebutton:
+; 	Gui, Channel:submit, nohide
+; 	if !cIndex
+; 		MsgBox, 48, Clipjump Channels, % TXT.CNL_del_default
+; 	else if (cIndex<CN.Total) 	; filter out cases when a not created channel is deleted	
+; 	{
+; 		MsgBox, 52, % "Clipjump Channel : " cname , % TXT.CNL_delmsg
+; 		IfMsgBox, Yes
+; 		{
+; 			manageChannel(cIndex)
+; 			GuiControl, channel: , cIndex, % cIndex-1
+; 			gosub ChannelUpdown
+; 		}
+; 	}
+; 	return
 
-channelGUIClose:
-channelGUIEscape:
-	Gui, Channel:Hide
-	return
+; channelGUIClose:
+; channelGUIEscape:
+; 	Gui, Channel:Hide
+; 	return
 
-}
+; }
 
-ChannelUpdown:
-	Gui, Channel:Submit, nohide
-	Gui, Channel:Default
-	SB_SetText(TXT.CNL_statusbar " - " CN["CURSAVE" (!cIndex?"":cIndex)])
-	Iniread, cname, %CONFIGURATION_FILE%, channels,% cIndex, %A_space%
-	GuiControl,, cname, % (cname=="") ? cIndex : cname
-	return
+; ChannelUpdown:
+; 	Gui, Channel:Submit, nohide
+; 	Gui, Channel:Default
+; 	SB_SetText(TXT.CNL_statusbar " - " CN["CURSAVE" (!cIndex?"":cIndex)])
+; 	Iniread, cname, %CONFIGURATION_FILE%, channels,% cIndex, %A_space%
+; 	GuiControl,, cname, % (cname=="") ? cIndex : cname
+; 	return
 
 initChannels(){
 	global
@@ -197,7 +197,7 @@ changeChannel(cIndex, backup_old:=1){
 
 	FileCreateDir, %CLIPS_dir%
 	FileCreateDir, %THUMBS_dir%
-	GuiControl, % "Channel:+Range0-" CN.Total, ChannelUpdown 		; refresh up-down limits
+	;GuiControl, % "Channel:+Range0-" CN.Total, ChannelUpdown 		; refresh up-down limits
 
 	LASTCLIP := LASTFORMAT := IScurCBACTIVE := "" 								;make all false as they are different for other channels
 	renameChannel(CN.NG, CN.Name)
@@ -300,8 +300,8 @@ manageChannel(orig, new=""){
 
 		bk := CN.NG
 		initChannels()
-		Gui, Channel:Default
-		GuiControl, % "+Range0-" CN.Total, ChannelUpdown
+		;Gui, Channel:Default
+		;GuiControl, % "+Range0-" CN.Total, ChannelUpdown
 		if ( bk >= orig )
 			changeChannel(bk-1, 0) 		; change the channel using proper methodology as initchannels() disturbs it
 		else changeChannel(bk, 0)
@@ -323,13 +323,13 @@ manageChannel(orig, new=""){
 
 ;-------------------------- ACCESSIBILTY SHORTCUTS ------------------------------------------------
 
-#if IsActive(PROGNAME " " TXT.CNL__name, "window")
-	Up::
-		GuiControl, channel:, ChannelUpdown, +1
-		gosub, ChannelUpdown
-		return
-	Down::
-		GuiControl, channel:, ChannelUpdown, +-1
-		gosub, ChannelUpdown
-		return
-#if
+; #if IsActive(PROGNAME " " TXT.CNL__name, "window")
+; 	Up::
+; 		GuiControl, channel:, ChannelUpdown, +1
+; 		gosub, ChannelUpdown
+; 		return
+; 	Down::
+; 		GuiControl, channel:, ChannelUpdown, +-1
+; 		gosub, ChannelUpdown
+; 		return
+; #if
