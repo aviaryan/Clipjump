@@ -300,7 +300,7 @@ paste:
 
 		try Clipboard := ""
 		hkZ(pastemodekey.up, "channel_up") , hkZ(pastemodekey.down, "channel_down") 		;activate the 2 keys to jump channels
-		Tooltip, % "{" CN.Name "} " MSG_CLIPJUMP_EMPTY 				;No Clip Exists
+		PasteModeTooltip("{" CN.Name "} " MSG_CLIPJUMP_EMPTY, 1) 				;No Clip Exists
 		setTimer, ctrlCheck, 50
 	}
 	else
@@ -815,7 +815,7 @@ ctrlCheck:
 			Critical, Off 			;End Critical so that the below function can overlap this thread
 			IScurCBACTIVE := 0 		; now not active in clipjump
 
-			temp21 := TT_Console(TXT.TIP_delallprompt, "Y N")
+			temp21 := TT_Console_PasteMode(TXT.TIP_delallprompt, "Y N")
 			if temp21 = Y
 			{
 				PasteModeTooltip(MSG_ALL_DELETED,1)
@@ -1149,7 +1149,9 @@ showPreview(){
 		if (scrnhgt*2-ay < displayh/2)
 			ay := 2
 		; Try ensures we dont see the error if it happens due to thread overlaps
-		try Gui, imgprv:Show, x%ax% y%ay% h%displayh% w%displayw% NoActivate, Display_Cj
+		tx := ini_pstMode_X ? ini_pstMode_X : ax , ty := ini_pstMode_Y ? ini_pstMode_Y : ay
+
+		try Gui, imgprv:Show, x%tx% y%ty% h%displayh% w%displayw% NoActivate, Display_Cj
 	}
 }
 

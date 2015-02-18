@@ -336,6 +336,11 @@ deactivateHtml(code){
 	return code
 }
 
+TT_Console_PasteMode(text, keys){
+	tx := ini_pstMode_X ? ini_pstMode_X : SPM.X , ty := ini_pstMode_Y ? ini_pstMode_Y : SPM.Y
+	return TT_Console(text, keys, tx, ty, 1)
+}
+
 ;GetFile()
 ;	Gets file path of selected item in Explorer
 
