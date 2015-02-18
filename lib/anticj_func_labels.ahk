@@ -16,10 +16,6 @@ history:
 	gui_History()
 	return
 
-channelGUI:
-	;channelGUI()
-	return
-
 classTool:
 	API.runPlugin("external.ignoreWmanager.ahk")
 	return

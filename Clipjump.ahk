@@ -135,8 +135,8 @@ else if (ini_Version != VERSION)
 
 
 ;Global Ini declarations
-global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_IsChannelMin , ini_isMessage, CopyMessage
-		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, channel_K, onetime_K, paste_k, actionmode_k, ini_is_duplicate_copied, ini_formatting
+global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_isMessage, CopyMessage
+		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, onetime_K, paste_k, actionmode_k, ini_is_duplicate_copied, ini_formatting
 		, ini_CopyBeep , beepFrequency , ignoreWindows, ini_defEditor, ini_defImgEditor, ini_def_Pformat, pluginManager_k, holdClip_K, ini_PreserveClipPos
 		, chOrg_K, ini_startSearch, ini_revFormat2def, ini_pstMode_X, ini_pstMode_Y, ini_HisCloseOnInstaPaste, history_K
 
@@ -1195,10 +1195,10 @@ actionmode:
 	return
 
 init_actionmode(){
-	ACTIONMODE := {H: "history", S: "channelGUI", O: "channelOrganizer", C: "copyfile", X: "copyfolder", F: "CopyFileData", D: "disable_clipjump"
+	ACTIONMODE := {H: "history", O: "channelOrganizer", C: "copyfile", X: "copyfolder", F: "CopyFileData", D: "disable_clipjump"
 		, P: "pitswap", T: "onetime", E: "settings", F1: "hlp", Esc: "Exit_actmd", M: "pluginManager_GUI()", F2: "OpenShortcutsHelp", L: "classTool"
 		, U: "API.runPlugin(updateClipjumpClipboard.ahk)", B: "holdclip"
-		, H_caption: TXT.HST__name, S_caption: TXT.SET_chnl, O_caption: TXT.SET_org, C_caption: TXT._cfilep, X_caption: TXT._cfolderp, F_caption: TXT._cfiled 
+		, H_caption: TXT.HST__name, O_caption: TXT.SET_org, C_caption: TXT._cfilep, X_caption: TXT._cfolderp, F_caption: TXT._cfiled 
 		, D_caption: TXT.ACT_disable " " PROGNAME, P_caption: TXT._pitswp, T_caption: TXT._ot, E_caption: TXT.SET__name
 		, F1_caption: TXT.TRY_help, Esc_caption: TXT.ACT_exit, M_caption: TXT.PLG__name, F2_caption: TXT.try_pstmdshorts, L_caption: TXT.IGN__name
 		, U_caption: TXT.PLG_sync_cb, B_caption: TXT.SET_holdclip}
