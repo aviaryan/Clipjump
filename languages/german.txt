@@ -146,8 +146,8 @@ ACT_disable = Deaktiviere
 ACT_exit = Fenster schließen
 
 IGN__name = Ignorierte Fenster
-IGN_add = &Fensterclasse hinzufügen
-IGN_delete = &Fensterclasse löschen
+IGN_add = &Fensterklasse hinzufügen
+IGN_delete = &Fensterklasse löschen
 
 LNG_error = Deutsche Sprachdatei nicht gefunden im Ordner languages/german.txt. Passierte dies absichtlich, füge sie wieder ein
 
