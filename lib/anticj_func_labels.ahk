@@ -16,10 +16,6 @@ history:
 	gui_History()
 	return
 
-channelGUI:
-	channelGUI()
-	return
-
 classTool:
 	API.runPlugin("external.ignoreWmanager.ahk")
 	return
@@ -338,6 +334,11 @@ deactivateHtml(code){
 	StringReplace, code, code, >, % "&gt;", All
 	StringReplace, code, code, <, % "&lt;", All
 	return code
+}
+
+TT_Console_PasteMode(text, keys){
+	tx := ini_pstMode_X ? ini_pstMode_X : SPM.X , ty := ini_pstMode_Y ? ini_pstMode_Y : SPM.Y
+	return TT_Console(text, keys, tx, ty, 1)
 }
 
 ;GetFile()

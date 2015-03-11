@@ -173,11 +173,26 @@ updatePluginIncludes() {
 	FileDelete, plugins\_registry.ahk
 	loop, plugins\*.ahk
 	{
+		if (A_LoopFileExt != "ahk") ; for .ahk~ bk files
+			continue
 		if Instr(A_LoopFileName, "external.") = 1
 			continue
 		st .= "#Include *i %A_ScriptDir%\plugins\" A_LoopFileName "`n"
 	}
 	FileAppend, % st, plugins\_registry.ahk
+}
+
+migratePlugins(){
+	loop, plugins\*.ahk
+	{
+		if (InStr(A_LoopFileName, "external.") = 1) or (InStr(A_LoopFileName, "pformat.") = 1)
+		{
+			clsname := SubStr(A_LoopFileName, 1, InStr(A_LoopFileName, ".")-1)
+			FileMove, % "plugins\" A_LoopFileName, % "plugins\" clsname "\" RegExReplace(A_LoopFileName, "i)" clsname "."), 0
+			if FileExist(lpath := "plugins\" Substr(A_LoopFileName, 1, -3) "lib")
+				FileMoveDir, % lpath, % "plugins\" clsname "\" RegExReplace( SubStr(A_LoopFileName, 1, -3), "i)" clsname "." ) "lib"
+		}
+	}
 }
 
 ;-------------------------------------------------------------------------------------------------------------
@@ -188,6 +203,8 @@ loadPlugins() {
 	PLUGINS.pformat := {} , PLUGINS.external := {} , PLUGINS["<>"] := {}	; init 2nd level objects
 	loop, plugins\*.ahk
 	{
+		if (A_LoopFileExt != "ahk")
+			continue
 		if A_LoopFileName = _registry.ahk
 			continue
 		; read plugin dets

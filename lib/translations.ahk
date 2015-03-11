@@ -35,7 +35,7 @@ Translations_load(file="languages\english.txt", default_file="languages\english.
 
 Translations_apply(){
 	;applies the loaded translations in vars to all GUIs and needed places
-	channelGUI(1)
+	;channelGUI(1)
 	trayMenu(1)
 	init_actionmode()
 	Translations_fixglobalvars()

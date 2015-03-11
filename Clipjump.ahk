@@ -110,6 +110,10 @@ FileInstall, icons\no_monitoring.ico, icons\no_monitoring.ico, 0
 ;Ini Configurations
 Iniread, ini_Version, %CONFIGURATION_FILE%, System, Version
 
+;FileCreateDir, plugins/pformat
+;FileCreateDir, plugins/external
+;migratePlugins()
+
 If !FileExist(CONFIGURATION_FILE)
 {
 	save_default(1)
@@ -131,8 +135,8 @@ else if (ini_Version != VERSION)
 
 
 ;Global Ini declarations
-global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_IsChannelMin , ini_isMessage, CopyMessage
-		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, channel_K, onetime_K, paste_k, actionmode_k, ini_is_duplicate_copied, ini_formatting
+global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_isMessage, CopyMessage
+		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, onetime_K, paste_k, actionmode_k, ini_is_duplicate_copied, ini_formatting
 		, ini_CopyBeep , beepFrequency , ignoreWindows, ini_defEditor, ini_defImgEditor, ini_def_Pformat, pluginManager_k, holdClip_K, ini_PreserveClipPos
 		, chOrg_K, ini_startSearch, ini_revFormat2def, ini_pstMode_X, ini_pstMode_Y, ini_HisCloseOnInstaPaste, history_K
 
@@ -150,15 +154,17 @@ global windows_copy_k, windows_cut_k, ini_OpenAllChbyDef := 0
 init_actionmode()
 ;Initialising Clipjump Channels
 initChannels()
+
+trayMenu() ; before customization and settings as customization can affect tray
 ;loading Settings
 load_Settings(1)
 validate_Settings()
 ;load plugins
 loadPlugins()
+
 ;load custom settings
 loadCustomizations()
 
-trayMenu()
 
 loop
 {
@@ -294,7 +300,7 @@ paste:
 
 		try Clipboard := ""
 		hkZ(pastemodekey.up, "channel_up") , hkZ(pastemodekey.down, "channel_down") 		;activate the 2 keys to jump channels
-		Tooltip, % "{" CN.Name "} " MSG_CLIPJUMP_EMPTY 				;No Clip Exists
+		PasteModeTooltip("{" CN.Name "} " MSG_CLIPJUMP_EMPTY, 1) 				;No Clip Exists
 		setTimer, ctrlCheck, 50
 	}
 	else
@@ -809,7 +815,7 @@ ctrlCheck:
 			Critical, Off 			;End Critical so that the below function can overlap this thread
 			IScurCBACTIVE := 0 		; now not active in clipjump
 
-			temp21 := TT_Console(TXT.TIP_delallprompt, "Y N")
+			temp21 := TT_Console_PasteMode(TXT.TIP_delallprompt, "Y N")
 			if temp21 = Y
 			{
 				PasteModeTooltip(MSG_ALL_DELETED,1)
@@ -1143,7 +1149,9 @@ showPreview(){
 		if (scrnhgt*2-ay < displayh/2)
 			ay := 2
 		; Try ensures we dont see the error if it happens due to thread overlaps
-		try Gui, imgprv:Show, x%ax% y%ay% h%displayh% w%displayw% NoActivate, Display_Cj
+		tx := ini_pstMode_X ? ini_pstMode_X : ax , ty := ini_pstMode_Y ? ini_pstMode_Y : ay
+
+		try Gui, imgprv:Show, x%tx% y%ty% h%displayh% w%displayw% NoActivate, Display_Cj
 	}
 }
 
@@ -1188,11 +1196,11 @@ actionmode:
 		EmptyMem()
 	return
 
-init_actionmode() {
-	ACTIONMODE := {H: "history", S: "channelGUI", O: "channelOrganizer", C: "copyfile", X: "copyfolder", F: "CopyFileData", D: "disable_clipjump"
+init_actionmode(){
+	ACTIONMODE := {H: "history", O: "channelOrganizer", C: "copyfile", X: "copyfolder", F: "CopyFileData", D: "disable_clipjump"
 		, P: "pitswap", T: "onetime", E: "settings", F1: "hlp", Esc: "Exit_actmd", M: "pluginManager_GUI()", F2: "OpenShortcutsHelp", L: "classTool"
 		, U: "API.runPlugin(updateClipjumpClipboard.ahk)", B: "holdclip"
-		, H_caption: TXT.HST__name, S_caption: TXT.SET_chnl, O_caption: TXT.SET_org, C_caption: TXT._cfilep, X_caption: TXT._cfolderp, F_caption: TXT._cfiled 
+		, H_caption: TXT.HST__name, O_caption: TXT.SET_org, C_caption: TXT._cfilep, X_caption: TXT._cfolderp, F_caption: TXT._cfiled 
 		, D_caption: TXT.ACT_disable " " PROGNAME, P_caption: TXT._pitswp, T_caption: TXT._ot, E_caption: TXT.SET__name
 		, F1_caption: TXT.TRY_help, Esc_caption: TXT.ACT_exit, M_caption: TXT.PLG__name, F2_caption: TXT.try_pstmdshorts, L_caption: TXT.IGN__name
 		, U_caption: TXT.PLG_sync_cb, B_caption: TXT.SET_holdclip}
@@ -1304,8 +1312,7 @@ updt:
 
 ;************************************** Helper FUNCTIONS ****************************************
 
-addToWinClip(lastEntry, extraTip)
-{
+addToWinClip(lastEntry, extraTip){
 	API.blockMonitoring()
 	PasteModeToolTip( "System Clipboard " extraTip,1)
 	if CURSAVE

@@ -81,8 +81,6 @@ gui_Settings()
 	Gui, Add, Hotkey,	x%x_ofhotkeys% yp-3 vcfolderp_K ghotkey_cfolderp, % Copyfolderpath_K
 	Gui, Add, Text,		xs y+8,		% TXT._cfiled
 	Gui, Add, Hotkey,	x%x_ofhotkeys% yp-3 vcfiled_K   ghotkey_cfiled, % Copyfiledata_K
-	Gui, Add, Text,		xs y+8,		% TXT.SET_chnl
-	Gui, Add, Hotkey,	x%x_ofhotkeys% yp-3 vchnl_K		ghotkey_chnl, % channel_K
 	Gui, Add, Text,		xs y+8,		% TXT.SET_holdclip
 	Gui, Add, Hotkey,	x%x_ofhotkeys% yp-3 vhldClip_K		ghotkey_holdClip, % holdClip_K
 	Gui, Add, Text, 	xs y+8, 	% TXT.PLG__name
@@ -92,7 +90,6 @@ gui_Settings()
 	Gui, Add, GroupBox, % "xs-9 y296 w" right_size " h74", % PROGNAME " " TXT.SET_channels
 	Gui, Add, Text, 	xs yp+22,	% TXT._pitswp " Hotkey"
 	Gui, Add, Hotkey,	x%x_ofhotkeys% yp-3 vpitswp_K  ghotkey_pitswp, % pitswap_K
-	Gui, Add, Checkbox, xs y+8 Checked%ini_IsChannelMin% vnew_IsChannelMin gchkbox_isChannelMin, % TXT.SET_ischannelmin
 
 	;---- Buttons
 	size_advanced := getControlInfo("text", TXT.SET_advanced, "w", "Underline")
@@ -164,9 +161,7 @@ chkbox_IsImageStored:
 hotkey_cfilep:
 hotkey_cfolderp:
 hotkey_cfiled:
-hotkey_chnl:
 hotkey_ot:
-chkbox_ischannelmin:
 hotkey_pitswp:
 hotkey_actmd:
 hotkey_plugM:
@@ -252,12 +247,10 @@ load_Settings(all=false)
 	IniRead, Copyfilepath_K,% CONFIGURATION_FILE, Shortcuts, Copyfilepath_K, %A_space%
 	IniRead, Copyfolderpath_K,% CONFIGURATION_FILE, Shortcuts, Copyfolderpath_K
 	IniRead, Copyfiledata_K,% CONFIGURATION_FILE, Shortcuts, Copyfiledata_K
-	Iniread, channel_K,% CONFIGURATION_FILE, Shortcuts, channel_K
 	Iniread, paste_K, % CONFIGURATION_FILE, Shortcuts, paste_K
 	Iniread, Actionmode_K, % CONFIGURATION_FILE, Shortcuts, actionmode_k
 
 	pitswap_K := ini_read("Channels", "pitswap_K")
-	ini_IsChannelMin := (t:=ini_read("Channels", "IsChannelMin")) ? t : 0
 
 	holdClip_K := ini_read("Shortcuts", "holdClip_K")
 	ini_PreserveClipPos := ini_read("Main", "ini_PreserveClipPos")
@@ -320,12 +313,10 @@ save_Settings()
 	IniWrite, %Cfilep_K%  ,% CONFIGURATION_FILE, Shortcuts, Copyfilepath_K
 	IniWrite, %Cfolderp_K%,% CONFIGURATION_FILE, Shortcuts, Copyfolderpath_K
 	IniWrite, %Cfiled_K%  ,% CONFIGURATION_FILE, Shortcuts, Copyfiledata_K
-	Iniwrite, %chnl_K%	  ,% CONFIGURATION_FILE, Shortcuts, channel_K
 	Iniwrite, %pst_k%	  ,% CONFIGURATION_FILE, Shortcuts, paste_K
 	IniWrite, %actmd_k%   ,% CONFIGURATION_FILE, Shortcuts, actionmode_k
 
 	IniWrite, %pitswp_k%  ,% CONFIGURATION_FILE, Channels, pitswap_K
-	Iniwrite, %new_ischannelMin%, % CONFIGURATION_FILE , Channels, IsChannelMin
 	; v10.7.3
 	ini_write("Main", "default_pformat", new_default_pformat="-original-" ? "" : new_default_pformat, 0) 	; trim reqd to remove space
 	ini_write("Shortcuts", "pluginManager_K", plugM_k, 0)
@@ -340,7 +331,6 @@ save_Settings()
 	  hkZ(Copyfilepath_K, 	"CopyFile", 0)
 	, hkZ(Copyfolderpath_K, "CopyFolder", 0) 
 	, hkZ(Copyfiledata_K,   "CopyFileData", 0)
-	, hkZ(channel_K,		"channelGUI",  0)
 	, hkZ(holdClip_K,		"holdClip",		0)
 	, hkZ(paste_k ? "$^" paste_k : emptyvar, "paste", 	0)
 	, hkZ(pitswap_K, 	   "PitSwap", 0)
@@ -353,7 +343,6 @@ save_Settings()
 	  hkZ(Cfilep_K, "CopyFile", 1)
 	, hkZ(Cfolderp_K, "CopyFolder", 1)
 	, hkZ(Cfiled_K,   "CopyFileData", 1)
-	, hkZ(chnl_K, "channelGUI",  1)
 	, hkZ(hldClip_K,	"holdClip",		1)
 	, hkZ(pst_k && CLIPJUMP_STATUS ? "$^" pst_k : emptyvar, "paste", CLIPJUMP_STATUS )
 	, hkZ(pitswp_K, "PitSwap", 1)
@@ -404,13 +393,11 @@ save_Default(full=1){
 	Ini_Write(s, "Copyfilepath_K")
 	Ini_Write(s, "Copyfolderpath_K")
 	Ini_Write(s, "Copyfiledata_K")
-	Ini_write(s, "channel_K")
 	Ini_write(s, "onetime_k") 			;No default specified
 	ini_write(s, "paste_k", "V")
 	Ini_write(s, "actionmode_k", "^+a")
 
 	ini_write("Channels",  "pitswap_K")
-	Ini_Write("Channels", "IsChannelMin", "0")
 	;---- Non GUI
 	Ini_write(s := "Advanced", "instapaste_write_clipboard", "0")
 	ini_write(s, "Show_pasting_tip", "0")
@@ -442,6 +429,8 @@ save_Default(full=1){
 	Ini_delete("Advanced", "Start_with_formatting")
 	Ini_delete("Advanced", "Actionmode_keys")
 	Ini_delete("Advanced", "history_k") 	; v11.6.1
+	ini_delete("Shortcuts", "channel_K") ;v11.6.1+
+	Ini_delete("Channels", "IsChannelMin")
 }
 
 Ini_write(section, key, value="", ifblank=true){
@@ -504,7 +493,7 @@ validate_Settings()
 		NOINCOGNITO := false
 		if CALLER_STATUS
 			Menu, tray, icon, icons\no_history.ico
-		Menu, Tray, check, % TXT.TRY_incognito
+		Menu, Options_Tray, check, % TXT.TRY_incognito
 	}
 
 	if paste_K = ERROR
