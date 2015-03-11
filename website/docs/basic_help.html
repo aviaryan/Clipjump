@@ -76,7 +76,7 @@ Release <kbda>Ctrl</kbda> and type to filter clips containing the typed text. Us
 <code class="key">Action Mode</code> provides a clean user-friendly interface to execute almost all the other components of Clipjump. 
 Activated with the default configurable shortcut <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>A</kbd>, it provides <a href=shortcuts.html#actmd>easy keys</a> to run components of Clipjump. 
 Action Mode easy keys <a href=ini.html#actmd_keys>can be totally configured</a> through <a href="custom.html">ClipjumpCustom</a> feature.<br><br>
-<span class="ver">[v9.9.1]</span> Action Mode is the default shortcut to execute any functionality in Clipjump. If you want to create System-Level shortcuts for these functions, you should use the Settings Editor OR <a href="custom.html">ClipjumpCustom</a>.<br>
+<span class="ver">[v9.9.1]</span> Action Mode is the default shortcut to execute any functionality in Clipjump. If you want to create System-Level shortcuts for these functions, you should use the <a href="settings.html">Settings Editor</a> OR <a href="custom.html">ClipjumpCustom</a>.<br>
 <a name=actmd_num></a><b>TIP</b> - Use keys <kbd>0</kbd> to <kbd>9</kbd> to change <a href=channels.html>channels</a> through Action Mode. 
 Just press <var>channel number</var> when ActionMode popup is active. These keys can be overwritten through ClipjumpCustom.ini .
 <br><br><br>
@@ -106,7 +106,7 @@ All other <a href="#pastemd">Paste Mode</a> shortcuts like <kbd>Ctrl</kbd> + <kb
 <br><br>
 <b>Tip</b> - You can change shortcuts in Search-Paste Mode through <a href=custom.html#2>ClipjumpCustom.ini</a>.<br>
 <b>Tip</b> - Search for <em>IMAGE</em> to find images.<br>
-<b>Tip</b> - You can make <a href="#pastemd">Paste Mode</a> always start with search enabled from the Settings Editor.
+<b>Tip</b> - You can make <a href="#pastemd">Paste Mode</a> always start with search enabled from the <a href="settings.html">Settings Editor</a>.
 <br><br>
 
 
@@ -136,7 +136,7 @@ user demands pasting/previewing from a plugin. You can too <a href="plugins/basi
 
 <a name="pf_notes">Note that</a> that Paste formats don't permanently change the clips. They are copied into memory and the 'memory-copy' 
 is what is changed at the time of action.<br>
-<b>TIP</b> - To make a paste-format as default for Clipjump , see the option <span class="str">Default Paste Format</span> in the Settings editor. 
+<b>TIP</b> - To make a paste-format as default for Clipjump , see the option <span class="str">Default Paste Format</span> in the <a href="settings.html">Settings Editor</a>. 
 <br><br>
 See Also - <a href="plugins/index.html#def_pformat">Default Paste Formats distributed with Clipjump</a> <br>
 See Also - <a href=http://youtu.be/Za9cMlWMn4Y>Video</a> demonstrating use of paste formats
@@ -170,7 +170,7 @@ from the tip will disappear.
 <h2><a name=editclip>Edit Clips in Paste Mode</a></h2>
 <span class="ver">[v10.6+]</span> Press <kbd>H</kbd> in <a href="#pastemd">Paste Mode</a> to start editing a clip.<br> 
 The Paste mode will end and your <var>default_editor</var> or <var>default_image_editor</var> will open the clip.
-<a name=default_editor></a>The <var>default_editor</var> and <var>default_image_editor</var> can be configured from the <em>System</em> section of <em>settings.ini</em>. 
+<a name=default_editor></a>The <var>default_editor</var> and <var>default_image_editor</var> can be configured from the <em>System</em> section of<a href="ini.html">Settings.ini</a>. 
 Once the editor comes up, change the clip according to needs, save the changes and then <b>exit the editor</b>. Clipjump will respond to the exit and update the clip.
 Alternatively press Esc anytime to exit. 
 <br>Editing works for all types of clips but for text clips all formatting will be lost when they are updated.
@@ -192,10 +192,9 @@ The same feature is also available <a href=#spm_multipaste>when Search-Paste Mod
 <h2><a name=path>Copying Paths to Clipjump</a></h2>
 <ul>
 <li>Activating the <a href="#actmd">Action Mode</a> and then <kbd>C</kbd> will copy path(s) of selected files in all file managers including Windows Explorer. You can 
-	also create an indendent shortcut for this function in Settings Editor.<br>
+	also create an indendent shortcut for this function in <a href="settings.html">Settings Editor</a>.<br>
 <a href="../images/path.png"><img src="../images/path.png" border="0"></a>
-<li>Using <a href="#actmd">Action Mode</a> and then <kbd>X</kbd> will copy path of current opened folder in all file managers including Windows Explorer. You can also create an independent shortcut 
-for this function in the Settings Editor.<br>
+<li>Using <a href="#actmd">Action Mode</a> and then <kbd>X</kbd> will copy path of current opened folder in all file managers including Windows Explorer. You can also create an independent shortcut for this function in the <a href="settings.html">Settings Editor</a>.<br>
 </ul>
 <br><br>
 
@@ -211,7 +210,7 @@ for this function in the Settings Editor.<br>
 
 <a name=export><h2>Export and share Clipboards</h2></a>
 Clipjump supports exporting clipboards as files which can be stored as a record OR send to a friend.<br>
-The feature is accessible by tapping <kbd>E</kbd> in <a href="#pastemd">Paste Mode</a> and by the shortcut <kbd>Ctrl</kbd> + <kbd>E</kbd> in the Clipjump History Tool.<br>
+The feature is accessible by tapping <kbd>E</kbd> in <a href="#pastemd">Paste Mode</a> and by the shortcut <kbd>Ctrl</kbd> + <kbd>E</kbd> in the <a href="history.html">History Tool</a>.<br>
 The  lip or  lipboard when exported will be saved in <em>My Documents</em> with a name export<var>x</var>.cj where <var>x</var> is a variable.<br>
 The .cj file extension when used with <a href=#fdata>Copy File Data</a> directs Clipjump to load the file contents into itself.
 <br><br /><br>
@@ -239,8 +238,7 @@ You will see a Confirmation <span class="str">System Clipboard has Clip x</span>
 
 <h2><a name=holdclip>Copy Clipboard to Buffer (Hold Clip)</a></h2>
 <span class="ver">[v10.9+]</span> Hold Clip feature allows you to copy clipboard to a buffer location from where you can either paste the data or copy it to the currently active channel.
-<br>No shortcut for holdclip is assigned by default but the option has been provided in the Settings Editor. Once you have created a shortcut for holdclip, use it copy 
-the selected text/file/folder/<i>anything</i> to the buffer.<br>
+<br>No shortcut for holdclip is assigned by default but the option has been provided in the <a href="settings.html">Settings Editor</a>. Once you have created a shortcut for holdclip, use it copy the selected text/file/folder/<i>anything</i> to the buffer.<br>
 When copied, you will see a tip previewing the clip and all available options. Press <kbd>F2</kbd> to open clip in <a href="plugins\plugin_commonformats.html">Common 
 Formats GUI</a>, <kbd>Ins</kbd> to insert clip to channel and <kbd>Ctrl</kbd>+<kbd>V</kbd> to paste it. <br>
 <b>Note : </b> Pressing <span class="str">OK</span> in Common formats GUI <b>exits</b> Hold Clip. So you can reuse Hold Clip when the output message box
@@ -255,14 +253,13 @@ run = holdclip</pre>
 <br><br>
 
 <a name=beep><h2>Sound when copied</h2></a>
-<span class="ver">[v9.8.1+]</span> Clipjump can be configured to make system beep when some data is copied to it. The setting can be found in the Settings editor as 
-<span class="str">Beep when copied</span>. 
-To change the frequency of the beep played, navigate to the Advanced section of <em>settings.ini</em> and change the value of <var>beepFrequency</var> to your liking.
+<span class="ver">[v9.8.1+]</span> Clipjump can be configured to make system beep when some data is copied to it. The setting can be found in the <a href="settings.html">Settings Editor</a> as <span class="str">Beep when copied</span>. 
+To change the frequency of the beep played, navigate to the Advanced section of <a href="ini.html">Settings.ini</a> and change the value of <var>beepFrequency</var> to your liking.
 <br><br><br>
 
 
 <h2><a name=paste>Changing Paste-Mode shortcut</a></h2>
-To force Clipjump <a href="#pastemd">Paste Mode</a> to be activated by some other key other than <kbd>Ctrl</kbd> + <kbd>V</kbd>, you can use the Settings editor of Clipjump. <br>
+To force Clipjump <a href="#pastemd">Paste Mode</a> to be activated by some other key other than <kbd>Ctrl</kbd> + <kbd>V</kbd>, you can use the <a href="settings.html">Settings Editor</a> of Clipjump. <br>
 Simply open the editor and look for the <span class="str">Paste Mode(Ctrl +..)</span> value in the Shortcuts group. Change the default <i>V</i> in the box to some other key to make the Clipjump Paste Mode to be activated by the <kbd>Ctrl</kbd>-combination of that key. Make the value blank to disable Clipjump Paste Mode.
 <br><br><br>
 
@@ -281,13 +278,13 @@ Clipjump can be temporarily automatically suspended when a certain window is act
 be very easily managed with the <code class="key">Ignore Windows Manager</code> located in the <code>Tray Menu>Tools</code> or in the <a href="#actmd">Action Mode</a> with easy key <kbd>L</kbd>. <br>
 Use the Add Class button in the manager to start a tooltip application that shows the class of the active window. To make a window active, simply make it foreground by left-clicking on it.<br>
 Use Delete Class button to delete a value.<br>
-<span class="red">Note</span> that you will have to restart Clipjump once you have made changes to the Settings.ini for them to take effect.
+<span class="red">Note</span> that you will have to restart Clipjump once you have made changes to the <a href="ini.html">Settings.ini</a> for them to take effect.
 <br><br><br>
 
 
 <h2><a name=reset>Resetting Clipjump</a></h2>
 <span class="ver">[v9.5+]</span> To reset Clipjump to its default settings and remove <b>all the data</b> created by Clipjump on your computer , use this option . The option can be found in 
-the About window for Clipjump. The data that will be removed includes history items, <a href="#pastemd">Paste Mode</a> clips, extracted icons and the settings file.
+the About window for Clipjump. The data that will be removed includes history items, <a href="#pastemd">Paste Mode</a> clips, extracted icons and the <a href="ini.html">settings file</a>.
 <br><br><br>
 
 
