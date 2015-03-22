@@ -1,0 +1,66 @@
+---
+---
+
+<html>
+<head>
+
+<meta charset='utf-8'>
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="author" content="{{ site.author.fullname }}">
+<link rel="author" href="https://plus.google.com/u/0/+{{site.author.google}}/posts">
+<link rel="stylesheet" type="text/css" href="/assets/base.css" media="screen" />
+<link rel="shortcut icon" href="/favicon.ico" />
+
+<title>
+Clipjump &middot; {{ page.title }}
+</title>
+
+{% if page.homepage == 1 %}
+<meta name="google-site-verification" content="{{ site.googleverify }}" />
+{% endif %}
+
+{% if page.rtype == "docs" %}
+<style>
+div#content {
+    width: 95%;
+}
+</style>
+{% endif %}
+
+</head>
+
+<body>
+
+<header>
+{% if page.rtype != "docs" %}
+<div class="banner">Clipjump <font size=-1>v{{site.version}}</font></div><br>
+{% endif %}
+<div class="menubar">
+<a href="/">Home</a> |
+<a href="/contact.html">About</a> |
+<a href="/docs">Docs</a> |
+<a href="http://aviaryan.in/blog/clipjump/" target="_blank">Blog</a> |
+<a href="http://clipjump.sourceforge.net/addons.html">Addons</a> |
+<a href="http://www.github.com/aviaryan/Clipjump" target="_blank">Github</a>
+</div>
+</header>
+
+<div id="content">
+{% if page.homepage != 1 %}
+<h1>{{ page.title }}</h1><br>
+{% endif %}
+<div id="realcontent">
+{{ content }}
+
+{% if page.rtype != "docs" %}
+{% include disqus.html %}
+{% endif %}
+{% if page.rtype != "docs" %}
+<script type="text/javascript">var sc_project=9462579;var sc_invisible=1;var sc_security="1e97df2a";var scJsHost="https:"==document.location.protocol?"https://secure.":"http://www.";document.write("<sc"+"ript type='text/javascript' src='"+scJsHost+"statcounter.com/counter/counter.js'></"+"script>")</script>
+{% endif %}
+</div>
+</div>
+
+</body>
+
+</html>
