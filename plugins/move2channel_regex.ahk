@@ -23,7 +23,7 @@ plugin_move2channel_regex(zWhat){
 			destChannel := channel_find(channelName)
 			if( CN.NG <> destChannel)
 				API.manageClip(destChannel)
-			API.showTip("Moved to ".channelName,"2000")
+			API.showTip("Moved to " . channelName,"2000")
 			break
 			}
 	}
