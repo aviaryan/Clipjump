@@ -13,7 +13,7 @@ Clipjump provides <a href="settings.html">several methods</a> to manipulate the 
 and not Clipjump. To create these shortcuts, open the [Advanced] section of Settings.ini and write down shortcut values for <var>windows_copy_shortcut</var> and 
 <var>windows_cut_shortcut</var>. As you may have guessed, these shortcuts are disabled by default and by writing shortcut values for them in the ini you create them.
 <br>These shortcuts can be very useful when in need to copy sensitive or crap information of the Clipboard.
-<br>
+<br><br>
 
 <h3><a name=actmd_keys>Changing Action Mode Easy keys</a></h3>
 Action Mode keys can be changed through ClipjumpCustom.ini, please see <a href="custom.html#actmd">this</a> example.<br>
@@ -21,16 +21,23 @@ To disable a key, empty its value. In the following example, F1 AND L keys are r
 <pre>[actionmode_delete_bad_keys]
 ACTIONMODE.F1=
 ACTIONMODE.L=</pre>
+<br>
 
 <h3>Showing the Pasting tooltip</h3> - You can make Clipjump show a <code>Pasting..</code> tip when you paste some data. To do so, change the value of 
 <var>Show_pasting_tip</var> in the <em>[Advanced]</em> section of Settings.ini to 1.
 
-<br>
+<br><br>
 
 <h3><a name="prior">Changing default Task Priority</a></h3> - You can change default Clipjump Task priority from the Priority key in the System section of the Ini.
 <br>Set Priority to H (high) to make Clipjump most responsive.<br> Priority Values can be-<br>
 <pre>L (or Low), B (or BelowNormal), N (or Normal), A (or AboveNormal), H (or High), R (or Realtime)</pre>
 
+<br>
+
+<h3><a name="ram_flush"></a>Make Clipjump flush RAM contents to disk <span class="ver">[v11.7+]</span></h3> - The <var>RAM_flush</var> option when enabled instructs Clipjump to flush its RAM 
+memory data to hard disk at needed intervals. Thus Clipjump will take much less RAM (<= 1.5 MB) but the overall performance may be affected. I recommend keeping this option disabled 
+(set to 0) which is what it is by default. You can find <var>RAM_flush</var> in [System] section of Settings.ini
+<br><br>
 
 <h3><a name="pst_custom_pos">Show paste mode at fixed position</a></h3>
 You can fix the Paste Mode's screen position by adding values to variables <var>pstMode_X</var> and <var>pstMode_Y</var> in the Advanced section of the Ini.<br>
