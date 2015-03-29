@@ -138,7 +138,7 @@ else if (ini_Version != VERSION)
 global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_isMessage, CopyMessage
 		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, onetime_K, paste_k, actionmode_k, ini_is_duplicate_copied, ini_formatting
 		, ini_CopyBeep , beepFrequency , ignoreWindows, ini_defEditor, ini_defImgEditor, ini_def_Pformat, pluginManager_k, holdClip_K, ini_PreserveClipPos
-		, chOrg_K, ini_startSearch, ini_revFormat2def, ini_pstMode_X, ini_pstMode_Y, ini_HisCloseOnInstaPaste, history_K
+		, chOrg_K, ini_startSearch, ini_revFormat2def, ini_pstMode_X, ini_pstMode_Y, ini_HisCloseOnInstaPaste, history_K, ini_ram_flush
 
 ; (search) paste mode keys 
 global pastemodekey := {} , spmkey := {}
@@ -1189,8 +1189,8 @@ actionmode:
 			gosub % ACTIONMODE[temp_am]
 		else if temp_am is Integer 			; give user chance to override setting
 			if changeChannel(temp_am)
-				autoTooltip( RegExReplace(TXT.CNL_chngMsg, "%cv1%", temp_am), 800, 2)
-			else autoTooltip( RegExReplace(TXT.CNL_chNtExst, "%cv1%", temp_am), 800, 2)
+				autoTooltip( RegExReplace(TXT.CNL_chngMsg, "%cv1%", temp_am " {" CN.Name "}"), 800, 2)
+			else autoTooltip( RegExReplace(TXT.CNL_chNtExst, "%cv1%", temp_am " {" CN.Name "}"), 800, 2)
 	}
 	else
 		EmptyMem()

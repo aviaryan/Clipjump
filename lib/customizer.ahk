@@ -124,7 +124,7 @@ RunFunc(v){
 	pmsbk := Trim(pms)
 	while (Trim(pmsbk) != ""){
 		if ( Instr(pmsbk, """") == 1 ){
-			endb := Instr(pmsbk, """",, 2)
+			endb := Instr(pmsbk, """", 0, 2)
 			z1 := RegExReplace( Substr(pmsbk, 2, endb-2) , rk, ",")
 			ps.Insert( RegExReplace(z1, dq, """") )
 			pmsbk := Substr(pmsbk, endb+1)

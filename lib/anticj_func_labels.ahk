@@ -68,7 +68,7 @@ BeepAt(value, freq, duration=150){
 ;	Emtpties free memory
 
 EmptyMem(){
-	return, dllcall("psapi.dll\EmptyWorkingSet", "UInt", -1)
+	return ini_ram_flush ? dllcall("psapi.dll\EmptyWorkingSet", "UInt", -1) : 0
 }
 
 FoolGUI(switch=1){
