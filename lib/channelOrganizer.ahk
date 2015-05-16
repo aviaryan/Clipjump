@@ -24,14 +24,14 @@ channelOrganizer(){
 	OnMessage(0x200, "WM_MOUSEMOVE")
 
 	Gui, chOrg:New
-	Gui, +Resize +MinSize825x500
+	Gui, +Resize +MinSize850x500
 	Gui, Color, D2D2D2
 	Gui, Font, s10
 	Gui, Add, Text, % "x" wt - w_ofSearch - 200 " y10", % TXT.HST_search
 	Gui, Font, s9
 	Gui, Add, Edit, % "x" wt-200 " yp w200 vchOrg_search gchOrg_search", 		; width of EDIT is fixed = 200
 	Gui, Font, s10
-	Gui, Add, Button, % "x" 5+115+4+30+4 " yp vchorgNew gchorgNew ", % TXT._new
+	Gui, Add, Button, % "x" 5+115+4+30+4 " yp vchorgNew gchorgNew ", % TXT.ORG_NewClip
 	Gui, Add, Text, x+30 yp+4, % TXT.ORG_chooseCh
 	Gui, Add, DropDownList, x+10 w150 yp-3 vchorg_useCh gchorg_useCh,
 	gosub chOrg_addChUseList
@@ -50,7 +50,7 @@ channelOrganizer(){
 	Gui, Add, Button, xp y+2 w30 gchOrgDelete vchOrgDelete, % chrhex("f0d0")
 	; x = 5+115 + 4 + 30 = 154 + 4
 	Gui, Font
-	Gui, Add, ListView, % "x+4 ys w" wt-158 " h" ht " HWNDchOrg_Lv vchOrg_Lv gchOrg_Lv", % "Ch|#|" TXT.HST_clip
+	Gui, Add, ListView, % "x+4 ys -E0x200 w" wt-158 " h" ht " HWNDchOrg_Lv vchOrg_Lv gchOrg_Lv", % "Ch|#|" TXT.HST_clip
 	LV_ModifyCol(1, "30 Integer") , LV_ModifyCol(2, "30 Integer") , LV_ModifyCol(3, wt-158 -60 -10)
 	Gui, Add, StatusBar
 	SB_SetParts(5+115)
@@ -100,7 +100,7 @@ channelOrganizer(){
 	hkZ("^o", "chOrg_openPasteMode")
 	hkZ("^h", "chOrgEdit")
 	hkZ("Del", "chOrgDelete")
-	hkZ("+tab", "chOrg_activateLB")
+	; hkZ("+tab", "chOrg_activateLB") ; NOT WORKING
 	hkZ("!Up", "chOrgUp")
 	hkZ("!Down", "chOrgDown")
 	hkZ("!x", "chOrgCut")
@@ -193,8 +193,10 @@ chOrgDown: 	; dont make these labels critical
 	} else {
 		gosub chorg_getChSelected
 		nCh := chSel + (t_Up ? -1 : 1)
-		if chOrg_clipFolderSwap(chSel, nCh)
+		if chOrg_clipFolderSwap(chSel, nCh){
 			gosub chOrg_addChList
+			gosub chOrg_addChUseList
+		}
 	}
 	return
 
@@ -232,6 +234,7 @@ chOrgDelete:
 			{
 				manageChannel(chSel)
 				gosub chOrg_addChList
+				gosub chOrg_addChUseList
 			}
 			IfMsgBox, No
 			{
@@ -291,9 +294,10 @@ chOrgNewCh:
 	InputBox, out, % TXT.ORG_newchname,,,,,,,,, % CN.Total
 	if !ErrorLevel {
 		changeChannel(CN.Total)
-		ini_write("Channels", CN.Total-1, out, 0)
+		renameChannel(CN.Total-1, out)
 		gosub chOrg_addChList
-		GuiControl, chOrg:Choose, Listbox1, % CN.Total+1
+		gosub chOrg_addChUseList
+		; GuiControl, chOrg:Choose, Listbox1, % CN.Total+1 ; makes no sense to open an empty channel
 	}
 	return
 
@@ -387,6 +391,7 @@ chOrg_renameCh:
 		return
 	renameChannel(chSel, outName)
 	gosub chOrg_addChList
+	gosub chOrg_addChUseList
 	return
 
 chorg_UseCh:
@@ -429,9 +434,13 @@ chOrg_Lb:
 }
 
 chOrg_addChUseList:
-	chList := RegexReplace( Trim( channel_find(), "`n" ), "im)\d+.*?-\s*", "")
-	chList := RegexReplace(Trim(chList), "`n", "|")
-	StringReplace, chList, chList, % CN.Name, % CN.Name "|", All
+	chList := Trim(channel_find(), "`n")
+	chListnew := ""
+	loop, parse, chList, % "`n"
+		chListnew .= Substr(A_loopfield, Instr(A_loopfield, "-")+1) "|"
+	chList := RTrim(chListnew, "|")
+
+	StringReplace, chList, chList, % CN.Name, % CN.Name "|"
 	chList .= (Substr(chList, 0) == "|") ? "|" : ""
 	GuiControl, chOrg:, ComboBox1, % "|" chList
 	return

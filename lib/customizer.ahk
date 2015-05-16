@@ -9,7 +9,7 @@ What is supported?
 
 loadCustomizations(){
 	if !FileExist("ClipjumpCustom.ini") {
-		FileAppend, % ";Customizer File for Clipjump`n;Add your custom settings here", ClipjumpCustom.ini
+		FileAppend, % ";Customizer File for Clipjump`n;Add your custom settings here`n`n[AutoRun]`n;auto-run items go here", ClipjumpCustom.ini
 		return
 	}
 	f := "ClipjumpCustom.ini"

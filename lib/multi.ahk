@@ -42,6 +42,8 @@ initChannels(){
 }
 
 changeChannel(cIndex, backup_old:=1){
+; changes channel
+; creates new channel if needed
 	if cIndex is not Integer
 		return 0
 	if ( cIndex == CN.Total ) 	; new channel create
@@ -77,14 +79,12 @@ changeChannel(cIndex, backup_old:=1){
 
 	LASTCLIP := LASTFORMAT := IScurCBACTIVE := "" 								;make all false as they are different for other channels
 	renameChannel(CN.NG, CN.Name)
-	if WinExist(TXT.ORG__name " ahk_class AutoHotkeyGUI")
-		gosub chorg_addchUseList
 	EmptyMem()
 	return 1
 }
 
 renameChannel(ch, nm){
-	ini_write("Channels", ch, nm, 0)
+	ini_write("Channels", ch, Trim(nm), 0)
 	if ( CN.NG == ch )
 	{
 		CN.Name := nm

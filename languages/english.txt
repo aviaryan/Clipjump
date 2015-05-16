@@ -425,3 +425,9 @@ TIP_empty2_2 = %PROGNAME% is empty
 
 SET_T_histshort = Shortcut for Clipboard History Tool
 PLG_sync_cb = Sync Clipjump Clipboard
+
+;====
+; 12
+;====
+
+ORG_NewClip = New Clip
