@@ -113,21 +113,25 @@ customization_Run(obj){
 }
 
 RunFunc(v){
+; runs dynamic functions
 	static rk := "ª"
 	static dq := "§"
-	; runs dynamic functions
+
 	fn := Substr(v, 1, Instr(v,"(")-1)
 	pms := Substr(v, Instr(v,"(")+1, -1) , ps := {}
 	; loop, parse, pms,`,, %A_Space%
 	; 	ps.Insert( RegExReplace(A_LoopField, rk, ",") )
 	StringReplace, pms, pms, % """""", % dq, All
 	pmsbk := Trim(pms)
+	
 	while (Trim(pmsbk) != ""){
 		if ( Instr(pmsbk, """") == 1 ){
 			endb := Instr(pmsbk, """", 0, 2)
 			z1 := RegExReplace( Substr(pmsbk, 2, endb-2) , rk, ",")
 			ps.Insert( RegExReplace(z1, dq, """") )
-			pmsbk := Substr(pmsbk, endb+1)
+			pmsbk := Substr(pmsbk, endb+1) ; skip quotes
+			pmsbk := Trim(pmsbk) ; ---
+			pmsbk := Substr(pmsbk, 2) ; and then comma
 		} else { ; comma separated params
 			endb := !Instr(pmsbk, ",")?10000:Instr(pmsbk, ",")
 			z1 := RegExReplace( Substr(pmsbk, 1, endb-1) , rk, ",")
@@ -146,7 +150,6 @@ RunFunc(v){
 			str .= "`n" ps[A_index]
 		return r := Act_API(str, "API:")
 	}
-
 	; else normal function
 	if !n
 		r := %fn%()

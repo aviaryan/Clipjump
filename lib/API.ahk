@@ -3,11 +3,12 @@
 Act_API(D, k){
 	static cbF := A_temp "\cjcb.txt"
 	static rFuncs := "|getClipAt|getClipLoc|getVar|runFunction|"
+	static resChar := "`r"
 
-	fname := Substr(  D, l := Strlen(k)+1, ( Instr(D, "`n")?Instr(D, "`n"):Strlen(D)+1 ) -l  )
-	p := Substr( D, Instr(D, "`n") ? Instr(D, "`n")+1 : 200 )
+	fname := Substr(  D, l := Strlen(k)+1, ( Instr(D, resChar)?Instr(D, resChar):Strlen(D)+1 ) -l  )
+	p := Trim(Substr( D, Instr(D, resChar) ? Instr(D, resChar)+1 : 2000000 ))
 	ps := {}
-	loop, parse, p, `n
+	loop, parse, p, % resChar
 		ps.Insert(A_LoopField)
 	n := ps.MaxIndex()
 

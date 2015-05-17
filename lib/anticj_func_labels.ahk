@@ -644,7 +644,7 @@ getControlInfo(type="button", text="", ret="w", fontsize="", fontmore=""){
 }
 
 ;GUI Message Box to allow selection
-guiMsgBox(title, text, owner="" ,isEditable=0, wait=0, w="", h=""){
+guiMsgBox(title, text, owner="", isEditable=0, wait=0, w="", h=""){
 	static thebox
 	wf := getControlInfo("edit", text, "w", "s9", "Lucida Console")
 	hf := getControlInfo("edit", text, "h", "s9", "Lucida Console")
