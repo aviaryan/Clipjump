@@ -206,25 +206,22 @@ chOrgDelete:
 	gosub chOrg_isChActive
 	if !isChActive {
 		gosub chOrg_getSelected
-		if Instr(rSel, "`n")
+		tobj := {}
+		loop, parse, rSel, % "`n"
 		{
-			chOrg_notification(TXT.ORG_error)
-			return
+			k := Substr(A_LoopField, 1, Instr(A_LoopField, "-")-1) , v := Substr(A_LoopField, Instr(A_LoopField, "-")+1)
+			tobj[k] .= v "`n"
 		}
-		if !API.deleteClip( ch := Substr(rSel, 1, Instr(rSel, "-")-1) , cl := Substr(rSel, Instr(rSel, "-")+1) )
-			return
+		; Sort and delete
+		for k,v in tobj
+		{
+			Sort, v, % "N R" ; reverse
+			v := Trim(v)
+			loop, parse, v, % "`n"
+				API.deleteClip(k, A_LoopField)
+		}
+		gosub chOrg_refresh
 		chOrg_notification(TXT.ORG_clpdelMsg)
-		LV_Delete(last_Row)
-		loop % LV_GetCount()
-		{
-			LV_GetText(out_ch, A_index, 1)
-			if ( out_ch == ch )
-			{
-				LV_GetText(out_cl, A_index, 2)
-				if (out_cl>cl)
-					LV_Modify(A_index, "", out_ch, out_cl-1)
-			}
-		}
 	}
 	else {
 		if (chOrg_Lb != "") && (chOrg_Lb>1) {

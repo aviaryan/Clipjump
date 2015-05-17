@@ -364,8 +364,7 @@ GetFile(hwnd=""){
 ;GetFolder()
 ;	Gets folder path of active window in Explorer
 
-GetFolder()
-{
+GetFolder(){
 	WinGetClass,var,A
 	If var in CabinetWClass,ExplorerWClass,Progman
 	{
