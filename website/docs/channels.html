@@ -16,24 +16,24 @@ layout: docs
 <br>
 
 	
-<h2><a name=about>About</a></h2>
+<h2><a name="about">About</a></h2>
 Clipjump Channels are meant to group related clipboard items. So you can group all (copied) data about your ongoing project in one channel, office work in another channel and so on.. 
-These channels have a name but are uniquely represented by their IDs. The default channel's id is 0 and is named as <span class="str">Default</span>.
+These channels have a name but are uniquely represented by their IDs. The default channel's id is 0 and is named as <samp>Default</samp>.
 You can use the <a href="organizer.html">Channel Organizer</a> to manage your channel and its contents. (accessible from the <a href="basic_help.html#actmd">Action Mode</a> with easy key <kbd>O</kbd>). 
 To activate a channel, you can either use <a name="chnlsel">Channel Organizer</a> or <a href="#chnljumps">Paste Mode</a>. We will see that later.
 <br />
 
 <h2><a name=using>How to Use</a></h2>
 As said above, use the action mode shortcut or the Tray menu to open Channel Organizer window.<br />
-On the top-center region, you will see <span class="str">Active Channel</span> list which will display the currently active channel. On a new installation, it should show <span class="str">Default</span> as the channel 0 is active. Try clicking on that list and you will find that the list has only one element. This is because there is only one channel created by default.<br>
+On the top-center region, you will see <samp>Active Channel</samp> list which will display the currently active channel. On a new installation, it should show <samp>Default</samp> as the channel 0 is active. Try clicking on that list and you will find that the list has only one element. This is because there is only one channel created by default.<br>
 Suppose you want to create a new channel named "office". On the left side of the window, you will see a list corresponding to the list of channels. Right click on an item in the list 
-(<span class="str">Default</span> for example) and select <span class="str">New</span>. <br>
-A box will appear asking the name of the channel. Write "office" and then click OK. You will see <var>office</var> has been added to the channel list. If you select it, you will find that the clips pane is empty meaning the channel has no clips. On the other hand, the <span class="str">Active Channel</span> list is now showing <var>office</var> indicating that it is the currently active channel.<br>
+(<samp>Default</samp> for example) and select <samp>New</samp>. <br>
+A box will appear asking the name of the channel. Write "office" and then click OK. You will see <var>office</var> has been added to the channel list. If you select it, you will find that the clips pane is empty meaning the channel has no clips. On the other hand, the <samp>Active Channel</samp> list is now showing <var>office</var> indicating that it is the currently active channel.<br>
 Another thing to notice here is that in the channel list, the number (<b>X</b>-office) before a channel's name is the ID given to it. ID starts from 0 and can go to infinity. Channels are ordered according to their ID's and not alphabetically. Now coming back, let's try copying something.<br><br>
 
-When you copy/cut data, you will see the confirmation tip <span class="str">Transferred to Clipjump</span> to be preceded by the string <var>{office}</var> which will mean that the item you currently copied is going to <var>office</var> channel.<br>
+When you copy/cut data, you will see the confirmation tip <samp>Transferred to Clipjump</samp> to be preceded by the string <var>{office}</var> which will mean that the item you currently copied is going to <var>office</var> channel.<br>
 
-Now press <kbd>Ctrl</kbd> + <kbd>V</kbd> and release <kbda>V</kbda> to enter <a href="basic_help.html#pastemd">[Paste Mode]</a> . You will see a <var>{office}</var> also preceding the Clip number message <span class="str">Clip x of y</span> . As you have already guessed , this means that the clip is contained in the channel <var>office</var> and that it is currently active.<br>
+Now press <kbd>Ctrl</kbd> + <kbd>V</kbd> and release <kbda>V</kbda> to enter <a href="basic_help.html#pastemd">[Paste Mode]</a> . You will see a <var>{office}</var> also preceding the Clip number message <samp>Clip x of y</samp> . As you have already guessed , this means that the clip is contained in the channel <var>office</var> and that it is currently active.<br>
 
 <img src="../images/channelpaste.png" border="0">
 <br /><br>
@@ -41,9 +41,9 @@ Now press <kbd>Ctrl</kbd> + <kbd>V</kbd> and release <kbda>V</kbda> to enter <a 
 <br />
 
 <h4><a name="channel_notes">IMPORTANT</a></h4>
-Channel 0 <span class="str">Default</span> is the main channel of Clipjump. It is the only channel for which the 
-<span class="str">Minimum Number of Active Clips</span> setting is valid, all other channel have no minimum and thus store unlimited clips. <br>
-Also the setting <span class="str">Retain Clipboard data upon Application restart</span> is invalid on channels other than 0 and so channels with (ID>0) store clips until they are deleted by the user.
+Channel 0 <samp>Default</samp> is the main channel of Clipjump. It is the only channel for which the 
+<samp>Minimum Number of Active Clips</samp> setting is valid, all other channel have no minimum and thus store unlimited clips. <br>
+Also the setting <samp>Retain Clipboard data upon Application restart</samp> is invalid on channels other than 0 and so channels with (ID>0) store clips until they are deleted by the user.
 <br><br>
 
 <h2><a name="chnljumps">Changing Channels in Paste Mode</a></h2>
@@ -51,7 +51,7 @@ Also the setting <span class="str">Retain Clipboard data upon Application restar
 
 <br><br>
 
-<h2><a name=protected>Protected Channels</a></h2>
+<h2><a name="protected">Protected Channels</a></h2>
 Protected Channels are user defined special channels that require confirmation before each copy of clipboard data to them. <br>
 If you copy some text while a protected channel is active, you will see a confirmation tip with a sharp beep to proceed further. Only after confirming that message, the clip will be 
 added to that channel.<br>
@@ -75,7 +75,7 @@ The Pit channel can be quickly used to capture <i>junk</i> or <i>confidential</i
 <h2><a name=tips>Tips for better productivity</a></h2>
 <ul>
 <li>For channel 0 to 9, you can also use <a href=basic_help.html#actmd>Action Mode</a> to change channels. See <a href=basic_help.html#actmd_num>How</a>.
-<li>In Channel Organizer, don't forget to use <kbd>Ctrl</kbd> + <kbd>G</kbd> to quickly focus on the <span class="str">Active Channel</span> list and then use arrow keys to change channel.
+<li>In Channel Organizer, don't forget to use <kbd>Ctrl</kbd> + <kbd>G</kbd> to quickly focus on the <samp>Active Channel</samp> list and then use arrow keys to change channel.
 <!-- add about creating custom -->
 </ul>
 <br /><br />

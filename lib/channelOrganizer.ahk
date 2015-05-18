@@ -100,7 +100,7 @@ channelOrganizer(){
 	hkZ("^o", "chOrg_openPasteMode")
 	hkZ("^h", "chOrgEdit")
 	hkZ("Del", "chOrgDelete")
-	; hkZ("+tab", "chOrg_activateLB") ; NOT WORKING
+	;hkZ("+tab", "chOrg_activateLB") ; NOT WORKING
 	hkZ("!Up", "chOrgUp")
 	hkZ("!Down", "chOrgDown")
 	hkZ("!x", "chOrgCut")
@@ -218,9 +218,30 @@ chOrgDelete:
 			Sort, v, % "N R" ; reverse
 			v := Trim(v)
 			loop, parse, v, % "`n"
+			{
+				if (Trim(A_LoopField) == "")
+					continue
 				API.deleteClip(k, A_LoopField)
+				z := A_LoopField
+				lvgcb := LV_GetCount()
+				cons := 0
+				loop % lvgcb ; Silent delete
+				{
+					LV_GetText(tch, A_index+cons, 1)
+					if (tch != k)
+						continue
+					LV_GetText(tcl, A_index+cons, 2)
+					if (tcl < z)
+						continue
+					if (tcl == z){
+						LV_Delete(A_index)
+						cons := -1
+						continue
+					}
+					LV_Modify(A_index+cons, "Col2", tcl-1)
+				}
+			}
 		}
-		gosub chOrg_refresh
 		chOrg_notification(TXT.ORG_clpdelMsg)
 	}
 	else {
@@ -406,7 +427,7 @@ chOrg_Lv:
 	return
 
 chOrg_activateLB:
-	
+	PostMessage, 0x06, 0, 0, ListBox1, A
 	;gosub chOrg_Lb
 	return
 

@@ -28,8 +28,8 @@ header .menubar {
     font-size: 18px;
 }
 
-div#content {
-    width: 1050px;
+div#content, header .banner, header .menubar {
+    max-width: 1050px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -40,10 +40,17 @@ div#realcontent {
 }
 
 footer {
-    margin-left: 5px;
-    margin-right: 5px;
-    font-size: 1em;
-    background-color: #88DBC5;
+    margin-left: 0px;
+    margin-right: 0px;
+    bottom: 0px;
+    height: 25em;
+    background-color: #cccccc;
+}
+
+div#fcontent {
+    margin-left: auto; margin-right: auto;
+    font-size: 16px;
+    max-width: 1050px;
 }
 
 p {
@@ -90,7 +97,7 @@ li {margin-top: 0.2em; margin-bottom: 0.2em; margin-left: -0.75em;}
 a {text-decoration: none;}
 a:link, a:active {color: #0000AA;}
 a:visited {color: #AA00AA;}
-a[href]:hover {text-decoration: underline; color: #6666CC;}
+div#content a[href]:hover {text-decoration: underline; color: #6666CC;}
 :not(a) b { color: #222222; }
 .Indent {
     margin-left: 2em;
@@ -171,7 +178,13 @@ h2 .ver {color: lightgray; font-size: 80%;}
     border-color: black;
 }
 
-/** FOR USE WITH DOCS **/
+
+/*********************
+ *
+ * FOR USE WITH DOCS 
+ * BY AVI ARYAN
+ *
+**********************/
 
 /**
 SOME INSTRUCTIONS
@@ -180,8 +193,11 @@ SOME INSTRUCTIONS
 **/
 
 dt{
-  font-size: 105%;
+  font-size: 110%;
   background-color: #E4E4E4;
+  padding: 4px 10px 4px 10px;
+  margin-bottom: 5px;
+  border-radius: 7px;
 }
 dd{
   font-size: 100%;
@@ -199,12 +215,27 @@ a strong, a code.key {
    color: #0000AA;
 }
 span.ver {font-size: 90%;} /** version **/
-.str {color: #63475B; text-decoration: underline; } /** gui string, fixed text, caption **/
+samp, .str {color: #63475B; text-decoration: underline; } /** gui string, fixed text, caption **/
 var { color: #478192; font-size: 110%;}  /** variables in explanation **/
 em {font-family: Courier New; font-size: 120%; font-style: normal;}  /** other constants like file names OR code strings **/
 .key {
     font-family: Lucida Console; background-color: #FFFFFF; font-size: 110%;
 } /** keywords **/
+
+.dt {
+    color: #574747;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.downloadBtn {
+    padding: 15px;
+    font-size: 22px;
+    background-color: #999999;
+    border: solid 3px #666666;
+    border-radius: 10px;
+    color: white;
+}
 
 /* **** kbd.css **/
 
@@ -247,9 +278,12 @@ kbd.inverse, kbda
     }
 
     div#content {
-        width: 100%;
         margin-left: 8px;
-        margin-right: 2px;
+        margin-right: 8px;
+    }
+    div#fcontent {
+        padding-left: 8px;
+        padding-right: 8px;
     }
 
     header {
@@ -259,7 +293,13 @@ kbd.inverse, kbda
 }
 
 @media all and (max-width: 480px) {
-    header .banner {
+   /* header .banner {
         display: none;
+    }*/
+    div#content {
+        margin-left: 3px; margin-right: 3px;
+    }
+    footer {
+        height: auto;
     }
 }
