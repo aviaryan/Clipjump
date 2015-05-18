@@ -223,7 +223,7 @@ em {font-family: Courier New; font-size: 120%; font-style: normal;}  /** other c
 } /** keywords **/
 
 .dt {
-    color: #574747;
+    color: #000000;
     font-size: 16px;
     font-weight: bold;
 }

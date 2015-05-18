@@ -99,7 +99,7 @@ plugin_pformat_commonformats(zin){
 	Gui, Add, Edit, x+10 w500 h200 vzedit +multi, % zin
 
 	Gui, Add, GroupBox, xs y+5 h70 w650, Info
-	Gui, Add, Edit, xp+5 yp+15 w640 h50 +ReadOnly -Border vzinfo,
+	Gui, Add, Edit, xp+5 yp+15 w640 h50 +ReadOnly +Disabled -Border vzinfo,
 
 	Gui, Add, Button, xs y+40 +Default, OK
 	Gui, Add, Button, x+30 yp gplugin_pformat_commonformats_apply, % TXT.SET_apply

@@ -290,7 +290,7 @@ chOrgCopy:
 		API.manageClip(ret, Substr(A_LoopField, 1, Instr(A_LoopField, "-")-1) , Substr(A_LoopField, Instr(A_LoopField, "-")+1) , flag )
 		chOrg_notification("In Process")
 	}
-	chOrg_notification("Done")
+	chOrg_notification(TXT.TIP_done)
 	gosub chOrg_refresh
 	return
 
