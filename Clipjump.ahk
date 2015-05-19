@@ -411,7 +411,7 @@ onClipboardChange:
 	ifwinactive, ahk_group IgnoreGroup
 		return
 
-	debugTip("1") ;<<<<<<<
+	;debugTip("1") ;<<<<<<<
 	If CALLER
 	{
 		STORE.CBCaptured := 0
@@ -419,7 +419,7 @@ onClipboardChange:
 			 try   clipboard_copy := makeClipboardAvailable() , ISACTIVEEXCEL := 0
 		else try   clipboard_copy := LASTCLIP , ISACTIVEEXCEL := 1  	;so that Cj doesnt open excel clipboard (for a longer time) and cause problems 
 		;clipboard_copy = lastclip as to remove duplicate copies in excel , ^x or ^c makes lastclip empty
-		debugTip("2") ;<<<<<<<<<
+		;debugTip("2") ;<<<<<<<<<
 		try eventinfo := A_eventinfo
 
 		if ISACTIVEEXCEL
@@ -435,12 +435,12 @@ onClipboardChange:
 			IScurCBACTIVE := 0
 		if !ISACTIVEEXCEL 				;excel has known bugs with AHK and manipulating clipboard *infront* of it will cause errors
 			makeClipboardAvailable(0) 						;close clipboard in case it is still opened by clipjump
-		debugTip("") ;<<<<<<<<<<<<
+		;debugTip("") ;<<<<<<<<<<<<
 		STORE.CBCaptured := 1
 	}
 	else
 	{
-		debugTip("pst mode 2") ;<<<<<<<<<<<<
+		;debugTip("pst mode 2") ;<<<<<<<<<<<<
 		LASTFORMAT := WinActive("ahk_class XLMAIN") ? "" : GetClipboardFormat(0)
 		if restoreCaller
 			restoreCaller := "" , CALLER := CALLER_STATUS
@@ -452,7 +452,7 @@ onClipboardChange:
 			autoTooltip("One Time Stop " TXT.TIP_deactivated, 600, 2)
 			changeIcon()
 		}
-		debugTip("") ;<<<<<<<<<<
+		;debugTip("") ;<<<<<<<<<<
 	}
 	return
 
