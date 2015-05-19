@@ -237,7 +237,7 @@ class API
 			mindex := this.getChStrength(k)
 			for k2,item in v
 				if Instr(" " Trim(item["Tags"]) " ", " " tag " ")
-					robj.insert( [k, mindex-A_index+1] )
+					robj.insert( [k, mindex-k2+1] )
 		}
 		return robj
 	}
