@@ -2,7 +2,7 @@
 
 Act_API(D, k){
 	static cbF := A_temp "\cjcb.txt"
-	static rFuncs := "|getClipAt|getClipLoc|getVar|runFunction|"
+	static rFuncs := "|getClipAt|getClipLoc|getVar|runFunction|getClipDataByTag"
 	static resChar := "`r"
 
 	fname := Substr(  D, l := Strlen(k)+1, ( Instr(D, resChar)?Instr(D, resChar):Strlen(D)+1 ) -l  )
@@ -69,8 +69,8 @@ class API
 		return ret
 	}
 
-	manageClip(new_channel=0, channel="", clip="", flag=0) 	; 0 = cut , 1 = copy
-	{
+	manageClip(new_channel=0, channel="", clip="", flag=0){
+	; 0 = cut , 1 = copy
 		; if channel is empty, active channel is used
 		; if clip is empty, active clip in paste mode (Clip x of y, "x") is used.
 		if channel=
@@ -219,6 +219,29 @@ class API
 		SPM.Channel := _cnl
 	}
 
+	; returns the contents of first element with tag
+	getClipDataByTag(tag){
+		robj := this.getClipByTag(tag)
+		for k,v in robj
+			return this.getClipAt(v[1], v[2])
+	}
+
+	; returns an array of clips which have the tag
+	; RETURN
+	; channel at index 0 and clip at 1
+	; example - [ [0,1] , [0,2] ]
+	getClipByTag(tag){
+		robj := {}
+		for k,v in CPS
+		{
+			mindex := this.getChStrength(k)
+			for k2,item in v
+				if Instr(" " Trim(item["Tags"]) " ", " " tag " ")
+					robj.insert( [k, mindex-A_index+1] )
+		}
+		return robj
+	}
+
 	; runs any other function like choosechannelgui() , changeChannel()
 	runFunction(funcString){
 		return runFunc(funcString)
@@ -237,7 +260,7 @@ class API
 	
 	; deletes a clip
 	deleteClip(channel, clip){
-	Critical
+		Critical
 		if (channel = "") or (clip = "")
 			return 0
 		zbkCh := CN.NG , zbkClip := TEMPSAVE	; create backup of current channel

@@ -147,7 +147,7 @@ RunFunc(v){
 	if Instr(fn, "."){
 		str := "API:" , str .= Substr(fn, Instr(fn,".")+1)
 		loop % n
-			str .= "`n" ps[A_index]
+			str .= "`r" ps[A_index]
 		return r := Act_API(str, "API:")
 	}
 	; else normal function

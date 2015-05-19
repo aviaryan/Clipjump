@@ -38,8 +38,11 @@ ListLines, Off
 global ini_LANG := "" , H_Compiled := RegexMatch(Substr(A_AhkPath, Instr(A_AhkPath, "\", 0, 0)+1), "iU)^(Clipjump).*(\.exe)$") && (!A_IsCompiled) ? 1 : 0
 global mainIconPath := H_Compiled || A_IsCompiled ? A_AhkPath : "icons/icon.ico"
 
-;*********Program Vars**********************************************************
-; Capitalised variables (here and everywhere) indicate that they are global
+/*
+**********************
+PROGRAM VARIABLES
+**********************
+*/
 
 global PROGNAME := "Clipjump"
 global VERSION := "12"
@@ -71,7 +74,12 @@ global MSG_TRANSFER_COMPLETE
 global hidden_date_no := 4 , history_w , history_partial := 1 ;start off with partial=1 <> much better
 global PREV_FILE := "cache\prev.html" , GHICON_PATH := A_ScriptDir "\icons\octicons-local.ttf"
 
-;*******************************************************************************
+
+/*
+****************
+BASIC STRUCTURE
+****************
+*/
 
 ;Creating Storage Directories
 FileCreateDir, cache
@@ -84,7 +92,12 @@ FileSetAttrib, -H, %A_WorkingDir%\cache
 FileDelete, % A_temp "/clipjumpcom.txt"
 try Clipboard := ""
 
-;Global Data Holders
+
+/*
+*********
+VARIABLES
+*********
+*/
 Sysget, temp, MonitorWorkArea
 global WORKINGHT := tempbottom-temptop, restoreCaller := 0, startUpComplete := 0
 
@@ -93,21 +106,35 @@ global CN := {}, CUSTOMS := {}, CDS := {}, CPS := {}, SEARCHOBJ := {}, HISTORYOB
 global cut_is_delete_windows := "XLMAIN QWidget" 			;excel, kingsoft office
 global CURSAVE, TEMPSAVE, LASTCLIP, LASTFORMAT, Islastformat_Changed := 1, IScurCBACTIVE := 0, curPformat, curPfunction, curPisPreviewable
 global NOINCOGNITO := 1, SPM := {}, protected_DoBeep := 1
+global pastemodekey := {} , spmkey := {}
+global windows_copy_k, windows_cut_k, ini_OpenAllChbyDef := 0
 
-;Initailizing Common Variables
+;Initailizing Common Global Variables
 global CALLER_STATUS, CLIPJUMP_STATUS := 1		; global vars are not declared like the below , without initialising
 global CALLER := CALLER_STATUS := 1, IN_BACK := 0, MULTIPASTE, PASTEMODE_ACT
 global CLIP_ACTION := "", ONCLIPBOARD := 1 , ISACTIVEEXCEL := 0 , HASCOPYFAILED := 0 , ctrlRef		;specific purpose global vars
 
+;Global Ini declarations
+global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_isMessage, CopyMessage
+		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, onetime_K, paste_k, actionmode_k, ini_is_duplicate_copied, ini_formatting
+		, ini_CopyBeep , beepFrequency , ignoreWindows, ini_defEditor, ini_defImgEditor, ini_def_Pformat, pluginManager_k, holdClip_K, ini_PreserveClipPos
+		, chOrg_K, ini_startSearch, ini_revFormat2def, ini_pstMode_X, ini_pstMode_Y, ini_HisCloseOnInstaPaste, history_K, ini_ram_flush
+
 ;Init General vars
 is_pstMode_active := 0
+
+/*
+***********************
+GET THE PROGRAM WORKING
+***********************
+*/
 
 ;Setting up Icons
 FileCreateDir, icons
 FileInstall, icons\no_history.Ico, icons\no_history.Ico, 0 			;Allow users to have their icons
 FileInstall, icons\no_monitoring.ico, icons\no_monitoring.ico, 0
 
-;Ini Configurations
+;MANAGE PROGRAM UPDATE
 Iniread, ini_Version, %CONFIGURATION_FILE%, System, Version
 
 ;FileCreateDir, plugins/pformat
@@ -134,14 +161,11 @@ else if (ini_Version != VERSION)
 }
 
 
-;Global Ini declarations
-global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_isMessage, CopyMessage
-		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, onetime_K, paste_k, actionmode_k, ini_is_duplicate_copied, ini_formatting
-		, ini_CopyBeep , beepFrequency , ignoreWindows, ini_defEditor, ini_defImgEditor, ini_def_Pformat, pluginManager_k, holdClip_K, ini_PreserveClipPos
-		, chOrg_K, ini_startSearch, ini_revFormat2def, ini_pstMode_X, ini_pstMode_Y, ini_HisCloseOnInstaPaste, history_K, ini_ram_flush
-
-; (search) paste mode keys 
-global pastemodekey := {} , spmkey := {}
+/*
+***********************
+DEFAULT SETTINGS LOADING
+************************
+*/
 temp_keys := "a|c|s|z|space|x|e|up|down|f|h|Enter|t|F1"
 loop, parse, temp_keys,|
 	pastemodekey[A_LoopField] := "^" A_LoopField
@@ -149,22 +173,19 @@ temp_keys := "Enter|Up|Down|Home"
 loop, parse, temp_keys,|
 	spmkey[A_LoopField] := A_LoopField
 
-global windows_copy_k, windows_cut_k, ini_OpenAllChbyDef := 0
-
-init_actionmode()
-;Initialising Clipjump Channels
+init_actionmode() ;Initialising Clipjump Channels
 initChannels()
 
+/*
+********************
+LOAD USER SETTINGS
+********************
+*/
 trayMenu() ; before customization and settings as customization can affect tray
 ;loading Settings
 load_Settings(1)
 validate_Settings()
-;load plugins
 loadPlugins()
-
-;load custom settings
-loadCustomizations()
-
 
 loop
 {
@@ -175,19 +196,17 @@ loop
 	}
 }
 
-;STARTUP
-IfExist, %A_Startup%/Clipjump.lnk
-{
-	FileDelete, %A_Startup%/Clipjump.lnk
-	FileCreateShortcut, % H_Compiled ? A_AhkPath : A_ScriptFullPath, %A_Startup%/Clipjump.lnk
-	Menu, Options_Tray, Check, % TXT.TRY_startup
-}
 
 global CLIPS_dir := "cache/clips"
 	, THUMBS_dir := "cache/thumbs"
 	, FIXATE_txt := "fixed"
 	, NUMBER_ADVANCED := 34 + CN.Total 					;the number stores the line number of ADVANCED section
 
+/*
+******************************
+MORE SETTINGS A/C USER SETTINGS
+******************************
+*/
 ;Setting Up shortcuts
 hkZ( ( paste_k ? "$^" paste_k : emptyvar ) , "Paste")
 hkZ("$^c", "NativeCopy") , hkZ("$^x", "NativeCut")
@@ -199,26 +218,54 @@ hkZ(actionmode_K, "actionmode") , hkZ(pluginManager_k, "pluginManagerGUI")
 hkZ(holdClip_K, "holdClip") , hkZ(chOrg_K, "channelOrganizer")
 ;more shortcuts
 hkZ(windows_copy_k, "windows_copy") , hkZ(windows_cut_k, "windows_cut")
-;Environment
-OnMessage(0x4a, "Receive_WM_COPYDATA")  ; 0x4a is WM_COPYDATA
-;Clean History
-historyCleanup()
+historyCleanup() ;Clean History
 
 ;create Ignore windows group from | separated values
 loop, parse, ignoreWindows,|
 	GroupAdd, ignoreGroup, ahk_class %A_LoopField%
 ;group created
 
+/*
+*********************
+LOAD END-USER CUSTOMIZATIONS
+*********************
+*/
+
 loadClipboardDataS()
-OnExit, exit
+loadCustomizations()
+
+/*
+***************
+ERROR HANDLINGS AND
+COMPATIBILITY
+***************
+*/
 
 fix_FixateFiles()
 if FileExist(GHICON_PATH)
 	DllCall("GDI32.DLL\AddFontResourceEx", Str, GHICON_PATH ,UInt,(FR_PRIVATE:=0x10), Int,0)
 else
 	MsgBox, 16, % PROGNAME, % valueof(TXT.ABT_errorFontIcon)
+
+/*
+**********
+LAST WORDS
+**********
+*/
+
+OnMessage(0x4a, "Receive_WM_COPYDATA")  ; 0x4a is WM_COPYDATA
+; Portable Startup
+IfExist, %A_Startup%/Clipjump.lnk
+{
+	FileDelete, %A_Startup%/Clipjump.lnk
+	FileCreateShortcut, % H_Compiled ? A_AhkPath : A_ScriptFullPath, %A_Startup%/Clipjump.lnk
+	Menu, Options_Tray, Check, % TXT.TRY_startup
+}
 EmptyMem()
 startUpComplete := 1
+OnExit, exit
+
+
 return
 
 ;Tooltip No 1 is used for Paste Mode tips, 2 is used for notifications , 3 is used for updates , 4 is used in WM_MOUSEMOVE , 5 is used in Action Mode
