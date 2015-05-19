@@ -11,7 +11,7 @@
 <UL>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Clipjump">
-		<param name="Local" value="clipjump.html">
+		<param name="Local" value="index.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Getting Started">
@@ -36,11 +36,12 @@
 	</UL>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Clipjump Channels">
+		<param name="Local" value="docs/channels.html">
 		</OBJECT>
 	<UL>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Introduction">
-			<param name="Local" value="docs/channels.html">
+			<param name="Local" value="docs/channels.html#intro">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Using Channels">

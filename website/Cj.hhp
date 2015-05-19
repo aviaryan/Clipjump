@@ -5,7 +5,7 @@ Compiled File=Clipjump.chm
 Contents File=Contents.hhc
 Index File=Index.hhk
 Default Window=
-Default Topic=clipjump.html
+Default Topic=index.html
 Default Font=
 Full-text search=Yes
 Auto Index=Yes
@@ -19,9 +19,9 @@ Display compile progress=Yes
 Display compile notes=Yes
 
 [FILES]
-Blogs.css
+assets\base.css
 changelog.html
-clipjump.html
+index.html
 clipjumpcontroller.html
 contact.html
 docs\basic_help.html
@@ -33,6 +33,9 @@ docs\organizer.html
 docs\settings.html
 docs\translate.html
 docs\troubleshooting.html
+docs\channels.html
+docs\devList.html
+docs\shortcuts.html
 docs\examples\ClipjumpCustom.ini
 images\cancel.png
 images\COPY.png

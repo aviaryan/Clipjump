@@ -215,7 +215,8 @@ a strong, a code.key {
    color: #0000AA;
 }
 span.ver {font-size: 90%;} /** version **/
-samp, .str {color: #63475B; text-decoration: underline; } /** gui string, fixed text, caption **/
+samp, .str { color: #63475B; text-decoration: underline; } /** gui string, fixed text, caption **/
+samp { font-family: inherit; }
 var { color: #478192; font-size: 110%;}  /** variables in explanation **/
 em {font-family: Courier New; font-size: 120%; font-style: normal;}  /** other constants like file names OR code strings **/
 .key {
@@ -224,7 +225,7 @@ em {font-family: Courier New; font-size: 120%; font-style: normal;}  /** other c
 
 .dt {
     color: #000000;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: bold;
 }
 

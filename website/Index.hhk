@@ -40,7 +40,7 @@
 	</UL>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Clipjump">
-		<param name="Local" value="clipjump.html">
+		<param name="Local" value="index.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Clipjump Controller">
@@ -129,7 +129,7 @@
 		<param name="Local" value="docs/basic_help.html#ignorew">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Class Grab Tool">
+		<param name="Name" value="Ignore Windows Manager">
 		<param name="Local" value="docs/basic_help.html#ignorew">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
