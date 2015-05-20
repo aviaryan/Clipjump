@@ -135,19 +135,20 @@ run=simplePaste
 
 [paste_without_formatting]
 bind=Win+V
-run=API.runPlugin(noformatting_paste.ahk)
+run=API.runPlugin("noformatting_paste.ahk")
 </pre>
 The above code has 2 examples, [paste_current] is to paste current clipboard as it is and [paste_without_formatting] is to paste current clipboard
 without formatting.
 <ul>
 	<li><em>simplePaste</em> is label in Clipjump to paste current content on Clipboard.
 	<li><code>API.runPlugin( plugin_path )</code> runs a plugin file. Here in the 2nd section, it runs the plugin file <em>noformatting_paste.ahk</em> which is supposed to contain the code to paste without formatting. Learn more about <a href="plugins/index.html#run">API.runPlugin()</a>.
+	<li>Another thing to note here is the use of quotes around <samp>noformatting_paste.ahk</samp>. As in a function call, arguments are separated by comma <code>(,)</code>, so it is advisable to use quotes around arguments to separate literal comma from the one meant to partition arguments.
 </ul>
 <br><br>
 
 <h3><a name="actmd">Example 5 (Running a section with Action Mode)</a></h3>
 Suppose you don't want to create a separate shortcut <kbd>Win</kbd>+<kbd>V</kbd> for the above example. Here is how to create a <a href="shorcuts.html#actmd">[Action Mode]</a> shortcut for it.
-<a name=noautorun_ex></a>
+<a name="noautorun_ex"></a>
 <pre class="brush: ini;">
 [changeto_4]
 noautorun=1
@@ -198,14 +199,14 @@ You can use the inbuilt <code>inputbox()</code> function to retrieve the <var>cl
 [paste_sig]
 bind = Ctrl+F8
 zClipno = 1
-<span style="color: green;">; zClipno = %inputbox(Choose, Please write the clip number to be pasted)%</span>
+<span style="color: green;">; zClipno = %inputbox("Choose", "Please write the clip number to be pasted")%</span>
 run = API.paste( 2, %zClipno% )
 </pre>
 <ul>
 	<li>In the line <code>zClipno = 1</code>, zClipno is a user created variable that is assigned the value of 1.
 	<li>The variable is fed into API.paste() function by wrapping it with %....% . So you can say that %...% is used to declare that something is a variable i.e. NOT Literal TEXT.
 	<li>In the commented line containing <code>%inputbox...%</code> the variable zClipno is assigned the return value of inputbox() function. As the whole function call is NOT supposed to be A FIXED TEXT, we have used %...% over it. You can try un-commenting that line and then restarting Clipjump to see what happens.
-	<li><code class=syntax>inputbox( title , caption_text )</code> is basically a function that shows a dialog box for the user to enter text. Once text is entered and OK is pressed, the function returns the text entered by user to the variable calling it.
+	<li><code class="syntax">inputbox( title , caption_text )</code> is basically a function that shows a dialog box for the user to enter text. Once text is entered and OK is pressed, the function returns the text entered by user to the variable calling it.
 </ul>
 <br><br>
 

@@ -1186,9 +1186,8 @@ showPreview(){
 	}
 }
 
-historyCleanup()
+historyCleanup(){
 ;Cleans history in bunch
-{
 	global
 	local cur_Time , temp_file_name
 
@@ -1526,61 +1525,10 @@ routines_Exit() {
 
 ;The function enables/disables Clipjump with respect to the Communicator.
 Act_CjControl(C){
-	global
-	local p:=0,d
-
-	if C = 1
-	{
-		CALLER := CALLER_STATUS := CLIPJUMP_STATUS := 1
-		, hkZ("$^c", "NativeCopy") , hkZ("$^x", "NativeCut")
-		, hkZ(Copyfilepath_K, "CopyFile") , hkZ(Copyfolderpath_K, "CopyFolder"), hkZ(CopyFileData_K, "CopyFileData") 
-		, hkZ(Channel_K, "channelGUI") , hkZ(onetime_K, "onetime") 
-		, hkZ( ( paste_k ? "$^" paste_k : emptyvar ) , "Paste") , hkZ(history_K, "History")
-		changeIcon()
-		Menu, Options_Tray, UnCheck, % TXT.TRY_disable " " PROGNAME
-		return
-	}
-
-	;--- Backward Compatibility
-	if C<1
-		C := 2+4+64
-	;--- 
-
-	if C = 1048576
-		d := "2 4 8 16 32 64 128 256"
-	else
-		d := getParams(C)
-
-	loop, parse, d, %A_space%
-		if A_LoopField = 2
-			CALLER := 0 , CALLER_STATUS := 0
-			, hkZ("$^c", "NativeCopy", 0) , hkZ("$^x", "NativeCut", 0)
-			, changeIcon()
-		else if A_LoopField = 4
-			hkZ( ( paste_k ? "$^" paste_k : emptyvar ) , "Paste", 0)
-		else if A_LoopField = 8
-			hkZ(Copyfilepath_K, "CopyFile", 0)
-		else if A_LoopField = 16
-			hkZ(Copyfolderpath_K, "CopyFolder", 0)
-		else if A_LoopField = 32
-			hkZ(CopyFileData_K, "CopyFileData", 0)
-		else if A_LoopField = 64
-			hkZ(history_K, "History", 0)
-		else if A_LoopField = 128
-			hkZ(Channel_K, "channelGUI", 0)
-		else if A_LoopField = 256
-			hkZ(onetime_K, "onetime", 0)
-
-	if !Instr(d, "2 4")
-	{
-		CLIPJUMP_STATUS := 1
-		Menu, Options_Tray, UnCheck, % TXT.TRY_disable " " PROGNAME
-	}
-
+	Msgbox, 48, % PROGNAME, % "Clipjump Controller has been discontinued."
 }
 
-Receive_WM_COPYDATA(wParam, lParam)
-{
+Receive_WM_COPYDATA(wParam, lParam){
 	global
     Local D
     static k := "API:" , cmd := "cmd:"
