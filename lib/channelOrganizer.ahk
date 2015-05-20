@@ -439,6 +439,8 @@ chOrg_activateLV:
 	GuiControl, chOrg:focus, SysListView321
 	sleep 50
 	gosub chOrg_Lv
+	LV_Modify(0, "-Select")
+	LV_Modify(1, "Select Focus")
 	return
 
 chOrg_refresh:
