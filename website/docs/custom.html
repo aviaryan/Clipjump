@@ -145,18 +145,8 @@ without formatting.
 </ul>
 <br><br>
 
-<h3>Example 5 (Instantly switching to your fav channel)</h3>
-Suppose your fav channel is #4 as it stores some important web links. We will use the inbuilt changeChannel function in Clipjump to do the purpose.
-<pre class="brush: ini;">
-[changeto_4]
-bind=Win+4
-run=changeChannel(4)
-tip=Channel changed to 4
-</pre>
-<br><br>
-
-<h3><a name=actmd>Example 6 (Running a section with Action Mode)</a></h3>
-Suppose you don't want to create a separate shortcut <kbd>Win</kbd>+<kbd>V</kbd> for the above example. Here is how to create a <a href=shorcuts.html#actmd>[Action Mode]</a> shortcut for it.
+<h3><a name="actmd">Example 5 (Running a section with Action Mode)</a></h3>
+Suppose you don't want to create a separate shortcut <kbd>Win</kbd>+<kbd>V</kbd> for the above example. Here is how to create a <a href="shorcuts.html#actmd">[Action Mode]</a> shortcut for it.
 <a name=noautorun_ex></a>
 <pre class="brush: ini;">
 [changeto_4]
@@ -177,17 +167,30 @@ ACTIONMODE.F10_caption = Change 2 my channel
 </ul>
 <br><br>
 
-<h3>Example 7 (Paste Signature)</h3>
-So you have your signature <span class="str">FIXED</span> in the Clip 1 position of 2nd channel as you use it always. <br>
-Here is an awesome customization for you-
+<h3>Example 6 (Instantly switching to your favorite channel)</h3>
+Suppose your favorite channel is #4 as it stores some important web links. We will use the inbuilt changeChannel function in Clipjump to do the purpose.
+<pre class="brush: ini;">
+[changeto_4]
+bind=Win+4
+run=changeChannel(4)
+tip=Channel changed to 4
+</pre>
+<br><br>
+
+
+<h3>Example 7 (Paste Your Contact Details)</h3>
+If you give a unique tag to a clip with some specific information, then it can be retrieved anytime using the <a href="devList.html#getClipDataByTag">getclipDataByTag()</a> function.
 <pre class="brush: ini;">
 [paste_sig]
 bind=Ctrl+F8
-run=API.paste(2,1)
+zAddr=%API.getClipDataByTag(my_address)%
+run=API.<a href="devList.html#api-pastetext">pasteText</a>(%zAddr%)
 </pre>
-<code class="Syntax">API.Paste(channel_number, clip_number)</code> is a function that pastes <var>clip_number</var> from <var>channel_number</var> in Clipjump. 
-Pressing <kbd>Ctrl</kbd> + <kbd>F8</kbd> will automatically paste your signature now.
-<br><br><br>
+<ul>
+	<li>Here <var>my_address</var> is the tag that your contact details clip has.
+</ul>
+<br><br>
+
 
 <h3><a name=inputbox>Example 7.5 (Getting the clip to paste)</a></h3>
 You can use the inbuilt <code>inputbox()</code> function to retrieve the <var>clipno</var> to paste. This procedure can also be done for the <var>channelno</var>.
@@ -243,13 +246,13 @@ current active ones if no value for them is passed. <br>
 [trash_clip]
 bind=Ctrl+Win+Del
 run=API.manageClip(2,,,0)
-tip=The current active clip was gvdlfe off!
+tip=The current active clip was trashed
 </pre>
 The last parameter <em>flag</em> is 0 for move and 1 for copy. Here we are moving the clip.
 <br><br>
 <br>
 
-<h3><a name=autoPastemode>Example 10 (paste mode with search enabled; no need to hold Ctrl)</a></h3>
+<h3><a name="autoPastemode">Example 10 (paste mode with search enabled; no need to hold Ctrl)</a></h3>
 If you don't like holding down <kbd>Ctrl</kbd> to navigate clips, this if for you. This Customization will bind <kbd>Win</kbd> + <kbd>V</kbd> to open paste mode with Search enabled so you will be able to use <kbd>Up</kbd>/<kbd>Down</kbd> keys to navigate through the clips.
 <pre class="brush: ini;">
 [paste_with_search]

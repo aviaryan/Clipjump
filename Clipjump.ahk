@@ -1458,7 +1458,7 @@ editClip(cnl, clip, owner="none"){
 		API.Text2Binary(temp_clipboard2, temp_clipboardall)
 		FileDelete, % clipLoc
 		FileAppend, % temp_clipboardall, % clipLoc
-		CDS[CN.NG][tmpsv] := temp_clipboard2
+		CDS[cnl][tmpsv] := temp_clipboard2
 	}
 
 	autoTooltip(TXT.TIP_editdone, 800, 10)
@@ -1585,7 +1585,7 @@ Receive_WM_COPYDATA(wParam, lParam)
     Local D
     static k := "API:" , cmd := "cmd:"
 
-   D := StrGet( NumGet(lParam + 2*A_PtrSize) )  ;unicode transfer
+	D := StrGet( NumGet(lParam + 2*A_PtrSize) )  ;unicode transfer
     if D is not Integer
     	if !Instr(D, k) 	; if both are false and so the input is garbled (chinese)
     		D := StrGet( NumGet(lParam + 2*A_PtrSize), 8, "UTF-8")  ;ansi conversion

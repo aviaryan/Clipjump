@@ -23,14 +23,16 @@ They should be accessed as <code class="Syntax">API.function_name()</code> . For
 	<br>
 	<br>
 
-	<li><code>getClipAt(channel=0, clipno=1, toreturn=1)</code><br><a name="getClipAt"></a>
+	<a name="getClipAt"></a>
+	<li><code>getClipAt(channel=0, clipno=1, toreturn=1)</code><br>
 	- Get a Clip's content i.e. what is contained in that clip. 'channel' and 'clipno' are the channel number and clip number respectively.<br>
 	If toreturn = 1 then return Clipboard text data<br>
 	If toreturn = 2 then return ClipboardAll binary data.
 	<br>
 	<br>
 
-	<li><code>manageClip(new_channel=0, channel="", clip="", flag=0)</code><br><a name="manageClip"></a>
+	<a name="manageClip"></a>
+	<li><code>manageClip(new_channel=0, channel="", clip="", flag=0)</code><br>
 	- Cut/Copy Clip from one channel to other. 'new_channel' is the new channel to place the clip in. Note that the clip will always be placed at clip 1 of new channel. <br>
 	If flag = 0 then cut , if flag = 1 then copy<br>
 	If channel is empty, active channel is used.<br>
@@ -38,7 +40,8 @@ They should be accessed as <code class="Syntax">API.function_name()</code> . For
 	<br>
 	<br>
 
-	<li><code>emptyChannel(chno="")</code><br><a name="emptyChannel"></a>
+	<a name="emptyChannel"></a>
+	<li><code>emptyChannel(chno="")</code><br>
 	- Empties a particular channel (chno)<br>
 	If 'chno' is empty, it DEFAULTS to current channel.<br>
 	You can also use name of a channel like <code>API.emptyChannel(web)</code> or <code>API.emptyChannel(pit)</code> or <code>API.emptyChannel(default)</code> . <b>Note</b> that if you are creating an AHK Script i.e. a plugin you will have to surround the channel name by quotes ("") to take it as string.
@@ -58,14 +61,16 @@ They should be accessed as <code class="Syntax">API.function_name()</code> . For
 	<br>
 	<br>
 	
-	<li><code>addClip(channel, input)</code><br><a name="addClip"></a>
+	<a name="addClip"></a>
+	<li><code>addClip(channel, input)</code><br>
 	- Adds a clip at the start of the channel i.e. as Clip 1<br>
 	channel - The <em>channel</em> where the new clip is to be added<br>
 	input - The text that the new clip will contain
 	<br>
 	<br>
 	
-	<li><code>showPasteTipAt(channel, clip)</code><br><a name="showPasteTipAt"></a>
+	<a name="showPasteTipAt"></a>
+	<li><code>showPasteTipAt(channel, clip)</code><br>
 	- Opens <a href=shortcuts.html#pstmd>[Paste-Mode]</a> with clip number 'clip' of channel 'channel' active. 
 	<br>
 	<br>
@@ -89,12 +94,14 @@ They should be accessed as <code class="Syntax">API.function_name()</code> . For
 	<br>
 	<br>
 
-	<li><code>getClipDataByTag(tag)</code><br><a name="getClipDataByTag"></a>
+	<a name="getClipDataByTag"></a>
+	<li><code>getClipDataByTag(tag)</code><br>
 	- returns the text data of first clip which has the tag <var>tag</var>
 	<br>
 	<br>
 
-	<li><code>blockMonitoring(yes=1)</code><br><a name="blockMonitoring"></a>
+	<a name="blockMonitoring"></a>
+	<li><code>blockMonitoring(yes=1)</code><br>
 	- blocks Clipjump Clipboard monitoring. Useful when you are changing clipboard content such that you don't want it to be accounted by Clipjump<br>
 	If first parameter i.e. yes = 1 , then block Monitoring.<br>
 	If 0 , then unblock (or enable Clipboard monitoring)
@@ -107,7 +114,8 @@ They should be accessed as <code class="Syntax">API.function_name()</code> . For
 	<br>
 	<br>
 	
-	<li><code>deleteClip(channel, clip)</code><br><a name="deleteClip"></a>
+	<a name="deleteClip"></a>
+	<li><code>deleteClip(channel, clip)</code><br>
 	- deletes a clip from a channel<br>
 	channel - The <b>channel number</b> whose clip is to be deleted<br>
 	clip - The Clip number to be deleted.
@@ -132,7 +140,8 @@ They should be accessed as <code class="Syntax">API.function_name()</code> . For
 	<br>
 	<br>
 
-	<li><code>getChStrength(channel)</code><br><a name="getChStrength"></a>
+	<a name="getChStrength"></a>
+	<li><code>getChStrength(channel)</code><br>
 	- gets total number of clips in a channel i.e. population of a channel
 	<br>
 	<br>

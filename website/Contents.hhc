@@ -249,6 +249,10 @@
 			<param name="Local" value="docs/plugins/index.html">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Plugin Manager">
+			<param name="Local" value="docs/plugins/index.html#manager">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Official Plugins">
 			<param name="Local" value="docs/plugins/index.html#def">
 			</OBJECT>

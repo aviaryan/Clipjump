@@ -59,6 +59,7 @@ customization_Run(obj){
 	{
 		;try { ; Try - No need currently
 		k := Ltrim(k, "0123456789") 	; correct key
+		isf := ((k=="run") && Instr(v,"("))
 		loop { 			; change %..% vars to keys
 			if !($op1 := Instr(v, "%", 0, 1, 1)) || !($op2 := Instr(v, "%", 0, 1, 2))
 				break
@@ -77,7 +78,7 @@ customization_Run(obj){
 					$var := %$j1%[$j2][$j3]
 			}
 			else $var := %$var%
-			StringReplace, v, v, % $match, % $var
+			StringReplace, v, v, % $match, % ( isf ? """" $var """" : $var )
 		}
 
 		if k = run
@@ -94,6 +95,7 @@ customization_Run(obj){
 			sleep % v
 		else if (k != "bind") or (k != "noautorun")
 		{
+			;msgbox % k "`n" v
 			if Instr(k,".")
 			{
 				loop, parse, k,`.
@@ -138,16 +140,19 @@ RunFunc(v){
 			ps.Insert(z1)
 			pmsbk := Substr(pmsbk, endb+1)
 		}
-		;msgbox % pmsbk
 	}
-	;return
 
 	n := ps.MaxIndex()
 	; API functions
 	if Instr(fn, "."){
 		str := "API:" , str .= Substr(fn, Instr(fn,".")+1)
 		loop % n
-			str .= "`r" ps[A_index]
+		{
+			temp := ps[A_Index]
+			StringReplace, temp, temp, % "`r`n", % "`n", All
+			StringReplace, temp, temp, % "`r", % "`n", All
+			str .= "`r" temp
+		}
 		return r := Act_API(str, "API:")
 	}
 	; else normal function
