@@ -314,7 +314,7 @@ chOrgNewCh:
 		changeChannel(CN.Total)
 		renameChannel(CN.Total-1, out)
 		gosub chOrg_addChList
-		gosub chOrg_addChUseList
+		; gosub chOrg_addChUseList ; No need as changeChannel calls it
 		; GuiControl, chOrg:Choose, Listbox1, % CN.Total+1 ; makes no sense to open an empty channel
 	}
 	return

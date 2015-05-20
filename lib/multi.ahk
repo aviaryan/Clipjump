@@ -79,6 +79,8 @@ changeChannel(cIndex, backup_old:=1){
 
 	LASTCLIP := LASTFORMAT := IScurCBACTIVE := "" 								;make all false as they are different for other channels
 	renameChannel(CN.NG, CN.Name)
+	if WinExist(TXT.ORG__name " ahk_class AutoHotkeyGUI") 		; change channel in ORG
+		gosub chorg_addchUseList
 	EmptyMem()
 	return 1
 }

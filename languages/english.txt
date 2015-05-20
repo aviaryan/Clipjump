@@ -413,3 +413,4 @@ PLG_sync_cb = Sync Clipjump Clipboard
 
 ORG_NewClip = New Clip
 ORG_clpdelmsg = Selected Clip(s) Deleted
+TIP_syscb = System clipboard has clip %realclipno%

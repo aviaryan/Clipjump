@@ -54,7 +54,7 @@ global TXT := Translations_load("languages/" ini_LANG ".txt") 		;Load translatio
 global UPDATE_FILE := "http://sourceforge.net/projects/clipjump/files/version.txt/download"
 global PRODUCT_PAGE := "http://clipjump.sourceforge.net"
 global HELP_PAGE := "http://clipjump.sourceforge.net/docs"
-global AUTHOR_PAGE := "http://aviaryan.github.io"
+global AUTHOR_PAGE := "http://aviaryan.in"
 
 global MSG_TRANSFER_COMPLETE
  , MSG_CLIPJUMP_EMPTY
@@ -241,7 +241,6 @@ COMPATIBILITY
 ***************
 */
 
-fix_FixateFiles()
 if FileExist(GHICON_PATH)
 	DllCall("GDI32.DLL\AddFontResourceEx", Str, GHICON_PATH ,UInt,(FR_PRIVATE:=0x10), Int,0)
 else
@@ -270,25 +269,6 @@ return
 
 ;Tooltip No 1 is used for Paste Mode tips, 2 is used for notifications , 3 is used for updates , 4 is used in WM_MOUSEMOVE , 5 is used in Action Mode
 ;6 used in Class Tool, 7 in API (Plugin) , 8 used in Customizer, 9 used in history tool, 10 in edit clips, 11 in Channel Organizer
-
-;OLD VERSION COMPATIBILITES TO REMOVE
-; fix_FIXATEFiles()
-
-fix_FixateFiles(){
-	loop % CN.Total
-	{
-		fp := "cache\fixate" (A_Index-1 ? A_index-1 : "") , rp := A_index-1
-		if !FileExist(fp)
-			continue
-		else DidRun := 1
-		CPS[rp] := {}  ; using 0 for ch 0
-		loop, % fp "\*.fxt"
-			CPS[rp][ cp := Substr(A_LoopFileName,1,-4) ] := {} , CPS[rp][cp][FIXATE_txt] := 1
-		FileRemoveDir, % fp, 1
-	}
-	if DidRun
-		Prefs2Ini()
-}
 
 ;End Of Auto-Execute================================================================================================================
 
@@ -976,7 +956,7 @@ endPastemode:
 
 Ssuspnd:
 	gosub endPastemode
-	addToWinClip(realactive , "has Clip " realclipno)
+	addToWinClip(realactive , TXT.TIP_syscb)
 	return
 
 pstMode_Help:
@@ -1365,7 +1345,7 @@ updt:
 
 addToWinClip(lastEntry, extraTip){
 	API.blockMonitoring()
-	PasteModeToolTip( "System Clipboard " extraTip,1)
+	PasteModeToolTip( Valueof(extraTip), 1)
 	if CURSAVE
 		try FileRead, Clipboard, *c %A_WorkingDir%/%CLIPS_dir%/%lastentry%.avc
 	Sleep, 1000
