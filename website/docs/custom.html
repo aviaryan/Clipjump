@@ -5,13 +5,13 @@ layout: docs
 
 <span class="ver">[v10.6+]</span><br><br>
 
-<em>ClipjumpCustom.ini</em> can be configured to change hidden variables in Clipjump to make Clipjump totally custom for a user.<br>
+<em>ClipjumpCustom.ini</em> is the medium to create scripts for Clipjump. Usually a script has 3-5 lines of code but can accomplish a lot.<br>
 The file is created and loaded when you start Clipjump.<br>
 It gives power to-
 <ul>
 	<li>Change previously unchangeable shortcuts
 	<li>bind a hotkey to an action (like a hotkey to toggle Incognito Mode)
-	<li>run coded <i>labels</i> and <i>functions</i> to tailor-make any complex user function.
+	<li>run inbuilt <i>labels</i> and <i>functions</i> to tailor-make any complex user function.
 	<li>run a plugin at will or at required condition
 	<li>send key-presses to facilitate scripting / macro
 </ul>
@@ -146,7 +146,17 @@ without formatting.
 </ul>
 <br><br>
 
-<h3><a name="actmd">Example 5 (Running a section with Action Mode)</a></h3>
+<h3>Example 5 (Instantly switching to your favorite channel)</h3>
+Suppose your favorite channel is #4 as it stores some important web links. We will use the inbuilt changeChannel function in Clipjump to do the purpose.
+<pre class="brush: ini;">
+[changeto_4]
+bind=Win+4
+run=changeChannel(4)
+tip=Channel changed to 4
+</pre>
+<br><br>
+
+<h3><a name="actmd">Example 6 (Running a ClipjumpCustom script with Action Mode)</a></h3>
 Suppose you don't want to create a separate shortcut <kbd>Win</kbd>+<kbd>V</kbd> for the above example. Here is how to create a <a href="shorcuts.html#actmd">[Action Mode]</a> shortcut for it.
 <a name="noautorun_ex"></a>
 <pre class="brush: ini;">
@@ -168,21 +178,12 @@ ACTIONMODE.F10_caption = Change 2 my channel
 </ul>
 <br><br>
 
-<h3>Example 6 (Instantly switching to your favorite channel)</h3>
-Suppose your favorite channel is #4 as it stores some important web links. We will use the inbuilt changeChannel function in Clipjump to do the purpose.
-<pre class="brush: ini;">
-[changeto_4]
-bind=Win+4
-run=changeChannel(4)
-tip=Channel changed to 4
-</pre>
-<br><br>
 
 
-<h3>Example 7 (Paste Your Contact Details)</h3>
+<a name="tag_ex"></a><a name="ans_ex"></a><h3>Example 7 (Paste Your Contact Details)</h3>
 If you give a unique tag to a clip with some specific information, then it can be retrieved anytime using the <a href="devList.html#getClipDataByTag">getclipDataByTag()</a> function.
 <pre class="brush: ini;">
-[paste_sig]
+[paste_address]
 bind=Ctrl+F8
 zAddr=%API.getClipDataByTag(my_address)%
 run=API.<a href="devList.html#api-pastetext">pasteText</a>(%zAddr%)
@@ -190,6 +191,15 @@ run=API.<a href="devList.html#api-pastetext">pasteText</a>(%zAddr%)
 <ul>
 	<li>Here <var>my_address</var> is the tag that your contact details clip has.
 </ul>
+<br>
+<a name="nested_var"></a>
+<span class="red">Note</span> It must be noted that Clipjump doesn't support nesting of <code>%..%</code>. So something like <code>zAddr = %API.getClipDataByTag(%some_variable%)% is invalid</code>. However the output of <a href="#run">run</a> command is stored in variable <samp>ans</samp>.So the above code can be written as - 
+<pre class="brush: ini;">
+[paste_address]
+bind=Ctrl+F8
+run=API.getClipDataByTag(my_address)  	<span class="green">; now you can use API.getClipDataByTag(%some_variable%)</span>
+run=API.<a href="devList.html#api-pastetext">pasteText</a>(%ans%)
+</pre>
 <br><br>
 
 

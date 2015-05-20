@@ -92,6 +92,8 @@ channelOrganizer(){
 	hkZ("^n", "chOrgNew")
 	hkZ("^+n", "chOrgNewCh")
 	hkZ("^g", "chOrg_useChFocus")
+	hkZ("!a", "chOrg_activateLB")
+	hkZ("!s", "chOrg_activateLV")
 	Hotkey, If
 	Hotkey, If, IsChOrgLVActive()
 	hkZ("Enter", "chOrg_preview")
@@ -100,7 +102,6 @@ channelOrganizer(){
 	hkZ("^o", "chOrg_openPasteMode")
 	hkZ("^h", "chOrgEdit")
 	hkZ("Del", "chOrgDelete")
-	;hkZ("+tab", "chOrg_activateLB") ; NOT WORKING
 	hkZ("!Up", "chOrgUp")
 	hkZ("!Down", "chOrgDown")
 	hkZ("!x", "chOrgCut")
@@ -111,6 +112,9 @@ channelOrganizer(){
 	hkZ("!Up", "chOrgUp")
 	hkZ("!Down", "chOrgDown")
 	hkZ("F2", "chOrg_renameCh")
+	Hotkey, If
+	Hotkey, If, IsChOrgSearchActive()
+	hkZ("Tab", "chOrg_activateLV")
 	Hotkey, If
 	Hotkey, If, IsPrevActive()
 	hkZ("^f", "prevSearchfocus")
@@ -427,24 +431,32 @@ chOrg_Lv:
 	return
 
 chOrg_activateLB:
-	PostMessage, 0x06, 0, 0, ListBox1, A
-	;gosub chOrg_Lb
+	GuiControl, chOrg:focus, ListBox1
+	sleep 50 ; Needed
+	gosub chOrg_Lb
+	return
+chOrg_activateLV:
+	GuiControl, chOrg:focus, SysListView321
+	sleep 50
+	gosub chOrg_Lv
 	return
 
 chOrg_refresh:
 chOrg_search:
 chOrg_Lb:
 	Gui, chOrg:submit, nohide
-	GuiControl, ,% "Button" t_startBtn, % chrhex("f040")
+	Gui, chOrg:default
+	;msgbox here
+	GuiControl, chOrg:,% "Button" t_startBtn, % chrhex("f040")
 	if chOrg_Lb=1
 		loop % t_horizButtons 		; in case all channels are selected
-			GuiControl, Disable, % "Button"  A_index+t_startBtn
+			GuiControl, chOrg:Disable, % "Button"  A_index+t_startBtn
 	else {
 		loop % t_horizButtons-t_commonBtn-1 	; 3=buttons common in bth LB LV
-			GuiControl, Disable, % "Button"  A_index+t_startBtn+t_commonBtn
+			GuiControl, chOrg:Disable, % "Button"  A_index+t_startBtn+t_commonBtn
 		loop % t_commonBtn
-			GuiControl, Enable,  % "Button"  A_Index+t_startBtn
-		GuiControl, Enable, % "Button" t_horizButtons+t_startBtn
+			GuiControl, chOrg:Enable,  % "Button"  A_Index+t_startBtn
+		GuiControl, chOrg:Enable, % "Button" t_horizButtons+t_startBtn
 	}
 	chOrgLV_update(chOrg_search, chOrg_Lb>1 ? chOrg_Lb-2 : "")
 	return
@@ -530,7 +542,9 @@ IsChOrgLVActive(){
 IsChOrgLBActive(){
 	return IsActive("ListBox1", "classnn") && WinActive(TXT.ORG__name " ahk_class AutoHotkeyGUI") && ctrlRef==""
 }
-
+IsChOrgSearchActive(){
+	return IsActive("Edit1", "classnn") && WinActive(TXT.ORG__name " ahk_class AutoHotkeyGUI") && ctrlRef==""
+}
 ; // UPDATES the ListView with current search
 chOrgLV_update(term="", channel=""){
 	Gui, chOrg:Default
@@ -560,4 +574,6 @@ chOrgLV_update(term="", channel=""){
 #If IsChOrgLVActive()
 #If
 #If IsChOrgLBActive()
+#If
+#If IsChOrgSearchActive()
 #If

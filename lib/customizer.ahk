@@ -57,7 +57,6 @@ resetCustomizations(){
 customization_Run(obj){
 	for k,v in obj
 	{
-		;try { ; Try - No need currently
 		k := Ltrim(k, "0123456789") 	; correct key
 		isf := ((k=="run") && Instr(v,"("))
 		loop { 			; change %..% vars to keys
@@ -85,7 +84,8 @@ customization_Run(obj){
 		{
 			if !Instr(v, "(")
 				gosub % IsLabel(v) ? v : "keyblocker"
-			else RunFunc(v)
+			else 
+				ans := RunFunc(v)
 		}
 		else if k = tip
 			autoTooltip(v, 1000, 8)
@@ -95,7 +95,6 @@ customization_Run(obj){
 			sleep % v
 		else if (k != "bind") or (k != "noautorun")
 		{
-			;msgbox % k "`n" v
 			if Instr(k,".")
 			{
 				loop, parse, k,`.
@@ -107,10 +106,6 @@ customization_Run(obj){
 			}
 			else %k% := v
 		}
-		;} ; catch
-		;catch {
-		;MsgBox, 16, Clipjump, % TXT.CUS_error "`nkey = " k "`nvalue = " v
-		;}
 	}
 }
 
