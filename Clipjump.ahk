@@ -49,6 +49,8 @@ global VERSION := "12"
 global CONFIGURATION_FILE := "settings.ini"
 
 ini_LANG := ini_read("System", "lang")
+if !ini_LANG
+	ini_LANG := "english"
 global TXT := Translations_load("languages/" ini_LANG ".txt") 		;Load translations
 
 global UPDATE_FILE := "http://sourceforge.net/projects/clipjump/files/version.txt/download"
