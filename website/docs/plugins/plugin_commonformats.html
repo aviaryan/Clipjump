@@ -11,20 +11,34 @@ layout: docs
 Users can add more formats in the <em>pformat.commonformats.lib/<b>user</b>.ahk</em> file. <br>
 <span class="red">Note</span> - This file is not present by default. It is created when the Common Formats plugin runs for the first time ( either from the plugin manager or paste mode ).<br><br>
 
- <h2>Using</h2>
- Once you have selected the <strong>Common Formats</strong> <a href="../basic_help.html#pformat">paste-format</a>, releasing <kbd class="inverse">Ctrl</kbd> to paste will bring up the GUI.
- <br>Use <kbd>Up</kbd> or <kbd>Down</kbd> keys or mouse to select your needed format and press <kbd>Enter</kbd> or <span class="str">OK</span> button to paste.<br>
- You can press <kbd>Esc</kbd> or simply close the GUI to cancel the paste operation.
- Selecting the paste-format <b><span class="str">None</span></b> will paste the original clip without making any changes.
- <br><br>
+<h2>Using</h2>
+Once you have selected the <strong>Common Formats</strong> <a href="../basic_help.html#pformat">paste-format</a>, releasing <kbd class="inverse">Ctrl</kbd> to paste will bring up the GUI.
+<br>Use <kbd>Up</kbd> or <kbd>Down</kbd> keys or mouse to select your needed format and press <kbd>Enter</kbd> or <span class="str">OK</span> button to paste.<br>
+You can press <kbd>Esc</kbd> or simply close the GUI to cancel the paste operation.
+Selecting the paste-format <b><span class="str">None</span></b> will paste the original clip without making any changes.
+<br><br>
 
- <b>The Apply button</b> applies the current changes made the the formatting to the clip to be pasted. Thus it helps you in applying multiple formats to a clip in 
- the needed order. Note that the <span class="str">None</span> paste format will still paste the real original clip and the 'apply' won't be undertaken.
- <br><br>
+<b>The Apply button</b> applies the current changes made the the formatting to the clip to be pasted. Thus it helps you in applying multiple formats to a clip in 
+the needed order. Note that the <span class="str">None</span> paste format will still paste the real original clip and the 'apply' won't be undertaken.
+<br><br>
 
 <b>Input Field</b> is used by formats that have parameters in addition to the input text. <span class="str">RegExReplace</span> for example uses input field to get the other 2 parameters, 
 the match needle and the replacement text and the users are supposed to enter these two paramters one in a line (line by line).
 <br><br>
+
+<h2>List of Formattings available</h2>
+<pre>
+BBCodeList
+DeHTML
+HTMLList
+lowercase
+TrimFormatting
+NumberedList
+<b>RegexReplace</b>
+TrimWhiteSpace
+UnHTML
+UPPERCASE
+</pre>
 
 <h2>Porting an existing pformat to under Common Formats</h2>
 To make any independent pformat a part of the <strong>Common Formats</strong>, you can simply copy its code to the <em>pformat.commonformats.lib/user.ahk</em> file. <br>
