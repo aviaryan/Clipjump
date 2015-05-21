@@ -68,7 +68,7 @@ BeepAt(value, freq, duration=150){
 ;	Emtpties free memory
 
 EmptyMem(){
-	return, dllcall("psapi.dll\EmptyWorkingSet", "UInt", -1)
+	return ini_ram_flush ? dllcall("psapi.dll\EmptyWorkingSet", "UInt", -1) : 0
 }
 
 FoolGUI(switch=1){
@@ -364,8 +364,7 @@ GetFile(hwnd=""){
 ;GetFolder()
 ;	Gets folder path of active window in Explorer
 
-GetFolder()
-{
+GetFolder(){
 	WinGetClass,var,A
 	If var in CabinetWClass,ExplorerWClass,Progman
 	{
@@ -645,7 +644,7 @@ getControlInfo(type="button", text="", ret="w", fontsize="", fontmore=""){
 }
 
 ;GUI Message Box to allow selection
-guiMsgBox(title, text, owner="" ,isEditable=0, wait=0, w="", h=""){
+guiMsgBox(title, text, owner="", isEditable=0, wait=0, w="", h=""){
 	static thebox
 	wf := getControlInfo("edit", text, "w", "s9", "Lucida Console")
 	hf := getControlInfo("edit", text, "h", "s9", "Lucida Console")
@@ -691,8 +690,7 @@ Base2Number(H, base=16){
 
 ; Code by deo http://www.autohotkey.com/board/topic/74348-send-command-when-switching-to-russian-input-language/#entry474543
 
-GetVKList( letter )
-{
+GetVKList( letter ){
 	SetFormat, Integer, Hex
 	vk_list := Array()
 	for i, hkl in KeyboardLayoutList()
@@ -712,8 +710,7 @@ GetVKList( letter )
 	return vk_list
 }
 
-KeyboardLayoutList()
-{
+KeyboardLayoutList(){
 	hkl_num := 20
 	VarSetCapacity(hHkls,hkl_num*A_PtrSize,0)
 	num := DllCall("GetKeyboardLayoutList","Uint",hkl_num,"Ptr",&hHkls)

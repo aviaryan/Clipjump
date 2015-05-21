@@ -290,6 +290,8 @@ load_Settings(all=false)
 		ini_pstMode_X := ini_read("Advanced", "pstMode_X")
 		ini_pstMode_Y := ini_read("Advanced", "pstMode_Y")
 		ini_HisCloseOnInstaPaste := ini_read("Advanced", "HisCloseOnInstaPaste")
+		; v11.6.1+
+		ini_ram_flush := ini_read("Advanced", "RAM_Flush")
 	}
 
 }
@@ -423,7 +425,8 @@ save_Default(full=1){
 	ini_write("Advanced", "pstMode_X")
 	ini_write("Advanced", "pstMode_Y")
 	ini_write("Advanced", "HisCloseOnInstaPaste", 1)
-
+	; v11.6.1+
+	ini_write("System", "RAM_Flush", 0)
 
 	; DELETE KEYS removed v10.7.2.6
 	Ini_delete("Advanced", "Start_with_formatting")
@@ -499,4 +502,6 @@ validate_Settings()
 	if paste_K = ERROR
 		paste_K := "V"
 	paste_K := Substr(paste_K, 1, 1)
+
+	ini_ram_flush := ini_ram_flush==1 ? 1 : 0
 }

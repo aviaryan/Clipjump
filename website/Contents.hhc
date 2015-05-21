@@ -11,10 +11,11 @@
 <UL>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Clipjump">
-		<param name="Local" value="clipjump.html">
+		<param name="Local" value="index.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Getting Started">
+		<param name="Local" value="docs/basic_help.html">
 		</OBJECT>
 	<UL>
 		<LI> <OBJECT type="text/sitemap">
@@ -36,11 +37,12 @@
 	</UL>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Clipjump Channels">
+		<param name="Local" value="docs/channels.html">
 		</OBJECT>
 	<UL>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Introduction">
-			<param name="Local" value="docs/channels.html">
+			<param name="Local" value="docs/channels.html#intro">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Using Channels">
@@ -226,12 +228,16 @@
 			<param name="Local" value="docs/custom.html">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Basic Concepts">
+			<param name="Local" value="docs/custom.html#basics">
+			</OBJECT>	
+		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Commands">
 			<param name="Local" value="docs/custom.html#commands">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Examples">
-			<param name="Local" value="docs/custom.html#ex1">
+			<param name="Local" value="docs/custom.html#ex">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Download from Addons page">
@@ -246,6 +252,18 @@
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Introduction">
 			<param name="Local" value="docs/plugins/index.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Plugin Manager">
+			<param name="Local" value="docs/plugins/index.html#manager">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Installing a plugin">
+			<param name="Local" value="docs/plugins/index.html#install">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Running a plugin from ClipjumpCustom">
+			<param name="Local" value="docs/plugins/index.html#run">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Official Plugins">
@@ -277,10 +295,6 @@
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Developer's Reference">
 		<param name="Local" value="docs/devList.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Clipjump Controller">
-		<param name="Local" value="clipjumpcontroller.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Shortcuts">

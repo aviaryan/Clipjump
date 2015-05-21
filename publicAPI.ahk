@@ -6,7 +6,7 @@ Just include this file in your script.
 Note that API.text2binary() is not supported currently.
 The ClipjumpCommunicator.ahk file is already included in this file.
 
-v 14.4.9.2
+v 15.5.17
 
 */
 
@@ -42,8 +42,14 @@ class Clipjump
 		cbF := A_temp "\cjcb.txt"
 		rFuncs := "|getClipAt|getClipLoc|getVar|runFunction|"
 
+		resChar := "`r"
+		ps := ""
 		for key,val in parameters
-			ps .= "`n" val
+		{
+			StringReplace, val, val, % "`r`n", % "`n", All
+			StringReplace, val, val, % "`r", % "`n", All
+			ps .= resChar val
+		}
 		FileDelete, % cbF
 		returned := CjControl("API:" funcName ps)
 		if returned && Instr(rFuncs, "|" funcName "|")

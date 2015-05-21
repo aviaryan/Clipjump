@@ -40,11 +40,7 @@
 	</UL>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Clipjump">
-		<param name="Local" value="clipjump.html">
-		</OBJECT>
-	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Clipjump Controller">
-		<param name="Local" value="clipjumpcontroller.html">
+		<param name="Local" value="index.html">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Contact">
@@ -129,7 +125,7 @@
 		<param name="Local" value="docs/basic_help.html#ignorew">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
-		<param name="Name" value="Class Grab Tool">
+		<param name="Name" value="Ignore Windows Manager">
 		<param name="Local" value="docs/basic_help.html#ignorew">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
@@ -211,6 +207,10 @@
 		<param name="Local" value="docs/ini.html#pst_custom_pos">
 		</OBJECT>
 	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Plugin Manager">
+		<param name="Local" value="docs/plugins/index.html#manager">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Action Mode">
 		<param name="Local" value="docs/basic_help.html#actmd">
 		</OBJECT>
@@ -221,6 +221,14 @@
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Paste Mode">
 		<param name="Local" value="docs/basic_help.html#pastemd">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Installing a plugin">
+		<param name="Local" value="docs/plugins/index.html#install">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Running a plugin from ClipjumpCustom">
+		<param name="Local" value="docs/plugins/index.html#run">
 		</OBJECT>
 </UL>
 </BODY></HTML>

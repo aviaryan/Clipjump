@@ -1,0 +1,22 @@
+name: Clipjump
+markdown: redcarpet
+fullpath: http://clipjump.sourceforge.net
+description: Official homepage of Clipjump Clipboard Manager
+baseurl: 
+permalink: /blog/:categories/:title.html
+title: Clipjump
+paginate: 10
+highlighter: null
+
+# More
+author:
+    fullname: Avi Aryan
+    twitter: aviaryan123
+    github: aviaryan
+    facebook: avi.aryan.ap
+    google: AviAryan
+    gplusid: 110328513842183229282
+
+googleverify: QF1dxap5pOK1UzZAuCzgvJDuDA5AvYrH9ch5aWr5h-8
+exclude: ['README.md', 'Gemfile.lock', 'Gemfile', 'Rakefile']
+version: 12

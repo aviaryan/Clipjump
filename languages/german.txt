@@ -52,7 +52,6 @@ HST_clip = Clip
 HST_date = Datum
 HST_size = Größe(B)
 HST_dconsump = Speicherverbrauch
-HST_viewimage = [Doppelklick für Bildvorschau]
 HST_m_prev = &Vorschau
 HST_m_copy = &Kopieren		(Ctrl+C)
 HST_m_insta = &Instant-Einfügen		(Space)
@@ -142,13 +141,13 @@ TRY_restart = Neustarten
 TRY_exit = Beenden
 
 ACT__name = AKTIONSMODUS
-ACT_enable = Aktivieren
-ACT_disable = Deaktivieren
+ACT_enable = Aktiviere
+ACT_disable = Deaktiviere
 ACT_exit = Fenster schließen
 
 IGN__name = Ignorierte Fenster
-IGN_add = &Fensterclasse hinzufügen
-IGN_delete = &Fensterclasse löschen
+IGN_add = &Fensterklasse hinzufügen
+IGN_delete = &Fensterklasse löschen
 
 LNG_error = Deutsche Sprachdatei nicht gefunden im Ordner languages/german.txt. Passierte dies absichtlich, füge sie wieder ein
 
@@ -402,7 +401,7 @@ ABT_errorFontIcon = Die Datei %GHICON_path% fehlt. Dies kann zu Schwierigkeiten 
 CNL_chngMsg = Channel %cv1% aktiv
 CNL_chNtExst = Channel %cv1% existiert nicht !
 SET_holdclip = Halte Clip
-ORG_openPastemode = Öffnet (schaltet um) Paste Mode Iterface mit dem selektierten Clip als aktivem Clip.
+ORG_openPastemode = Öffnet Paste Mode Interface mit dem selektierten Clip als aktivem Clip.
 TIP_confirmcopy = Diese Bestätigung wird angezeigt, weil dies ein geschützter Channel ist.
                 = Soll das Kopieren trotzdem durchgeführt werden?
                 = Drücke Y für Ja
@@ -417,3 +416,10 @@ TIP_holdclip = Drücke Ctrl+V um einzufügen
 _output = Ausgabe
 TIP_copied_2 = Übertragen an %PROGNAME%
 TIP_empty2_2 = %PROGNAME% ist leer
+
+;====
+; 11.6.1
+;====
+
+SET_T_histshort = Shortcut für das Clipboard History Tool
+PLG_sync_cb = Sync Clipjump Clipboard

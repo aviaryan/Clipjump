@@ -1,23 +1,8 @@
-<html>
-<head>
-	<meta http-equiv="X-UA-Compatible" content="IE=9" >
-	<meta http-equiv="X-UA-Compatible" content="IE=8" >
-  <title>Clipjump : Troubleshooting</title>
-  <link rel="stylesheet" href="../Blogs.css" type="text/css">
-</head>
-
-
-<body>
-<h1>Troubleshooting</h1><br><br>
+---
+title: Troubleshooting
+layout: docs
+---
 	
-	<dt>Error on Program startup</dt>
-	<dd>Majority of these errors happen because of syntax errors in a plugin. The Error message box contains all information about the error the plugin and where it is 
-		faulty in this case. In the image shown below, the first arrow shows the file (the plugin file) with the error and the second arrow shows the line number where 
-		it is faulty.<br>
-		<img src=../images/pluginerror.png><br>
-		To get rid of the problem, simply remove that plugin from the plugins folder and then try contacting its developer. A screenshot of the error box will help.</dd>
-
-	<br><br>
 
 	<dt>I see Japanese / Chinese characters as boxes ?</dt>
 	<dd>This is a uncommon <a href="http://social.technet.microsoft.com/Forums/windows/en-US/1eea3d70-c29a-4a80-9dd7-87ec131f160a/chinese-characters-showing-as-blocks-on-windows-7?forum=w7itproappcompat">Windows Issue</a>
@@ -30,6 +15,22 @@
 	<dd>Clipjump will need to have 'write access' to the folder it is placed in. So if you are placing Clipjump in C:\ drive like <em>Program Files/Clipjump</em> you 
 		might need to <b>run Clipjump as administrator</b> to have disk rights. If you don't want to run it with administrator privileges, place it in other local drive 
 		like <em>D:\</em> or another folder like <em>My Documents</em> where it will have rights to "atleast" write to its own folder.</dd>
+
+	<br><br>
+
+	<a name="cj_stall"></a><dt>Paste Mode not opening when pressing <kbd>Ctrl</kbd>+<kbd>V</kbd></dt>
+	<dd>If you are seeing this bug when certain windows are active, then this happens because the active's application keyboard hook is processed before Clipjump's. 
+	To overcome this issue, <b>run Clipjump as administrator</b>. Open <samp>Clipjump.exe</samp> properties, go to <samp>Compatibilty</samp> and check 
+	<samp>Run this program as administrator</samp>.
+
+	<br><br>
+	
+	<dt>Error on Program startup</dt>
+	<dd>Majority of these errors happen because of syntax errors in a plugin. The Error message box contains all information about the error the plugin and where it is 
+		faulty in this case. In the image shown below, the first arrow shows the file (the plugin file) with the error and the second arrow shows the line number where 
+		it is faulty.<br>
+		<img src=../images/pluginerror.png><br>
+		To get rid of the problem, simply remove that plugin from the plugins folder and then try contacting its developer. A screenshot of the error box will help.</dd>
 
 	<br><br>
 
@@ -51,12 +52,3 @@
 
 	<br><br>
 	
-<hr noshade=noshade size=5 color=yellow>
-<br>
-<a href="http://translate.google.com/translate?hl=en&sl=en&u=clipjump.sourceforge.net/docs/troubleshooting.html" id="translate">Translate</a>
-
-<br><br>
-
-</body>
-
-</html>

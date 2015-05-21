@@ -4,7 +4,7 @@
 ;@Plugin-Description Only works for Text ([Text] or [File/Folder]) type data.
 ;@Plugin-Author Avi
 ;@Plugin-Tags pformat
-;@Plugin-version 0.5
+;@Plugin-version 0.61
 ;@Plugin-Previewable 0
 
 ;@Plugin-Param1 The Input Text
@@ -21,7 +21,7 @@ plugin_pformat_commonformats_None(zin){
 	return zin , STORE.ClipboardChanged := 0
 }
 
-plugin_pformat_commonformats_htmlList(zin){
+plugin_pformat_commonformats_HTMLList(zin){
 	return RegExReplace( Trim(zin, "`r`n "), "m`a)^", "<li>") , STORE.ClipboardChanged := 1
 }
 
@@ -29,7 +29,7 @@ plugin_pformat_commonformats_BBCodeList(zin){
 	return RegExReplace( Trim(zin, "`r`n "), "m`a)^", "[*]") , STORE.ClipboardChanged := 1
 }
 
-plugin_pformat_commonformats_NoFormatting(zin){
+plugin_pformat_commonformats_TrimFormatting(zin){
 	return RTrim(zin, "`r`n") , STORE.ClipboardChanged := 1
 }
 
@@ -51,8 +51,7 @@ plugin_pformat_commonformats_TrimWhiteSpace(zin){
 }
 
 plugin_pformat_commonformats_DeHTML(zin){
-	STORE["commonformats_DeHTML"] := "Deactivates HTML code. All ("" & < >) are translated to (&quot; &amp; &lt; &gt;) and linefeed \n to <br>. If you don't want <br>, apply changes and "
-	. "then RegexReplace <br> with none."
+	STORE["commonformats_DeHTML"] := "Deactivates HTML code. All ("" & < >) are translated to (&quot; &amp; &lt; &gt;) and linefeed \n to <br>."
 	Transform, o, HTML, % zin
 	return plugin_pformat_commonformats_TrimWhiteSpace(o)
 }
@@ -64,8 +63,9 @@ plugin_pformat_commonformats_UPPERCASE(zin){
 
 #Include *i %A_ScriptDir%\plugins\pformat.commonformats.lib\unhtml.ahk
 plugin_pformat_commonformats_UnHTML(zin){
-	STORE["commonformats_unhtml"] := "Removes tags from HTML code and converts unicode sequences to characters"
-	return unhtml(zin) , STORE.ClipboardChanged := 1
+	STORE["commonformats_unhtml"] := "Converts HTML code to Plain Text. Removes tags from HTML code and converts unicode sequences to characters."
+	StringReplace, zin, zin, % "<br>", % "`n", All
+	return Trim(unhtml(zin), "`n`r`t ") , STORE.ClipboardChanged := 1
 }
 
 plugin_pformat_commonformats_RegexReplace(zin, zps){
@@ -106,9 +106,9 @@ plugin_pformat_commonformats(zin){
 	Gui, Add, Text, x+55 yp-15, Input Field
 	Gui, Font, s10, Lucida Console
 	Gui, Font, s10, Consolas
-	Gui, Add, Edit, x+10 yp-2 w441 h40 gzchosenformat vzinputfield, 
+	Gui, Add, Edit, x+10 yp-2 w441 h40 gzinputfield vzinputfield, 
 	Gui, Font
-	Gui, commonformat:Show,, Choose Format
+	Gui, commonformat:Show,, % "Choose Format"
 
 	if !FileExist(ztF)
 	{
@@ -150,18 +150,30 @@ plugin_pformat_commonformats_end:
 	WinWaitClose, Choose Format
 	return
 
+zinputfield:
+	Gui, commonformat:Submit, nohide
+	zoutput := ( zFobj.MaxParams > 1 ) ? zFobj.(zin, zinputfield) : zFobj.(zin)
+	STORE.ClipboardChanged := 0 		; remove any clipboard change
+	GuiControl, commonformat:, Edit1, % zoutput
+	GuiControl, commonformat:, Edit2, % STORE["commonformats_" zchosenformat]
+	return
+
 zchosenformat:
+	GuiControl, commonformat:, Edit3, % ""
 	Gui, commonformat:Submit, nohide
 	if (A_GuiEvent="DoubleClick") && (zDone!="")
 		gosub commonformatbuttonOK
-	ELSE {
+	else {
 		if zchosenformat=
 			zchosenformat := "None"
 		zFobj := Func("plugin_pformat_commonformats_" zchosenformat)
-		zoutput := ( zFobj.MaxParams > 1 ) ? zFobj.(zin, zinputfield) : zFobj.(zin)
-		STORE.ClipboardChanged := 0 		; remove any clipboard change
-		GuiControl, commonformat:, Edit1, % zoutput
-		GuiControl, commonformat:, Edit2, % STORE["commonformats_" zchosenformat]
+		if ( zFobj.MaxParams < 2 )
+			GuiControl, commonformat:Disable, Edit3
+		else {
+			GuiControl, commonformat:Enable, Edit3
+			GuiControl, commonformat:Focus, Edit3
+		}
+		gosub zinputfield
 	}
 	return
 

@@ -1,16 +1,8 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-    "http://www.w3.org/TR/html4/loose.dtd">
+---
+title: Developer's API
+layout: docs
+---
 
-<html>
-<head>
-	<meta http-equiv="X-UA-Compatible" content="IE=9" >
-	<meta http-equiv="X-UA-Compatible" content="IE=8" >
-  <title>Clipjump : Complete API functions and resource list</title>
-  <link rel="stylesheet" href="../Blogs.css" type="text/css">
-</head>
-
-<body>
-<h1>Complete Developer's API functions and other routines list</h1>
 <br>
 <ul>
 	<li><a href=#api>API functions</a></li>
@@ -21,8 +13,7 @@
 </ul>
 <br>
 
-<h2><a name=api>API functions</a></h2>
-All the functions under the file API.ahk<br>
+<h2><a name="api">API functions</a></h2>
 They should be accessed as <code class="Syntax">API.function_name()</code> . For example <code>API.paste()</code>
 <ol>
 	<li><a name="api-paste"></a><code>paste(channel="", clipno="")</code><br>
@@ -31,6 +22,7 @@ They should be accessed as <code class="Syntax">API.function_name()</code> . For
 	<br>
 	<br>
 
+	<a name="getClipAt"></a>
 	<li><code>getClipAt(channel=0, clipno=1, toreturn=1)</code><br>
 	- Get a Clip's content i.e. what is contained in that clip. 'channel' and 'clipno' are the channel number and clip number respectively.<br>
 	If toreturn = 1 then return Clipboard text data<br>
@@ -38,6 +30,7 @@ They should be accessed as <code class="Syntax">API.function_name()</code> . For
 	<br>
 	<br>
 
+	<a name="manageClip"></a>
 	<li><code>manageClip(new_channel=0, channel="", clip="", flag=0)</code><br>
 	- Cut/Copy Clip from one channel to other. 'new_channel' is the new channel to place the clip in. Note that the clip will always be placed at clip 1 of new channel. <br>
 	If flag = 0 then cut , if flag = 1 then copy<br>
@@ -46,6 +39,7 @@ They should be accessed as <code class="Syntax">API.function_name()</code> . For
 	<br>
 	<br>
 
+	<a name="emptyChannel"></a>
 	<li><code>emptyChannel(chno="")</code><br>
 	- Empties a particular channel (chno)<br>
 	If 'chno' is empty, it DEFAULTS to current channel.<br>
@@ -59,13 +53,14 @@ They should be accessed as <code class="Syntax">API.function_name()</code> . For
 	<br>
 
 	<li><code>runFunction(function_string)</code><br>
-	- Runs a <a href=#funcs>function</a><br>
+	- Runs a <a href="#funcs">function</a><br>
 	function_string - The string containing the function with parameters, like <code>changeChannel(1)</code> , <code>inputBox(mytitle, some text to desc)</code><br>
 	Example - <code>API.runFunction("changeChannel(1)")</code><br>
-	Note - <a href=custom.html>ClipjumpCustom</a> users are requested to use <code>run=changeChannel(1)</code> rather than this.
+	Note - <a href="custom.html">ClipjumpCustom</a> users are requested to use <code>run=changeChannel(1)</code> rather than this.
 	<br>
 	<br>
 	
+	<a name="addClip"></a>
 	<li><code>addClip(channel, input)</code><br>
 	- Adds a clip at the start of the channel i.e. as Clip 1<br>
 	channel - The <em>channel</em> where the new clip is to be added<br>
@@ -73,6 +68,7 @@ They should be accessed as <code class="Syntax">API.function_name()</code> . For
 	<br>
 	<br>
 	
+	<a name="showPasteTipAt"></a>
 	<li><code>showPasteTipAt(channel, clip)</code><br>
 	- Opens <a href=shortcuts.html#pstmd>[Paste-Mode]</a> with clip number 'clip' of channel 'channel' active. 
 	<br>
@@ -97,6 +93,13 @@ They should be accessed as <code class="Syntax">API.function_name()</code> . For
 	<br>
 	<br>
 
+	<a name="getClipDataByTag"></a>
+	<li><code>getClipDataByTag(tag)</code><br>
+	- returns the text data of first clip which has the tag <var>tag</var>
+	<br>
+	<br>
+
+	<a name="blockMonitoring"></a>
 	<li><code>blockMonitoring(yes=1)</code><br>
 	- blocks Clipjump Clipboard monitoring. Useful when you are changing clipboard content such that you don't want it to be accounted by Clipjump<br>
 	If first parameter i.e. yes = 1 , then block Monitoring.<br>
@@ -110,6 +113,7 @@ They should be accessed as <code class="Syntax">API.function_name()</code> . For
 	<br>
 	<br>
 	
+	<a name="deleteClip"></a>
 	<li><code>deleteClip(channel, clip)</code><br>
 	- deletes a clip from a channel<br>
 	channel - The <b>channel number</b> whose clip is to be deleted<br>
@@ -117,7 +121,7 @@ They should be accessed as <code class="Syntax">API.function_name()</code> . For
 	<br>
 	<br>
 
-	<li><a name=showtip><code>showTip(Text, forTime="")</code></a><br>
+	<li><a name="showtip"><code>showTip(Text, forTime="")</code></a><br>
 	- shows a Tip (with a different font). recommended when creating a plugin<br>
 	Text - the text to show in the tip<br>
 	forTime - time for which the tip is to be shown, if the paramter is not passed i.e. blank, the tip becomes permanent
@@ -135,6 +139,7 @@ They should be accessed as <code class="Syntax">API.function_name()</code> . For
 	<br>
 	<br>
 
+	<a name="getChStrength"></a>
 	<li><code>getChStrength(channel)</code><br>
 	- gets total number of clips in a channel i.e. population of a channel
 	<br>
@@ -175,17 +180,17 @@ Unlike API, they should be accessed normally as <code class="Syntax">function_na
 	- shows a dialog for user to enter any text and the function returns that text. See <a href="custom.html#inputbox">More</a>
 	<br>
 	<br>
-	<li><code>HParse(hotkey)</code><br>
+	<li><code>HParse(hotkey)</code><br><a name="hparse"></a>
 	- converts a normal hotkey like 'Win+Alt+Z' or 'Ctrl+PrintScreen' to AutoHotkey format like '#!z' or '^Printscreen'.<br>
 	hotkey - The Standard hotkey to convert to AHK form.<br>
 	The function returns the AHK formatted hotkey of the input hotkey.
 	<br>
 	<br>
-	<li><code>changeChannel(channelno)</code><br>
+	<li><code>changeChannel(channelno)</code><br><a name="changeChannel"></a>
 	- Changes channel to 'channelno'
 	<br>
 	<br>
-	<li><code>channel_find( name )</code><br>
+	<li><code>channel_find( name )</code><br><a name="channel_find"></a>
 	- Finds the channel corresponding to the 'name' and returns its channel number.<br>
 	name - The name of the channel like 'Default'
 	<br>
@@ -283,12 +288,12 @@ Changing a variable in <a href=custom.html>ClipjumpCustom</a> is done as <code c
 </ol>
 <br>
 
-<h2><a name=pubapi>Public API</a></h2>
+<h2><a name="pubapi">Public API</a></h2>
 Public API (publicAPI.ahk) gives power to any Ahk Script as well an <a href=plugins/basics.html#class_ext>external plugin</a> to control all aspects of Clipjump from 
 changing and reading variables to running function and labels. It is by default distibuted with Clipjump and present in the Clipjump.exe directory.<br>
-<a href=https://github.com/aviaryan/Clipjump/blob/master/publicAPI.ahk>Here</a> is the online github link in case it ever updates<br>
+<a href="https://github.com/aviaryan/Clipjump/blob/master/publicAPI.ahk">Here</a> is the online github link in case it ever updates<br>
 <br>
-An external plugin can include publicapi as <code class=syntax>#Include %A_ScriptDir%\..\publicAPI.ahk</code><br>
+An external plugin can include publicapi as <code class="syntax">#Include %A_ScriptDir%\..\publicAPI.ahk</code><br>
 Once publicAPI is included in the script, you will have to initialize it.<br>
 <pre>cj := new Clipjump()     <span class="green">; The name 'cj' doesnt matter</span></pre>
 Then you can call API methods, set variables, get variables and so on using the 'cj' object. Here are few examples -<br>
@@ -310,11 +315,3 @@ cj.runLabel("exit") 		<span class="green">; closes Clipjump</span>
 
 The plugin <span class="str">Ignored Windows Manager</span> uses the publicAPI. It will be a good idea to read its code ( <em>external.ignoreWManager.ahk</em> ).
 <br><br>
-
-<hr noshade=noshade size=5 color=yellow>
-<br>
-<a href="http://translate.google.com/translate?hl=en&sl=en&u=clipjump.sourceforge.net/docs/devList.html" id="translate">Translate</a>
-<br><br>
-</body>
-
-</html>

@@ -1,7 +1,7 @@
 /*
 	Clipjump
 
-	Copyright 2013-14 Avi Aryan
+	Copyright 2013-15 Avi Aryan
 
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 
 ;@Ahk2Exe-SetName Clipjump
 ;@Ahk2Exe-SetDescription Clipjump
-;@Ahk2Exe-SetVersion 11.6.1
+;@Ahk2Exe-SetVersion 12
 ;@Ahk2Exe-SetCopyright Avi Aryan
 ;@Ahk2Exe-SetOrigFilename Clipjump.exe
 
@@ -38,20 +38,25 @@ ListLines, Off
 global ini_LANG := "" , H_Compiled := RegexMatch(Substr(A_AhkPath, Instr(A_AhkPath, "\", 0, 0)+1), "iU)^(Clipjump).*(\.exe)$") && (!A_IsCompiled) ? 1 : 0
 global mainIconPath := H_Compiled || A_IsCompiled ? A_AhkPath : "icons/icon.ico"
 
-;*********Program Vars**********************************************************
-; Capitalised variables (here and everywhere) indicate that they are global
+/*
+**********************
+PROGRAM VARIABLES
+**********************
+*/
 
 global PROGNAME := "Clipjump"
-global VERSION := "11.6.1"
+global VERSION := "12"
 global CONFIGURATION_FILE := "settings.ini"
 
 ini_LANG := ini_read("System", "lang")
+if !ini_LANG
+	ini_LANG := "english"
 global TXT := Translations_load("languages/" ini_LANG ".txt") 		;Load translations
 
 global UPDATE_FILE := "http://sourceforge.net/projects/clipjump/files/version.txt/download"
 global PRODUCT_PAGE := "http://clipjump.sourceforge.net"
 global HELP_PAGE := "http://clipjump.sourceforge.net/docs"
-global AUTHOR_PAGE := "http://aviaryan.github.io"
+global AUTHOR_PAGE := "http://aviaryan.in"
 
 global MSG_TRANSFER_COMPLETE
  , MSG_CLIPJUMP_EMPTY
@@ -71,7 +76,12 @@ global MSG_TRANSFER_COMPLETE
 global hidden_date_no := 4 , history_w , history_partial := 1 ;start off with partial=1 <> much better
 global PREV_FILE := "cache\prev.html" , GHICON_PATH := A_ScriptDir "\icons\octicons-local.ttf"
 
-;*******************************************************************************
+
+/*
+****************
+BASIC STRUCTURE
+****************
+*/
 
 ;Creating Storage Directories
 FileCreateDir, cache
@@ -84,7 +94,12 @@ FileSetAttrib, -H, %A_WorkingDir%\cache
 FileDelete, % A_temp "/clipjumpcom.txt"
 try Clipboard := ""
 
-;Global Data Holders
+
+/*
+*********
+VARIABLES
+*********
+*/
 Sysget, temp, MonitorWorkArea
 global WORKINGHT := tempbottom-temptop, restoreCaller := 0, startUpComplete := 0
 
@@ -93,21 +108,35 @@ global CN := {}, CUSTOMS := {}, CDS := {}, CPS := {}, SEARCHOBJ := {}, HISTORYOB
 global cut_is_delete_windows := "XLMAIN QWidget" 			;excel, kingsoft office
 global CURSAVE, TEMPSAVE, LASTCLIP, LASTFORMAT, Islastformat_Changed := 1, IScurCBACTIVE := 0, curPformat, curPfunction, curPisPreviewable
 global NOINCOGNITO := 1, SPM := {}, protected_DoBeep := 1
+global pastemodekey := {} , spmkey := {}
+global windows_copy_k, windows_cut_k, ini_OpenAllChbyDef := 0
 
-;Initailizing Common Variables
+;Initailizing Common Global Variables
 global CALLER_STATUS, CLIPJUMP_STATUS := 1		; global vars are not declared like the below , without initialising
 global CALLER := CALLER_STATUS := 1, IN_BACK := 0, MULTIPASTE, PASTEMODE_ACT
 global CLIP_ACTION := "", ONCLIPBOARD := 1 , ISACTIVEEXCEL := 0 , HASCOPYFAILED := 0 , ctrlRef		;specific purpose global vars
 
+;Global Ini declarations
+global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_isMessage, CopyMessage
+		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, onetime_K, paste_k, actionmode_k, ini_is_duplicate_copied, ini_formatting
+		, ini_CopyBeep , beepFrequency , ignoreWindows, ini_defEditor, ini_defImgEditor, ini_def_Pformat, pluginManager_k, holdClip_K, ini_PreserveClipPos
+		, chOrg_K, ini_startSearch, ini_revFormat2def, ini_pstMode_X, ini_pstMode_Y, ini_HisCloseOnInstaPaste, history_K, ini_ram_flush
+
 ;Init General vars
 is_pstMode_active := 0
+
+/*
+***********************
+GET THE PROGRAM WORKING
+***********************
+*/
 
 ;Setting up Icons
 FileCreateDir, icons
 FileInstall, icons\no_history.Ico, icons\no_history.Ico, 0 			;Allow users to have their icons
 FileInstall, icons\no_monitoring.ico, icons\no_monitoring.ico, 0
 
-;Ini Configurations
+;MANAGE PROGRAM UPDATE
 Iniread, ini_Version, %CONFIGURATION_FILE%, System, Version
 
 ;FileCreateDir, plugins/pformat
@@ -134,14 +163,11 @@ else if (ini_Version != VERSION)
 }
 
 
-;Global Ini declarations
-global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_isMessage, CopyMessage
-		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, onetime_K, paste_k, actionmode_k, ini_is_duplicate_copied, ini_formatting
-		, ini_CopyBeep , beepFrequency , ignoreWindows, ini_defEditor, ini_defImgEditor, ini_def_Pformat, pluginManager_k, holdClip_K, ini_PreserveClipPos
-		, chOrg_K, ini_startSearch, ini_revFormat2def, ini_pstMode_X, ini_pstMode_Y, ini_HisCloseOnInstaPaste, history_K
-
-; (search) paste mode keys 
-global pastemodekey := {} , spmkey := {}
+/*
+***********************
+DEFAULT SETTINGS LOADING
+************************
+*/
 temp_keys := "a|c|s|z|space|x|e|up|down|f|h|Enter|t|F1"
 loop, parse, temp_keys,|
 	pastemodekey[A_LoopField] := "^" A_LoopField
@@ -149,22 +175,19 @@ temp_keys := "Enter|Up|Down|Home"
 loop, parse, temp_keys,|
 	spmkey[A_LoopField] := A_LoopField
 
-global windows_copy_k, windows_cut_k, ini_OpenAllChbyDef := 0
-
-init_actionmode()
-;Initialising Clipjump Channels
+init_actionmode() ;Initialising Clipjump Channels
 initChannels()
 
+/*
+********************
+LOAD USER SETTINGS
+********************
+*/
 trayMenu() ; before customization and settings as customization can affect tray
 ;loading Settings
 load_Settings(1)
 validate_Settings()
-;load plugins
 loadPlugins()
-
-;load custom settings
-loadCustomizations()
-
 
 loop
 {
@@ -175,19 +198,17 @@ loop
 	}
 }
 
-;STARTUP
-IfExist, %A_Startup%/Clipjump.lnk
-{
-	FileDelete, %A_Startup%/Clipjump.lnk
-	FileCreateShortcut, % H_Compiled ? A_AhkPath : A_ScriptFullPath, %A_Startup%/Clipjump.lnk
-	Menu, Options_Tray, Check, % TXT.TRY_startup
-}
 
 global CLIPS_dir := "cache/clips"
 	, THUMBS_dir := "cache/thumbs"
 	, FIXATE_txt := "fixed"
 	, NUMBER_ADVANCED := 34 + CN.Total 					;the number stores the line number of ADVANCED section
 
+/*
+******************************
+MORE SETTINGS A/C USER SETTINGS
+******************************
+*/
 ;Setting Up shortcuts
 hkZ( ( paste_k ? "$^" paste_k : emptyvar ) , "Paste")
 hkZ("$^c", "NativeCopy") , hkZ("$^x", "NativeCut")
@@ -199,49 +220,57 @@ hkZ(actionmode_K, "actionmode") , hkZ(pluginManager_k, "pluginManagerGUI")
 hkZ(holdClip_K, "holdClip") , hkZ(chOrg_K, "channelOrganizer")
 ;more shortcuts
 hkZ(windows_copy_k, "windows_copy") , hkZ(windows_cut_k, "windows_cut")
-;Environment
-OnMessage(0x4a, "Receive_WM_COPYDATA")  ; 0x4a is WM_COPYDATA
-;Clean History
-historyCleanup()
+historyCleanup() ;Clean History
 
 ;create Ignore windows group from | separated values
 loop, parse, ignoreWindows,|
 	GroupAdd, ignoreGroup, ahk_class %A_LoopField%
 ;group created
 
-loadClipboardDataS()
-OnExit, exit
+/*
+*********************
+LOAD END-USER CUSTOMIZATIONS
+*********************
+*/
 
-fix_FixateFiles()
+loadClipboardDataS()
+loadCustomizations()
+
+/*
+***************
+ERROR HANDLINGS AND
+COMPATIBILITY
+***************
+*/
+
 if FileExist(GHICON_PATH)
 	DllCall("GDI32.DLL\AddFontResourceEx", Str, GHICON_PATH ,UInt,(FR_PRIVATE:=0x10), Int,0)
 else
 	MsgBox, 16, % PROGNAME, % valueof(TXT.ABT_errorFontIcon)
+
+/*
+**********
+LAST WORDS
+**********
+*/
+
+OnMessage(0x4a, "Receive_WM_COPYDATA")  ; 0x4a is WM_COPYDATA
+; Portable Startup
+IfExist, %A_Startup%/Clipjump.lnk
+{
+	FileDelete, %A_Startup%/Clipjump.lnk
+	FileCreateShortcut, % H_Compiled ? A_AhkPath : A_ScriptFullPath, %A_Startup%/Clipjump.lnk
+	Menu, Options_Tray, Check, % TXT.TRY_startup
+}
 EmptyMem()
 startUpComplete := 1
+OnExit, exit
+
+
 return
 
 ;Tooltip No 1 is used for Paste Mode tips, 2 is used for notifications , 3 is used for updates , 4 is used in WM_MOUSEMOVE , 5 is used in Action Mode
 ;6 used in Class Tool, 7 in API (Plugin) , 8 used in Customizer, 9 used in history tool, 10 in edit clips, 11 in Channel Organizer
-
-;OLD VERSION COMPATIBILITES TO REMOVE
-; fix_FIXATEFiles()
-
-fix_FixateFiles(){
-	loop % CN.Total
-	{
-		fp := "cache\fixate" (A_Index-1 ? A_index-1 : "") , rp := A_index-1
-		if !FileExist(fp)
-			continue
-		else DidRun := 1
-		CPS[rp] := {}  ; using 0 for ch 0
-		loop, % fp "\*.fxt"
-			CPS[rp][ cp := Substr(A_LoopFileName,1,-4) ] := {} , CPS[rp][cp][FIXATE_txt] := 1
-		FileRemoveDir, % fp, 1
-	}
-	if DidRun
-		Prefs2Ini()
-}
 
 ;End Of Auto-Execute================================================================================================================
 
@@ -364,6 +393,7 @@ onClipboardChange:
 	ifwinactive, ahk_group IgnoreGroup
 		return
 
+	;debugTip("1") ;<<<<<<<
 	If CALLER
 	{
 		STORE.CBCaptured := 0
@@ -371,7 +401,7 @@ onClipboardChange:
 			 try   clipboard_copy := makeClipboardAvailable() , ISACTIVEEXCEL := 0
 		else try   clipboard_copy := LASTCLIP , ISACTIVEEXCEL := 1  	;so that Cj doesnt open excel clipboard (for a longer time) and cause problems 
 		;clipboard_copy = lastclip as to remove duplicate copies in excel , ^x or ^c makes lastclip empty
-
+		;debugTip("2") ;<<<<<<<<<
 		try eventinfo := A_eventinfo
 
 		if ISACTIVEEXCEL
@@ -387,10 +417,12 @@ onClipboardChange:
 			IScurCBACTIVE := 0
 		if !ISACTIVEEXCEL 				;excel has known bugs with AHK and manipulating clipboard *infront* of it will cause errors
 			makeClipboardAvailable(0) 						;close clipboard in case it is still opened by clipjump
+		;debugTip("") ;<<<<<<<<<<<<
 		STORE.CBCaptured := 1
 	}
 	else
 	{
+		;debugTip("pst mode 2") ;<<<<<<<<<<<<
 		LASTFORMAT := WinActive("ahk_class XLMAIN") ? "" : GetClipboardFormat(0)
 		if restoreCaller
 			restoreCaller := "" , CALLER := CALLER_STATUS
@@ -402,6 +434,7 @@ onClipboardChange:
 			autoTooltip("One Time Stop " TXT.TIP_deactivated, 600, 2)
 			changeIcon()
 		}
+		;debugTip("") ;<<<<<<<<<<
 	}
 	return
 
@@ -925,7 +958,7 @@ endPastemode:
 
 Ssuspnd:
 	gosub endPastemode
-	addToWinClip(realactive , "has Clip " realclipno)
+	addToWinClip(realactive , TXT.TIP_syscb)
 	return
 
 pstMode_Help:
@@ -1155,9 +1188,8 @@ showPreview(){
 	}
 }
 
-historyCleanup()
+historyCleanup(){
 ;Cleans history in bunch
-{
 	global
 	local cur_Time , temp_file_name
 
@@ -1189,8 +1221,8 @@ actionmode:
 			gosub % ACTIONMODE[temp_am]
 		else if temp_am is Integer 			; give user chance to override setting
 			if changeChannel(temp_am)
-				autoTooltip( RegExReplace(TXT.CNL_chngMsg, "%cv1%", temp_am), 800, 2)
-			else autoTooltip( RegExReplace(TXT.CNL_chNtExst, "%cv1%", temp_am), 800, 2)
+				autoTooltip( RegExReplace(TXT.CNL_chngMsg, "%cv1%", temp_am " {" CN.Name "}"), 800, 2)
+			else autoTooltip( RegExReplace(TXT.CNL_chNtExst, "%cv1%", temp_am " {" CN.Name "}"), 800, 2)
 	}
 	else
 		EmptyMem()
@@ -1314,7 +1346,7 @@ updt:
 
 addToWinClip(lastEntry, extraTip){
 	API.blockMonitoring()
-	PasteModeToolTip( "System Clipboard " extraTip,1)
+	PasteModeToolTip( Valueof(extraTip), 1)
 	if CURSAVE
 		try FileRead, Clipboard, *c %A_WorkingDir%/%CLIPS_dir%/%lastentry%.avc
 	Sleep, 1000
@@ -1427,7 +1459,7 @@ editClip(cnl, clip, owner="none"){
 		API.Text2Binary(temp_clipboard2, temp_clipboardall)
 		FileDelete, % clipLoc
 		FileAppend, % temp_clipboardall, % clipLoc
-		CDS[CN.NG][tmpsv] := temp_clipboard2
+		CDS[cnl][tmpsv] := temp_clipboard2
 	}
 
 	autoTooltip(TXT.TIP_editdone, 800, 10)
@@ -1495,66 +1527,15 @@ routines_Exit() {
 
 ;The function enables/disables Clipjump with respect to the Communicator.
 Act_CjControl(C){
-	global
-	local p:=0,d
-
-	if C = 1
-	{
-		CALLER := CALLER_STATUS := CLIPJUMP_STATUS := 1
-		, hkZ("$^c", "NativeCopy") , hkZ("$^x", "NativeCut")
-		, hkZ(Copyfilepath_K, "CopyFile") , hkZ(Copyfolderpath_K, "CopyFolder"), hkZ(CopyFileData_K, "CopyFileData") 
-		, hkZ(Channel_K, "channelGUI") , hkZ(onetime_K, "onetime") 
-		, hkZ( ( paste_k ? "$^" paste_k : emptyvar ) , "Paste") , hkZ(history_K, "History")
-		changeIcon()
-		Menu, Options_Tray, UnCheck, % TXT.TRY_disable " " PROGNAME
-		return
-	}
-
-	;--- Backward Compatibility
-	if C<1
-		C := 2+4+64
-	;--- 
-
-	if C = 1048576
-		d := "2 4 8 16 32 64 128 256"
-	else
-		d := getParams(C)
-
-	loop, parse, d, %A_space%
-		if A_LoopField = 2
-			CALLER := 0 , CALLER_STATUS := 0
-			, hkZ("$^c", "NativeCopy", 0) , hkZ("$^x", "NativeCut", 0)
-			, changeIcon()
-		else if A_LoopField = 4
-			hkZ( ( paste_k ? "$^" paste_k : emptyvar ) , "Paste", 0)
-		else if A_LoopField = 8
-			hkZ(Copyfilepath_K, "CopyFile", 0)
-		else if A_LoopField = 16
-			hkZ(Copyfolderpath_K, "CopyFolder", 0)
-		else if A_LoopField = 32
-			hkZ(CopyFileData_K, "CopyFileData", 0)
-		else if A_LoopField = 64
-			hkZ(history_K, "History", 0)
-		else if A_LoopField = 128
-			hkZ(Channel_K, "channelGUI", 0)
-		else if A_LoopField = 256
-			hkZ(onetime_K, "onetime", 0)
-
-	if !Instr(d, "2 4")
-	{
-		CLIPJUMP_STATUS := 1
-		Menu, Options_Tray, UnCheck, % TXT.TRY_disable " " PROGNAME
-	}
-
+	Msgbox, 48, % PROGNAME, % "Clipjump Controller has been discontinued."
 }
 
-Receive_WM_COPYDATA(wParam, lParam)
-{
+Receive_WM_COPYDATA(wParam, lParam){
 	global
     Local D
     static k := "API:" , cmd := "cmd:"
 
-   D := StrGet( NumGet(lParam + 2*A_PtrSize) )  ;unicode transfer
+	D := StrGet( NumGet(lParam + 2*A_PtrSize) )  ;unicode transfer
     if D is not Integer
     	if !Instr(D, k) 	; if both are false and so the input is garbled (chinese)
     		D := StrGet( NumGet(lParam + 2*A_PtrSize), 8, "UTF-8")  ;ansi conversion
