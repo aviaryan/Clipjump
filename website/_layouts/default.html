@@ -37,19 +37,21 @@ div#content, header .menubar {
 
 <body>
 
-<header>
 {% if page.rtype != "docs" %}
+<header>
 <div class="banner">Clipjump <font size=-1>v{{site.version}}</font></div><br>
-{% endif %}
 <div class="menubar">
 <a href="/">Home</a> |
 <a href="/contact.html">About</a> |
-<a href="http://clipjump.sourceforge.net/docs/index.html">Docs</a> |
+<a href="http://clipjump.sourceforge.net/help.htm">Online Docs</a> |
 <a href="http://aviaryan.in/blog/clipjump/" target="_blank">Blog</a> |
 <a href="http://clipjump.sourceforge.net/addons.html">Addons</a> |
 <a href="http://www.github.com/aviaryan/Clipjump" target="_blank">Github</a>
 </div>
 </header>
+{% else %}
+<br><br>
+{% endif %}
 
 <div id="content">
 {% if page.homepage != 1 %}
@@ -76,7 +78,7 @@ div#content, header .menubar {
 <div style="float: left;">
 <b><font size=+1>Helpful Links</font></b><br><br>
 <a href="http://clipjump.sourceforge.net/screenshots.html">Screenshots</a><br>
-<a href="docs/">Documentation</a><br>
+<a href="http://clipjump.sourceforge.net/help.htm">Online Documentation</a><br>
 <a href="http://clipjump.sourceforge.net/translations">Translations</a><br> <!-- online pages -->
 <a href="http://www.avi-win-tips.blogspot.in/p/clipjump.html">Previous Clipjump page</a><br>
 </div>

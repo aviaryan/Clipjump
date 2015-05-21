@@ -226,5 +226,13 @@
 		<param name="Name" value="Paste Mode">
 		<param name="Local" value="docs/basic_help.html#pastemd">
 		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Installing a plugin">
+		<param name="Local" value="docs/plugins/index.html#install">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Running a plugin from ClipjumpCustom">
+		<param name="Local" value="docs/plugins/index.html#run">
+		</OBJECT>
 </UL>
 </BODY></HTML>
