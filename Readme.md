@@ -23,3 +23,6 @@ Clipjump is distributed without compiling and a disguised AutoHotkey.exe renamed
 #### Building the Docs
 Docs can be compiled using Jekyll and then Microsoft's HHC. First build the website folder using Jekyll and then compile the jekyll-processed files using HHC.
   
+#### Adding Plugins
+Please add your plugins to the [clipjump-addons](https://github.com/aviaryan/clipjump-addons) repository. This repo only contains plugins distributed with official Clipjump release. 
+If I realise your plugin is useful for the community, I will distribute it officially and hence it will be added to this repository. See [#68](https://github.com/aviaryan/Clipjump/issues/68)
