@@ -267,8 +267,16 @@ getRealCD(text){
 
 ClipTransfer(sub, cno, nsub="", ncno="", keep_original=1, flag=1){
 ; Copy moves a clip along with the 3 or more files
+; TODO Change params in prefs.ini also
 	FileTransfer("cache\clips" sub "\" cno ".avc", "cache\clips" nsub "\" ncno ".avc", keep_original, flag)
 	FileTransfer("cache\thumbs" sub "\" cno ".jpg", "cache\thumbs" nsub "\" ncno ".jpg", keep_original, flag)
+}
+
+ClipSwap(sub, cno, nsub="", ncno=""){
+	; Swaps two clips
+	ClipTransfer(sub, cno, sub, 100000, 0)
+	ClipTransfer(nsub, ncno, sub, cno, 0)
+	ClipTransfer(sub, 100000, nsub, ncno, 0)
 }
 
 ClipFolderTransfer(sub, nsub, keep_original=1, flag=1){

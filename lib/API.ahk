@@ -96,16 +96,19 @@ class API
 		else
 		{
 			FileTransfer(origClip, newClip, 0) , FileTransfer(origThumb, newThumb, 0)
-			CPS[new_channel][nc_info.realCURSAVE+1] := CPS[channel][clip] , CPS[channel].remove(Clip)
-
-			CDS[new_channel][nc_info.realCURSAVE+1] := CDS[channel][clip] , CDS[channel][clip] := ""
+			CPS[new_channel][nc_info.realCURSAVE+1] := CPS[channel][clip] , CPS[channel].remove(Clip) ; .remove() auto adjusts cavities in array
+			CDS[new_channel][nc_info.realCURSAVE+1] := CDS[channel][clip] , CDS[channel].remove(Clip) 
 			c_Folder1 := "cache\clips" c_info.p "\" , c_Folder2 := "cache\thumbs" c_info.p "\"
 			loop % c_info.realCURSAVE-clip
 			{
 				FileMove, % c_Folder1 clip+A_Index ".avc", % c_Folder1 clip+A_Index-1 ".avc", 1
-				;Auto rmv := CPS[channel].remove(clip+A_index) , CPS[channel][clip+A_index-1] := rmv
 				FileMove, % c_Folder2 clip+A_Index ".jpg", % c_Folder2 clip+A_index-1 ".jpg", 1
-				CDS[channel][clip+A_index-1] := CDS[channel][clip+A_index] , CDS[channel][clip+A_index] := ""
+			}
+
+			if (new_channel == channel){
+				ClipTransfer(c_info.p, nc_info.realCURSAVE+1, c_info.p, nc_info.realCURSAVE, 0)
+				; no need for changing arr as .remove() handles it
+				return
 			}
 			manageFIXATE( nc_info.realCURSAVE + 1, new_channel, nc_info.p )
 			IsCurCBActive := 0
