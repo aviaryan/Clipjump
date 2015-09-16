@@ -76,7 +76,6 @@ global MSG_TRANSFER_COMPLETE
 global hidden_date_no := 4 , history_w , history_partial := 1 ;start off with partial=1 <> much better
 global PREV_FILE := "cache\prev.html" , GHICON_PATH := A_ScriptDir "\icons\octicons-local.ttf"
 
-
 /*
 ****************
 BASIC STRUCTURE
@@ -168,7 +167,7 @@ else if (ini_Version != VERSION)
 DEFAULT SETTINGS LOADING
 ************************
 */
-temp_keys := "a|c|s|z|space|x|e|up|down|f|h|Enter|t|F1"
+temp_keys := "a|c|s|z|space|x|e|up|down|f|h|Enter|t|F1|q"
 loop, parse, temp_keys,|
 	pastemodekey[A_LoopField] := "^" A_LoopField
 temp_keys := "Enter|Up|Down|Home"
@@ -692,6 +691,11 @@ AddjumpClip:
 	gosub paste
 	return
 
+move_to_first:
+	API.manageClip(CN.NG, CN.NG, realClipNo, 0)
+	gosub navigate_to_first
+	return
+
 navigate_to_first:
 	if IN_BACK
 		IN_BACK_correction()
@@ -804,7 +808,7 @@ fixCheck() {
 }
 
 ;Shows tooltips in Clipjump Paste Modes
-PasteModeTooltip(cText, notpaste=0) {
+PasteModeTooltip(cText, notpaste=0, fontops="") {
 	global
 	local tx, ty
 	if STORE["pstTipRebuild"] {
@@ -814,7 +818,10 @@ PasteModeTooltip(cText, notpaste=0) {
 	; SPM.X and y contain place to show a/c searchbox
 	tx := ini_pstMode_X ? ini_pstMode_X : SPM.X , ty := ini_pstMode_Y ? ini_pstMode_Y : SPM.Y
 	if notpaste
-		Tooltip, % cText, % tx, % ty
+		if (fontops != "")
+			Tooltip_fonted(cText,, tx, ty, fontops)
+		else
+			Tooltip, % cText, % tx, % ty
 	else {
 		tagText := (t := CPS[CN.NG][realActive]["Tags"]) != "" ? "(" t ")" : ""
 		if cText =
@@ -962,7 +969,7 @@ Ssuspnd:
 	return
 
 pstMode_Help:
-	PasteModeTooltip(TXT.SET_shortcuts "`n" TXT.TIP_help, 1) , Tooltip_setFont("s8", "Courier New|Consolas")
+	PasteModeTooltip(TXT.SET_shortcuts "`n" TXT.TIP_help, 1) ;, "S8, Consolas")
 	STORE["pstTipRebuild"] := 1
 	return
 
@@ -986,7 +993,7 @@ hkZ_pasteMode(mode=0, disableAll=1){
 	hkZ(pastemodekey.space, "Fixate", mode) , hkZ(pastemodekey.s, "Ssuspnd", mode) , hkZ(pastemodekey.e, "export", mode)
 	hkZ(pastemodekey.up, "channel_up", mode) , hkZ(pastemodekey.down, "channel_down", mode) , hkZ(pastemodekey.a, "navigate_to_first", mode)
 	hkZ(pastemodekey.f, "searchpm", mode) , hkZ(pastemodekey.h, "editclip", mode) , hkZ(pastemodekey.enter, "multiPaste", mode)
-	hkZ(pastemodekey.t, "setClipTag", mode) , hkZ(pastemodekey.F1, "pstMode_Help", mode)
+	hkZ(pastemodekey.t, "setClipTag", mode) , hkZ(pastemodekey.F1, "pstMode_Help", mode) , hkZ(pastemodekey.q, "move_to_first", mode)
 
 	if (!mode) && disableAll        ;init Cj
 	{
@@ -1046,7 +1053,7 @@ holdClip:
 	}
 	holdclip_continue := 1 , hkZ( ( paste_k ? "$^" paste_k : emptyvar ) , "Paste", 0) 	; disable paste mode
 	try temp_cb := trygetVar("Clipboard")
-	keyPressed := TT_Console(TXT.TIP_holdclip "`n`n" Substr(temp_cb, 1, 200) " ...", "Insert F2 Esc",,,,,, 1)
+	keyPressed := TT_Console(TXT.TIP_holdclip "`n`n" Substr(temp_cb, 1, 200) " ...", "Insert F2 Esc",,,,, 1)
 	if keyPressed = F2
 	{
 		guiMsgBox(TXT["_output"], API.runPlugin("pformat.commonformats.ahk", Clipboard) )
@@ -1212,7 +1219,7 @@ historyCleanup(){
 
 actionmode:
 	update_actionmode()
-	temp_am := TT_Console(ACTIONMODE.text, ACTIONMODE.keys, temp3, temp3, 5, "s8", "Consolas|Courier New")
+	temp_am := TT_Console(ACTIONMODE.text, ACTIONMODE.keys, PROGNAME " " TXT.ACT__name,,, "S8, Consolas")
 	if ACTIONMODE[temp_am] != "Exit_actmd"
 	{
 		if Instr(ACTIONMODE[temp_am] , "(")
@@ -1241,9 +1248,9 @@ init_actionmode(){
 update_actionmode(){
 	static numadd := "0123456789"
 	thetext := ""
-	.  PROGNAME " " TXT.ACT__name
-	. "`n-----------"
-	. "`n"
+	;.  PROGNAME " " TXT.ACT__name
+	;. "`n-----------"
+	;. "`n"
 	ACTIONMODE.remove("text") , ACTIONMODE.remove("keys")
 
 	for k,v in ACTIONMODE
@@ -1540,7 +1547,7 @@ Receive_WM_COPYDATA(wParam, lParam){
     	if !Instr(D, k) 	; if both are false and so the input is garbled (chinese)
     		D := StrGet( NumGet(lParam + 2*A_PtrSize), 8, "UTF-8")  ;ansi conversion
     if Instr(D, k)
-    	Act_API(D, k) 	; done to not cause error if no lib is included
+    	a := Act_API(D, k) 	; done to not cause error if no lib is included
     else Act_CjControl(D)
 
     while !FileExist(A_temp "\clipjumpcom.txt")
@@ -1567,6 +1574,7 @@ Receive_WM_COPYDATA(wParam, lParam){
 #include %A_ScriptDir%\lib\history gui plug.ahk
 #include %A_ScriptDir%\lib\pluginManager.ahk
 #include %A_ScriptDir%\lib\channelOrganizer.ahk
+#include %A_ScriptDir%\lib\TTInclude.ahk
 #include *i %A_ScriptDir%\plugins\_registry.ahk
 
 ;------------------------------------------------------------------- X -------------------------------------------------------------------------------

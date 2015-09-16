@@ -43,18 +43,11 @@ chrHex(n){
 	return chr( base2Number(n, 16) )
 }
 
-Tooltip_setFont(font_options="", font_face=""){
-;sets font for a tooltip
-	if (font_options) or (font_face)
-	{
-		loop, parse, font_face, |
-			Gui, TTfont:Font, %font_options%, %A_LoopField%
-		Gui, TTfont:Add, Text, hwnd_hwnd, `.
-		SendMessage, 0x31, 0, 0,, ahk_id %_hwnd%
-		Gui, TTfont: Destroy
-		font := ErrorLevel
-		SendMessage, 0x30, %font%, 1, %ctrl%, ahk_class tooltips_class32
-	}
+Tooltip_fonted(msg, title="", x="", y="", fontops=""){
+	ttobj := TT("", msg, title)
+	ttobj.Font(fontops)
+	ttobj.Show()
+	return ttobj
 }
 
 ;BeepAt()
@@ -338,7 +331,7 @@ deactivateHtml(code){
 
 TT_Console_PasteMode(text, keys){
 	tx := ini_pstMode_X ? ini_pstMode_X : SPM.X , ty := ini_pstMode_Y ? ini_pstMode_Y : SPM.Y
-	return TT_Console(text, keys, tx, ty, 1)
+	return TT_Console(text, keys,, tx, ty,, 1)
 }
 
 ;GetFile()

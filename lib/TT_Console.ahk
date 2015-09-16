@@ -14,7 +14,6 @@ Returns >
 	The key which has been pressed
 */
 
-
 ;EXAMPLE
 ;#Persistent
 ;a := TT_Console( "Hi`nPress Y to see another message.`nPress N to exit script", "y n", empty_var, empty_var, 1, "s12", "Arial|Consolas")
@@ -29,42 +28,38 @@ Returns >
 ;return
 
 
-TT_Console(msg, keys, x="", y="", whichtooltip=1, font_options="", font_face="", followMouse=0) {
+TT_Console(msg, keys, title="", x="", y="", fontops="", followMouse=0) {
 
-	;create font
-	if (font_options) or (font_face)
-	{
-		createfont := 1
-		gosub TT_Console_CreateFont
-	}
-	;create tooltip
-	Tooltip, % msg, % x, % y, % whichtooltip
-	;set font
-	if createfont
-		gosub TT_Console_SetFont
+	ttobj := TT("", msg, title)
+	if (fontops=="")
+		fontops := "Arial,s9"
+	ttobj.Font(fontops)
+
+	;show tooltip
+	ttobj.Show(msg, x, y)
 
 	;create hotkeys
 	loop, parse, keys, %A_space%, %a_space%
 		hkZ(A_LoopField, "TT_Console_Check", 1)
-		;Hotkey, % A_LoopField, TT_Console_Check, On
 
+	is_TTkey_pressed := 0
 	while !is_TTkey_pressed
 	{
 		if followMouse
 		{
-			Tooltip, % msg,,, % whichtooltip
-			if createfont
-				gosub TT_Console_SetFont
+			ttobj.Show()
 			sleep 200
 		}
 		else sleep 20
 	}
 
 	ToolTip,,,, % whichtooltip
+	ttobj.Hide()
+	ttobj := ""
+	; msgbox % "Report this to dev : " what_pressed
 
 	loop, parse, keys, %A_space%, %a_space%
 		hkZ(A_LoopField, "TT_Console_Check", 0)
-		;Hotkey, % A_LoopField, TT_Console_Check, Off
 
 	return what_pressed
 
@@ -72,19 +67,5 @@ TT_Console(msg, keys, x="", y="", whichtooltip=1, font_options="", font_face="",
 TT_Console_Check:
 	what_pressed := A_ThisHotkey
 	is_TTkey_pressed := 1
-	return
-
-TT_Console_CreateFont:
-	loop, parse, font_face, |
-		Gui, TTfont:Font, %font_options%, %A_LoopField%
-	Gui, TTfont:Add, Text, hwnd_hwnd, `.
-	SendMessage, 0x31, 0, 0,, ahk_id %_hwnd%
-	Gui, TTfont: Destroy
-	font := ErrorLevel
-	return
-
-TT_Console_SetFont:
-	;SendMessage, 0x30, %font%, 1, %ctrl%, ahk_id%win% 
-	SendMessage, 0x30, %font%, 1, %ctrl%, ahk_class tooltips_class32
 	return
 }

@@ -394,7 +394,7 @@ class API
 			autoTooltip(Text, forTime, 7)
 		else
 			Tooltip, % Text,,, 7
-		tooltip_setfont("s9", "Courier")
+		;tooltip_setfont("s9", "Courier")
 	}
 	; removes the above tip
 	removeTip(){
