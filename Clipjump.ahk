@@ -839,6 +839,7 @@ ctrlCheck:
 		Critical
 		SetTimer, ctrlCheck, Off
 		CALLER := false , sleeptime := 300 , TEMPSAVE := realActive 				; keep the current clip pos saved
+		dopop := 0
 		Gui, imgprv:Destroy
 		; Change vars a/c MULTIPASTE
 		if MULTIPASTE && !GetKeyState("Ctrl") && !temp_spmWasActive 		;if spmIsActive user is not expected to cancel by releasing Ctrl
@@ -888,6 +889,8 @@ ctrlCheck:
 		else if ctrlRef = pastemode
 		{
 			PasteModeToolTip(MSG_PASTING,1)
+			if (GetKeyState("Shift")) ; POP
+				dopop := 1
 			if curPformat 	;use curpf to get the func
 			{
 				Critical, Off
@@ -932,6 +935,8 @@ ctrlCheck:
 			MULTIPASTE := 0 		; deactivated when Ctrl released
 		ctrlRef := ""
 		CALLER := CALLER_STATUS
+		if dopop
+			clearClip(CURSAVE)
 		if ini_revFormat2def
 			set_pformat(ini_def_Pformat)
 		if prefs_changed
