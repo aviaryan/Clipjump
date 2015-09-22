@@ -45,7 +45,7 @@ PROGRAM VARIABLES
 */
 
 global PROGNAME := "Clipjump"
-global VERSION := "12"
+global VERSION := "12.1"
 global CONFIGURATION_FILE := "settings.ini"
 
 ini_LANG := ini_read("System", "lang")
@@ -108,7 +108,7 @@ global cut_is_delete_windows := "XLMAIN QWidget" 			;excel, kingsoft office
 global CURSAVE, TEMPSAVE, LASTCLIP, LASTFORMAT, Islastformat_Changed := 1, IScurCBACTIVE := 0, curPformat, curPfunction, curPisPreviewable
 global NOINCOGNITO := 1, SPM := {}, protected_DoBeep := 1
 global pastemodekey := {} , spmkey := {}
-global windows_copy_k, windows_cut_k, ini_OpenAllChbyDef := 0
+global windows_copy_k, windows_cut_k, ini_OpenAllChbyDef := 0, pstIdentifier := "^", pstKeyName := (pstIdentifier == "^") ? "Ctrl" : "LWin"
 
 ;Initailizing Common Global Variables
 global CALLER_STATUS, CLIPJUMP_STATUS := 1		; global vars are not declared like the below , without initialising
@@ -167,9 +167,6 @@ else if (ini_Version != VERSION)
 DEFAULT SETTINGS LOADING
 ************************
 */
-temp_keys := "a|c|s|z|space|x|e|up|down|f|h|Enter|t|F1|q"
-loop, parse, temp_keys,|
-	pastemodekey[A_LoopField] := "^" A_LoopField
 temp_keys := "Enter|Up|Down|Home"
 loop, parse, temp_keys,|
 	spmkey[A_LoopField] := A_LoopField
@@ -208,8 +205,13 @@ global CLIPS_dir := "cache/clips"
 MORE SETTINGS A/C USER SETTINGS
 ******************************
 */
+
+temp_keys := "a|c|s|z|space|x|e|up|down|f|h|Enter|t|F1|q"
+loop, parse, temp_keys,|
+	pastemodekey[A_LoopField] := pstIdentifier A_LoopField
+
 ;Setting Up shortcuts
-hkZ( ( paste_k ? "$^" paste_k : emptyvar ) , "Paste")
+hkZ( ( paste_k ? "$" pstIdentifier paste_k : emptyvar ) , "Paste")
 hkZ("$^c", "NativeCopy") , hkZ("$^x", "NativeCut")
 hkZ(Copyfilepath_K, "CopyFile") , hkZ(Copyfolderpath_K, "CopyFolder")
 hkZ(history_K, "History")
@@ -834,7 +836,7 @@ PasteModeTooltip(cText, notpaste=0, fontops="") {
 }
 
 ctrlCheck:
-	if ((!GetKeyState("Ctrl")) && (!SPM.ACTIVE)) || PASTEMODE_ACT
+	if ((!GetKeyState(pstKeyName)) && (!SPM.ACTIVE)) || PASTEMODE_ACT
 	{
 		Critical
 		SetTimer, ctrlCheck, Off
@@ -842,7 +844,7 @@ ctrlCheck:
 		dopop := 0
 		Gui, imgprv:Destroy
 		; Change vars a/c MULTIPASTE
-		if MULTIPASTE && !GetKeyState("Ctrl") && !temp_spmWasActive 		;if spmIsActive user is not expected to cancel by releasing Ctrl
+		if MULTIPASTE && !GetKeyState(pstKeyName) && !temp_spmWasActive 		;if spmIsActive user is not expected to cancel by releasing Ctrl
 			if ctrlRef = pastemode
 				ctrlRef := "cancel"
 		; ---
@@ -931,7 +933,7 @@ ctrlCheck:
 		Tooltip
 
 		restoreCaller := PASTEMODE_ACT := 0 	; restoreCaller - make it 0 in case Clipboard was not touched (Pasting was done)
-		if !GetKeyState("Ctrl") && !SPM.ACTIVE
+		if !GetKeyState(pstKeyName) && !SPM.ACTIVE
 			MULTIPASTE := 0 		; deactivated when Ctrl released
 		ctrlRef := ""
 		CALLER := CALLER_STATUS
@@ -1056,7 +1058,7 @@ holdClip:
 		}
 		sleep 50
 	}
-	holdclip_continue := 1 , hkZ( ( paste_k ? "$^" paste_k : emptyvar ) , "Paste", 0) 	; disable paste mode
+	holdclip_continue := 1 , hkZ( ( paste_k ? "$" pstIdentifier paste_k : emptyvar ) , "Paste", 0) 	; disable paste mode
 	try temp_cb := trygetVar("Clipboard")
 	keyPressed := TT_Console(TXT.TIP_holdclip "`n`n" Substr(temp_cb, 1, 200) " ...", "Insert F2 Esc",,,,, 1)
 	if keyPressed = F2
@@ -1071,7 +1073,7 @@ holdClip:
 	API.blockMonitoring(0)
 	if keyPressed = Insert
 		try Clipboard := t_cb
-	hkZ( ( paste_k && CLIPJUMP_STATUS ? "$^" paste_k : emptyvar ) , "Paste")
+	hkZ( ( paste_k && CLIPJUMP_STATUS ? "$" pstIdentifier paste_k : emptyvar ) , "Paste")
 	EmptyMem()
 	return
 
@@ -1523,7 +1525,7 @@ disable_clipjump:
 	, hkZ("$^c", "NativeCopy", CLIPJUMP_STATUS) , hkZ("$^x", "NativeCut", CLIPJUMP_STATUS)
 	changeIcon()
 
-	hkZ( ( paste_k ? "$^" paste_k : emptyvar ) , "Paste", CLIPJUMP_STATUS)
+	hkZ( ( paste_k ? "$" pstIdentifier paste_k : emptyvar ) , "Paste", CLIPJUMP_STATUS)
 	Menu, Options_Tray, % !CLIPJUMP_STATUS ? "Check" : "Uncheck", % TXT.TRY_disable " " PROGNAME
 	init_actionmode() 			;refresh enable/disable text in action mode
 	return
