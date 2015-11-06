@@ -841,7 +841,6 @@ ctrlCheck:
 		Critical
 		SetTimer, ctrlCheck, Off
 		CALLER := false , sleeptime := 300 , TEMPSAVE := realActive 				; keep the current clip pos saved
-		dopop := 0
 		Gui, imgprv:Destroy
 		; Change vars a/c MULTIPASTE
 		if MULTIPASTE && !GetKeyState(pstKeyName) && !temp_spmWasActive 		;if spmIsActive user is not expected to cancel by releasing Ctrl
@@ -944,6 +943,14 @@ ctrlCheck:
 		if prefs_changed
 			Prefs2Ini() 	; save preferences in memory
 		EmptyMem()
+		dopop := 0
+	} else {
+		; record previous shift presses too
+		; is more user convenient
+		if (GetKeyState("Shift")) 
+			dopop := 1
+		else
+			dopop := 0
 	}
 	return
 
