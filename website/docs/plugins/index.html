@@ -24,7 +24,7 @@ Simply copy the .ahk file with all other dependent files in the plugins director
 <h2><a name="run">Running a plugin from ClipjumpCustom</a></h2>
 The <code class="Syntax">API.runPlugin( plugin_file_name , param1 , param2 , param3 , ..... )</code> can be used to run a plugin.<br>
 If <b>no</b> parameter (param) is passed at all , then the user will be automatically asked for the needed number of parameters. Below are suitable examples -
-<pre>
+{% highlight ini %}
 [some_section]
 noautorun=1
 run = API.runPlugin( some_plugin.ahk )
@@ -32,7 +32,7 @@ run = API.runPlugin( some_plugin.ahk )
 [some_section2]
 bind=Win+Alt+K
 run = API.runPlugin( some_plugin.ahk , the_text , the_title )
-</pre>
+{% endhighlight %}
 <br><br>
 
 <h2>Creating your own plugins</h2>
