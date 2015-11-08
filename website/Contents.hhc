@@ -203,6 +203,10 @@
 			<param name="Name" value="More Ini based settings">
 			<param name="Local" value="docs/ini.html">
 			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Using Win for Paste Mode">
+			<param name="Local" value="docs/ini.html#win_paste_mode">
+			</OBJECT>
 	</UL>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Languages">
