@@ -2,11 +2,10 @@ name: Clipjump
 markdown: redcarpet
 fullpath: http://clipjump.sourceforge.net
 description: Official homepage of Clipjump Clipboard Manager
-baseurl: 
+baseurl: /
 permalink: /blog/:categories/:title.html
 title: Clipjump
-# paginate: 10
-highlighter: null
+highlighter: rouge
 
 # More
 author:
@@ -19,4 +18,4 @@ author:
 
 googleverify: QF1dxap5pOK1UzZAuCzgvJDuDA5AvYrH9ch5aWr5h-8
 exclude: ['README.md', 'Gemfile.lock', 'Gemfile', 'Rakefile']
-version: 12
+version: 12.3

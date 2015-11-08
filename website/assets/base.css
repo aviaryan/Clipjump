@@ -114,7 +114,8 @@ img {
 pre, code, .Syntax {
 	font-family: Consolas, Courier New, monospace;
 }
-pre, code { background-color: #F3F3FF; border: solid 1px #E3E3EF; }
+:not(.highlight) pre { background-color: #F3F3FF; border: solid 1px #E3E3EF; }
+
 .Syntax   { background-color: #FFFFAA; border: solid 1px #E8E89A; }
 code, span.Syntax { padding: 0 1px; }
 pre {
@@ -128,7 +129,7 @@ pre.Syntax {
     padding: 12px 0 12px 4px;
     line-height: 150%;
 }
-pre, pre.Short /*used with .Syntax*/ { line-height: 120%; }
+pre.Short /*used with .Syntax*/ { line-height: 120%; }
 /* comments */
 pre em, code em { color: #008000; font-style: normal; }
 
