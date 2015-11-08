@@ -244,11 +244,13 @@ Formats GUI</a>, <kbd>Ins</kbd> to insert clip to channel and <kbd>Ctrl</kbd>+<k
  is shown.
 <br><br>
 <span class="red">Tip</span> - Want HoldClip feature to cut rather than copy data to buffer. Try this <a href=custom.html>Customization</a> --
-<pre>[cut_to_buffer]
+{% highlight ini %}
+[cut_to_buffer]
 bind = Ctrl + Win + X
 STORE.holdClip_send = ^{vk58}
-<span class="green">; virtual key 58 is X , so ^x = Ctrl+X</span>
-run = holdclip</pre>
+; virtual key 58 is X , so ^x = Ctrl+X
+run = holdclip
+{% endhighlight %}
 <br><br>
 
 <a name=beep><h2>Sound when copied</h2></a>

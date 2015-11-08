@@ -78,11 +78,12 @@ h2 {
 }
 h3 {
 	font-size: 14px;
-	font-weight: bold;
+	font-weight: normal;
+    color: #000000;
 	background-color: #E6E6E6;
 	margin: 1.0em 0 0.5em 0;
-	padding: 0.1em 0 0.1em 0.2em;
-	border-top: 1px solid silver;
+	padding: 0.3em 0.3em 0.3em 0.3em;
+	border: 1px solid silver;
 	border-bottom: 1px solid silver;
 }
 h4 {

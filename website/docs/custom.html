@@ -104,7 +104,7 @@ pastemodekey.z=^y
 The above code changes the inbuilt variable <code>pastemodekey.z</code> to '^y'. <br>
 If you remember, <kbd>Z</kbd> is the default key for toggling <a href="basic_help.html#pformat">Paste formats</a> in <strong><a href="basic_help.html#pstmd">Paste Mode</a></strong>. The above code changes it to <kbd>Y</kbd>. It is mandatory to write <samp>pastemodekey</samp> in <code>pastemodekey.z</code> because pastemodekey is the object name which has 
 this setting.<br>
-The Pastemode group has all variables as pastemodekey.<var>key</var> where <var>key</var> is the original key. Same is for <a href="shorcuts.html#spm">[Search-Paste Mode]</a>. It has all variables as spmkey.<var>key</var>. So the following code will change <code>Channel up</code>, <code>Channel down</code> and <code>paste-format</code> shortcut in <a href="shorcuts.html#pastemd">[Paste-Mode]</a> and <code>cancel</code> shortcut in <a href="shortcuts.html#spm">[Search-Paste Mode]</a>.
+The Pastemode group has all variables as pastemodekey.<var>key</var> where <var>key</var> is the original key. Same is for <a href="shortcuts.html#spm">[Search-Paste Mode]</a>. It has all variables as spmkey.<var>key</var>. So the following code will change <code>Channel up</code>, <code>Channel down</code> and <code>paste-format</code> shortcut in <a href="shortcuts.html#pastemd">[Paste-Mode]</a> and <code>cancel</code> shortcut in <a href="shortcuts.html#spm">[Search-Paste Mode]</a>.
 {% highlight ini %}
 [AutoRun]
 pastemodekey.z=^y
@@ -158,7 +158,7 @@ tip=Channel changed to 4
 <br><br>
 
 <h3><a name="actmd">Example 6 (Running a ClipjumpCustom script with Action Mode)</a></h3>
-Suppose you don't want to create a separate shortcut <kbd>Win</kbd>+<kbd>V</kbd> for the above example. Here is how to create a <a href="shorcuts.html#actmd">[Action Mode]</a> shortcut for it.
+Suppose you don't want to create a separate shortcut <kbd>Win</kbd>+<kbd>V</kbd> for the above example. Here is how to create a <a href="shortcuts.html#actmd">[Action Mode]</a> shortcut for it.
 <a name="noautorun_ex"></a>
 {% highlight ini %}
 [changeto_4]
@@ -174,7 +174,7 @@ ACTIONMODE.F10_caption = Change 2 my channel
 {% endhighlight %}
 <ul>
 	<li><code class=syntax>API.executeSection( section_name )</code> can be used to execute any section any time. section_name is the name of the section to be executed.
-	<li><a href=shorcuts.html#actmd>[Action-Mode]</a> keys are customizable with the <code>ACTIONMODE.<var>key</var></code> variable. The <code>ACTIONMODE.<var>key</var>_caption</code> variable holds the caption for the action shown in [Action-Mode].
+	<li><a href=shortcuts.html#actmd>[Action-Mode]</a> keys are customizable with the <code>ACTIONMODE.<var>key</var></code> variable. The <code>ACTIONMODE.<var>key</var>_caption</code> variable holds the caption for the action shown in [Action-Mode].
 	<li>The <code>ACTIONMODE.<var>key</var></code> on the other hand holds the label/function/routine to be executed when the key is pressed. Here we are executing the function <code>API.executeSection()</code> with the first parameter as <em>changeto_4</em>
 </ul>
 <br><br>
