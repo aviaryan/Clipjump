@@ -72,7 +72,7 @@ gui_Settings()
 	Gui, Add, Text, 	xs y+8,		% TXT.SET_actmd
 	Gui, Add, Hotkey, 	x%x_ofhotkeys% yp-3 vactmd_K   ghotkey_actmd, % Actionmode_K
 	Gui, Add, Text,		xs y+8,		% TXT.HST__name
-	Gui, Add, Hotkey, 	x%x_ofhotkeys% yp-3 vhst_K	gsettingsChanged, % history_k 
+	Gui, Add, Hotkey, 	x%x_ofhotkeys% yp-3 vhst_K	gsettingsChanged, % history_k
 	Gui, Add, Text, 	xs y+8, 	% TXT.SET_org
 	Gui, Add, Hotkey, 	x%x_ofhotkeys% yp-3 vorg_K 		gsettingsChanged, % chOrg_K
 	Gui, Add, Text, 	xs y+8,		% TXT._cfilep

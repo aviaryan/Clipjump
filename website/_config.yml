@@ -5,7 +5,7 @@ description: Official homepage of Clipjump Clipboard Manager
 baseurl: 
 permalink: /blog/:categories/:title.html
 title: Clipjump
-paginate: 10
+# paginate: 10
 highlighter: null
 
 # More

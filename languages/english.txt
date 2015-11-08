@@ -296,27 +296,6 @@ SET_T_startSearch = Make Ctrl+V open paste mode with the search mode enabled.
                   = This will help if you don't like holding down Ctrl to navigate through clips. Also see "Search in Paste Mode" in Help file.
 _editing = Editing
 
-; Note to Translator > please make sure the out in Ctrl+v+F1 is aligned properly in TIP_help
-TIP_help =
-= Release Ctrl - Paste
-= V            - Move forward One Clip
-= C            - Move Back One Clip
-= X            - Cancel mode, Move Clip, Delete Clip, Copy Clip
-= Z            - Change Pasting Format
-= Space        - FIX
-= S            - Put current Clip to system Clipboard
-= E            - Export
-= Up/Down      - Change channel +1/-1
-= A            - Move to first clip of the channel
-= 1..9         - Jump to nth Clip ahead of the active clip
-= F            - Search
-= H            - Edit
-= Enter        - Start Multiple Pasting Session
-= T            - Tag
-= F1           - Help
-=
-= Press V to exit this window
-
 ;=======
 ; 11.2.3
 ;=======
@@ -415,3 +394,30 @@ TIP_syscb = System clipboard has clip %realclipno%
 TIP_editing = Editing....
             = Press Esc to cancel.
             = After editing, save (Ctrl+S) the file and close the editor to have it loaded into Clipjump.
+
+;=====
+; 12.3
+;=====
+
+; Note to Translator > please make sure the out in Ctrl+v+F1 is aligned properly in TIP_help
+TIP_help =
+= Release Ctrl - Paste
+= V            - Move forward One Clip
+= C            - Move Back One Clip
+= X            - Cancel mode, Move Clip, Delete Clip, Copy Clip
+= Z            - Change Pasting Format
+= Space        - FIX
+= S            - Put current Clip to system Clipboard
+= E            - Export
+= Up/Down      - Change channel +1/-1
+= A            - Move to first clip of the channel
+= 1..9         - Jump to nth Clip ahead of the active clip
+= F            - Search
+= H            - Edit
+= Q            - Move clip to first position
+= Enter        - Start Multiple Pasting Session
+= T            - Tag
+= Hold Shift   - Delete clip after pasting
+= F1           - Help
+=
+= Press V to exit this window
