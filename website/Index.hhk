@@ -230,5 +230,9 @@
 		<param name="Name" value="Running a plugin from ClipjumpCustom">
 		<param name="Local" value="docs/plugins/index.html#run">
 		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Delete clip after Pasting">
+		<param name="Local" value="docs/basic_help.html#pastepop">
+		</OBJECT>
 </UL>
 </BODY></HTML>

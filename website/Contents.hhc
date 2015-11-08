@@ -147,6 +147,10 @@
 			<param name="Local" value="docs/basic_help.html#copycutclip">
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Delete clip after Pasting">
+			<param name="Local" value="docs/basic_help.html#pastepop">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Copying to Windows Clipboard">
 			<param name="Local" value="docs/basic_help.html#winclip">
 			</OBJECT>
