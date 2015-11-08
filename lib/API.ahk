@@ -339,6 +339,17 @@ class API
 		return FileExist(f) ? f : ""
 	}
 
+	;disable Clipjump - status=1 means disable , status=-1 means toggle
+	disable(status=1){
+		status .= ""
+		if (status == "-1")
+			gosub disable_clipjump
+		else if (status=="1" && CLIPJUMP_STATUS)
+			gosub disable_clipjump
+		else if (status=="0" && !CLIPJUMP_STATUS)
+			gosub disable_clipjump
+	}
+
 	;blocks CB monitoring
 	blockMonitoring(yes=1, sleeptime=10){
 		Critical, Off 		; necessary to let onclipboard break process if needed
