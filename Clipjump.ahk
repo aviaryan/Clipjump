@@ -922,7 +922,10 @@ ctrlCheck:
 		Critical, Off
 		; The below thread will be interrupted when the Clipboard command is executed. The ONC label will exit as CALLER := 0 in the situtaion
 		if ((ctrlRef == "pastemode") && dopop) ; pop clip
+		{
 			clearClip(TEMPSAVE)
+			IScurCBACTIVE := 0
+		}
 		if !ini_PreserveClipPos
 			TEMPSAVE := cursave 		; not preserve active clip
 
