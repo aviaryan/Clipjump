@@ -15,9 +15,9 @@ channelOrganizer(){
 
 	wt := ini_read("Organizer", "w") , ht := ini_read("Organizer", "h")
 	if !wt
-		wt := A_ScreenWidth>1300 ? 1000 : 850
+		wt := A_ScreenWidth>1300 ? 900 : 750
 	if !ht
-		ht := A_ScreenHeight>800 ? 850 : 600
+		ht := A_ScreenHeight>800 ? 500 : 400
 	w_ofSearch := getControlInfo("button", TXT.HST_search, "w", "s10")
 
 	;enable tooltips
