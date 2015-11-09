@@ -421,3 +421,30 @@ TIP_syscb = System Clipboard beinhaltet clip %realclipno%
 TIP_editing = Editieren ....
             = Drücke Esc zum Abbrechen.
             = Nach dem Editieren: Speichere (Ctrl+S) Datei und schliesse den Editor.
+
+;=====
+; 12.3
+;=====
+
+; Note to Translator > please make sure the out in Ctrl+v+F1 is aligned properly in TIP_help
+TIP_help =
+= Release Ctrl - Einfügen
+= V            - Verschiebe einen Clip vorwärts
+= C            - Verschiebe einen Clip rückwärts
+= X            - Beende Modus, Bewege Clip, Lösche Clip, Kopiere Clip
+= Z            - Wechsle das Einfüge-Format
+= Space        - FIX
+= S            - Übernehme aktuellen Clip auf das System-Clipboard
+= E            - Export
+= Up/Down      - Wechsle Channel +1/-1
+= A            - Bewege zum ersten Clip im Channel
+= 1..9         - Springe zum n-ten Clip relativ zum aktiven Clip
+= F            - Suche
+= H            - Edit
+= Q            - Bewege Clip an die erste Position
+= Enter        - Starte Session zum mehrfachen Einfügen
+= T            - Tag
+= Hold Shift   - Lösche Clip nach dem Einfügen
+= F1           - Hilfe
+=
+= Drücke V um dieses Fenster zu verlassen
