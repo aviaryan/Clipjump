@@ -72,7 +72,7 @@ gui_Settings()
 	Gui, Add, Text, 	xs y+8,		% TXT.SET_actmd
 	Gui, Add, Hotkey, 	x%x_ofhotkeys% yp-3 vactmd_K   ghotkey_actmd, % Actionmode_K
 	Gui, Add, Text,		xs y+8,		% TXT.HST__name
-	Gui, Add, Hotkey, 	x%x_ofhotkeys% yp-3 vhst_K	gsettingsChanged, % history_k 
+	Gui, Add, Hotkey, 	x%x_ofhotkeys% yp-3 vhst_K	gsettingsChanged, % history_k
 	Gui, Add, Text, 	xs y+8, 	% TXT.SET_org
 	Gui, Add, Hotkey, 	x%x_ofhotkeys% yp-3 vorg_K 		gsettingsChanged, % chOrg_K
 	Gui, Add, Text, 	xs y+8,		% TXT._cfilep
@@ -290,6 +290,14 @@ load_Settings(all=false)
 		ini_pstMode_X := ini_read("Advanced", "pstMode_X")
 		ini_pstMode_Y := ini_read("Advanced", "pstMode_Y")
 		ini_HisCloseOnInstaPaste := ini_read("Advanced", "HisCloseOnInstaPaste")
+		; v11.6.1+
+		ini_ram_flush := ini_read("Advanced", "RAM_Flush")
+		; v12+
+		tempVar := ini_read("Advanced", "WinForPasteMode")
+		if (tempVar){
+			pstIdentifier := "#"
+			pstKeyName := "LWin"
+		}
 	}
 
 }
@@ -332,7 +340,7 @@ save_Settings()
 	, hkZ(Copyfolderpath_K, "CopyFolder", 0) 
 	, hkZ(Copyfiledata_K,   "CopyFileData", 0)
 	, hkZ(holdClip_K,		"holdClip",		0)
-	, hkZ(paste_k ? "$^" paste_k : emptyvar, "paste", 	0)
+	, hkZ(paste_k ? "$" pstIdentifier paste_k : emptyvar, "paste", 	0)
 	, hkZ(pitswap_K, 	   "PitSwap", 0)
 	, hkZ(actionmode_K, 	"actionmode", 0)
 	, hkZ(pluginManager_K, 	"pluginManagerGUI", 0)
@@ -344,7 +352,7 @@ save_Settings()
 	, hkZ(Cfolderp_K, "CopyFolder", 1)
 	, hkZ(Cfiled_K,   "CopyFileData", 1)
 	, hkZ(hldClip_K,	"holdClip",		1)
-	, hkZ(pst_k && CLIPJUMP_STATUS ? "$^" pst_k : emptyvar, "paste", CLIPJUMP_STATUS )
+	, hkZ(pst_k && CLIPJUMP_STATUS ? "$" pstIdentifier pst_k : emptyvar, "paste", CLIPJUMP_STATUS )
 	, hkZ(pitswp_K, "PitSwap", 1)
 	, hkZ(actmd_k, "actionmode", 1)
 	, hkZ(plugM_k, "pluginManagerGUI", 1)
@@ -423,7 +431,10 @@ save_Default(full=1){
 	ini_write("Advanced", "pstMode_X")
 	ini_write("Advanced", "pstMode_Y")
 	ini_write("Advanced", "HisCloseOnInstaPaste", 1)
-
+	; v11.6.1+
+	ini_write("System", "RAM_Flush", 0)
+	; V12+
+	ini_write("Advanced", "WinForPasteMode", 0)
 
 	; DELETE KEYS removed v10.7.2.6
 	Ini_delete("Advanced", "Start_with_formatting")
@@ -499,4 +510,6 @@ validate_Settings()
 	if paste_K = ERROR
 		paste_K := "V"
 	paste_K := Substr(paste_K, 1, 1)
+
+	ini_ram_flush := ini_ram_flush==1 ? 1 : 0
 }

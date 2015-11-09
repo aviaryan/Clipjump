@@ -1,29 +1,30 @@
-<html>
-<head>
-	<meta http-equiv="X-UA-Compatible" content="IE=9" >
-	<meta http-equiv="X-UA-Compatible" content="IE=8" >
-  <title>Clipjump : Plugins</title>
-  <link rel="stylesheet" href="../../Blogs.css" type="text/css">
-</head>
-
-<body>
-<h1>Plugins</h1><br>
+---
+title: Plugins
+layout: docs
+---
 
 Plugins are AutoHotkey scripts that are placed in the plugins folder in Clipjump.exe directory.<br>
-They can be accessed from the Plugin Manager that runs with the <kbd>M</kbd> key in <a href="../basic_help.html#actmd">Action Mode</a>. 
+They can be accessed from the <a href="#manager">Plugin Manager</a> that runs with the <kbd>M</kbd> key in <a href="../basic_help.html#actmd">Action Mode</a>. 
 <br><br>
 
-<h2>Installing</h2>
+<a name="manager"></a>
+<h2>Plugin Manager</h2>
+Plugin Manager is a small tool that lets you deal with currently installed plugins. You can access it with key <kbd>M</kbd> from Action Mode or from Tools submenu in Clipjump's Tray menu.<br>
+The UI is kept minimal and you have to right Click on a plugin row to show the various options available.<br>
+The Edit Option opens the plugin's source code. After making changes to a plugin or after adding a new plugin, restart Clipjump to make that plugin effective.
+<br><br>
+
+<a name="install"></a><h2>Installing a plugin</h2>
 Simply copy the .ahk file with all other dependent files in the plugins directory and <b>restart Clipjump</b>.<br>
 <b>Note</b> - Clipjump lists all plugins to use at ExitTime and <b>not at runTime</b>. Thus Restarting Clipjump after making changes to plugins is necessary.
 <br>
 <b>TIP</b> - To disable a plugin temporarily, create a folder named (for example) <em>_Disabled</em> in the plugins folder and move the plugin to it.
-<br><br><br>
+<br><br>
 
-<h2><a name=run>Running a plugin from ClipjumpCustom</a></h2>
-The <code class=Syntax>API.runPlugin( plugin_file_name , param1 , param2 , param3 , ..... )</code> can be used to run a plugin.<br>
+<h2><a name="run">Running a plugin from ClipjumpCustom</a></h2>
+The <code class="Syntax">API.runPlugin( plugin_file_name , param1 , param2 , param3 , ..... )</code> can be used to run a plugin.<br>
 If <b>no</b> parameter (param) is passed at all , then the user will be automatically asked for the needed number of parameters. Below are suitable examples -
-<pre>
+{% highlight ini %}
 [some_section]
 noautorun=1
 run = API.runPlugin( some_plugin.ahk )
@@ -31,14 +32,14 @@ run = API.runPlugin( some_plugin.ahk )
 [some_section2]
 bind=Win+Alt+K
 run = API.runPlugin( some_plugin.ahk , the_text , the_title )
-</pre>
+{% endhighlight %}
 <br><br>
 
 <h2>Creating your own plugins</h2>
 If you know the AutoHotkey language, you won't take a minute starting creating your first plugins. If you are not familiar with AutoHotkey, I recommended 
 <a href="http://ahkscript.org">trying it</a> as it is the ever so easy and suprisingly powerful programming langauge. You <b>won't</b> regret.<br>
 See <a href="basics.html">Plugins Basics</a>
-<br><br><br>
+<br><br>
 
 <h2><a name=def>Officially Distributed Plugins</a></h2>
 <ol>
@@ -48,30 +49,19 @@ See <a href="basics.html">Plugins Basics</a>
 		<li>Delete [File/Folder] - Deletes clips of data type <code>[File/Folder]</code> from selected or all channels.
 		<li>Sync Clipjump Clipboard - Updates clipjump with the current system clipboard
 	</ol>
-	<li><a name=def_pformat>Paste Formats</a>
-	<ol><li><a href=plugin_commonformats.html>Common Formats</a>
-		<li>NO-FORMATTING
+	<li><a name="def_pformat">Paste Formats</a>
+	<ol><li><a href="plugin_commonformats.html">Common Formats</a>
+		<li>Trim Formatting
 		<li>SentenceCase
-		<li>UPPERCASE
 	</ol>
 	<li><a name=def_ext>External</a>
 	<ol><li><a href="../settings.html#plugin_inieditor">Ini Editor</a> - by rbrtryn, Added as a secondary interface to edit <a href="../ini.html">Settings.ini</a>
-		<li><a href=../basic_help.html#ignorew>Ignored Windows Manager</a> - by fump2000, allows you to manage windows which will be automatically ignored by Clipjump
-		<li><a href=../../clipjumpcontroller.html>Controller</a> - Clipjump Controller, as a plugin
+		<li><a href="../basic_help.html#ignorew">Ignored Windows Manager</a> - by fump2000, allows you to manage windows which will be automatically ignored by Clipjump
 		<li>History file paths cleaner - Deletes copied file and folder paths from clipboard history
+		<li>Translation File Cleaner - Detects invalid and duplicate keys in language files and displays them
 	</ol>
 </ol>
 <br><br>
 
 <h2>More Plugins</h2>
 Third party plugins can be downloaded at the <a href="http://clipjump.sourceforge.net/addons.html">Official Addons page</a><br>
-
-<br><br>
-<hr noshade=noshade size=5 color=yellow>
-<br>
-<a href="http://translate.google.com/translate?hl=en&sl=en&u=clipjump.sourceforge.net/docs/plugins/index.html" id="translate">Translate</a>
-<br><br>
-
-</body>
-
-</html>

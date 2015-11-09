@@ -52,7 +52,6 @@ HST_clip = Clip
 HST_date = Datum
 HST_size = Größe(B)
 HST_dconsump = Speicherverbrauch
-HST_viewimage = [Doppelklick für Bildvorschau]
 HST_m_prev = &Vorschau
 HST_m_copy = &Kopieren		(Ctrl+C)
 HST_m_insta = &Instant-Einfügen		(Space)
@@ -80,9 +79,7 @@ SET_images = Bilder in der &Historie speichern
 SET_shortcuts = Hotkeys
 SET_pst = Einfügen (Ctrl + ..)
 SET_actmd = Actionmenü
-SET_chnl = Channelmenü
 SET_channels = Channels
-SET_ischannelmin = Kleines Menü nutzen
 SET_advanced = Zeige erweiterte Einstellungen
 SET_manageignore = Verwalte ignorierte Fenster
 SET_cancel = &Abbruch
@@ -115,9 +112,6 @@ SET_T_cfolderp = Hotkey um den Pfad des ausgewählten Ordners zu kopieren.
                = Geben Sie keinen Buchstaben an wird der Hotkey deaktiviert.
 SET_T_cfiled = Hotkey um den Dateiinhalt der ausgewählten Datei an Clipjump zu senden.
              = Geben Sie keinen Buchstaben an wird der Hotkey deaktiviert.
-SET_T_ot = Hotkey zum auslösen des [One Time Stop].
-         = [One Time Stop] bringt Clipjump dazu, einmalig die folgenden Daten die über die Windows-Zwischenablage gehen zu ignorieren.
-         =  Geben Sie keinen Buchstaben an wird der Hotkey deaktiviert.
 SET_T_pitswp = 	Hotkey um direkt in den PitSwap channel zu wechseln. (Funktioniert nur dann wenn es den Channel bereits gibt.)
              = Für weitere Einzelheiten über die Funktion lesen Sie den Part in der Hilfedatei.
 SET_T_ischannelmin = Beschrängt das Channel Fenster auf das Wesentliche.
@@ -125,13 +119,6 @@ SET_T_ischannelmin = Beschrängt das Channel Fenster auf das Wesentliche.
 
 CNL__name = Channels
 CNL_choose = &Wähle Multi-Clipboard Channel
-CNL_channelname = Channel &Name
-CNL_advice1 = Channel 0 (Default) ist der Mainstream-Channel und sollte in der Regel verwendet werden.
-CNL_advice2 = Channelnamen werden automatisch gespeichert.
-CNL_advice3 = Beachte: Neuer Channel kann ggf. nur erstellt werden wenn der zuletzt erstellte aktiv ist.
-CNL_use = &Channel aktivieren
-CNL_cancel = &Abbruch
-CNL_statusbar = Clips im Channel
 
 TRY_incognito = Incognito Modus
 TRY_disable = Deaktiviere
@@ -142,13 +129,12 @@ TRY_restart = Neustarten
 TRY_exit = Beenden
 
 ACT__name = AKTIONSMODUS
-ACT_enable = Aktivieren
-ACT_disable = Deaktivieren
+ACT_disable = Deaktiviere
 ACT_exit = Fenster schließen
 
 IGN__name = Ignorierte Fenster
-IGN_add = &Fensterclasse hinzufügen
-IGN_delete = &Fensterclasse löschen
+IGN_add = &Fensterklasse hinzufügen
+IGN_delete = &Fensterklasse löschen
 
 LNG_error = Deutsche Sprachdatei nicht gefunden im Ordner languages/german.txt. Passierte dies absichtlich, füge sie wieder ein
 
@@ -402,7 +388,7 @@ ABT_errorFontIcon = Die Datei %GHICON_path% fehlt. Dies kann zu Schwierigkeiten 
 CNL_chngMsg = Channel %cv1% aktiv
 CNL_chNtExst = Channel %cv1% existiert nicht !
 SET_holdclip = Halte Clip
-ORG_openPastemode = Öffnet (schaltet um) Paste Mode Iterface mit dem selektierten Clip als aktivem Clip.
+ORG_openPastemode = Öffnet Paste Mode Interface mit dem selektierten Clip als aktivem Clip.
 TIP_confirmcopy = Diese Bestätigung wird angezeigt, weil dies ein geschützter Channel ist.
                 = Soll das Kopieren trotzdem durchgeführt werden?
                 = Drücke Y für Ja
@@ -417,3 +403,21 @@ TIP_holdclip = Drücke Ctrl+V um einzufügen
 _output = Ausgabe
 TIP_copied_2 = Übertragen an %PROGNAME%
 TIP_empty2_2 = %PROGNAME% ist leer
+
+;====
+; 11.6.1
+;====
+
+SET_T_histshort = Shortcut für das Clipboard History Tool
+PLG_sync_cb = Sync Clipjump Clipboard
+
+;====
+; 12
+;====
+
+ORG_NewClip = Neuer Clip
+ORG_clpdelmsg = Ausgewählte Clip(s) gelöscht
+TIP_syscb = System Clipboard beinhaltet clip %realclipno%
+TIP_editing = Editieren ....
+            = Drücke Esc zum Abbrechen.
+            = Nach dem Editieren: Speichere (Ctrl+S) Datei und schliesse den Editor.

@@ -1,15 +1,7 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-    "http://www.w3.org/TR/html4/loose.dtd">
-
-<html>
-<head>
-	<meta http-equiv="X-UA-Compatible" content="IE=9" >
-	<meta http-equiv="X-UA-Compatible" content="IE=8" >
-  <title>Clipjump Help</title>
-  <link rel="stylesheet" href="../Blogs.css" type="text/css">
-</head>
-<body>
-<h1>Clipjump Help</h1>
+---
+title: Help
+layout: docs
+---
 
 <h2><a name=bu>First Steps</a></h2><br>
 <ul>
@@ -57,7 +49,7 @@ Release <kbda>Ctrl</kbda> and type to filter clips containing the typed text. Us
 <br><br>
 </ul>
 
-<a name=basic_notes></a>
+<a name="basic_notes"></a>
 <h3>Notes</h3>
 <ul>
 	<li>As you can see, releasing <kbda>Ctrl</kbda> is the basis of performing actions in Clipjump.
@@ -65,6 +57,7 @@ Release <kbda>Ctrl</kbda> and type to filter clips containing the typed text. Us
 	The program cycles through these modes when you press <kbd>X</kbd> while holding <kbd>Ctrl</kbd>.
 	So, pressing <kbd>X</kbd> while holding <kbd>Ctrl</kbd>  in <strong>Delete All Mode</strong> will switch back to <strong>Cancel Mode</strong>.
 	<li>TIP - Press <kbd>A</kbd> in <a href=#pastemd><strong>Paste Mode</strong></a> to directly jump to the first clip.
+	<li>TIP - Press <kbd>Q</kbd> in Paste Mode to move a clip to first position.
 	<li>TIP - Press <kbd>F1</kbd>  in Paste Mode to view <a href=shortcuts.html#pstmd>all the keys available in Paste Mode</a>.
 	<li><a name=1to9></a>TIP - Use keys <kbd>1</kbd>....<kbd>9</kbd> in Paste Mode to directly go to clip <var>num</var> ahead of current clip. For example if you are on <code>Clip 7 of 25</code> within <a href="#pastemd">Paste Mode</a>, <kbd>5</kbd> goes to Clip 12. Use the minus (<kbd>-</kbd>) key to subtract clip position and hence move back. Two times minus will make it plus again. Minus setting is made default to plus when Paste Mode is first opened.
 </ul><br>
@@ -72,10 +65,10 @@ Release <kbda>Ctrl</kbda> and type to filter clips containing the typed text. Us
 
 <a name=au></a>
 
-<h2><a name=actmd>Action Mode</a></h2>
+<h2><a name="actmd">Action Mode</a></h2>
 <code class="key">Action Mode</code> provides a clean user-friendly interface to execute almost all the other components of Clipjump. 
 Activated with the default configurable shortcut <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>A</kbd>, it provides <a href=shortcuts.html#actmd>easy keys</a> to run components of Clipjump. 
-Action Mode easy keys <a href=ini.html#actmd_keys>can be totally configured</a> through <a href="custom.html">ClipjumpCustom</a> feature.<br><br>
+Action Mode easy keys <a href="ini.html#actmd_keys">can be totally configured</a> through <a href="custom.html">ClipjumpCustom</a> feature.<br><br>
 <span class="ver">[v9.9.1]</span> Action Mode is the default shortcut to execute any functionality in Clipjump. If you want to create System-Level shortcuts for these functions, you should use the <a href="settings.html">Settings Editor</a> OR <a href="custom.html">ClipjumpCustom</a>.<br>
 <a name=actmd_num></a><b>TIP</b> - Use keys <kbd>0</kbd> to <kbd>9</kbd> to change <a href=channels.html>channels</a> through Action Mode. 
 Just press <var>channel number</var> when ActionMode popup is active. These keys can be overwritten through ClipjumpCustom.ini .
@@ -110,14 +103,14 @@ All other <a href="#pastemd">Paste Mode</a> shortcuts like <kbd>Ctrl</kbd> + <kb
 <br><br>
 
 
-<a name=spm_multipaste><h4>Multipaste in Search-Paste Mode</h4></a>
+<a name="spm_multipaste"><h4>Multipaste in Search-Paste Mode</h4></a>
 You can use <kbd>Ctrl</kbd> + <kbd>Enter</kbd> when search is active in <a href="#pastemd">Paste Mode</a> to paste without closing the paste and Search-Paste Mode. <a href=#multipaste>Unlike Paste Mode</a>, here after first paste with <kbd>Ctrl</kbd> + <kbd>Enter</kbd>, the release <kbda>Ctrl</kbda> action will not change to cancel. So you don't need to hold <kbd>Ctrl</kbd> as you always do when [Search-Paste Mode] is active.
 <br><br><br>
 <!-- -->
 
 <!-- pformat -->
 
-<a name=pformat><h2>Paste Formats</h2></a>
+<a name="pformat"><h2>Paste Formats</h2></a>
 <h4>previously denoted by NO-Formatting Mode</h4>
 <span class="ver">[v10.7.3+]</span> (Custom) Paste formats are possible as a plugin feature in Clipjump. With these, you can paste any clip as UPPERCASE, SentenceCase... or even trim off 
 formatting from copied HTML.<br>To choose a format to paste with, you will have to activate it in the <a href="#pastemd">Paste Mode</a>. As like many features, it is also available with a special key. 
@@ -167,7 +160,7 @@ from the tip will disappear.
 <br><br><br>
 
 
-<h2><a name=editclip>Edit Clips in Paste Mode</a></h2>
+<h2><a name="editclip">Edit Clips in Paste Mode</a></h2>
 <span class="ver">[v10.6+]</span> Press <kbd>H</kbd> in <a href="#pastemd">Paste Mode</a> to start editing a clip.<br> 
 The Paste mode will end and your <var>default_editor</var> or <var>default_image_editor</var> will open the clip.
 <a name=default_editor></a>The <var>default_editor</var> and <var>default_image_editor</var> can be configured from the <em>System</em> section of<a href="ini.html">Settings.ini</a>. 
@@ -176,20 +169,20 @@ Alternatively press Esc anytime to exit.
 <br>Editing works for all types of clips but for text clips all formatting will be lost when they are updated.
 <br><br><br>
 
-<h2><a name=tags>Adding Tags to Clips</a></h2>
+<h2><a name="tags">Adding Tags to Clips</a></h2>
 <span class="ver">[v11.2+]</span> Use the <kbd>T</kbd> key in <a href="#pastemd">Paste Mode</a> to add tags to a clip. Tags show up in round brackets <code>(tag)</code> in the <strong>Paste Mode</strong> and they can be searched from the 
-search in Paste Mode or the <a href=organizer.html>Channel Organizer</a>. You can add tags to copied access-keys, passwords, shortened URLs...  .<br>
-Use the <span class="str">Properties</span> option in <a href=organizer.html>Channel Organizer</a> to add/edit tag.
+search in Paste Mode or the <a href="organizer.html">Channel Organizer</a>. You can add tags to copied access-keys, passwords, shortened URLs...  .<br>
+Use the <span class="str">Properties</span> option in <a href="organizer.html">Channel Organizer</a> to add/edit tag.
 <br><br><br>
 
-<h2><a name=multipaste>Multiple Pasting in Paste Mode</a></h2>
+<h2><a name="multipaste">Multiple Pasting in Paste Mode</a></h2>
 <span class="ver">[v10.7.3]</span> You can also use <kbd>Enter</kbd> in <a href="#pastemd">Paste Mode</a> (while holding <kbd>Ctrl</kbd>) to do multi-paste. In this mode, you will be able to paste without closing the Paste Mode.<br>
 To do multi-pasting, tap <kbd>Enter</kbd> in Paste Mode. Once the first entry with <kbd>Ctrl</kbd> + <kbd>Enter</kbd> is pasted, releasing <kbda>Ctrl</kbda> will change action from 'pasting' to 'cancelling'. This change will be valid only in that session and once you have <i>cancelled</i>, everything will be back to normal i.e. <i>release</i> to paste and <kbd>Ctrl</kbd> + <kbd>X</kbd> and then release <kbd class="inverse">Ctrl</kbd> to cancel.<br>
-The same feature is also available <a href=#spm_multipaste>when Search-Paste Mode is active</a>.
+The same feature is also available <a href="#spm_multipaste">when Search-Paste Mode is active</a>.
 <br><br><br>
 
 
-<h2><a name=path>Copying Paths to Clipjump</a></h2>
+<h2><a name="path">Copying Paths to Clipjump</a></h2>
 <ul>
 <li>Activating the <a href="#actmd">Action Mode</a> and then <kbd>C</kbd> will copy path(s) of selected files in all file managers including Windows Explorer. You can 
 	also create an indendent shortcut for this function in <a href="settings.html">Settings Editor</a>.<br>
@@ -208,7 +201,7 @@ The same feature is also available <a href=#spm_multipaste>when Search-Paste Mod
 <br><br>
 
 
-<a name=export><h2>Export and share Clipboards</h2></a>
+<a name="export"><h2>Export and share Clipboards</h2></a>
 Clipjump supports exporting clipboards as files which can be stored as a record OR send to a friend.<br>
 The feature is accessible by tapping <kbd>E</kbd> in <a href="#pastemd">Paste Mode</a> and by the shortcut <kbd>Ctrl</kbd> + <kbd>E</kbd> in the <a href="history.html">History Tool</a>.<br>
 The  lip or  lipboard when exported will be saved in <em>My Documents</em> with a name export<var>x</var>.cj where <var>x</var> is a variable.<br>
@@ -216,10 +209,16 @@ The .cj file extension when used with <a href=#fdata>Copy File Data</a> directs 
 <br><br /><br>
 
 
-<a name=copycutclip><h2>Copying and Moving Clip</h2></a>
+<a name="copycutclip"><h2>Copying and Moving Clip</h2></a>
 <span class="ver">[v10+]</span> Clips can be copied and moved from one channel to another from the <a href="#pastemd">Paste Mode</a>.<br>
 To do so, press <kbd>X</kbd> when in Paste Mode to change to <strong>Cancel Mode</strong>. While still holding <kbd>Ctrl</kbd>, press <kbd>X</kbd> again and again till you reach to <strong>Move clip</strong> and <strong>Copy clip</strong> mode. Release <kbda>Ctrl</kbda> to confirm.<br>
 You will see a list of <a href="channels.html">channels</a> to copy/cut clip to. Select a channel and click OK.<br>
+<br><br>
+
+
+<a name="pastepop"><h2>Deleting clip after pasting (popping)</h2></a>
+<span class="ver">[v12.3+]</span> To automatically delete a clip right after pasting it, hold <kbd>Shift</kbd> along with <kbd>Ctrl</kbd> and then release both of them simultaneously.
+This will first paste the clip and then delete it. The active clip will be set to the clip right after the deleted clip.
 <br><br>
 
 
@@ -245,11 +244,13 @@ Formats GUI</a>, <kbd>Ins</kbd> to insert clip to channel and <kbd>Ctrl</kbd>+<k
  is shown.
 <br><br>
 <span class="red">Tip</span> - Want HoldClip feature to cut rather than copy data to buffer. Try this <a href=custom.html>Customization</a> --
-<pre>[cut_to_buffer]
+{% highlight ini %}
+[cut_to_buffer]
 bind = Ctrl + Win + X
 STORE.holdClip_send = ^{vk58}
-<span class="green">; virtual key 58 is X , so ^x = Ctrl+X</span>
-run = holdclip</pre>
+; virtual key 58 is X , so ^x = Ctrl+X
+run = holdclip
+{% endhighlight %}
 <br><br>
 
 <a name=beep><h2>Sound when copied</h2></a>
@@ -267,9 +268,8 @@ Simply open the editor and look for the <span class="str">Paste Mode(Ctrl +..)</
 <!-- DISABLE -->
 
 <a name=disable><h2>Disable Clipjump</h2></a>
-<span class="ver">[v9.7+]</span> You can disable Clipjump ( i.e. clipboard monitoring and <a href="#pastemd">Paste Mode</a> ) from the Tray Menu as well as <a href="#actmd">Action Mode</a>. In Action Mode, this option is available 
-with the easy key <code>D</code>.<br>
-To have more control over Clipjump, see <a href="../clipjumpcontroller.html">Clipjump Controller</a> . 
+<span class="ver">[v9.7+]</span> You can disable Clipjump ( i.e. clipboard monitoring and <a href="#pastemd">Paste Mode</a> ) from the Tray Menu as well as <a href="#actmd">Action Mode</a>.
+In Action Mode, this option is available with the easy key <code>D</code>.
 <br><br><br>
 
 
@@ -300,15 +300,6 @@ The <strong>One Time Stop</strong> feature just solves this problem. Available w
 
 
 
-<h2><a name=short>Shortcut List</a></h2>
+<h2><a name="short">Shortcut List</a></h2>
 
-See <a href=shortcuts.html>here</a> 
-
-<hr noshade=noshade size=5 color=yellow>
-<br>
-<a href="http://translate.google.com/translate?hl=en&sl=en&u=clipjump.sourceforge.net/docs/basic_help.html" id="translate">Translate</a>
-<br><br>
-
-</body>
-
-</html>
+See <a href="shortcuts.html">here</a>

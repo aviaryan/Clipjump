@@ -1,14 +1,7 @@
-<html>
-<head>
-	<meta http-equiv="X-UA-Compatible" content="IE=9" >
-	<meta http-equiv="X-UA-Compatible" content="IE=8" >
-  <title>Clipjump : Plugins Basics</title>
-  <link rel="stylesheet" href="../../Blogs.css" type="text/css">
-</head>
-
-<body>
-<h1>Making a Clipjump plugin</h1>
-<br>
+---
+title: Plugin Development
+layout: docs
+---
 
 <ol>
 <li><a href=#intro>Introduction</a>
@@ -72,14 +65,14 @@ Currently Clipjump has 2 defined classes. User is not allowed to create them. (i
 <br><br>
 
 <h3><a name=class_pformat>pformat</a></h3>
-The plugins in this class are used in the paste-format option in Paste mode (key = Z). Officially distributed plugins like <em>pformat.uppercase.ahk</em> and 
+The plugins in this class are used in the paste-format option in Paste mode (key = Z). Officially distributed plugins like <em>pformat.sentencecase.ahk</em> and 
 <em>pformat.noformatting.ahk</em> belong to this class.<br>
 <ol>
 	<li>These plugins also have a custom mandatory parameter <code>;@Plugin-Previewable</code> which should hold 1 if the paste format is previewable in Paste Mode. 
-		It is 1 for UPPERCASE and SentenceCase.</li>
+		It is 1 for SentenceCase.</li>
 	<li>These Plugins should make <code>STORE.ClipboardChanged</code> true if they have successfully changed the input variable and thus what is going to be pasted.
 		<br>For example <code class="Syntax">STORE.ClipboardChanged := true</code>
-	<li>It should be noted that these plugins (should) have 1 input parameter. See the file 'pformat.uppercase.ahk' for example.</li>
+	<li>It should be noted that these plugins (should) have 1 input parameter. See the file 'pformat.sentencecase.ahk' for example.</li>
 	<li>When toggling and when pasting, Clipjump inputs the <em>Clipboard</em> variable and not the <em>ClipboardAll</em> variable as the first parameter. 
 		If the plugin needs the <em>ClipboardAll</em> variable, it can consult it anytime as it will be the same as what current active</li>
 </ol>
@@ -109,13 +102,4 @@ For example try running the <em>external.controller.ahk</em> and then seeing its
 <h2><a name=libs>Libs</a></h2>
 If your plugin file requires more files as #Includes, consider keeping them in (file_name).lib directory. So for the plugin <em>external.controller.ahk</em> 
 we have <em>external.controller.lib</em> as the lib directory. This makes the Delete Plugin option in Plugin Manager work.
-<br><br><br>
-
-<hr noshade=noshade size=5 color=yellow>
-<br>
-<a href="http://translate.google.com/translate?hl=en&sl=en&u=clipjump.sourceforge.net/docs/plugins/basics.html" id="translate">Translate</a>
 <br><br>
-
-</body>
-
-</html>

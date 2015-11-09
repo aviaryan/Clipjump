@@ -2,12 +2,13 @@
 
 Act_API(D, k){
 	static cbF := A_temp "\cjcb.txt"
-	static rFuncs := "|getClipAt|getClipLoc|getVar|runFunction|"
+	static rFuncs := "|getClipAt|getClipLoc|getVar|runFunction|getClipDataByTag"
+	static resChar := "`r"
 
-	fname := Substr(  D, l := Strlen(k)+1, ( Instr(D, "`n")?Instr(D, "`n"):Strlen(D)+1 ) -l  )
-	p := Substr( D, Instr(D, "`n") ? Instr(D, "`n")+1 : 200 )
+	fname := Substr(  D, l := Strlen(k)+1, ( Instr(D, resChar)?Instr(D, resChar):Strlen(D)+1 ) -l  )
+	p := Trim(Substr( D, Instr(D, resChar) ? Instr(D, resChar)+1 : 2000000 ))
 	ps := {}
-	loop, parse, p, `n
+	loop, parse, p, % resChar
 		ps.Insert(A_LoopField)
 	n := ps.MaxIndex()
 
@@ -68,8 +69,8 @@ class API
 		return ret
 	}
 
-	manageClip(new_channel=0, channel="", clip="", flag=0) 	; 0 = cut , 1 = copy
-	{
+	manageClip(new_channel=0, channel="", clip="", flag=0){
+	; 0 = cut , 1 = copy
 		; if channel is empty, active channel is used
 		; if clip is empty, active clip in paste mode (Clip x of y, "x") is used.
 		if channel=
@@ -95,16 +96,19 @@ class API
 		else
 		{
 			FileTransfer(origClip, newClip, 0) , FileTransfer(origThumb, newThumb, 0)
-			CPS[new_channel][nc_info.realCURSAVE+1] := CPS[channel][clip] , CPS[channel].remove(Clip)
-
-			CDS[new_channel][nc_info.realCURSAVE+1] := CDS[channel][clip] , CDS[channel][clip] := ""
+			CPS[new_channel][nc_info.realCURSAVE+1] := CPS[channel][clip] , CPS[channel].remove(Clip) ; .remove() auto adjusts cavities in array
+			CDS[new_channel][nc_info.realCURSAVE+1] := CDS[channel][clip] , CDS[channel].remove(Clip) 
 			c_Folder1 := "cache\clips" c_info.p "\" , c_Folder2 := "cache\thumbs" c_info.p "\"
 			loop % c_info.realCURSAVE-clip
 			{
 				FileMove, % c_Folder1 clip+A_Index ".avc", % c_Folder1 clip+A_Index-1 ".avc", 1
-				;Auto rmv := CPS[channel].remove(clip+A_index) , CPS[channel][clip+A_index-1] := rmv
 				FileMove, % c_Folder2 clip+A_Index ".jpg", % c_Folder2 clip+A_index-1 ".jpg", 1
-				CDS[channel][clip+A_index-1] := CDS[channel][clip+A_index] , CDS[channel][clip+A_index] := ""
+			}
+
+			if (new_channel == channel){
+				ClipTransfer(c_info.p, nc_info.realCURSAVE+1, c_info.p, nc_info.realCURSAVE, 0)
+				; no need for changing arr as .remove() handles it
+				return
 			}
 			manageFIXATE( nc_info.realCURSAVE + 1, new_channel, nc_info.p )
 			IsCurCBActive := 0
@@ -218,6 +222,29 @@ class API
 		SPM.Channel := _cnl
 	}
 
+	; returns the contents of first element with tag
+	getClipDataByTag(tag){
+		robj := this.getClipByTag(tag)
+		for k,v in robj
+			return this.getClipAt(v[1], v[2])
+	}
+
+	; returns an array of clips which have the tag
+	; RETURN
+	; channel at index 0 and clip at 1
+	; example - [ [0,1] , [0,2] ]
+	getClipByTag(tag){
+		robj := {}
+		for k,v in CPS
+		{
+			mindex := this.getChStrength(k)
+			for k2,item in v
+				if Instr(" " Trim(item["Tags"]) " ", " " tag " ")
+					robj.insert( [k, mindex-k2+1] )
+		}
+		return robj
+	}
+
 	; runs any other function like choosechannelgui() , changeChannel()
 	runFunction(funcString){
 		return runFunc(funcString)
@@ -236,7 +263,7 @@ class API
 	
 	; deletes a clip
 	deleteClip(channel, clip){
-	Critical
+		Critical
 		if (channel = "") or (clip = "")
 			return 0
 		zbkCh := CN.NG , zbkClip := TEMPSAVE	; create backup of current channel
@@ -312,6 +339,17 @@ class API
 		return FileExist(f) ? f : ""
 	}
 
+	;disable Clipjump - status=1 means disable , status=-1 means toggle
+	disable(status=1){
+		status .= ""
+		if (status == "-1")
+			gosub disable_clipjump
+		else if (status=="1" && CLIPJUMP_STATUS)
+			gosub disable_clipjump
+		else if (status=="0" && !CLIPJUMP_STATUS)
+			gosub disable_clipjump
+	}
+
 	;blocks CB monitoring
 	blockMonitoring(yes=1, sleeptime=10){
 		Critical, Off 		; necessary to let onclipboard break process if needed
@@ -370,7 +408,7 @@ class API
 			autoTooltip(Text, forTime, 7)
 		else
 			Tooltip, % Text,,, 7
-		tooltip_setfont("s9", "Courier")
+		;tooltip_setfont("s9", "Courier")
 	}
 	; removes the above tip
 	removeTip(){

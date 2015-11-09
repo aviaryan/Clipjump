@@ -1,0 +1,110 @@
+---
+---
+
+<html>
+<head>
+
+<meta charset='utf-8'>
+<meta http-equiv="X-UA-Compatible" content="IE=11" >
+<meta http-equiv="X-UA-Compatible" content="IE=10" >
+<meta http-equiv="X-UA-Compatible" content="IE=9" >
+<meta http-equiv="X-UA-Compatible" content="IE=8" >
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+<meta name="author" content="{{ site.author.fullname }}">
+<link rel="author" href="https://plus.google.com/u/0/+{{site.author.google}}/posts">
+<link rel="stylesheet" type="text/css" href="/assets/base.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="/assets/mojombo.css" media="screen" />
+<link rel="shortcut icon" href="/favicon.ico" />
+
+<title>
+Clipjump &middot; {{ page.title }}
+</title>
+
+{% if page.homepage == 1 %}
+<meta name="google-site-verification" content="{{ site.googleverify }}" />
+{% endif %}
+
+{% if page.rtype == "docs" %}
+<style>
+div#content, header .menubar {
+    max-width: none;
+    width: 95%;
+}
+</style>
+{% endif %}
+
+</head>
+
+<body>
+
+{% if page.rtype != "docs" %}
+<header>
+<div class="banner">Clipjump <font size=-1>v{{site.version}}</font></div><br>
+<div class="menubar">
+<a href="/">Home</a> |
+<a href="/contact.html">About</a> |
+<a href="http://clipjump.sourceforge.net/help.htm">Online Docs</a> |
+<a href="http://aviaryan.in/blog/clipjump/" target="_blank">Blog</a> |
+<a href="http://clipjump.sourceforge.net/addons.html">Addons</a> |
+<a href="http://www.github.com/aviaryan/Clipjump" target="_blank">Github</a>
+</div>
+</header>
+{% else %}
+<br><br>
+{% endif %}
+
+<div id="content">
+{% if page.homepage != 1 %}
+<h1>{{ page.title }}</h1><br>
+{% endif %}
+<div id="realcontent">
+{{ content }}
+
+{% if page.rtype != "docs" %}
+{% include disqus.html %}
+{% endif %}
+{% if page.rtype != "docs" %}
+<script type="text/javascript">var sc_project=9462579;var sc_invisible=1;var sc_security="1e97df2a";var scJsHost="https:"==document.location.protocol?"https://secure.":"http://www.";document.write("<sc"+"ript type='text/javascript' src='"+scJsHost+"statcounter.com/counter/counter.js'></"+"script>")</script>
+{% endif %}
+</div>
+</div>
+
+{% if page.rtype != "docs" %}
+<br><br>
+<footer>
+<br><br>
+
+<div id="fcontent">
+<div style="float: left;">
+<b><font size=+1>Helpful Links</font></b><br><br>
+<a href="http://clipjump.sourceforge.net/screenshots.html">Screenshots</a><br>
+<a href="http://clipjump.sourceforge.net/help.htm">Online Documentation</a><br>
+<a href="http://clipjump.sourceforge.net/translations">Translations</a><br> <!-- online pages -->
+<a href="http://www.avi-win-tips.blogspot.in/p/clipjump.html">Previous Clipjump page</a><br>
+</div>
+
+<div style="float: right;">
+<b><font size=+1>You may read about Clipjump at</font></b>
+<ul> 
+<li><a href="http://www.pcadvisor.co.uk/downloads/3329616/clipjump-1063/">PC Advisor</a>
+<li><a href="http://www.ghacks.net/2013/09/10/clipjump-turns-windows-clipboard-pro-clipboard/">GHacks Technology Blog</a>
+<li><a href="http://www.maketecheasier.com/enhance-windows-clipboard-with-clipjump/2013/09/25">MakeTech Easier</a>
+<li><a href="http://betanews.com/2014/01/14/instantly-enhance-the-windows-clipboard-with-clipjump/">BetaNews</a>
+<li><a href="http://www.rgdot.com/bl/2013/11/26/clipjump-does-the-clipboard-well/">RgDot</a>
+<li><a href="http://clipjump.findmysoft.com/">FindmySoft (with video)</a>
+<li><a href="http://softpedia.com/get/Office-tools/Clipboard/ClipJump.shtml">Softpedia</a>
+<li><a href="http://www.giga.de/downloads/clipjump/">Giga (German)</a>
+</ul>
+</div>
+
+<span itemprop="author" itemscope itemtype="http://schema.org/Person">
+<meta itemprop="name" content="Avi Aryan"></span>
+<meta itemprop="operatingSystem" content="Windows">
+<meta itemprop="image" content="http://clipjump.sourceforge.net/icon.png"></span>
+</div>
+</footer>
+{% endif %}
+</body>
+
+</html>

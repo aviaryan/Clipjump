@@ -1,4 +1,4 @@
-;@Plugin-Name NO-FORMATTING
+;@Plugin-Name Trim Formatting
 ;@Plugin-Description Strip off Formatting
 ;@Plugin-Author Avi
 ;@Plugin-Tags pformat

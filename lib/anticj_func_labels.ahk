@@ -43,18 +43,11 @@ chrHex(n){
 	return chr( base2Number(n, 16) )
 }
 
-Tooltip_setFont(font_options="", font_face=""){
-;sets font for a tooltip
-	if (font_options) or (font_face)
-	{
-		loop, parse, font_face, |
-			Gui, TTfont:Font, %font_options%, %A_LoopField%
-		Gui, TTfont:Add, Text, hwnd_hwnd, `.
-		SendMessage, 0x31, 0, 0,, ahk_id %_hwnd%
-		Gui, TTfont: Destroy
-		font := ErrorLevel
-		SendMessage, 0x30, %font%, 1, %ctrl%, ahk_class tooltips_class32
-	}
+Tooltip_fonted(msg, title="", x="", y="", fontops=""){
+	ttobj := TT("", msg, title)
+	ttobj.Font(fontops)
+	ttobj.Show()
+	return ttobj
 }
 
 ;BeepAt()
@@ -68,7 +61,7 @@ BeepAt(value, freq, duration=150){
 ;	Emtpties free memory
 
 EmptyMem(){
-	return, dllcall("psapi.dll\EmptyWorkingSet", "UInt", -1)
+	return ini_ram_flush ? dllcall("psapi.dll\EmptyWorkingSet", "UInt", -1) : 0
 }
 
 FoolGUI(switch=1){
@@ -274,8 +267,16 @@ getRealCD(text){
 
 ClipTransfer(sub, cno, nsub="", ncno="", keep_original=1, flag=1){
 ; Copy moves a clip along with the 3 or more files
+; TODO Change params in prefs.ini also
 	FileTransfer("cache\clips" sub "\" cno ".avc", "cache\clips" nsub "\" ncno ".avc", keep_original, flag)
 	FileTransfer("cache\thumbs" sub "\" cno ".jpg", "cache\thumbs" nsub "\" ncno ".jpg", keep_original, flag)
+}
+
+ClipSwap(sub, cno, nsub="", ncno=""){
+	; Swaps two clips
+	ClipTransfer(sub, cno, sub, 100000, 0)
+	ClipTransfer(nsub, ncno, sub, cno, 0)
+	ClipTransfer(sub, 100000, nsub, ncno, 0)
 }
 
 ClipFolderTransfer(sub, nsub, keep_original=1, flag=1){
@@ -338,7 +339,7 @@ deactivateHtml(code){
 
 TT_Console_PasteMode(text, keys){
 	tx := ini_pstMode_X ? ini_pstMode_X : SPM.X , ty := ini_pstMode_Y ? ini_pstMode_Y : SPM.Y
-	return TT_Console(text, keys, tx, ty, 1)
+	return TT_Console(text, keys,, tx, ty,, 1)
 }
 
 ;GetFile()
@@ -364,8 +365,7 @@ GetFile(hwnd=""){
 ;GetFolder()
 ;	Gets folder path of active window in Explorer
 
-GetFolder()
-{
+GetFolder(){
 	WinGetClass,var,A
 	If var in CabinetWClass,ExplorerWClass,Progman
 	{
@@ -645,7 +645,7 @@ getControlInfo(type="button", text="", ret="w", fontsize="", fontmore=""){
 }
 
 ;GUI Message Box to allow selection
-guiMsgBox(title, text, owner="" ,isEditable=0, wait=0, w="", h=""){
+guiMsgBox(title, text, owner="", isEditable=0, wait=0, w="", h=""){
 	static thebox
 	wf := getControlInfo("edit", text, "w", "s9", "Lucida Console")
 	hf := getControlInfo("edit", text, "h", "s9", "Lucida Console")
@@ -691,8 +691,7 @@ Base2Number(H, base=16){
 
 ; Code by deo http://www.autohotkey.com/board/topic/74348-send-command-when-switching-to-russian-input-language/#entry474543
 
-GetVKList( letter )
-{
+GetVKList( letter ){
 	SetFormat, Integer, Hex
 	vk_list := Array()
 	for i, hkl in KeyboardLayoutList()
@@ -712,8 +711,7 @@ GetVKList( letter )
 	return vk_list
 }
 
-KeyboardLayoutList()
-{
+KeyboardLayoutList(){
 	hkl_num := 20
 	VarSetCapacity(hHkls,hkl_num*A_PtrSize,0)
 	num := DllCall("GetKeyboardLayoutList","Uint",hkl_num,"Ptr",&hHkls)

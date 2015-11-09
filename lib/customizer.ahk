@@ -9,7 +9,7 @@ What is supported?
 
 loadCustomizations(){
 	if !FileExist("ClipjumpCustom.ini") {
-		FileAppend, % ";Customizer File for Clipjump`n;Add your custom settings here", ClipjumpCustom.ini
+		FileAppend, % ";Customizer File for Clipjump`n;Add your custom settings here`n`n[AutoRun]`n;auto-run items go here", ClipjumpCustom.ini
 		return
 	}
 	f := "ClipjumpCustom.ini"
@@ -57,8 +57,8 @@ resetCustomizations(){
 customization_Run(obj){
 	for k,v in obj
 	{
-		;try { ; Try - No need currently
 		k := Ltrim(k, "0123456789") 	; correct key
+		isf := ((k=="run") && Instr(v,"("))
 		loop { 			; change %..% vars to keys
 			if !($op1 := Instr(v, "%", 0, 1, 1)) || !($op2 := Instr(v, "%", 0, 1, 2))
 				break
@@ -77,14 +77,15 @@ customization_Run(obj){
 					$var := %$j1%[$j2][$j3]
 			}
 			else $var := %$var%
-			StringReplace, v, v, % $match, % $var
+			StringReplace, v, v, % $match, % ( isf ? """" $var """" : $var )
 		}
 
 		if k = run
 		{
 			if !Instr(v, "(")
 				gosub % IsLabel(v) ? v : "keyblocker"
-			else RunFunc(v)
+			else 
+				ans := RunFunc(v)
 		}
 		else if k = tip
 			autoTooltip(v, 1000, 8)
@@ -105,48 +106,50 @@ customization_Run(obj){
 			}
 			else %k% := v
 		}
-		;} ; catch
-		;catch {
-		;MsgBox, 16, Clipjump, % TXT.CUS_error "`nkey = " k "`nvalue = " v
-		;}
 	}
 }
 
 RunFunc(v){
+; runs dynamic functions
 	static rk := "ª"
 	static dq := "§"
-	; runs dynamic functions
+
 	fn := Substr(v, 1, Instr(v,"(")-1)
 	pms := Substr(v, Instr(v,"(")+1, -1) , ps := {}
 	; loop, parse, pms,`,, %A_Space%
 	; 	ps.Insert( RegExReplace(A_LoopField, rk, ",") )
 	StringReplace, pms, pms, % """""", % dq, All
 	pmsbk := Trim(pms)
+	
 	while (Trim(pmsbk) != ""){
 		if ( Instr(pmsbk, """") == 1 ){
-			endb := Instr(pmsbk, """",, 2)
+			endb := Instr(pmsbk, """", 0, 2)
 			z1 := RegExReplace( Substr(pmsbk, 2, endb-2) , rk, ",")
 			ps.Insert( RegExReplace(z1, dq, """") )
-			pmsbk := Substr(pmsbk, endb+1)
+			pmsbk := Substr(pmsbk, endb+1) ; skip quotes
+			pmsbk := Trim(pmsbk) ; ---
+			pmsbk := Substr(pmsbk, 2) ; and then comma
 		} else { ; comma separated params
 			endb := !Instr(pmsbk, ",")?10000:Instr(pmsbk, ",")
 			z1 := RegExReplace( Substr(pmsbk, 1, endb-1) , rk, ",")
 			ps.Insert(z1)
 			pmsbk := Substr(pmsbk, endb+1)
 		}
-		;msgbox % pmsbk
 	}
-	;return
 
 	n := ps.MaxIndex()
 	; API functions
 	if Instr(fn, "."){
 		str := "API:" , str .= Substr(fn, Instr(fn,".")+1)
 		loop % n
-			str .= "`n" ps[A_index]
+		{
+			temp := ps[A_Index]
+			StringReplace, temp, temp, % "`r`n", % "`n", All
+			StringReplace, temp, temp, % "`r", % "`n", All
+			str .= "`r" temp
+		}
 		return r := Act_API(str, "API:")
 	}
-
 	; else normal function
 	if !n
 		r := %fn%()

@@ -1,13 +1,8 @@
-<html>
-<head>
-	<meta http-equiv="X-UA-Compatible" content="IE=9" >
-	<meta http-equiv="X-UA-Compatible" content="IE=8" >
-  <title>Clipjump : Settings.ini Advanced Settings</title>
-  <link rel="stylesheet" href="../Blogs.css" type="text/css">
-</head>
+---
+title: Settings.ini
+layout: docs
+---
 
-<body>
-<h1>Settings.ini</h1>
 <h2>General</h2>
 The file settings.ini is used to store the settings of ClipJump. It's located in the same directory where the Clipjump executable resides.
 <br>
@@ -18,36 +13,41 @@ Clipjump provides <a href="settings.html">several methods</a> to manipulate the 
 and not Clipjump. To create these shortcuts, open the [Advanced] section of Settings.ini and write down shortcut values for <var>windows_copy_shortcut</var> and 
 <var>windows_cut_shortcut</var>. As you may have guessed, these shortcuts are disabled by default and by writing shortcut values for them in the ini you create them.
 <br>These shortcuts can be very useful when in need to copy sensitive or crap information of the Clipboard.
-<br>
+<br><br>
 
 <h3><a name=actmd_keys>Changing Action Mode Easy keys</a></h3>
 Action Mode keys can be changed through ClipjumpCustom.ini, please see <a href="custom.html#actmd">this</a> example.<br>
 To disable a key, empty its value. In the following example, F1 AND L keys are removed.<br>
-<pre>[actionmode_delete_bad_keys]
+{% highlight ini %}
+[actionmode_delete_bad_keys]
 ACTIONMODE.F1=
-ACTIONMODE.L=</pre>
+ACTIONMODE.L=
+{% endhighlight %}
+<br>
+
+<h3><a name="win_paste_mode"></a>Using Win as Paste Mode key instead of Ctrl <span class="ver">[v12.3+]</span></h3>
+To use <kbd>Win</kbd> instead of <kbd>Ctrl</kbd> for activating and controlling Paste Mode, set the option <var>WinForPasteMode</var> = 1 in the <em>[Advanced]</em> section of settings.ini. It is recommended to use the plugin <a href="settings.html#plugin_inieditor">IniEditor</a> to do so. Don't forget to restart Clipjump after updating Settings.ini.
+
+<br><br>
 
 <h3>Showing the Pasting tooltip</h3> - You can make Clipjump show a <code>Pasting..</code> tip when you paste some data. To do so, change the value of 
 <var>Show_pasting_tip</var> in the <em>[Advanced]</em> section of Settings.ini to 1.
 
-<br>
+<br><br>
 
 <h3><a name="prior">Changing default Task Priority</a></h3> - You can change default Clipjump Task priority from the Priority key in the System section of the Ini.
 <br>Set Priority to H (high) to make Clipjump most responsive.<br> Priority Values can be-<br>
 <pre>L (or Low), B (or BelowNormal), N (or Normal), A (or AboveNormal), H (or High), R (or Realtime)</pre>
 
+<br>
+
+<h3><a name="ram_flush"></a>Make Clipjump flush RAM contents to disk <span class="ver">[v12+]</span></h3> - The <var>RAM_flush</var> option when enabled instructs Clipjump to flush its RAM 
+memory data to hard disk at needed intervals. Thus Clipjump will take much less RAM (&lt;= 1.5 MB) but the overall performance may be affected. I recommend keeping this option disabled 
+(set to 0) which is what it is by default. You can find <var>RAM_flush</var> in [System] section of Settings.ini
+<br><br>
 
 <h3><a name="pst_custom_pos">Show paste mode at fixed position</a></h3>
 You can fix the Paste Mode's screen position by adding values to variables <var>pstMode_X</var> and <var>pstMode_Y</var> in the Advanced section of the Ini.<br>
 The X coord is pixels from left of the screen whereas the Y coord is pixels from top of the screen.<br>
 You can also leave either of the coords blank and only the specified axes (X or Y) will be fixed for the paste mode.
 <br>
-
-<hr noshade=noshade size=5 color=yellow>
-<br>
-<a href="http://translate.google.com/translate?hl=en&sl=en&u=clipjump.sourceforge.net/docs/ini.html" id="translate">Translate</a>
-<br><br>
-
-</body>
-
-</html>
