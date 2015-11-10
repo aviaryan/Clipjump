@@ -1,14 +1,15 @@
 ﻿;Deutsche übersetzung für Clipjump
 ;erstellt von fump2000 / hoppfrosch
 
-; Hinweise:
-; Kommentare sollten nur am Anfang der Zeile stehen
-; Hinzufügen neuer Schlüssel in künftigen Versionen, erfolgt am Ende für einfache und konsequente Entwicklung
+; NOTES
+; Comments should only be at the start of the line
+; Add new keys in the future versions at the bottom for easy & consistent development
 ; Add version no in comment when adding a new key in the translation file.
-; Füge die Versionsnummer einem neuen Schlüssel hinzu.
-; Niemals 'Clipjump' ändern.
-; & in &Vorschau dient dazu den Shortcut Alt+V zu erstellen wenn das Fenster aktiv ist.
-; Bei der Übersetzung in eine andere Sprache als Deutsch lasse das '&' weg. Verwende '&' nur wenn du dir sicher bist das du richtig liegts.
+; Most keys have format XXX_ where XXX is the component name
+; Dont translate 'Clipjump'
+; & in &Preview is to create shortcut Alt+P when the window is active. When translating into a non-english language, omit '&' and when in a english type language, use '&'
+; only when you are sure you are right.
+; Words inside %..% are variables. Take them as constants and translate them accordingly.
 
 ;======
 ;v9.9.0.1
@@ -24,7 +25,6 @@ TIP_deleted = Gelöscht
 TIP_alldeleted = Alle Daten gelöscht
 TIP_cancelled = Abgebrochen
 TIP_fixed = [FIXIERT]
-TIP_noformatting = OHNE-FORMATIERUNG
 TIP_filepath = Dateipfad(e) gesendet an
 TIP_folderpath = Aktiver Ordnerpfad gesendet an
 TIP_activated = AKTIVIERT
@@ -72,7 +72,6 @@ SET_quality = &Qualität der Vorschaubilder
 SET_copybeep = &Beep beim Kopieren
 SET_ismessage = &Info ToolTip beim kopieren
 SET_keepsession = &Clips auch nach Neustart beibehalten
-SET_formatting = "OHNE-FORMATIERUNG" M&odus starten
 SET_cb = Clip Historie
 SET_daystostore = A&nzahl der Speichertage
 SET_images = Bilder in der &Historie speichern
@@ -91,6 +90,7 @@ SET_advanced_error = ist nicht in der Lage die Einstellungsdatei (settings.ini) 
 SET_T_limitmaxclips = Limmitiert Clipjump's Clipanzahl
                     = Markiert = Limitierung aktiv
 SET_T_maxclips = Die minimale Anzahl der Zwischenablagen, die Sie zur Nutzung aktivieren wollen.
+               = Wenn 20 gewünscht werden, geben Sie 20 an.
 SET_T_threshold = Threshold bietet eine zusätzliche Anzahl an Zwischenablagen.
                 = Empfohlene Menge = 10.
                 =
@@ -170,12 +170,9 @@ SET_T_actmd = Hotkey um den Aktionsmodus zu starten.
 ;9.9.1.9
 ;==========
 
-CNL_delete = &Lösche Channel
-CNL_delmsg = Sind Sie sicher, dass Sie diesen Channel löschen wollen? Der Vorgang kann nicht rückgängig gemacht werden und alle Clips aus diesem Channels gehen verloren.
-CNL_del_default = Löschen des Channel 0 (Default) ist nicht erlaubt.
-TIP_empty3 = Zum verlassen STRG loslassen.
-UPD_restart = Clipjump wird nun neustarten um die Updates zu aktivieren.
-UPD_automsg = Klicke auf Ja um ein Autoupdate durchzuführen oder klicke auf Nein um die Webseite zu öffnen.
+TIP_empty3 = Release Ctrl to exit.
+UPD_restart = Clipjump will now restart to apply the updates.
+UPD_automsg = Click Yes to auto update Clipjump or No to go to website.
 
 ;=========
 ;10
@@ -208,8 +205,6 @@ ABT_runadmin = Clipjump läuft nicht mit Administratorrechten.
 ABT_cjready = Hi!
             = Clipjump ist nun aktiv.
             = Testen Sie ein paar Copy&Paste aktionen...
-TIP_editing = Bearbeiten....
-            = Drücke Esc zum abbrechen.
 TIP_editdone = Clip wurde bearbeitet!
 TIP_editnotdone = Clip wurde NICHT bearbeitet!
 
@@ -301,27 +296,6 @@ SET_T_startSearch = Stelle Strg+V so um, dass Paste Mode mit aktivierter Suche g
                   = Dies ermöglicht, dass man nicht die Ctrl Taste gedrückt halten muss um durch die Clips zu navigieren. Siehe auch "Search in Paste Mode" in der Hilfe.
 _editing = Bearbeiten
 
-; Note to Translator > please make sure the out in Ctrl+v+F1 is aligned properly in TIP_help
-TIP_help =
-= Release Strg - Einfügen
-= V            - Wechsle zum nächsten Clip
-= C            - Wechsle zum vorigen Clip
-= X            - Beende die Modi: Bewege Clip, Lösche Clip, Kopiere Clip
-= Z            - Wechsle Einfügeformat
-= Space        - FIX
-= S            - Lege den aktuelle Clip aufs System Clipboard
-= E            - Exportiere
-= Up/Down      - Wechsle Channel +1/-1
-= A            - Springe zum ersten Clip im Channel
-= 1..9         - Springe n Clips weiter vom aktiven Clip
-= F            - Suche
-= H            - Bearbeite
-= Enter        - Start Multiple Pasting Session
-= T            - Tag
-= F1           - Hilfe
-=
-= Drücke V um dieses Fenster zu verlassen
-
 ;=======
 ; 11.2.3
 ;=======
@@ -355,7 +329,6 @@ ORG_delete = Löscht den selektierten Clip
 
 SET_revFormat2Def = Starte Paste mode immer mit der Default-Formatierung
 SET_T_revFormat2Def = Option, damit der Paste Mode immer mit der Default-Formatierung gestartet wird (Defaultwert: 'original'/'none' ).
-ORG_clpdelmsg = Ausgewählter Clip wurde gelöscht
 ORG_copyingclp = Kopiere selektierte(n) Clip(s)
 ORG_movingclp = Bewege selectierte(n) Clip(s)
 ORG_Editprops = Bearbeite Clip Eigenschaften
