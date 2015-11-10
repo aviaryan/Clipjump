@@ -170,19 +170,19 @@ SET_T_actmd = Hotkey um den Aktionsmodus zu starten.
 ;9.9.1.9
 ;==========
 
-TIP_empty3 = Release Ctrl to exit.
-UPD_restart = Clipjump will now restart to apply the updates.
-UPD_automsg = Click Yes to auto update Clipjump or No to go to website.
+TIP_empty3 = Ctrl Taste loslassen um zu verlassen
+UPD_restart = Clipjump führt einen Neustart aus um die Updates anzuwenden
+UPD_automsg = Drücke Yes um ein Auto-Update für Clipjump durchzuführen oder No um zur Webesite zu gehen.
 
 ;=========
 ;10
 ;=========
 
-CHC_name = Select Channel
+CHC_name = Wähle Channel
 TIP_done = Done
-TIP_copycutfailed = Copy/Move Not Done
-TIP_copy = Copy current Clip
-TIP_move = Move current Clip
+TIP_copycutfailed = Kopieren/Verschieben nicht durchgeführt
+TIP_copy = Kopiere aktuellen Clip
+TIP_move = Verschiebe aktuellen Clip
 
 ;========
 ;10.5 beta
@@ -240,15 +240,15 @@ API_plugCorrupt = Das folgende Plugin ist korrupt oder fehlt.
 PLG_Sb_running = Plugin läuft
 PLG_Sb_exit = Plugin wurde beendet
 PLG_Sb_deleted = Plugin wurde gelöscht
-SET_T_pst = Single character combination to use with Ctrl in activating [PASTE MODE]
-          = Note that letters  E C X Z S A F H are reserved.
+SET_T_pst = Einzelne Zeichenkombination zusammen mit Ctrl bei der Aktivierung des [PASTE MODE]
+          = Avhtung: Die Buchstaben  E C X Z S A F H sind reserviert.
           =
           = Beachten Sie den Abschnitt "Copy bypassing Clipjump" in der Hilfe
 SET_pformat = Default Einfügen-Format
-SET_T_pformat = The Paste format you would like to be active at Clipjump startup. '-original' is the default Clipjump pasting technique.
-SET_t_plugM = Shortcut to open Plugin Manager
+SET_T_pformat = Das Paste-Format, das bei der Aktivierung von Clipjump verwendet werden soll (default: '-original' )
+SET_t_plugM = Shortcut um den Plugin-Manager zu öffnen
 PLG_edit = Bearbeiten (F2)
-CUS_error = There was an error in a ClipjumpCustom.ini routine?
+CUS_error = Fehler in der ClipjumpCustom.ini Routine?
 
 ;=====
 ;10.7.8
