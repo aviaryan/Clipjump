@@ -340,6 +340,12 @@ escapeQuotesSql(s){
 	return s
 }
 
+fileSizeFromStr(s){
+	; in bytes
+	; + 3 comes from other file constraints
+	return strlen(s) + 3 
+}
+
 genHTMLforPreview(code){
 	FileDelete, % PREV_FILE
 	FileAppend, % "<pre style=""word-break: break-all; word-wrap: break-word;"">" deActivateHtml(code), % PREV_FILE

@@ -544,8 +544,9 @@ createHisTable(){
 		id	INTEGER PRIMARY KEY AUTOINCREMENT,
 		data 	TEXT,
 		type	INTEGER,
-		blobc	BLOB,
-		time	TEXT
+		blob	BLOB,
+		time	TEXT,
+		size 	INTEGER
 		`)
 	)
 	if !DB.Exec(q)
@@ -561,14 +562,30 @@ migrateHistory(){
 	loop, cache\history\*
 	{
 		if (A_LoopFileExt == "jpg"){
+			ts := convertTimeSql( SubStr(A_LoopFileName, 1, -4) )
+			fptr := FileOpen(A_LoopFileFullPath, "r")
+			size := fptr.RawRead(BLOB, fptr.Length)
+			fptr.Close()
 			
+			q := "insert into history (type, time, size, blob) values ("
+				. 1 ","
+				. """" ts """ ,"
+				. size ","
+				. "?)"
+			; Create the BLOB array
+			BlobArray := []
+			BlobArray.Insert({Addr: &BLOB, Size: Size}) ; will be inserted as element 1
+			If !DB.StoreBLOB(q, BlobArray)
+				MsgBox, 16, SQLite Error, % "Msg:`t" . DB.ErrorMsg . "`nCode:`t" . DB.ErrorCode
+
 		} else if (A_LoopFileExt == "txt"){
 			ts := convertTimeSql( SubStr(A_LoopFileName, 1, -4) )
 			FileRead, tdata, % A_LoopFileFullPath
-			q := "insert into history (data, type, time) values (""" 
+			q := "insert into history (data, type, time, size) values (""" 
 				. escapeQuotesSql(tdata)
 				. """, 0, """ 
-				. ts """)"
+				. ts """, "
+				. fileSizeFromStr(tdata) ")"
 			if (!DB.Exec(q))
 				msgbox % q
 		}
