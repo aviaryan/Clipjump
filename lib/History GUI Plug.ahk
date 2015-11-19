@@ -106,6 +106,7 @@ history_ButtonPreview:
 	else v := LV_GetNext()
 
 	LV_GetText(clip_file_path, v, hidden_date_no)
+	msgbox % clip_file_path
 	if !Instr(clip_file_path, ".jpg"){
 		FileRead, clip_data, % "cache\history\" clip_file_path
 		genHTMLforPreview(clip_data)
@@ -353,44 +354,25 @@ history_clipboard(sTartRow=0){
 	return row_selected
 }
 
-
 historyUpdate(crit="", create=true, partial=false){
-; Update the history GUI listview
-; create=false will prevent re-drawing of Columns , useful when the function is called in the SearchBox label and Gui Size is customized.
-	local totalSize := 0
+	; Updates the clipboard history window list
+	; works when search content is changed
 
+	local totalSize := 0
 	LV_Delete()
 	func := Func(partial ? "Superinstr" : "Instr") , thirdpm := partial ? 1 : 0		;The third param 0 has diff meanings in both cases
 
-	Loop, cache\history\*
+	q := "select * from history where data like ""%" crit "%"""
+	result := ""
+	if !DB.GetTable(q, result)
+		msgbox error
+	loop % result.RowCount
 	{
-		; Filling Text data in obj
-		if Instr(A_LoopFileFullPath, ".txt")
-		{
-			if !HISTORYOBJ[A_LoopFileName "_data"]
-			{
-				Fileread, lv_temp, %A_LoopFileFullPath%
-				HISTORYOBJ[A_LoopFileName "_data"] := lv_temp
-			}
-		}
-		else if Instr(A_LoopFileFullPath, ".jpg")
-			HISTORYOBJ[A_LoopFileName "_data"] := MSG_HISTORY_PREVIEW_IMAGE
-		else Continue
-
-		;  Searching
-		if func.(HISTORYOBJ[A_LoopFileName "_data"], crit, thirdpm)
-		{
-			if !HISTORYOBJ[A_LoopFileName "_date"]
-			{
-				HISTORYOBJ[A_LoopFileName "_date"] := Substr(A_LoopFileName,1,4) "-" Substr(A_LoopFileName,5,2) "-" Substr(A_LoopFileName,7,2) "  "
-						. Substr(A_LoopFileName,9,2) ":" Substr(A_LoopFileName,11,2) ":" Substr(A_LoopFileName, 13, 2)
-				FileGetSize, O,% A_LoopFileFullPath
-				HISTORYOBJ[A_LoopFileName "_size"] := O
-			}
-
-			LV_Add("", HISTORYOBJ[A_LoopFileName "_data"], HISTORYOBJ[A_LoopFileName "_date"], t := HISTORYOBJ[A_LoopFileName "_size"], A_LoopFileName)
-			totalSize += t 				; speed factor
-		}
+		result.Next(Row)
+		clipdata := Row[2] ;data
+		clipdate := Row[5]
+		totalsize += ( clipsize := Row[6] )
+		LV_Add("", clipdata, clipdate, clipsize, Row[1])
 	}
 
 	history_UpdateSTB("" totalSize/1024)
@@ -553,6 +535,11 @@ createHisTable(){
 		msgbox % "db create history table"
 }
 
+getFromTable(tbl, cols, condition){
+	q = "select " . cols . " from " . tbl . " where " escapeQuotesSql(condition)
+	result := ""
+}
+
 ;------------------------------------ MIGRATE ----------------------------------------------
 
 migrateHistory(){
@@ -566,10 +553,11 @@ migrateHistory(){
 			fptr := FileOpen(A_LoopFileFullPath, "r")
 			size := fptr.RawRead(BLOB, fptr.Length)
 			fptr.Close()
-			
-			q := "insert into history (type, time, size, blob) values ("
+
+			q := "insert into history (data, type, time, size, blob) values ("
+				. """[IMAGE]"", " 
 				. 1 ","
-				. """" ts """ ,"
+				. """" ts """, "
 				. size ","
 				. "?)"
 			; Create the BLOB array
