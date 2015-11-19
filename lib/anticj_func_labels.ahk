@@ -326,6 +326,18 @@ GetClipboardFormat(type=1){		;Thanks nnnik
     	return x
 }
 
+; Converts YYYYMMDDHHMMSS to YYYY-MM-DD HH:MM:SS
+convertTimeSql(t=""){
+	if (t == "") 
+		t:= A_Now
+	return SubStr(t, 1, 4) "-" SubStr(t,5,2) "-" SubStr(t,7,2) " " SubStr(t, 9, 2) ":" SubStr(t,11,2) ":" SubStr(t,13,2)
+}
+
+escapeQuotesSql(s){
+	StringReplace, s, s, % """", % """""", All
+	return s
+}
+
 genHTMLforPreview(code){
 	FileDelete, % PREV_FILE
 	FileAppend, % "<pre style=""word-break: break-all; word-wrap: break-word;"">" deActivateHtml(code), % PREV_FILE
