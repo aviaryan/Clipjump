@@ -132,6 +132,7 @@ GET THE PROGRAM WORKING
 */
 
 global DB := new SQLiteDB()
+FileDelete, % DBPATH
 if (!FileExist(DBPATH))
 	isnewdb := 1
 else
