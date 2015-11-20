@@ -326,6 +326,10 @@ GetClipboardFormat(type=1){		;Thanks nnnik
     	return x
 }
 
+;--------------------------------------------------------------------------
+;      S Q L     F U N C T I O N S
+;--------------------------------------------------------------------------
+
 ; Converts YYYYMMDDHHMMSS to YYYY-MM-DD HH:MM:SS
 convertTimeSql(t=""){
 	if (t == "") 
@@ -334,6 +338,8 @@ convertTimeSql(t=""){
 }
 
 escapeQuotesSql(s){
+	; replace quote (") in data content with double quote ("")
+	; works like escaping
 	StringReplace, s, s, % """", % """""", All
 	return s
 }
@@ -343,6 +349,47 @@ fileSizeFromStr(s){
 	; + 3 comes from other file constraints
 	return strlen(s) + 3 
 }
+
+getFromTable(tbl, cols, condition){
+	; get from table
+	; get only particular columns if necessary
+	q := "select " . cols . " from " . tbl . " where " condition
+	recordSet := ""
+	if !DB.Query(q, recordSet)
+		msgbox ERROR
+	if (recordSet.RowCount == 0)
+		return ""
+	else {
+		recordSet.Next(Row)
+		return Row
+	}
+}
+
+saveBlobImage(blobobj, path){
+	; gets the blob obj 
+	; and saves the image from it at path
+
+	HFILE := FileOpen(path, "w")
+
+	If IsObject(blobobj){
+		Size := blobobj.Size
+		Addr := blobobj.GetAddress("Blob")
+		If !(Addr) || !(Size) {
+			MsgBox, 0, Error, BlobAddr = %Addr% - BlobSize = %Size%
+		} Else {
+			VarSetCapacity(MyBLOBVar, Size) ; added
+			DllCall("Kernel32.dll\RtlMoveMemory", "Ptr", &MyBLOBVar, "Ptr", Addr, "Ptr", Size) ; added
+			HFILE.RawWrite(&MyBLOBVar, Size) ; changed
+			;HFILE.RawWrite(Addr + 0, Size) ; original
+			blobobj := ""
+			HFILE.Close()
+			blobobj := ""
+		}
+	}
+}
+
+;-------------------------------------------------------------
+
 
 genHTMLforPreview(code){
 	FileDelete, % PREV_FILE
