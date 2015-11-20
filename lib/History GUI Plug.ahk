@@ -113,8 +113,6 @@ history_ButtonPreview:
 		gui_Clip_Preview(PREV_FILE, history_searchbox)
 	} else {
 		data := getFromTable("history", "fileid", "id=" clip_file_path)
-		;saveBlobImage(data[1], path := "cache\history_prev.jpg")
-		;saveBlobImage("history", "blob", "id=" clip_file_path, path := "cache\history_prev.png")
 		gui_Clip_Preview(path := data[1], history_SearchBox)
 	}
 	recordSet.Free()
@@ -130,6 +128,7 @@ history_ButtonDeleteAll:
 	IfMsgBox, OK
 	{
 		FileDelete, cache\history\*
+		execSql("delete from history")
 		historyUpdate()
 		history_UpdateSTB()
 	}
@@ -167,8 +166,8 @@ history_HoldClip:
 		sleep 50
 	Gui, History:Default
 	LV_GetText(clip_file_path, LV_GetNext(0), hidden_date_no)
-	FileRead, tmp, % "cache\history\" clip_file_path
-	STORE.holdClip_preText := tmp
+	data := getFromTable("history", "data", "id=" clip_file_path)
+	STORE.holdClip_preText := data[1]
 	gosub holdclip
 	return
 
@@ -348,14 +347,18 @@ history_clipboard(sTartRow=0){
 ; -
 	Gui, History:Default
 	row_selected := LV_GetNext(sTartRow)
+	if !row_selected
+		return 0
 	LV_GetText(clip_file_path, row_selected, hidden_date_no)
-	if !Instr(clip_file_path, ".jpg")
-	{
+
+	if (HISTORYOBJ[clip_file_path] == 0) {
 		FileRead, temp_Read, cache\history\%clip_file_path%
+		temp_read := getFromTable("history", "data", "id=" clip_file_path)[1]
 		try Clipboard := temp_Read
+	} else if (HISTORYOBJ[clip_file_path] == 1) { ; in case row_selected=0 , this case ensures the code is not executed
+		filepath := getFromTable("history", "fileid", "id=" clip_file_path)[1]
+		Gdip_SetImagetoClipboard(filepath)
 	}
-	else
-		Gdip_SetImagetoClipboard("cache\history\" clip_file_path)
 	return row_selected
 }
 
@@ -392,13 +395,14 @@ historyUpdate(crit="", create=true, partial=false){
 	}
 }
 
-history_GetSize(I := ""){
+history_GetSize(option := ""){
 ;returns the size of given filename in history
-	If I !=
-		FileGetSize, R, % "cache\history\" I, B
-	else
-		Loop, cache\history\*.*, , 1
-    		R += %A_LoopFileSize%
+	If (option == ""){
+    	data := getFromTable("history", "sum(size)", "id>-1")
+    	R := data[1]
+	} else {
+
+	}
 
     return R/1024
 }
@@ -427,7 +431,13 @@ history_ButtonDelete(){
 		LV_Delete(A_LoopField+1-A_index)
 	;Delete items
 	loop, parse, list_clipfilepath, `n
-		FileDelete, % "cache\history\" A_LoopField
+	{
+		if (HISTORYOBJ[A_loopfield] == 1){
+			imgpath := getFromTable("history", "fileid", "id=" A_LoopField)[1]
+			FileDelete, % imgpath
+		}
+		execSql("delete from history where id=" A_LoopField)
+	}
 	
 	Guicontrol, History:Focus, history_SearchBox
 	history_UpdateSTB()

@@ -352,9 +352,11 @@ fileSizeFromStr(s){
 	return strlen(s) + 3 
 }
 
-execSql(s){
+execSql(s, warn:=0){
 	; execute sql
-	DB.Exec("")
+	if (!DB.Exec(s))
+		if (warn)
+			msgbox % DB.ErrorCode "`n" DB.ErrorMsg
 }
 
 getFromTable(tbl, cols, condition){
