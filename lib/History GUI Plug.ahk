@@ -1,9 +1,8 @@
 ;History Gui labels and functions
 ;A lot Thanks to chaz who first improved it
 
-gui_History()
+gui_History(){
 ; Creates and shows a GUI for managing and viewing the clipboard history
-{
 	global
 	static x, y, how_sort := 2_sort := 3_sort := 0, what_sort := 2
 	local selected_row, thisguisize
@@ -432,11 +431,7 @@ history_ButtonDelete(){
 	;Delete items
 	loop, parse, list_clipfilepath, `n
 	{
-		if (HISTORYOBJ[A_loopfield] == 1){
-			imgpath := getFromTable("history", "fileid", "id=" A_LoopField)[1]
-			FileDelete, % imgpath
-		}
-		execSql("delete from history where id=" A_LoopField)
+		deleteHistoryById(A_loopfield)
 	}
 	
 	Guicontrol, History:Focus, history_SearchBox
@@ -551,6 +546,46 @@ createHisTable(){
 		msgbox % "db create history table"
 }
 
+addHistoryText(data, timestamp){
+	timestamp := convertTimeSql( timestamp )
+	q := "insert into history (data, type, time, size) values (""" 
+		. escapeQuotesSql(data)
+		. """, 0, """ 
+		. timestamp """, "
+		. fileSizeFromStr(data) ")"
+	if (!DB.Exec(q))
+		msgbox % q
+}
+
+addHistoryImage(imgpath, timestamp){
+	timestamp := convertTimeSql(timestamp)
+	fptr := FileOpen(imgpath, "r")
+	size := fptr.Length
+	fptr.Close()
+	while (FileExist(rname := "cache\history\" getRandomStr(15) ".jpg")){
+		; loop till new file name
+	}
+
+	FileCopy, % imgpath, % rname
+	q := "insert into history (data, type, time, size, fileid) values ("
+		. """[IMAGE]"", " 
+		. 1 ","
+		. """" timestamp """, "
+		. size ", "
+		. """" rname """)"
+
+	If !DB.Exec(q)
+		MsgBox, 16, SQLite Error, % "Msg:`t" . DB.ErrorMsg . "`nCode:`t" . DB.ErrorCode
+}
+
+deleteHistoryById(id){
+	if (HISTORYOBJ[id] == 1){
+		imgpath := getFromTable("history", "fileid", "id=" id)[1]
+		FileDelete, % imgpath
+	}
+	execSql("delete from history where id=" id)
+}
+
 ;------------------------------------ MIGRATE ----------------------------------------------
 
 migrateHistory(){
@@ -559,38 +594,15 @@ migrateHistory(){
 	API.showTip("Moving history files to database. This process may take some time.")
 	loop, cache\history\*
 	{
-		if (A_LoopFileExt == "jpg" || A_LoopFileExt == "png"){
-			ts := convertTimeSql( SubStr(A_LoopFileName, 1, -4) )
-			fptr := FileOpen(A_LoopFileFullPath, "r")
-			size := fptr.Length
-			fptr.Close()
-
-			while (FileExist(rname := "cache\history\" getRandomStr(15) ".jpg")){
-				; loop till new file name
-			}
-
-			FileCopy, % A_LoopFileFullPath, % rname 
-
-			q := "insert into history (data, type, time, size, fileid) values ("
-				. """[IMAGE]"", " 
-				. 1 ","
-				. """" ts """, "
-				. size ", "
-				. """" rname """)"
-
-			If !DB.Exec(q)
-				MsgBox, 16, SQLite Error, % "Msg:`t" . DB.ErrorMsg . "`nCode:`t" . DB.ErrorCode
-
+		if (strlen(A_LoopFileName) != 18) ; YYYYMMDDHHMMSS.ext
+			continue
+		if (A_LoopFileExt == "jpg"){
+			addHistoryImage(A_LoopFileFullPath, Substr(A_LoopFileName,1,-4))
+			FileDelete, % A_LoopFileFullPath
 		} else if (A_LoopFileExt == "txt"){
-			ts := convertTimeSql( SubStr(A_LoopFileName, 1, -4) )
 			FileRead, tdata, % A_LoopFileFullPath
-			q := "insert into history (data, type, time, size) values (""" 
-				. escapeQuotesSql(tdata)
-				. """, 0, """ 
-				. ts """, "
-				. fileSizeFromStr(tdata) ")"
-			if (!DB.Exec(q))
-				msgbox % q
+			addHistoryText(tdata, Substr(A_LoopFileName,1,-4))
+			FileDelete, % A_LoopFileFullPath
 		}
 	}
 	DB.Exec("COMMIT TRANSACTION")

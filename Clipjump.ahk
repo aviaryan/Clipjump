@@ -132,7 +132,6 @@ GET THE PROGRAM WORKING
 */
 
 global DB := new SQLiteDB()
-FileDelete, % DBPATH
 if (!FileExist(DBPATH))
 	isnewdb := 1
 else
@@ -231,7 +230,6 @@ hkZ(actionmode_K, "actionmode") , hkZ(pluginManager_k, "pluginManagerGUI")
 hkZ(holdClip_K, "holdClip") , hkZ(chOrg_K, "channelOrganizer")
 ;more shortcuts
 hkZ(windows_copy_k, "windows_copy") , hkZ(windows_cut_k, "windows_cut")
-historyCleanup() ;Clean History
 
 ;create Ignore windows group from | separated values
 loop, parse, ignoreWindows,|
@@ -259,9 +257,9 @@ if FileExist(GHICON_PATH)
 else
 	MsgBox, 16, % PROGNAME, % valueof(TXT.ABT_errorFontIcon)
 
-;if (isnewdb){
+if (isnewdb){
 	migrateHistory()
-;}
+}
 
 /*
 **********
@@ -269,6 +267,7 @@ LAST WORDS
 **********
 */
 
+historyCleanup() ;Clean History
 OnMessage(0x4a, "Receive_WM_COPYDATA")  ; 0x4a is WM_COPYDATA
 ; Portable Startup
 IfExist, %A_Startup%/Clipjump.lnk
@@ -472,8 +471,9 @@ clipChange(CErrorlevel, clipboard_copy) {
 				return
 			}
 
-			if NOINCOGNITO and ( CN.Name != "pit" )
-				FileAppend, %LASTCLIP%, cache\history\%A_Now%.txt
+			if NOINCOGNITO and ( CN.Name != "pit" ){
+				addHistoryText(LASTCLIP, A_now)
+			}
 
 			BeepAt(ini_CopyBeep, beepFrequency)
 			ToolTip, %copyMessage%
@@ -507,8 +507,9 @@ clipChange(CErrorlevel, clipboard_copy) {
 			ToolTip, %copyMessage%
 			thumbGenerator()
 
-			if NOINCOGNITO and ini_IsImageStored and ( CN.Name != "pit" )
-				FileCopy, %THUMBS_dir%\%CURSAVE%.jpg, cache\history\%A_Now%.jpg
+			if NOINCOGNITO and ini_IsImageStored and ( CN.Name != "pit" ){
+				addHistoryImage(THUMBS_dir "\" CURSAVE ".jpg", A_Now)
+			}
 
 			while ( CURSAVE >= TOTALCLIPS )
 				compacter()
@@ -1234,14 +1235,15 @@ historyCleanup(){
 	if !ini_DaysToStore                    ;Dont delete old data
 		return
 
-	cur_Time := A_now
-	Envadd, cur_Time, -%ini_DaysToStore%, D
-	Loop, cache\history\*
+	q := "select id from history where (strftime('%s', date('now', '-" ini_DaysToStore "days')) - strftime('%s', time)) > 0;"
+	recordSet := ""
+	if (!DB.Query(q, recordSet))
+		msgbox % "Error history cleanup `n " DB.ErrorMsg "`n" q
+
+	loop % recordSet.RowCount
 	{
-		temp_file_name := Substr(A_LoopFileName, 1, -4)
-		EnvSub, temp_File_Name, cur_Time, S
-		if temp_File_Name < 0
-			FileDelete, cache\history\%A_LoopFileName%
+		recordSet.Next(Row)
+		deleteHistoryById(Row[1])
 	}
 }
 
