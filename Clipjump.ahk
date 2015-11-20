@@ -75,7 +75,7 @@ global MSG_TRANSFER_COMPLETE
 ;History Tool
 global hidden_date_no := 4 , history_w , history_partial := 1 ;start off with partial=1 <> much better
 global PREV_FILE := "cache\prev.html" , GHICON_PATH := A_ScriptDir "\icons\octicons-local.ttf"
-global DBPATH := "cache\data.db", recordSet
+global DBPATH := "cache\data.db"
 
 /*
 ****************
@@ -1230,7 +1230,7 @@ showPreview(){
 
 historyCleanup(){
 ;Cleans history in bunch
-	;global
+	local Row
 	if !ini_DaysToStore                    ;Dont delete old data
 		return
 

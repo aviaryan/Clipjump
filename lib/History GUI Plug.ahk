@@ -114,7 +114,6 @@ history_ButtonPreview:
 		data := getFromTable("history", "fileid", "id=" clip_file_path)
 		gui_Clip_Preview(path := data[1], history_SearchBox)
 	}
-	recordSet.Free()
 	return
 
 history_ButtonDelete:
@@ -364,12 +363,25 @@ history_clipboard(sTartRow=0){
 historyUpdate(crit="", create=true, partial=false){
 	; Updates the clipboard history window list
 	; works when search content is changed
-
 	local totalSize := 0
+	local result, Row
+
 	LV_Delete()
 	func := Func(partial ? "Superinstr" : "Instr") , thirdpm := partial ? 1 : 0		;The third param 0 has diff meanings in both cases
 
-	q := "select * from history where data like ""%" crit "%"""
+	crit := trim(crit)
+	if (crit == ""){
+		q := "select * from history"
+	} else if partial {
+		likestr := ""
+		loop, parse, crit, % " `t", % " `t"
+			likestr .= "data like ""%" A_loopfield "%"" and "
+		likestr := Substr(likestr, 1, -4)
+		q := "select * from history where " likestr
+	} else {
+		q := "select * from history where data like ""%" crit "%"""
+	}
+
 	result := ""
 	if !DB.GetTable(q, result)
 		msgbox error
@@ -531,6 +543,8 @@ LV_SortArrow(h, c, d="")	; by Solar (http://www.autohotkey.com/forum/viewtopic.p
 ; --------------------------- SQL STORAGE FUNCTIONS --------------------------------------
 
 createHisTable(){
+; creates the History Table if it doesnt exist
+; called by the migrateHistory function
 	q = 
 	(
 		CREATE TABLE if not exists history `(
@@ -547,6 +561,8 @@ createHisTable(){
 }
 
 addHistoryText(data, timestamp){
+; adds some text data to history
+; the timestamp is in A_Now format
 	timestamp := convertTimeSql( timestamp )
 	q := "insert into history (data, type, time, size) values (""" 
 		. escapeQuotesSql(data)
@@ -558,6 +574,9 @@ addHistoryText(data, timestamp){
 }
 
 addHistoryImage(imgpath, timestamp){
+; addes image to history
+; image specified by image path (imgpath)
+; timestamp is in A_Now format
 	timestamp := convertTimeSql(timestamp)
 	fptr := FileOpen(imgpath, "r")
 	size := fptr.Length
@@ -579,6 +598,7 @@ addHistoryImage(imgpath, timestamp){
 }
 
 deleteHistoryById(id){
+; deletes a history element by its ID in the table
 	if (HISTORYOBJ[id] == 1){
 		imgpath := getFromTable("history", "fileid", "id=" id)[1]
 		FileDelete, % imgpath
@@ -587,6 +607,10 @@ deleteHistoryById(id){
 }
 
 fillHISTORYOBJ(){
+; fills the HISTORYOBJ array
+; It contains ID v/s type information
+; HISTORYOBJ[ID] = type ( 0 or 1 )
+	local result
 	q := "select id,type from history"
 	result := ""
 	if !DB.GetTable(q, result)
@@ -598,6 +622,7 @@ fillHISTORYOBJ(){
 ;------------------------------------ MIGRATE ----------------------------------------------
 
 migrateHistory(){
+; migrates History files to the database
 	createHisTable()
 	DB.Exec("BEGIN TRANSACTION")
 	API.showTip("Moving history files to database. This process may take some time.")
