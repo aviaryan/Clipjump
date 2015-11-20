@@ -117,7 +117,7 @@ global CALLER := CALLER_STATUS := 1, IN_BACK := 0, MULTIPASTE, PASTEMODE_ACT
 global CLIP_ACTION := "", ONCLIPBOARD := 1 , ISACTIVEEXCEL := 0 , HASCOPYFAILED := 0 , ctrlRef		;specific purpose global vars
 
 ;Global Ini declarations
-global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_isMessage, CopyMessage
+global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_isMessage, CopyMessage, ini_DaysToStore
 		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, onetime_K, paste_k, actionmode_k, ini_is_duplicate_copied, ini_formatting
 		, ini_CopyBeep , beepFrequency , ignoreWindows, ini_defEditor, ini_defImgEditor, ini_def_Pformat, pluginManager_k, holdClip_K, ini_PreserveClipPos
 		, chOrg_K, ini_startSearch, ini_revFormat2def, ini_pstMode_X, ini_pstMode_Y, ini_HisCloseOnInstaPaste, history_K, ini_ram_flush
@@ -267,6 +267,7 @@ LAST WORDS
 **********
 */
 
+fillHISTORYOBJ()
 historyCleanup() ;Clean History
 OnMessage(0x4a, "Receive_WM_COPYDATA")  ; 0x4a is WM_COPYDATA
 ; Portable Startup
@@ -1229,22 +1230,21 @@ showPreview(){
 
 historyCleanup(){
 ;Cleans history in bunch
-	global
-	local cur_Time , temp_file_name
-
+	;global
 	if !ini_DaysToStore                    ;Dont delete old data
 		return
 
-	q := "select id from history where (strftime('%s', date('now', '-" ini_DaysToStore "days')) - strftime('%s', time)) > 0;"
-	recordSet := ""
-	if (!DB.Query(q, recordSet))
-		msgbox % "Error history cleanup `n " DB.ErrorMsg "`n" q
+	q := "select id from history where (strftime('%s', date('now', '-" ini_DaysToStore " days')) - strftime('%s', time)) > 0"
+	recs := ""
+	if (!DB.Query(q, recs))
+		msgbox % "Error history cleanup `n " DB.ErrorMsg "`n" DB.ErrorCode "`n" q
 
-	loop % recordSet.RowCount
+	DB.Exec("BEGIN TRANSACTION")
+	while ( recs.Next(Row) > 0 )
 	{
-		recordSet.Next(Row)
 		deleteHistoryById(Row[1])
 	}
+	DB.Exec("COMMIT TRANSACTION")
 }
 
 

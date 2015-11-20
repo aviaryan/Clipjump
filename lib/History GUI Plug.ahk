@@ -586,6 +586,15 @@ deleteHistoryById(id){
 	execSql("delete from history where id=" id)
 }
 
+fillHISTORYOBJ(){
+	q := "select id,type from history"
+	result := ""
+	if !DB.GetTable(q, result)
+		msgbox error
+	loop % result.RowCount
+		HISTORYOBJ[Row[1]] := Row[2]
+}
+
 ;------------------------------------ MIGRATE ----------------------------------------------
 
 migrateHistory(){
