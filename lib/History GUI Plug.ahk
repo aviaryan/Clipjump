@@ -106,13 +106,18 @@ history_ButtonPreview:
 	else v := LV_GetNext()
 
 	LV_GetText(clip_file_path, v, hidden_date_no)
-	msgbox % clip_file_path
-	if !Instr(clip_file_path, ".jpg"){
-		FileRead, clip_data, % "cache\history\" clip_file_path
+	if (HISTORYOBJ[clip_file_path] == 0){ ;type text
+		data := getFromTable("history", "data", "id=" clip_file_path)
+		clip_data := data[1]
 		genHTMLforPreview(clip_data)
 		gui_Clip_Preview(PREV_FILE, history_searchbox)
+	} else {
+		data := getFromTable("history", "blob", "id=" clip_file_path)
+		saveBlobImage(data[1], path := "cache\history_prev.jpg")
+		;saveBlobImage("history", "blob", "id=" clip_file_path, path := "cache\history_prev.png")
+		gui_Clip_Preview(path, history_SearchBox)
 	}
-	else gui_Clip_Preview( "cache\history\" clip_file_path, history_SearchBox)
+	recordSet.Free()
 	return
 
 history_ButtonDelete:
@@ -373,6 +378,7 @@ historyUpdate(crit="", create=true, partial=false){
 		clipdate := Row[5]
 		totalsize += ( clipsize := Row[6] )
 		LV_Add("", clipdata, clipdate, clipsize, Row[1])
+		HISTORYOBJ[Row[1]] := Row[3]
 	}
 
 	history_UpdateSTB("" totalSize/1024)
@@ -526,18 +532,13 @@ createHisTable(){
 		id	INTEGER PRIMARY KEY AUTOINCREMENT,
 		data 	TEXT,
 		type	INTEGER,
-		blob	BLOB,
+		blob 	BLOB,
 		time	TEXT,
 		size 	INTEGER
 		`)
 	)
 	if !DB.Exec(q)
 		msgbox % "db create history table"
-}
-
-getFromTable(tbl, cols, condition){
-	q = "select " . cols . " from " . tbl . " where " escapeQuotesSql(condition)
-	result := ""
 }
 
 ;------------------------------------ MIGRATE ----------------------------------------------
@@ -548,7 +549,7 @@ migrateHistory(){
 	API.showTip("Moving history files to database. This process may take some time.")
 	loop, cache\history\*
 	{
-		if (A_LoopFileExt == "jpg"){
+		if (A_LoopFileExt == "jpg" || A_LoopFileExt == "png"){
 			ts := convertTimeSql( SubStr(A_LoopFileName, 1, -4) )
 			fptr := FileOpen(A_LoopFileFullPath, "r")
 			size := fptr.RawRead(BLOB, fptr.Length)
@@ -558,11 +559,11 @@ migrateHistory(){
 				. """[IMAGE]"", " 
 				. 1 ","
 				. """" ts """, "
-				. size ","
+				. size ", "
 				. "?)"
 			; Create the BLOB array
 			BlobArray := []
-			BlobArray.Insert({Addr: &BLOB, Size: Size}) ; will be inserted as element 1
+			BlobArray.Insert({Addr: &BLOB, Size: size}) ; will be inserted as element 1
 			If !DB.StoreBLOB(q, BlobArray)
 				MsgBox, 16, SQLite Error, % "Msg:`t" . DB.ErrorMsg . "`nCode:`t" . DB.ErrorCode
 
