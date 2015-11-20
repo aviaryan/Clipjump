@@ -362,6 +362,8 @@ execSql(s, warn:=0){
 getFromTable(tbl, cols, condition){
 	; get from table
 	; get only particular columns if necessary
+	local recordSet, Row
+	
 	q := "select " . cols . " from " . tbl . " where " condition
 	recordSet := ""
 	if !DB.Query(q, recordSet)
