@@ -112,10 +112,10 @@ history_ButtonPreview:
 		genHTMLforPreview(clip_data)
 		gui_Clip_Preview(PREV_FILE, history_searchbox)
 	} else {
-		data := getFromTable("history", "blob", "id=" clip_file_path)
-		saveBlobImage(data[1], path := "cache\history_prev.jpg")
+		data := getFromTable("history", "fileid", "id=" clip_file_path)
+		;saveBlobImage(data[1], path := "cache\history_prev.jpg")
 		;saveBlobImage("history", "blob", "id=" clip_file_path, path := "cache\history_prev.png")
-		gui_Clip_Preview(path, history_SearchBox)
+		gui_Clip_Preview(path := data[1], history_SearchBox)
 	}
 	recordSet.Free()
 	return
@@ -532,7 +532,7 @@ createHisTable(){
 		id	INTEGER PRIMARY KEY AUTOINCREMENT,
 		data 	TEXT,
 		type	INTEGER,
-		blob 	BLOB,
+		fileid 	TEXT,
 		time	TEXT,
 		size 	INTEGER
 		`)
@@ -552,19 +552,23 @@ migrateHistory(){
 		if (A_LoopFileExt == "jpg" || A_LoopFileExt == "png"){
 			ts := convertTimeSql( SubStr(A_LoopFileName, 1, -4) )
 			fptr := FileOpen(A_LoopFileFullPath, "r")
-			size := fptr.RawRead(BLOB, fptr.Length)
+			size := fptr.Length
 			fptr.Close()
 
-			q := "insert into history (data, type, time, size, blob) values ("
+			while (FileExist(rname := "cache\history\" getRandomStr(15) ".jpg")){
+				; loop till new file name
+			}
+
+			FileCopy, % A_LoopFileFullPath, % rname 
+
+			q := "insert into history (data, type, time, size, fileid) values ("
 				. """[IMAGE]"", " 
 				. 1 ","
 				. """" ts """, "
 				. size ", "
-				. "?)"
-			; Create the BLOB array
-			BlobArray := []
-			BlobArray.Insert({Addr: &BLOB, Size: size}) ; will be inserted as element 1
-			If !DB.StoreBLOB(q, BlobArray)
+				. """" rname """)"
+
+			If !DB.Exec(q)
 				MsgBox, 16, SQLite Error, % "Msg:`t" . DB.ErrorMsg . "`nCode:`t" . DB.ErrorCode
 
 		} else if (A_LoopFileExt == "txt"){

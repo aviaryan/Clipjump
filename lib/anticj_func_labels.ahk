@@ -350,6 +350,11 @@ fileSizeFromStr(s){
 	return strlen(s) + 3 
 }
 
+execSql(s){
+	; execute sql
+	DB.Exec("")
+}
+
 getFromTable(tbl, cols, condition){
 	; get from table
 	; get only particular columns if necessary
@@ -390,6 +395,17 @@ saveBlobImage(blobobj, path){
 
 ;-------------------------------------------------------------
 
+
+getRandomStr(len){
+	rStr := "abcdefghijiklmnopqrstuvwxyz0123456789"
+	str := ""
+	loop % len
+	{
+		Random, num, 1, 36
+		str .= Substr(rStr, num, 1)
+	}
+	return str
+}
 
 genHTMLforPreview(code){
 	FileDelete, % PREV_FILE
