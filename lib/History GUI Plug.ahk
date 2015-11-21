@@ -104,14 +104,14 @@ history_ButtonPreview:
 		v := selected_row
 	else v := LV_GetNext()
 
-	LV_GetText(clip_file_path, v, hidden_date_no)
-	if (HISTORYOBJ[clip_file_path] == 0){ ;type text
-		data := getFromTable("history", "data", "id=" clip_file_path)
+	LV_GetText(clip_id, v, hidden_date_no)
+	if (HISTORYOBJ[clip_id] == 0){ ;type text
+		data := getFromTable("history", "data", "id=" clip_id)
 		clip_data := data[1]
 		genHTMLforPreview(clip_data)
 		gui_Clip_Preview(PREV_FILE, history_searchbox)
 	} else {
-		data := getFromTable("history", "fileid", "id=" clip_file_path)
+		data := getFromTable("history", "fileid", "id=" clip_id)
 		gui_Clip_Preview(path := data[1], history_SearchBox)
 	}
 	return
@@ -153,9 +153,18 @@ history_clipboard:
 
 history_EditClip: 		; label inside to call history_searchbox which uses local func variables
 	Gui, History:Default
-	LV_GetText(clip_file_path, LV_GetNext(0), hidden_date_no)
-	runwait % ( Instr(clip_file_path, ".jpg") ? ini_defImgEditor : ini_defEditor ) " """ A_WorkingDir "\cache\history\" clip_file_path """"
-	HISTORYOBJ[clip_file_path "_data"] := HISTORYOBJ[clip_file_path "_date"] := ""  	; free to rebuild them
+	LV_GetText(clip_id, LV_GetNext(0), hidden_date_no)
+	if (HISTORYOBJ[clip_id] == 1){
+		data := getFromTable("history", "fileid", "id=" clip_id)
+		runwait % ini_defImgEditor " """ A_WorkingDir "\" data[1] """"
+	} else {
+		data := getFromTable("history", "data", "id=" clip_id)
+		STORE.ErrorLevel := 0
+		out := multInputBox("Edit Clip", "Make your changes and then click OK", 10, data[1], "History")
+		if (STORE.ErrorLevel == 1){
+			execSql("update history set data=""" escapeQuotesSql(out) """ where id=" clip_id, 1)
+		}
+	}
 	gosub history_SearchBox
 	return
 
@@ -163,8 +172,8 @@ history_HoldClip:
 	while !IsHisListViewActive()
 		sleep 50
 	Gui, History:Default
-	LV_GetText(clip_file_path, LV_GetNext(0), hidden_date_no)
-	data := getFromTable("history", "data", "id=" clip_file_path)
+	LV_GetText(clip_id, LV_GetNext(0), hidden_date_no)
+	data := getFromTable("history", "data", "id=" clip_id)
 	STORE.holdClip_preText := data[1]
 	gosub holdclip
 	return
@@ -347,14 +356,14 @@ history_clipboard(sTartRow=0){
 	row_selected := LV_GetNext(sTartRow)
 	if !row_selected
 		return 0
-	LV_GetText(clip_file_path, row_selected, hidden_date_no)
+	LV_GetText(clip_id, row_selected, hidden_date_no)
 
-	if (HISTORYOBJ[clip_file_path] == 0) {
-		FileRead, temp_Read, cache\history\%clip_file_path%
-		temp_read := getFromTable("history", "data", "id=" clip_file_path)[1]
+	if (HISTORYOBJ[clip_id] == 0) {
+		FileRead, temp_Read, cache\history\%clip_id%
+		temp_read := getFromTable("history", "data", "id=" clip_id)[1]
 		try Clipboard := temp_Read
-	} else if (HISTORYOBJ[clip_file_path] == 1) { ; in case row_selected=0 , this case ensures the code is not executed
-		filepath := getFromTable("history", "fileid", "id=" clip_file_path)[1]
+	} else if (HISTORYOBJ[clip_id] == 1) { ; in case row_selected=0 , this case ensures the code is not executed
+		filepath := getFromTable("history", "fileid", "id=" clip_id)[1]
 		Gdip_SetImagetoClipboard(filepath)
 	}
 	return row_selected
@@ -435,8 +444,8 @@ history_ButtonDelete(){
 
 	;Get Row names
 	loop, parse, rows_selected,`,
-		LV_GetText(clip_file_path, A_LoopField, hidden_date_no)
-		, list_clipfilepath .= clip_file_path "`n" 	;Important for faster results
+		LV_GetText(clip_id, A_LoopField, hidden_date_no)
+		, list_clipfilepath .= clip_id "`n" 	;Important for faster results
 	;Delete Rows
 	loop, parse, rows_selected,`,
 		LV_Delete(A_LoopField+1-A_index)
