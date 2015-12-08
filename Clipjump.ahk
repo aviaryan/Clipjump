@@ -826,7 +826,7 @@ fixCheck() {
 }
 
 ;Shows tooltips in Clipjump Paste Modes
-PasteModeTooltip(cText, notpaste=0, fontops="") {
+PasteModeTooltip(cText, notpaste=0) {
 	global
 	local tx, ty
 	if STORE["pstTipRebuild"] {
@@ -836,10 +836,7 @@ PasteModeTooltip(cText, notpaste=0, fontops="") {
 	; SPM.X and y contain place to show a/c searchbox
 	tx := ini_pstMode_X ? ini_pstMode_X : SPM.X , ty := ini_pstMode_Y ? ini_pstMode_Y : SPM.Y
 	if notpaste
-		if (fontops != "")
-			Tooltip_fonted(cText,, tx, ty, fontops)
-		else
-			Tooltip, % cText, % tx, % ty
+		Tooltip, % cText, % tx, % ty
 	else {
 		tagText := (t := CPS[CN.NG][realActive]["Tags"]) != "" ? "(" t ")" : ""
 		if cText =
