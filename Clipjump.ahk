@@ -815,13 +815,14 @@ PasteModeTooltip(cText, notpaste=0) {
 	local tx, ty
 	if STORE["pstTipRebuild"] {
 		Tooltip
+		TooltipEx()
 		STORE["pstTipRebuild"] := 0
 	}
 	; SPM.X and y contain place to show a/c searchbox
 	tx := ini_pstMode_X ? ini_pstMode_X : SPM.X , ty := ini_pstMode_Y ? ini_pstMode_Y : SPM.Y
-	if (notpaste == 1)
+	if (notpaste == 1){
 		Tooltip, % cText, % tx, % ty
-	else {
+	} else {
 		tagText := (t := CPS[CN.NG][realActive]["Tags"]) != "" ? "(" t ")" : ""
 		if (cText == "")
 			ToolTip % "{" CN.Name "} Clip " realclipno " of " CURSAVE fillWithSpaces("",7) tagText " " fixStatus 
@@ -983,7 +984,9 @@ Ssuspnd:
 	return
 
 pstMode_Help:
-	PasteModeTooltip(TXT.SET_shortcuts "`n" TXT.TIP_help, 1) ;, "S8, Consolas")
+	Tooltip
+	TooltipEx(TXT.SET_shortcuts "`n" TXT.TIP_help, __x, __y, 1, getHFONT("s8", "Consolas"))
+	;PasteModeTooltip(TXT.SET_shortcuts "`n" TXT.TIP_help, 1) ;, "S8, Consolas")
 	STORE["pstTipRebuild"] := 1
 	return
 
@@ -1233,7 +1236,7 @@ historyCleanup(){
 
 actionmode:
 	update_actionmode()
-	temp_am := TT_Console(ACTIONMODE.text, ACTIONMODE.keys, __x, __y, "s8", "Consolas", 5)
+	temp_am := TT_Console(ACTIONMODE.text, ACTIONMODE.keys, __x, __y, "s9", "Consolas", 5)
 	if ACTIONMODE[temp_am] != "Exit_actmd"
 	{
 		if Instr(ACTIONMODE[temp_am] , "(")
@@ -1270,10 +1273,10 @@ update_actionmode(){
 	for k,v in ACTIONMODE
 	if !Instr(k, "_") && (k != "Esc") && v{
 		thekeys .= k " "
-		thetext .= "`n" fillwithSpaces( ACTIONMODE[k "_caption"] ? ACTIONMODE[k "_caption"] : v , 35 ) " -  " k
+		thetext .= "`n" fillwithSpaces( ACTIONMODE[k "_caption"] ? ACTIONMODE[k "_caption"] : v , 25 ) " -  " k
 	}
 	if ACTIONMODE.Esc
-		thetext .= "`n`n" fillwithSpaces( ACTIONMODE.Esc_caption ? ACTIONMODE.Esc_caption : ACTIONMODE.Esc , 35 ) " -  Esc" , thekeys .= "Esc"
+		thetext .= "`n`n" fillwithSpaces( ACTIONMODE.Esc_caption ? ACTIONMODE.Esc_caption : ACTIONMODE.Esc , 25 ) " -  Esc" , thekeys .= "Esc"
 	loop, parse, numadd
 		thekeys .= " " A_LoopField
 	ACTIONMODE.keys := Trim(thekeys)
