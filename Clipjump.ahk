@@ -1591,8 +1591,6 @@ Receive_WM_COPYDATA(wParam, lParam){
 #include %A_ScriptDir%\lib\history gui plug.ahk
 #include %A_ScriptDir%\lib\pluginManager.ahk
 #include %A_ScriptDir%\lib\channelOrganizer.ahk
-;##include %A_ScriptDir%\lib\ToolTip.ahk
-;#include %A_ScriptDir%\lib\TTInclude.ahk
 #include %A_ScriptDir%\lib\TooltipEx.ahk
 #include *i %A_ScriptDir%\plugins\_registry.ahk
 
