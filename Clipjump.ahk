@@ -810,27 +810,25 @@ fixCheck() {
 }
 
 ;Shows tooltips in Clipjump Paste Modes
-PasteModeTooltip(cText, notpaste=0, fontops="") {
+PasteModeTooltip(cText, notpaste=0) {
 	global
 	local tx, ty
 	if STORE["pstTipRebuild"] {
 		Tooltip
+		TooltipEx()
 		STORE["pstTipRebuild"] := 0
 	}
 	; SPM.X and y contain place to show a/c searchbox
 	tx := ini_pstMode_X ? ini_pstMode_X : SPM.X , ty := ini_pstMode_Y ? ini_pstMode_Y : SPM.Y
-	if notpaste
-		if (fontops != "")
-			Tooltip_fonted(cText,, tx, ty, fontops)
-		else
-			Tooltip, % cText, % tx, % ty
-	else {
+	if (notpaste == 1){
+		Tooltip, % cText, % tx, % ty
+	} else {
 		tagText := (t := CPS[CN.NG][realActive]["Tags"]) != "" ? "(" t ")" : ""
-		if cText =
+		if (cText == "")
 			ToolTip % "{" CN.Name "} Clip " realclipno " of " CURSAVE fillWithSpaces("",7) tagText " " fixStatus 
 		. (WinExist("Display_Cj") ? "" : "`n`n" MSG_ERROR "`n`n"), % tx, % ty
 		else
-		ToolTip % "{" CN.Name "} Clip " realclipno " of " CURSAVE fillWithSpaces("",7) GetClipboardFormat() fillWithSpaces("",5) (curPformat ? "[" curPformat "]" : "") 
+			ToolTip % "{" CN.Name "} Clip " realclipno " of " CURSAVE fillWithSpaces("",7) GetClipboardFormat() fillWithSpaces("",5) (curPformat ? "[" curPformat "]" : "") 
 			. fillWithSpaces("",5) tagText " " fixstatus "`n`n" halfclip, % tx, % ty
 	}
 }
@@ -986,7 +984,9 @@ Ssuspnd:
 	return
 
 pstMode_Help:
-	PasteModeTooltip(TXT.SET_shortcuts "`n" TXT.TIP_help, 1) ;, "S8, Consolas")
+	Tooltip
+	TooltipEx(TXT.SET_shortcuts "`n" TXT.TIP_help, __x, __y, 1, getHFONT("s8", "Consolas"))
+	;PasteModeTooltip(TXT.SET_shortcuts "`n" TXT.TIP_help, 1) ;, "S8, Consolas")
 	STORE["pstTipRebuild"] := 1
 	return
 
@@ -1070,7 +1070,7 @@ holdClip:
 	}
 	holdclip_continue := 1 , hkZ( ( paste_k ? "$" pstIdentifier paste_k : emptyvar ) , "Paste", 0) 	; disable paste mode
 	try temp_cb := trygetVar("Clipboard")
-	keyPressed := TT_Console(TXT.TIP_holdclip "`n`n" Substr(temp_cb, 1, 200) " ...", "Insert F2 Esc",,,,, 1)
+	keyPressed := TT_Console(TXT.TIP_holdclip "`n`n" Substr(temp_cb, 1, 200) " ...", "Insert F2 Esc", __x, __y, __fontops, __fontname, 1, 1)
 	if keyPressed = F2
 	{
 		guiMsgBox(TXT["_output"], API.runPlugin("pformat.commonformats.ahk", Clipboard) )
@@ -1236,7 +1236,7 @@ historyCleanup(){
 
 actionmode:
 	update_actionmode()
-	temp_am := TT_Console(ACTIONMODE.text, ACTIONMODE.keys, PROGNAME " " TXT.ACT__name,,, "S8, Consolas")
+	temp_am := TT_Console(ACTIONMODE.text, ACTIONMODE.keys, __x, __y, "s9", "Consolas", 5)
 	if ACTIONMODE[temp_am] != "Exit_actmd"
 	{
 		if Instr(ACTIONMODE[temp_am] , "(")
@@ -1265,18 +1265,18 @@ init_actionmode(){
 update_actionmode(){
 	static numadd := "0123456789"
 	thetext := ""
-	;.  PROGNAME " " TXT.ACT__name
-	;. "`n-----------"
-	;. "`n"
+	.  PROGNAME " " TXT.ACT__name
+	. "`n-----------"
+	. "`n"
 	ACTIONMODE.remove("text") , ACTIONMODE.remove("keys")
 
 	for k,v in ACTIONMODE
 	if !Instr(k, "_") && (k != "Esc") && v{
 		thekeys .= k " "
-		thetext .= "`n" fillwithSpaces( ACTIONMODE[k "_caption"] ? ACTIONMODE[k "_caption"] : v , 35 ) " -  " k
+		thetext .= "`n" fillwithSpaces( ACTIONMODE[k "_caption"] ? ACTIONMODE[k "_caption"] : v , 25 ) " -  " k
 	}
 	if ACTIONMODE.Esc
-		thetext .= "`n`n" fillwithSpaces( ACTIONMODE.Esc_caption ? ACTIONMODE.Esc_caption : ACTIONMODE.Esc , 35 ) " -  Esc" , thekeys .= "Esc"
+		thetext .= "`n`n" fillwithSpaces( ACTIONMODE.Esc_caption ? ACTIONMODE.Esc_caption : ACTIONMODE.Esc , 25 ) " -  Esc" , thekeys .= "Esc"
 	loop, parse, numadd
 		thekeys .= " " A_LoopField
 	ACTIONMODE.keys := Trim(thekeys)
@@ -1591,7 +1591,7 @@ Receive_WM_COPYDATA(wParam, lParam){
 #include %A_ScriptDir%\lib\history gui plug.ahk
 #include %A_ScriptDir%\lib\pluginManager.ahk
 #include %A_ScriptDir%\lib\channelOrganizer.ahk
-#include %A_ScriptDir%\lib\TTInclude.ahk
+#include %A_ScriptDir%\lib\TooltipEx.ahk
 #include *i %A_ScriptDir%\plugins\_registry.ahk
 
 ;------------------------------------------------------------------- X -------------------------------------------------------------------------------

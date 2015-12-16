@@ -1,5 +1,5 @@
 /*
-TT_Console() v0.02
+TT_Console() v0.03
 	Use Tooltip as a User Interface
 
 By:
@@ -15,28 +15,16 @@ Returns >
 */
 
 ;EXAMPLE
-;#Persistent
 ;a := TT_Console( "Hi`nPress Y to see another message.`nPress N to exit script", "y n", empty_var, empty_var, 1, "s12", "Arial|Consolas")
 ;if a = y
-;{
-;	c := TT_Console( "Press V to close me`nPress Esc to let me running", "v Esc")
-;	if c = v
-;		Exitapp
-;}
-;Else if a = n
-;	Exitapp
+;...
 ;return
 
 
-TT_Console(msg, keys, title="", x="", y="", fontops="", followMouse=0) {
+TT_Console(msg, keys, x="", y="", fontops="", fontname="", whichtooltip=1, followMouse=0) {
 
-	ttobj := TT("", msg, title)
-	if (fontops=="")
-		fontops := "Arial,s9"
-	ttobj.Font(fontops)
-
-	;show tooltip
-	ttobj.Show(msg, x, y)
+	hFont := getHFONT(fontops, fontname)
+	TooltipEx(msg, x, y, whichtooltip, hFont)
 
 	;create hotkeys
 	loop, parse, keys, %A_space%, %a_space%
@@ -47,16 +35,14 @@ TT_Console(msg, keys, title="", x="", y="", fontops="", followMouse=0) {
 	{
 		if followMouse
 		{
-			ttobj.Show()
-			sleep 200
+			TooltipEx(msg,,, whichtooltip)
+			sleep 100
+		} else {
+			sleep 20
 		}
-		else sleep 20
 	}
 
-	ToolTip,,,, % whichtooltip
-	ttobj.Hide()
-	ttobj := ""
-	; msgbox % "Report this to dev : " what_pressed
+	TooltipEx(,,, whichtooltip)
 
 	loop, parse, keys, %A_space%, %a_space%
 		hkZ(A_LoopField, "TT_Console_Check", 0)
@@ -69,3 +55,4 @@ TT_Console_Check:
 	is_TTkey_pressed := 1
 	return
 }
+

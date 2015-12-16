@@ -43,11 +43,13 @@ chrHex(n){
 	return chr( base2Number(n, 16) )
 }
 
-Tooltip_fonted(msg, title="", x="", y="", fontops=""){
-	ttobj := TT("", msg, title)
-	ttobj.Font(fontops)
-	ttobj.Show()
-	return ttobj
+GetHFONT(Options := "", Name := "") {
+   Gui, New
+   Gui, Font, % Options, % Name
+   Gui, Add, Text, +hwndHTX, Dummy
+   HFONT := DllCall("User32.dll\SendMessage", "Ptr", HTX, "UInt", 0x31, "Ptr", 0, "Ptr", 0, "UPtr") ; WM_GETFONT
+   Gui, Destroy
+   Return HFONT
 }
 
 ;BeepAt()
@@ -310,20 +312,20 @@ MakeClipboardAvailable(doreturn=1, sleeptime=10){
 ;	returns data types
 GetClipboardFormat(type=1){		;Thanks nnnik
 	Critical, On
- 	DllCall("OpenClipboard", "int", "")
- 	while c := DllCall("EnumClipboardFormats","Int",c?c:0)
+	DllCall("OpenClipboard", "int", "")
+	while c := DllCall("EnumClipboardFormats","Int",c?c:0)
 		x .= "," c
 	DllCall("CloseClipboard")
 
 	if type=1
-  		if Instr(x, ",1") and Instr(x, ",13")
-    		return "[" TXT.TIP_text "]"
- 		else If Instr(x, ",15")
-    		return "[" TXT.TIP_file_folder "]"
-    	else
-    		return ""
-    else
-    	return x
+		if Instr(x, ",1") and Instr(x, ",13")
+			return "[" TXT.TIP_text "]"
+		else If Instr(x, ",15")
+			return "[" TXT.TIP_file_folder "]"
+		else
+			return ""
+	else
+		return x
 }
 
 genHTMLforPreview(code){
@@ -339,7 +341,7 @@ deactivateHtml(code){
 
 TT_Console_PasteMode(text, keys){
 	tx := ini_pstMode_X ? ini_pstMode_X : SPM.X , ty := ini_pstMode_Y ? ini_pstMode_Y : SPM.Y
-	return TT_Console(text, keys,, tx, ty,, 1)
+	return TT_Console(text, keys, tx, ty,,, 1)
 }
 
 ;GetFile()
@@ -352,12 +354,12 @@ GetFile(hwnd=""){
 	{
 		try for window in ComObjCreate("Shell.Application").Windows
 				if (window.hwnd==hwnd)
-    				sel := window.Document.SelectedItems
-    	for item in sel
+					sel := window.Document.SelectedItems
+		for item in sel
 			ToReturn .= item.path "`n"
-    }
-    else
-    	Toreturn := Copytovar(4)
+	}
+	else
+		Toreturn := Copytovar(4)
 
 	return Trim(ToReturn,"`n")
 }

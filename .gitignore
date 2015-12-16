@@ -5,3 +5,6 @@ website/addons.html
 website/news.html
 website/screenshots.html
 website/.jekyll-metadata
+cache/
+settings.ini
+ClipjumpCustom.ini
