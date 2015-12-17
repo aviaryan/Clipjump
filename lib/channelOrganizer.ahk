@@ -380,7 +380,11 @@ chOrg_paste:
 	gosub chOrgGuiClose
 	WinWaitClose, % TXT.ORG__name
 	loop, parse, rSel, `n
+	{
 		API.paste( Substr(A_LoopField, 1, Instr(A_LoopField, "-")-1) , Substr(A_LoopField, Instr(A_LoopField, "-")+1) )
+		sleep 30
+		SendInput, {Enter}
+	}
 	return
 
 chOrg_props:

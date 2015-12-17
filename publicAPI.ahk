@@ -52,7 +52,7 @@ class Clipjump
 		}
 		FileDelete, % cbF
 		returned := CjControl("API:" funcName ps)
-		if returned && Instr(rFuncs, "|" funcName "|")
+		if (returned>0) && Instr(rFuncs, "|" funcName "|")
 		{
 			Clipjump_wait4file()
 			Fileread, out, % cbF
@@ -102,7 +102,7 @@ CjControl(ByRef Code)
     if ! (IsExe := CjControl_check())
         return -1       ;Clipjump doesn't exist
 
-	TargetScriptTitle := "Clipjump" (IsExe=1 ? ".ahk ahk_class AutoHotkey" : ".exe ahk_class AutoHotkey")
+	TargetScriptTitle := "Clipjump" (IsExe==1 ? ".ahk ahk_class AutoHotkey" : ".exe ahk_class AutoHotkey")
     
     VarSetCapacity(CopyDataStruct, 3*A_PtrSize, 0)
     SizeInBytes := (StrLen(Code) + 1) * (A_IsUnicode ? 2 : 1)
@@ -118,6 +118,8 @@ CjControl(ByRef Code)
     {
         SendMessage, 0x4a, 0, &CopyDataStruct,, %TargetScriptTitle%
         Z := ErrorLevel
+       	if (Z == "FAIL")
+       		Z := ""
         if A_index>100
             return -1 ;Timeout..
     }
@@ -131,8 +133,10 @@ CjControl(ByRef Code)
     		if !CjControl_check()
     			return -1
        	sleep 50
+       	;Tooltip, % "waiting for clipjumpcom"
    	}
     FileDelete % A_temp "\clipjumpcom.txt"
+    ;ToolTip
 
     return 1        ;True
 }
