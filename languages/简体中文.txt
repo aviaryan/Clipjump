@@ -51,7 +51,6 @@ TIP_deleted = 已删除
 TIP_alldeleted = 全部信息已删除
 TIP_cancelled = 已取消
 TIP_fixed = [固定]
-TIP_noformatting = 原始数据
 TIP_filepath = 文件路径复制到
 TIP_folderpath = 文件所在目录复制到
 TIP_activated = 已激活
@@ -99,16 +98,13 @@ SET_quality = 用于预览的缩略图质量(&Q)
 SET_copybeep = 复制成功时声音提示(&B)
 SET_ismessage = 复制成功时文字提示(&S)
 SET_keepsession = 保存剪贴板信息以便重启后继续使用(&R)
-SET_formatting = 启动时使用原始数据模式(&F)
 SET_cb = 剪贴板历史
 SET_daystostore = 历史信息保留天数(&H)
 SET_images = 历史信息中存储图片(&I)
 SET_shortcuts = 快捷键
 SET_pst = 粘贴 (Ctrl + …)
 SET_actmd = 活动命令
-SET_chnl = 频道切换
 SET_channels = 频道
-SET_ischannelmin = 使用迷你界面
 SET_advanced = 高级设置
 SET_manageignore = 管理忽略窗口(不想 Clipjump 起作用的窗口)
 SET_cancel = 取消(&C)
@@ -142,9 +138,6 @@ SET_T_cfolderp = 这个快捷键用于 复制选中文件所在目录
                = 设置快捷键为 无 将只能通过 活动命令 使用此功能
 SET_T_cfiled = 这个快捷键用于 复制选中文件内容
              = 设置快捷键为 无 将只能通过 活动命令 使用此功能
-SET_T_ot = 这个快捷键用于激活 [One Time Stop] 特性
-         = [One Time Stop] 将使 Clipjump 暂时失效，直到完成一次复制操作后。注意，因为 Clipjump 在此期间是失效状态，所以复制内容存在于系统剪贴板中。
-         = 设置快捷键为 无 将只能通过 活动命令 使用此功能
 SET_T_pitswp = 这个快捷键用于激活 PitSwap 特性
              = 关于此特性的更多细节请看帮助文件。
 SET_T_ischannelmin = 使频道界面细节更少，感觉更好。
@@ -152,13 +145,6 @@ SET_T_ischannelmin = 使频道界面细节更少，感觉更好。
 
 CNL__name = 频道
 CNL_choose = 选择频道(&C)
-CNL_channelname = 频道名(&N)
-CNL_advice1 = 频道 0 (Default) 是通常使用下的主频道。
-CNL_advice2 = 频道名将在修改时自动保存。
-CNL_advice3 = 只有前一个频道被激活(使用)后，下一个频道才可用。
-CNL_use = 激活频道(&U)
-CNL_cancel = 取消(&L)
-CNL_statusbar = 当前频道中剪贴板信息数量
 
 TRY_incognito = 隐身模式(&I)
 TRY_disable = 停用(&D)
@@ -169,7 +155,6 @@ TRY_restart = 重启(&R)
 TRY_exit = 退出(&E)
 
 ACT__name = 活动命令
-ACT_enable = 启用
 ACT_disable = 停用
 ACT_exit = 退出活动命令
 
@@ -202,15 +187,12 @@ HST_delall_msg = 确定要清空 Clipjump 的历史记录？
 ; the following key was modified in v9.9.1 and so you see its entry here
 SET_T_actmd = 这个快捷键用于打开 活动命令。
             = 活动命令状态下，可快速调用程序提供的几乎所有功能。
-            = 如果想使用系统级的快捷键调用那些功能，可以在下面设置。
+            = 如果想使用单独的快捷键调用那些功能，可以在下面设置。
 
 ;==========*
 ;9.9.1.9
 ;==========
 
-CNL_delete = 删除频道(&D)
-CNL_delmsg = 你真的想删除这个频道吗？请注意这个过程是不可逆的，并且将删除存储在该频道中的所有剪贴板信息。
-CNL_del_default = 不允许删除默认频道(#0)。
 TIP_empty3 = 松开 Ctrl 退出。
 UPD_restart = Clipjump 现在将重启以便应用更新。
 UPD_automsg = 点击 是 将自动更新 Clipjump 点击 否 将前往主页。
@@ -246,9 +228,6 @@ ABT_runadmin = Clipjump 没有以管理员权限运行
 ABT_cjready = 嗨！
             = Clipjump 已经激活了。
             = 现在试试复制粘贴点东西…
-TIP_editing = 编辑中…
-            = 按 Esc 取消
-	    = 按 保存 键保存修改
 TIP_editdone = 剪贴板信息已被编辑
 TIP_editnotdone = 剪贴板信息未被编辑！
 
@@ -340,27 +319,6 @@ SET_T_startSearch = 选中此项将使粘贴模式启动后搜索功能亦随之
                   = 如果你不喜欢按住 Ctrl 切换剪贴板信息的方式，这个设置将很有用。也可以在帮助文件中搜索“Search in Paste Mode”。
 _editing = 编辑中
 
-; Note to Translator > please make sure the out in Ctrl+v+F1 is aligned properly in TIP_help
-TIP_help =
-= 松开 Ctrl    - 粘贴
-= V            - 下一条剪贴板信息
-= C            - 前一条剪贴板信息
-= X            - 取消粘贴、移动、复制、删除剪贴板信息
-= Z            - 切换粘贴格式
-= Space        - 固定
-= S            - 将当前剪贴板信息存入系统剪贴板
-= E            - 导出
-= Up/Down      - 切换频道 +1/-1
-= A            - 跳至首条剪贴板信息
-= 1…9          - 以 n 为步长进行跳至
-= F            - 搜索
-= H            - 编辑
-= Enter        - 重复粘贴当前剪贴板信息
-= T            - 标签
-= F1           - 帮助
-=
-= 按 V 退出此窗口
-
 ;=======*
 ; 11.2.3
 ;=======
@@ -394,7 +352,6 @@ ORG_delete = 删除
 
 SET_revFormat2Def = 总是使用默认粘贴格式
 SET_T_revFormat2Def = 选中此项将使粘贴格式总是使用“-original”。
-ORG_clpdelmsg = 已删除
 ORG_copyingclp = 复制中
 ORG_movingclp = 移动中
 ORG_Editprops = 编辑属性
@@ -442,3 +399,48 @@ TIP_holdclip = 按 Ctrl+V 粘贴
 _output = 输出
 TIP_copied_2 = 复制到 %PROGNAME%
 TIP_empty2_2 = %PROGNAME% 没有可粘贴的内容
+
+;====
+; 11.6.1
+;====
+
+SET_T_histshort = 剪贴板历史
+PLG_sync_cb = 同步 Clipjump
+
+;====
+; 12
+;====
+
+ORG_NewClip = 新建
+ORG_clpdelmsg = 选中的剪贴板信息已被删除
+TIP_syscb = 系统剪贴板已存入剪贴板信息 %realclipno%
+TIP_editing = 编辑中…
+            = 按 Esc 取消
+            = 按 保存(Ctrl+S) 键保存修改
+
+;=====
+; 12.3
+;=====
+
+; Note to Translator > please make sure the out in Ctrl+v+F1 is aligned properly in TIP_help
+TIP_help =
+= 松开 Ctrl              - 粘贴
+= V                        - 下一条剪贴板信息
+= C                        - 前一条剪贴板信息
+= X                        - 取消粘贴、移动、复制、删除剪贴板信息
+= Z                        - 切换粘贴格式
+= Space                 - 固定
+= S                        - 将当前剪贴板信息存入系统剪贴板
+= E                        - 导出
+= Up/Down            - 切换频道 +1/-1
+= A                        - 跳至首条剪贴板信息
+= 1…9                    - 以 n 为步长进行跳至
+= F                         - 搜索
+= H                        - 编辑
+= Q                        - 将当前剪贴板信息设为首条
+= Enter                   - 重复粘贴当前剪贴板信息
+= T                         - 标签
+= 按住 Shift             - 粘贴后删除当前剪贴板信息
+= F1                       - 帮助
+=
+= 按 V 退出此窗口
