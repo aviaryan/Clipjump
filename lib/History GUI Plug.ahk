@@ -354,10 +354,9 @@ history_clipboard(sTartRow=0){
 }
 
 
-historyUpdate(crit="", create=true, partial=false)
+historyUpdate(crit="", create=true, partial=false){
 ; Update the history GUI listview
 ; create=false will prevent re-drawing of Columns , useful when the function is called in the SearchBox label and Gui Size is customized.
-{
 	local totalSize := 0
 
 	LV_Delete()
@@ -533,6 +532,49 @@ LV_SortArrow(h, c, d="")	; by Solar (http://www.autohotkey.com/forum/viewtopic.p
 		NumPut(fmt | (d && d = "desc" || d = "down" ? 512 : 1024), lvColumn, 4, "int")
 	}
 	return DllCall("SendMessage", ptr, h, "uint", LVM_SETCOLUMN, "uint", c, ptr, &lvColumn)
+}
+
+
+; --------------------------- SQL STORAGE FUNCTIONS --------------------------------------
+
+createHisTable(){
+	q = 
+	(
+		CREATE TABLE if not exists history `(
+		id	INTEGER PRIMARY KEY AUTOINCREMENT,
+		data 	TEXT,
+		type	INTEGER,
+		blobc	BLOB,
+		time	TEXT
+		`)
+	)
+	if !DB.Exec(q)
+		msgbox % "db create history table"
+}
+
+;------------------------------------ MIGRATE ----------------------------------------------
+
+migrateHistory(){
+	createHisTable()
+	DB.Exec("BEGIN TRANSACTION")
+	API.showTip("Moving history files to database. This process may take some time.")
+	loop, cache\history\*
+	{
+		if (A_LoopFileExt == "jpg"){
+			
+		} else if (A_LoopFileExt == "txt"){
+			ts := convertTimeSql( SubStr(A_LoopFileName, 1, -4) )
+			FileRead, tdata, % A_LoopFileFullPath
+			q := "insert into history (data, type, time) values (""" 
+				. escapeQuotesSql(tdata)
+				. """, 0, """ 
+				. ts """)"
+			if (!DB.Exec(q))
+				msgbox % q
+		}
+	}
+	DB.Exec("COMMIT TRANSACTION")
+	API.removeTip()
 }
 
 ;------------------------------------ ACCESSIBILITY SHORTCUTS -------------------------------

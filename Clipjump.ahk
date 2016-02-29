@@ -75,6 +75,7 @@ global MSG_TRANSFER_COMPLETE
 ;History Tool
 global hidden_date_no := 4 , history_w , history_partial := 1 ;start off with partial=1 <> much better
 global PREV_FILE := "cache\prev.html" , GHICON_PATH := A_ScriptDir "\icons\octicons-local.ttf"
+global DBPATH := "cache\data.db"
 
 /*
 ****************
@@ -129,6 +130,14 @@ is_pstMode_active := 0
 GET THE PROGRAM WORKING
 ***********************
 */
+
+global DB := new SQLiteDB()
+if (!FileExist(DBPATH))
+	isnewdb := 1
+else
+	isnewdb := 0
+if (!DB.OpenDB(DBPATH))
+	msgbox some error occured
 
 ;Setting up Icons
 FileCreateDir, icons
@@ -248,6 +257,10 @@ if FileExist(GHICON_PATH)
 	DllCall("GDI32.DLL\AddFontResourceEx", Str, GHICON_PATH ,UInt,(FR_PRIVATE:=0x10), Int,0)
 else
 	MsgBox, 16, % PROGNAME, % valueof(TXT.ABT_errorFontIcon)
+
+;if (isnewdb){
+	migrateHistory()
+;}
 
 /*
 **********
@@ -1542,6 +1555,7 @@ disable_clipjump:
 
 routines_Exit() {
 	Ini_write("Clipboard_history_window", "partial", history_partial, 0)
+	DB.CloseDb()
 	Prefs2Ini()
 	updatePluginIncludes()
 	DllCall( "GDI32.DLL\RemoveFontResourceEx",Str, GHICON_PATH,UInt,(FR_PRIVATE:=0x10),Int,0)
@@ -1592,6 +1606,7 @@ Receive_WM_COPYDATA(wParam, lParam){
 #include %A_ScriptDir%\lib\pluginManager.ahk
 #include %A_ScriptDir%\lib\channelOrganizer.ahk
 #include %A_ScriptDir%\lib\TooltipEx.ahk
+#include %A_ScriptDir%\lib\SQLiteDB\Class_SQLiteDB.ahk
 #include *i %A_ScriptDir%\plugins\_registry.ahk
 
 ;------------------------------------------------------------------- X -------------------------------------------------------------------------------
