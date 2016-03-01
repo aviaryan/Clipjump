@@ -278,9 +278,9 @@ IfExist, %A_Startup%/Clipjump.lnk
 	Menu, Options_Tray, Check, % TXT.TRY_startup
 }
 EmptyMem()
+lastClipboardTime := 0
 startUpComplete := 1
 OnExit, exit
-
 
 return
 
@@ -404,7 +404,12 @@ onClipboardChange:
 	ONCLIPBOARD := 1 		;used by paste/or another to identify if OnCLipboard has been breached
 	if !startUpComplete 	;if not started, not allow - after onclipboard=1 as the purpose of onc is served
 		return
-
+	; check for machine-done clipboard manipulations
+	timeDiff := A_TickCount - lastClipboardTime
+	lastClipboardTime := A_TickCount
+	if (timeDiff < 100){
+		return
+	}
 	ifwinactive, ahk_group IgnoreGroup
 		return
 
