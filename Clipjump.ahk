@@ -407,7 +407,7 @@ onClipboardChange:
 	; check for machine-done clipboard manipulations
 	timeDiff := A_TickCount - lastClipboardTime
 	lastClipboardTime := A_TickCount
-	if (timeDiff < 100){
+	if (timeDiff < 200){
 		return
 	}
 	ifwinactive, ahk_group IgnoreGroup
