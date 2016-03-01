@@ -278,7 +278,7 @@ IfExist, %A_Startup%/Clipjump.lnk
 	Menu, Options_Tray, Check, % TXT.TRY_startup
 }
 EmptyMem()
-lastClipboardTime := 0
+lastClipboardTime := cbTime := isOldCbTime := newCbTime := 0
 startUpComplete := 1
 OnExit, exit
 
@@ -396,6 +396,15 @@ paste:
 
 onClipboardChange:
 	Critical, On
+	if (cbTime == 0){
+		isOldCbTime := 0
+		cbTime := A_TickCount
+	} else {
+		isOldCbTime := 1
+		cbTime := (newCbTime != 0) ? newCbTime : cbTime
+		newCbTime := A_TickCount
+	}
+
 	if !ONCLIPBOARD
 	{
 		ONCLIPBOARD:=1 	; if let blank, the label ends quickly
@@ -405,8 +414,13 @@ onClipboardChange:
 	if !startUpComplete 	;if not started, not allow - after onclipboard=1 as the purpose of onc is served
 		return
 	; check for machine-done clipboard manipulations
-	timeDiff := A_TickCount - lastClipboardTime
+
+	if (isOldCbTime)
+		timeDiff := A_TickCount - max(lastClipboardTime, cbTime)
+	else
+		timeDiff := A_TickCount - lastClipboardTime
 	lastClipboardTime := A_TickCount
+	cbTime := newCbTime := 0
 	if (timeDiff < 100){
 		return
 	}
