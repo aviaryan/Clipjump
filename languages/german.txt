@@ -241,7 +241,7 @@ PLG_Sb_running = Plugin läuft
 PLG_Sb_exit = Plugin wurde beendet
 PLG_Sb_deleted = Plugin wurde gelöscht
 SET_T_pst = Einzelne Zeichenkombination zusammen mit Ctrl bei der Aktivierung des [PASTE MODE]
-          = Avhtung: Die Buchstaben  E C X Z S A F H sind reserviert.
+          = Achtung: Die Buchstaben  E C X Z S A F H sind reserviert.
           =
           = Beachten Sie den Abschnitt "Copy bypassing Clipjump" in der Hilfe
 SET_pformat = Default Einfügen-Format
@@ -254,7 +254,7 @@ CUS_error = Fehler in der ClipjumpCustom.ini Routine?
 ;10.7.8
 ;=====
 
-TRY_pstmdshorts = Paste Mode Tastaturkürzel
+TRY_pstmdshorts = PasteMode Tastaturkürzel
 
 ;=====
 ;10.9
@@ -263,8 +263,8 @@ TRY_pstmdshorts = Paste Mode Tastaturkürzel
 SET_T_holdclip = Kopiert den selektierten Text in einen Buffer und verhindert, dass Clipjump den Text auffängt.
 			   = Sie können dann den Clip entweder einfügen, in einen Channel verschieben oder zurückweisen
 SET_keepactivepos = Bewahre die Position des aktuell aktiven Clips
-SET_T_keepactivepos = Wollen Sie, dass sich Clipjump an den letzten aktiven Clip im Paste Mode erinnert?
-                    = Abschalten bedeutet, das der Clipjump Paste Mode immer mit Clip 1 startet.
+SET_T_keepactivepos = Wollen Sie, dass sich Clipjump an den letzten aktiven Clip im PasteMode erinnert?
+                    = Abschalten bedeutet, das der Clipjump PasteMode immer mit Clip 1 startet.
 
 ;=====
 ;11
@@ -291,16 +291,16 @@ TIP_initMsg = Initialisiere Clipjump
 ;======
 
 TIP_tagPrompt = Mit Leerzeichen getrennte Tags für diesen Clip
-SET_startSearch = Starte Paste Mode mit aktivierter Suche
-SET_T_startSearch = Stelle Strg+V so um, dass Paste Mode mit aktivierter Suche gestartet wird
-                  = Dies ermöglicht, dass man nicht die Ctrl Taste gedrückt halten muss um durch die Clips zu navigieren. Siehe auch "Search in Paste Mode" in der Hilfe.
+SET_startSearch = Starte PasteMode mit aktivierter Suche
+SET_T_startSearch = Stelle Strg+V so um, dass PasteMode mit aktivierter Suche gestartet wird
+                  = Dies ermöglicht, dass man nicht die Ctrl Taste gedrückt halten muss um durch die Clips zu navigieren. Siehe auch "Search in PasteMode" in der Hilfe.
 _editing = Bearbeiten
 
 ;=======
 ; 11.2.3
 ;=======
 _more_options = Weitere Optionen
-ORG_m_openpst = Öffne im Paste Mode (Strg+O)
+ORG_m_openpst = Öffne im PasteMode (Strg+O)
 _!x = Alt+X
 _!c = Alt+C
 ORG_m_insta = Insta-Paste (Space)
@@ -327,8 +327,8 @@ ORG_copy = Kopiert den selektierten Clip aus und fügt Kopie einem anderen Chann
 ORG_delete = Löscht den selektierten Clip
 ; ----
 
-SET_revFormat2Def = Starte Paste mode immer mit der Default-Formatierung
-SET_T_revFormat2Def = Option, damit der Paste Mode immer mit der Default-Formatierung gestartet wird (Defaultwert: 'original'/'none' ).
+SET_revFormat2Def = Starte PasteMode immer mit der Default-Formatierung
+SET_T_revFormat2Def = Option, damit der PasteMode immer mit der Default-Formatierung gestartet wird (Defaultwert: 'original'/'none' ).
 ORG_copyingclp = Kopiere selektierte(n) Clip(s)
 ORG_movingclp = Bewege selectierte(n) Clip(s)
 ORG_Editprops = Bearbeite Clip Eigenschaften
@@ -357,11 +357,11 @@ ABT_chmErr = Ein Problem ist aufgetreten.
 ;=======
 ORG_createnew = Erzeuge neuen Clip
 ORG_chooseCh = Aktiver Channel
-ABT_errorFontIcon = Die Datei %GHICON_path% fehlt. Dies kann zu Schwierigkeiten in der Anzeige in einigen Benutzerschnittstellen führen . Bitte Datei ersetzen.
+ABT_errorFontIcon = Die Datei %GHICON_path% fehlt. Dies kann zu Schwierigkeiten in der Anzeige in einigen Benutzerschnittstellen führen. Bitte Datei ersetzen.
 CNL_chngMsg = Channel %cv1% aktiv
 CNL_chNtExst = Channel %cv1% existiert nicht !
 SET_holdclip = Halte Clip
-ORG_openPastemode = Öffnet Paste Mode Interface mit dem selektierten Clip als aktivem Clip.
+ORG_openPastemode = Öffnet PasteMode Interface mit dem selektierten Clip als aktivem Clip.
 TIP_confirmcopy = Diese Bestätigung wird angezeigt, weil dies ein geschützter Channel ist.
                 = Soll das Kopieren trotzdem durchgeführt werden?
                 = Drücke Y für Ja
