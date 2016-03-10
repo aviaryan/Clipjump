@@ -278,9 +278,9 @@ IfExist, %A_Startup%/Clipjump.lnk
 	Menu, Options_Tray, Check, % TXT.TRY_startup
 }
 EmptyMem()
+lastClipboardTime := 0
 startUpComplete := 1
 OnExit, exit
-
 
 return
 
@@ -404,7 +404,12 @@ onClipboardChange:
 	ONCLIPBOARD := 1 		;used by paste/or another to identify if OnCLipboard has been breached
 	if !startUpComplete 	;if not started, not allow - after onclipboard=1 as the purpose of onc is served
 		return
-
+	; check for machine-done clipboard manipulations
+	timeDiff := A_TickCount - lastClipboardTime
+	lastClipboardTime := A_TickCount
+	if (timeDiff < 200){
+		return
+	}
 	ifwinactive, ahk_group IgnoreGroup
 		return
 
@@ -1608,9 +1613,8 @@ Receive_WM_COPYDATA(wParam, lParam){
 #include %A_ScriptDir%\lib\history gui plug.ahk
 #include %A_ScriptDir%\lib\pluginManager.ahk
 #include %A_ScriptDir%\lib\channelOrganizer.ahk
-;#include %A_ScriptDir%\lib\TTInclude.ahk
-#include %A_ScriptDir%\lib\SQLiteDB\Class_SQLiteDB.ahk
 #include %A_ScriptDir%\lib\TooltipEx.ahk
+#include %A_ScriptDir%\lib\SQLiteDB\Class_SQLiteDB.ahk
 #include *i %A_ScriptDir%\plugins\_registry.ahk
 
 ;------------------------------------------------------------------- X -------------------------------------------------------------------------------

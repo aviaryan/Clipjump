@@ -776,6 +776,10 @@ Base2Number(H, base=16){
 	return N
 }
 
+max(a, b){
+	return (a>b) ? a : b
+}
+
 ; Code by deo http://www.autohotkey.com/board/topic/74348-send-command-when-switching-to-russian-input-language/#entry474543
 
 GetVKList( letter ){
