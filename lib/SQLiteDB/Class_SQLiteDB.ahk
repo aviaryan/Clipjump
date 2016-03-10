@@ -1,12 +1,13 @@
 ﻿; ======================================================================================================================
 ; Function:         Class definitions as wrappers for SQLite3.dll to work with SQLite DBs.
-; AHK version:      v2 alpha
-; Tested on:        Win 7 Pro (64 Bit), SQLite 3.7.6
+; AHK version:      1.1.23.01
+; Tested on:        Win 10 Pro (x64), SQLite 3.7.13
 ; Version:          0.0.01.00/2011-08-10/just me
 ;                   0.0.02.00/2012-08-10/just me   -  Added basic BLOB support
 ;                   0.0.03.00/2012-08-11/just me   -  Added more advanced BLOB support
 ;                   0.0.04.00/2013-06-29/just me   -  Added new methods AttachDB and DetachDB
 ;                   0.0.05.00/2013-08-03/just me   -  Changed base class assignment
+;                   0.0.06.00/2016-01-28/just me   -  Fixed version check, revised parameter initialization.
 ; Remarks:          Names of "private" properties / methods are prefixed with an underscore,
 ;                   they must not be set / called by the script!
 ;                   
@@ -38,7 +39,7 @@ Class SQLiteDB Extends SQLiteDB.BaseClass {
       Static Version := ""
       Static _SQLiteDLL := A_ScriptDir . "\SQLite3.dll"
       Static _RefCount := 0
-      Static _MinVersion := 36
+      Static _MinVersion := "3.6"
    }
    ; ===================================================================================================================
    ; CLASS _Table
@@ -50,7 +51,7 @@ Class SQLiteDB Extends SQLiteDB.BaseClass {
       ; CONSTRUCTOR  Create instance variables
       ; ----------------------------------------------------------------------------------------------------------------
       __New() {
-          This.ColumnCount := 0          ; Number of coumns in the result table          (Integer)
+          This.ColumnCount := 0          ; Number of columns in the result table         (Integer)
           This.RowCount := 0             ; Number of rows in the result table            (Integer)     
           This.ColumnNames := []         ; Names of columns in the result table          (Array)
           This.Rows := []                ; Rows of the result table                      (Array of Arrays)
@@ -283,7 +284,9 @@ Class SQLiteDB Extends SQLiteDB.BaseClass {
             ExitApp
          }
          This.Base.Version := StrGet(DllCall("SQlite3.dll\sqlite3_libversion", "Cdecl UPtr"), "UTF-8")
-         If (SubStr(RegExReplace(This.Base.Version, "\."), 1, 2) < This.Base._MinVersion) {
+         SQLVersion := StrSplit(This.Base.Version, ".")
+         MinVersion := StrSplit(This.Base._MinVersion, ".")
+         If (SQLVersion[1] < MinVersion[1]) || ((SQLVersion[1] = MinVersion[1]) && (SQLVersion[2] < MinVersion[2])){
             DllCall("FreeLibrary", "Ptr", DLL)
             MsgBox, 16, SQLite ERROR, % "Version " . This.Base.Version .  " of SQLite3.dll is not supported!`n`n"
                                       . "You can download the current version from www.sqlite.org!"
@@ -395,7 +398,7 @@ Class SQLiteDB Extends SQLiteDB.BaseClass {
    ; Remarks:              If DBPath is empty in write mode, a database called ":memory:" is created in memory
    ;                       and deletet on call of CloseDB.
    ; ===================================================================================================================
-   OpenDB(DBPath, Access = "W", Create = True) {
+   OpenDB(DBPath, Access := "W", Create := True) {
       Static SQLITE_OPEN_READONLY  := 0x01 ; Database opened as read-only
       Static SQLITE_OPEN_READWRITE := 0x02 ; Database opened as read-write
       Static SQLITE_OPEN_CREATE    := 0x04 ; Database will be created if not exists
@@ -507,7 +510,7 @@ Class SQLiteDB Extends SQLiteDB.BaseClass {
    ; Return values:        On success  - True, the number of changed rows is given in property Changes
    ;                       On failure  - False, ErrorMsg / ErrorCode contain additional information
    ; ===================================================================================================================
-   Exec(SQL, Callback = "") {
+   Exec(SQL, Callback := "") {
       This.ErrorMsg := ""
       This.ErrorCode := 0
       This.SQL := SQL
@@ -551,7 +554,7 @@ Class SQLiteDB Extends SQLiteDB.BaseClass {
    ; Return values:        On success  - True, TB contains the result object
    ;                       On failure  - False, ErrorMsg / ErrorCode contain additional information
    ; ===================================================================================================================
-   GetTable(SQL, ByRef TB, MaxResult = 0) {
+   GetTable(SQL, ByRef TB, MaxResult := 0) {
       TB := ""
       This.ErrorMsg := ""
       This.ErrorCode := 0
@@ -710,7 +713,7 @@ Class SQLiteDB Extends SQLiteDB.BaseClass {
       RS.HasRows := HasRows
       RS._Handle := Query
       RS._DB := This
-      This._Queries.Insert(Query, Query)
+      This._Queries[Query] := Query
       Return True
    }
    ; ===================================================================================================================
@@ -768,7 +771,7 @@ Class SQLiteDB Extends SQLiteDB.BaseClass {
    ; Return values:        On success  - True
    ;                       On failure  - False, ErrorMsg / ErrorCode contain additional information
    ; ===================================================================================================================
-   SetTimeout(Timeout = 1000) {
+   SetTimeout(Timeout := 1000) {
       This.ErrorMsg := ""
       This.ErrorCode := 0
       This.SQL := ""
@@ -798,7 +801,7 @@ Class SQLiteDB Extends SQLiteDB.BaseClass {
    ; Return values:        On success  - True
    ;                       On failure  - False, ErrorMsg / ErrorCode contain additional information
    ; ===================================================================================================================
-   EscapeStr(ByRef Str, Quote = True) {
+   EscapeStr(ByRef Str, Quote := True) {
       This.ErrorMsg := ""
       This.ErrorCode := 0
       This.SQL := ""
