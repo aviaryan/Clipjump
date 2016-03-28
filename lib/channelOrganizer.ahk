@@ -3,10 +3,18 @@
  * *****************
 */
 
+/**
+ * Label to open channel organizer gui
+ */
 channelOrganizer:
 	channelOrganizer()
 	return
 
+
+/**
+ * Function to open channel organizer gui
+ * @return {void}
+ */
 channelOrganizer(){
 	global
 	static chOrg_Lb, chOrg_search, chOrg_Lv
@@ -121,13 +129,18 @@ channelOrganizer(){
 	Hotkey, If
 	return
 
-
+/**
+ * add channel list to the listbox
+ */
 chOrg_addChList:
 	chList := RegexReplace( Trim( channel_find(), "`n" ), "`n", "|" )
 	Sort, chList, D| N
 	GuiControl, chOrg:, ListBox1, % "||" chList
 	return
 
+/**
+ * gui resize handler
+ */
 chOrgGuiSize:
 	if (A_EventInfo != 1){
 		gui_w := A_GuiWidth , gui_h := A_GuiHeight
@@ -141,6 +154,9 @@ chOrgGuiSize:
 	}
 	return
 
+/**
+ * context menu handler
+ */
 chOrgGuiContextMenu:
 	if (A_GuiControl == "chOrg_Lv")
 		Menu, chOrgLVMenu, Show, %A_GuiX%, %A_GuiY%
@@ -152,6 +168,9 @@ chOrgGuiContextMenu:
 	}
 	return
 
+/**
+ * gui close/exit handler
+ */
 chOrgGuiEscape:
 chOrgGuiClose:
 	Ini_write("Organizer", "w", width+158-5-2+2, 0) , Ini_write("Organizer", "h", height+2, 0) 	; +2 dont know why
@@ -164,6 +183,9 @@ chOrgGuiClose:
 	EmptyMem()
 	return
 
+/**
+ * label to handle up/down of clips and channels
+ */
 chOrgUp:
 chOrgDown: 	; dont make these labels critical
 	Gui, chorg:Default
@@ -204,7 +226,10 @@ chOrgDown: 	; dont make these labels critical
 	}
 	return
 
-
+/**
+ * clip/channel delete handler
+ * also allows emptying a channel
+ */
 chOrgDelete:
 	Critical
 	gosub chOrg_isChActive
@@ -271,6 +296,9 @@ chOrgDelete:
 	}
 	return
 
+/**
+ * clip copy/move handler
+ */
 chOrgCut:
 chOrgCopy:
 ; single cut/ multi copy supported
@@ -298,6 +326,9 @@ chOrgCopy:
 	gosub chOrg_refresh
 	return
 
+/**
+ * label to show create new clip dialog
+ */
 chOrgNew:
 	gosub chorg_getChSelected
 	if chSel<0
@@ -312,6 +343,9 @@ chOrgNew:
 		chOrg_notification(TXT.TIP_cancelled)
 	return
 
+/**
+ * label for creating new channel action
+ */
 chOrgNewCh:
 	InputBox, out, % TXT.ORG_newchname,,,,,,,,, % CN.Total
 	if !ErrorLevel {
@@ -323,12 +357,19 @@ chOrgNewCh:
 	}
 	return
 
+/**
+ * get selected channel id and name
+ */
 chorg_getChSelected:
 	Gui, chorg:Submit, nohide
 	chSel := chOrg_Lb-2
 	chSelname := ini_read("Channels", chSel)
 	return
 
+/**
+ * is channel list active or not
+ * not in case clip list is active
+ */
 chOrg_isChActive:
 	Gui, chorg:Default
 	GuiControlGet, isChActive, chOrg:, % "Button" t_startBtn 		; Cut button not enabled when LB is active
@@ -337,6 +378,9 @@ chOrg_isChActive:
 	else isChActive := 0
 	return
 
+/**
+ * get selected clips from the list
+ */
 chOrg_getSelected:
 	Gui, chOrg:Default
 	temp_row_s := 0 , rSel := ""
@@ -349,6 +393,9 @@ chOrg_getSelected:
 	rSel := Trim(rSel, "`n")
 	return
 
+/**
+ * edit a selected clip or channel
+ */
 chOrgEdit:
 	gosub chOrg_isChActive
 	if isChActive
@@ -363,6 +410,9 @@ chOrgEdit:
 	}
 	return
 
+/**
+ * open paste mode for the selected clip
+ */
 chOrg_openPasteMode: ; Toggles the interface
 	gosub chOrg_getSelected
 	opnPstMd_cn := out_ch , opnPstMd_cl := API.getChStrength(out_ch)-out_cl+1
@@ -375,6 +425,9 @@ chOrg_openPasteMode: ; Toggles the interface
 		API.showPasteTipAt(out_ch, out_cl) ;, x+100, y+160)
 	return
 
+/**
+ * close the organizer gui and paste the selected clip
+ */
 chOrg_paste:
 	gosub chOrg_getSelected
 	gosub chOrgGuiClose
@@ -387,6 +440,9 @@ chOrg_paste:
 	}
 	return
 
+/**
+ * show properties of the selected clip
+ */
 chOrg_props:
 	gosub chOrg_getSelected
 	out_cl := API.getChStrength(out_ch)-out_cl+1
@@ -397,6 +453,9 @@ chOrg_props:
 	chOrg_notification(blank, 10)
 	return
 
+/**
+ * preview the selected clip
+ */
 chOrg_preview:
 	gosub chOrg_getSelected
 	out_cl := API.getChStrength(out_ch) - out_cl + 1
@@ -410,6 +469,9 @@ chOrg_preview:
 	}
 	return
 
+/**
+ * rename a channel and then refresh the channel list
+ */
 chOrg_renameCh:
 	gosub chorg_getChSelected
 	InputBox, outName, % TXT.ORG__name, % TXT.ORG_renameAsk " -> " chSel,, 500, 200,,,,, % chSelname
@@ -420,11 +482,17 @@ chOrg_renameCh:
 	gosub chOrg_addChUseList
 	return
 
+/**
+ * activate a channel
+ */
 chorg_UseCh:
 	Gui, chorg:Submit, nohide
 	changeChannel(channel_find(chorg_UseCh)) 	; chChannel() will handle that list
 	return
 
+/**
+ * list view (clip list) event handler
+ */
 chOrg_Lv:
 	Gui, chOrg:Default
 	GuiControl, , % "Button" t_startBtn, % chrhex("f03e")
@@ -434,11 +502,18 @@ chOrg_Lv:
 		gosub chOrg_preview
 	return
 
+/**
+ * activate the list box i.e. channels list
+ */
 chOrg_activateLB:
 	GuiControl, chOrg:focus, ListBox1
 	sleep 50 ; Needed
 	gosub chOrg_Lb
 	return
+
+/**
+ * activate the list view i.e. clips list
+ */
 chOrg_activateLV:
 	GuiControl, chOrg:focus, SysListView321
 	sleep 50
@@ -447,6 +522,12 @@ chOrg_activateLV:
 	LV_Modify(1, "Select Focus")
 	return
 
+/**
+ * refresh the clip list
+ * triggers when you edit the text in search box
+ * or press refresh (F5)
+ * or change focus to list box (channels list) in order to change channel
+ */
 chOrg_refresh:
 chOrg_search:
 chOrg_Lb:
@@ -469,6 +550,9 @@ chOrg_Lb:
 
 }
 
+/**
+ * add the active channel selector list (the one on top)
+ */
 chOrg_addChUseList:
 	chList := Trim(channel_find(), "`n")
 	chListnew := ""
@@ -481,14 +565,27 @@ chOrg_addChUseList:
 	GuiControl, chOrg:, ComboBox1, % "|" chList
 	return
 
+/**
+ * label to focus on active channel selector
+ */
 chOrg_useChFocus:
 	GuiControl, chOrg:focus, ComboBox1
 	return
 
+/**
+ * focus on search box
+ */
 chOrg_searchfocus:
 	GuiControl, chOrg:Focus, Edit1
 	return
 
+/**
+ * swap two channel
+ * essentially their id's will be swapped
+ * @param  {int} orig_ch channel 1
+ * @param  {int} new_ch  channel 2
+ * @return {bool} 1 for success
+ */
 chOrg_clipFolderSwap(orig_ch, new_ch){
 	if (new_ch<0) or ( new_ch >= CN.Total )
 		return 0
@@ -516,6 +613,14 @@ chOrg_clipFolderSwap(orig_ch, new_ch){
 	return 1
 }
 
+/**
+ * swaps two clips
+ * @param  {int} fch first channel
+ * @param  {int} fcl first clip
+ * @param  {int} sch second channel
+ * @param  {int} scl second clip
+ * @return {void}
+ */
 chOrg_clipSwap(fch, fcl, sch, scl){
 	f_sub := (fch?fch:"") , s_sub := (sch?sch:"")
 	f_cno := API.getChStrength(fch)-fcl+1 , s_cno := API.getChStrength(sch)-scl+1
@@ -527,17 +632,27 @@ chOrg_clipSwap(fch, fcl, sch, scl){
 	bk := CPS[sch][s_cno] , CPS[sch][s_cno] := CPS[fch][f_cno] , CPS[fch][f_cno] := bk
 }
 
+/**
+ * shows notification in the gui status bar
+ * @param  {string} text text to show
+ * @param  {int} time time to show in ms
+ * @return {void}
+ */
 chOrg_notification(text, time=800){
 	Gui, chOrg:Default
 	SB_SetText(text, 2)
 	SetTimer, chOrg_notification, % time
 }
 
+/**
+ * timer'ed label to clear the notification
+ */
 chOrg_notification:
 	SetTimer, chOrg_notification, Off
 	Gui, chOrg:Default
 	SB_SetText(empty, 2)
 	return
+
 
 IsChorgActive(){
 	return WinActive( TXT.ORG__name " ahk_class AutoHotkeyGUI") && ctrlRef==""
@@ -551,7 +666,13 @@ IsChOrgLBActive(){
 IsChOrgSearchActive(){
 	return IsActive("Edit1", "classnn") && WinActive(TXT.ORG__name " ahk_class AutoHotkeyGUI") && ctrlRef==""
 }
-; // UPDATES the ListView with current search
+
+/**
+ * updates the list view with the current search
+ * @param  {String} term    term to filter by
+ * @param  {int} channel channel number if any
+ * @return {void}
+ */
 chOrgLV_update(term="", channel=""){
 	Gui, chOrg:Default
 	LV_Delete() , term := Trim(term) , ct := 0
