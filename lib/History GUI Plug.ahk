@@ -1,8 +1,11 @@
 ;History Gui labels and functions
 ;A lot Thanks to chaz who first improved it
 
+/**
+ * Creates and shows a GUI for managing and viewing the clipboard history
+ * @return {void}
+ */
 gui_History(){
-; Creates and shows a GUI for managing and viewing the clipboard history
 	global
 	static x, y, how_sort := 2_sort := 3_sort := 0, what_sort := 2
 	local selected_row, thisguisize
@@ -84,11 +87,16 @@ gui_History(){
 	Hotkey, If
 	return
 
+/**
+ * label to invoke preview button
+ */
 history_MenuPreview:
-; Invoking the prev. button . 
 	Send {vk0d}
 	return
 
+/**
+ * label triggered when search box contents are changed and then updates the list
+ */
 history_SearchBox:
 	Critical, On
 	Gui, History:Default
@@ -97,6 +105,10 @@ history_SearchBox:
 	LV_ModifyCol(what_sort, how_sort ? "Sort" : "SortDesc") 		;sort column correctly
 	return
 
+/**
+ * trigerred when button preview is pressed
+ * opens the preview window
+ */
 history_ButtonPreview:
 	Gui, History:Default
 	Gui, submit, nohide
@@ -120,6 +132,9 @@ history_ButtonDelete:
 	history_ButtonDelete()
 	return
 
+/**
+ * button event to delete all history
+ */
 history_ButtonDeleteAll:
 	Gui, +OwnDialogs
 	MsgBox, 257, Clear History,% TXT.HST_delall_msg
@@ -132,6 +147,10 @@ history_ButtonDeleteAll:
 	}
 	return
 
+/**
+ * list view (clips list) handler
+ * responsible for sorting and stuff
+ */
 historyLV:
 	Gui, History:Default
 
@@ -151,6 +170,9 @@ history_clipboard:
 	history_clipboard()
 	return
 
+/**
+ * method to allow editing a history clip
+ */
 history_EditClip: 		; label inside to call history_searchbox which uses local func variables
 	Gui, History:Default
 	LV_GetText(clip_id, LV_GetNext(0), hidden_date_no)
@@ -168,6 +190,9 @@ history_EditClip: 		; label inside to call history_searchbox which uses local fu
 	gosub history_SearchBox
 	return
 
+/**
+ * add the selected history clip to holdclip
+ */
 history_HoldClip:
 	while !IsHisListViewActive()
 		sleep 50
@@ -178,6 +203,10 @@ history_HoldClip:
 	gosub holdclip
 	return
 
+/**
+ * context menu history gui
+ * reponsible for showing right click on clip menu
+ */
 historyGuiContextMenu:
 	if (A_GuiControl != "historyLV") or (LV_GetNext() = 0)
 		return
@@ -185,6 +214,9 @@ historyGuiContextMenu:
 	Menu, HisMenu, Show, %A_GuiX%, %A_GuiY%
 	return
 
+/**
+ * gui resize handler
+ */
 historyGuiSize:
 	if (A_EventInfo != 1)	; ignore minimising
 	{
@@ -201,6 +233,10 @@ historyGuiSize:
 	}
 	return
 
+/**
+ * gui close handler
+ * saves the position, height, width and exits
+ */
 historyGuiClose:
 historyGuiEscape:
 	Wingetpos, x, y,, h, % PROGNAME " " TXT.HST__name
@@ -223,6 +259,12 @@ historyGuiEscape:
 	return
 }
 
+/**
+ * shows the preview of a clip
+ * param path - path to the html file of the clip generated disk or path to jpg file for image
+ * param searchbox - searchbox content of the history gui, same is shown in preview
+ * param owner - owner of gui
+ */
 gui_Clip_Preview(path, searchBox="", owner="History")
 {
 	global prev_copybtn, prev_findtxt, prev_handle, preview_search, prev_picture, preview, prev_findtxtw
@@ -276,7 +318,10 @@ gui_Clip_Preview(path, searchBox="", owner="History")
 	if !preview.isimg
 		GuiControl, , preview_search, % searchBox
 	return
-	
+
+/**
+ * copy previewed clip to clipboard
+ */
 button_Copy_to_Clipboard:
 	Gui, Preview:Submit, nohide
 	if !preview.isimg
@@ -287,6 +332,9 @@ button_Copy_to_Clipboard:
 	gosub, previewGuiClose
 	return
 
+/**
+ * close preview gui
+ */
 previewGuiClose:
 previewGuiEscape:
 	Gui, % preview.owner ":-Disabled"
@@ -296,6 +344,10 @@ previewGuiEscape:
 	EmptyMem()
 	return
 
+/**
+ * search in preview gui
+ * highlights the matches too
+ */
 previewSearch:
 	Critical
 	Gui, submit, nohide
@@ -324,6 +376,9 @@ previewSearch:
 	}
 	return
 
+/**
+ * preview gui resize handler
+ */
 PreviewGuiSize:
 	if (A_EventInfo != 1)
 	{
@@ -349,9 +404,12 @@ PreviewGuiSize:
 
 }
 
+/**
+ * transfers the selected item from listview to clipboard
+ * @param  {Number} startRow row to start searching the selected clip. 0
+ * @return {Number} selected clip row no
+ */
 history_clipboard(sTartRow=0){
-; Transfers the selected item from Listview to Clipboard
-; -
 	Gui, History:Default
 	row_selected := LV_GetNext(sTartRow)
 	if !row_selected
@@ -369,6 +427,13 @@ history_clipboard(sTartRow=0){
 	return row_selected
 }
 
+/**
+ * updates the clipboard history window list wrt search filter
+ * @param  {String}  crit    search filter
+ * @param  {Boolean} create  create the gui, useful for first time
+ * @param  {Boolean} partial perform partial search
+ * @return {void}
+ */
 historyUpdate(crit="", create=true, partial=false){
 	; Updates the clipboard history window list
 	; works when search content is changed
@@ -415,8 +480,12 @@ historyUpdate(crit="", create=true, partial=false){
 	}
 }
 
+/**
+ * reutrns the size of history
+ * @param  {String} option no idea
+ * @return {number} size in kb
+ */
 history_GetSize(option := ""){
-;returns the size of given filename in history
 	If (option == ""){
     	data := getFromTable("history", "sum(size)", "id>-1")
     	R := data[1]
@@ -427,13 +496,21 @@ history_GetSize(option := ""){
     return R/1024
 }
 
+/**
+ * update size in status bar
+ * @param  {String} size size to show
+ * @return {void}
+ */
 history_UpdateSTB(size=""){
 	; If size is passed, that size is used
 	Gui, History:Default
 	SB_SetText(TXT.HST_dconsump " : " ( size="" ? history_GetSize() : size ) " KB")
 }
 
-;deletes selected rows from histroy
+/**
+ * deletes selected rows from history
+ * @return {void}
+ */
 history_ButtonDelete(){
 	Gui, History:Default
 
@@ -459,6 +536,9 @@ history_ButtonDelete(){
 	history_UpdateSTB()
 }
 
+/**
+ * history insta paste feature
+ */
 history_InstaPaste:
 	IniRead, clipboard_instapaste, % CONFIGURATION_FILE, Advanced, Instapaste_write_clipboard, %A_Space%
 	WinHide, % PROGNAME " " TXT.HST__name
@@ -486,6 +566,10 @@ history_InstaPaste:
 	}
 	return
 
+/**
+ * exports selected clip
+ * gets the clip from clipboard
+ */
 history_exportclip:
 	CALLER := 0 , ONCLIPBOARD := ""
 	history_clipboard()
