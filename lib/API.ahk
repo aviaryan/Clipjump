@@ -1,5 +1,10 @@
 ; Plugin API for Clipjump
 
+/**
+ * run a api function in the string given
+ * @param {string} D string with the function call
+ * @param {string} k api prefix, here 'api:'
+ */
 Act_API(D, k){
 	static cbF := A_temp "\cjcb.txt"
 	static rFuncs := "|getClipAt|getClipLoc|getVar|runFunction|getClipDataByTag"
@@ -31,6 +36,10 @@ Act_API(D, k){
 }
 
 
+/**
+ * API Class
+ * includes all methods accessible through the api
+ */
 class API
 {
 	; pastes clips from certain postion in certain channel
@@ -69,10 +78,10 @@ class API
 		return ret
 	}
 
-	manageClip(new_channel=0, channel="", clip="", flag=0){
 	; 0 = cut , 1 = copy
-		; if channel is empty, active channel is used
-		; if clip is empty, active clip in paste mode (Clip x of y, "x") is used.
+	; if channel is empty, active channel is used
+	; if clip is empty, active clip in paste mode (Clip x of y, "x") is used.
+	manageClip(new_channel=0, channel="", clip="", flag=0){
 		if channel=
 			channel := CN.NG
 		c_info := this.getChInfo(channel)
@@ -410,11 +419,13 @@ class API
 			Tooltip, % Text,,, 7
 		;tooltip_setfont("s9", "Courier")
 	}
+
 	; removes the above tip
 	removeTip(){
 		ToolTip,,,, 7
 	}
 
+	; get the text from a ClipboardAll binary
 	Binary2Text(byref binary){
 		this.blockMonitoring(1)
 		try 
@@ -429,9 +440,9 @@ class API
 	;------------------------
 
 
+	; returns obj full of channel information data
+	; ret=0 returns string
 	getChInfo(c="", ret=1){
-		; returns obj full of channel information data
-		; ret=0 returns string
 		if c=
 			c := CN.NG
 		o := {}
