@@ -7,6 +7,11 @@ What is supported?
 	a.b = %c.d%
 */
 
+
+/**
+ * loads customs from the ClipjumpCustom.ini file
+ * @return {void}
+ */
 loadCustomizations(){
 	if !FileExist("ClipjumpCustom.ini") {
 		FileAppend, % ";Customizer File for Clipjump`n;Add your custom settings here`n`n[AutoRun]`n;auto-run items go here", ClipjumpCustom.ini
@@ -45,6 +50,11 @@ loadCustomizations(){
 	}
 }
 
+
+/**
+ * reset all customizations applied in Clipjump, including the hotkey bindings
+ * @return {void}
+ */
 resetCustomizations(){
 	for k,v in CUSTOMS
 	{
@@ -54,6 +64,12 @@ resetCustomizations(){
 	CUSTOMS := {}
 }
 
+
+/**
+ * runs a customization (the section)
+ * @param  {array} obj customization object containing key-value pairs of commands in it
+ * @return {void}
+ */
 customization_Run(obj){
 	for k,v in obj
 	{
@@ -109,6 +125,12 @@ customization_Run(obj){
 	}
 }
 
+
+/**
+ * runs a function in a string
+ * @param {string} v function string
+ * @Return output of function
+ */
 RunFunc(v){
 ; runs dynamic functions
 	static rk := "ª"
@@ -164,6 +186,10 @@ RunFunc(v){
 	return r
 }
 
+
+/**
+ * The label to run any hotkey created in Clipjump Custom
+ */
 CustomHotkey:
 	customization_Run( CUSTOMS[A_ThisHotkey] )
 	return
