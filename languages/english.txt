@@ -421,3 +421,12 @@ TIP_help =
 = F1           - Help
 =
 = Press V to exit this window
+
+
+;=====
+; 12.3+
+;=====
+
+SET_winClipjump = Use Win shortcuts for copy/cut to Clipjump
+SET_T_winClipjump = Use Win+C and Win+X to copy and cut to Windows clipboard. 
+                  = Ctrl-C and Ctrl-X will behave normally.

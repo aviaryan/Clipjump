@@ -48,7 +48,7 @@ gui_Settings()
 	Gui, Add, Checkbox, xs Checked%ini_IsMessage%		vnew_IsMessage			gchkbox_IsMessage,		% TXT.SET_ismessage
 	Gui, Add, Checkbox, xs Checked%ini_KeepSession%		vnew_KeepSession		gchkbox_KeepSession,	% TXT.SET_keepsession
 	Gui, Add, Checkbox, xs Checked%ini_PreserveClipPos%		vnew_PreserveClipPos 	gsettingsChanged, 	% TXT.SET_keepactivepos
-	Gui, Add, Checkbox, xs Checked%ini_winClipjump%			vnew_winClipjump 	gsettingsChanged, 		% "Use Win shortcuts for copy/cut"
+	Gui, Add, Checkbox, xs Checked%ini_winClipjump%			vnew_winClipjump 	gsettingsChanged, 		% TXT.SET_winClipjump
 
 	Gui, Add, Text, xs y+10, % TXT.SET_pformat 		; the y param is not needed but to make it symmetrical
 	; Build pformats list
@@ -263,7 +263,10 @@ load_Settings(all=false){
 	ini_startSearch := ini_read("Main", "startSearch")
 	ini_revFormat2def := ini_read("Main", "revFormat2def")
 	history_k := ini_read("Shortcuts", "history_k")
+
+	copyCutShortcuts(0) ; end all old shortcuts
 	ini_winClipjump := ini_read("Main", "winClipjump")
+	copyCutShortcuts() ; create new shortcuts
 
 	; // below are INI only settings , not loaded by settings editor
 
