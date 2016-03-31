@@ -1631,6 +1631,7 @@ Receive_WM_COPYDATA(wParam, lParam){
 #include %A_ScriptDir%\lib\channelOrganizer.ahk
 #include %A_ScriptDir%\lib\TooltipEx.ahk
 #include %A_ScriptDir%\lib\SQLiteDB\Class_SQLiteDB.ahk
+#include %A_ScriptDir%\lib\settingsHelper.ahk
 #include *i %A_ScriptDir%\plugins\_registry.ahk
 
 ;------------------------------------------------------------------- X -------------------------------------------------------------------------------

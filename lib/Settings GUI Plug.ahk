@@ -343,6 +343,9 @@ save_Settings()
 	ini_write("Shortcuts", "history_k", hst_k, 0)
 	; v12.3+
 	ini_write("Main", "winClipjump", new_winClipjump, 0)
+	if (new_winClipjump != ini_winClipjump){ ; change win-paste-mode too
+		manageWinPasteMode(new_winClipjump, 1)
+	}
 
 	;Disable old shortcuts
 	  hkZ(Copyfilepath_K, 	"CopyFile", 0)
