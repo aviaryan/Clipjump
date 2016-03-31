@@ -45,7 +45,7 @@ PROGRAM VARIABLES
 */
 
 global PROGNAME := "Clipjump"
-global VERSION := "12.3"
+global VERSION := "12.4"
 global CONFIGURATION_FILE := "settings.ini"
 
 ini_LANG := ini_read("System", "lang")

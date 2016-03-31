@@ -42,6 +42,7 @@ WM_MOUSEMOVE()
 	new_startSearch_TT := TXT.SET_T_startSearch
 	new_revFormat2def_TT := TXT.SET_T_revFormat2def
 	hst_K_TT := TXT.SET_T_histshort
+	new_winClipjump_TT := "Hello australia"
 
 	; **** Channel Organizer *********************
 	chOrgToggleLeftRight_TT := TXT.ORG_toggleLeftRight

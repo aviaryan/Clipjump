@@ -21,9 +21,12 @@ gui_Settings()
 	;enable tooltips
 	OnMessage(0x200, "WM_MOUSEMOVE")
 
+	height_group := 300
+	height_downgroup := 75
+
 	Gui, Settings:New
 	Gui, Margin, 8, 8
-	Gui, Add, GroupBox,	% "w" left_size " h280", % TXT.SET_main		; for every new checkbox add 18 pixels to the height, and for every new UpDown control add 26 pixels
+	Gui, Add, GroupBox,	% "w" left_size " h" height_group, % TXT.SET_main		; for every new checkbox add 18 pixels to the height, and for every new UpDown control add 26 pixels
 	; The total width of the GUI is about 289 x 2
 	
 	Gui, Add, CheckBox, xp+9 yp+22 Section Checked%ini_limitMaxClips% vnew_limitMaxClips gchkbox_limitMaxClips, % TXT.SET_limitmaxclips	; when this is checked the following two controls will be disabled
@@ -45,6 +48,7 @@ gui_Settings()
 	Gui, Add, Checkbox, xs Checked%ini_IsMessage%		vnew_IsMessage			gchkbox_IsMessage,		% TXT.SET_ismessage
 	Gui, Add, Checkbox, xs Checked%ini_KeepSession%		vnew_KeepSession		gchkbox_KeepSession,	% TXT.SET_keepsession
 	Gui, Add, Checkbox, xs Checked%ini_PreserveClipPos%		vnew_PreserveClipPos 	gsettingsChanged, 	% TXT.SET_keepactivepos
+	Gui, Add, Checkbox, xs Checked%ini_winClipjump%			vnew_winClipjump 	gsettingsChanged, 		% "Use Win shortcuts for copy/cut"
 
 	Gui, Add, Text, xs y+10, % TXT.SET_pformat 		; the y param is not needed but to make it symmetrical
 	; Build pformats list
@@ -55,7 +59,7 @@ gui_Settings()
 
 
 	;---- Clipboard H
-	Gui, Add, GroupBox, % "xm y296 w" left_size " h74",	% TXT.SET_cb  ;
+	Gui, Add, GroupBox, % "xm y" height_group+16 " w" left_size " h" height_downgroup,	% TXT.SET_cb  ;
 
 	Gui, Add, Text,		xp+9 yp+22,		% TXT.SET_daystostore
 	Gui, Add, Edit,	%	"x" left_size-55 " yp-3 w50 r1 Number vnew_DaysToStore gedit_DaysToStore"
@@ -66,7 +70,7 @@ gui_Settings()
 	;---- Shortcuts
 	x_ofhotkeys := left_size+right_size+5-120
 	;5 is gap betn two adjacent group boxes , 120 is width of hotkey control
-	Gui, Add, GroupBox, % "ym w" right_size " h280 vshortcutgroupbox",	% TXT.SET_shortcuts
+	Gui, Add, GroupBox, % "ym w" right_size " h" height_group " vshortcutgroupbox",	% TXT.SET_shortcuts
 	Gui, Add, Text, 	xp+9 yp+22 section,	% TXT.SET_pst
 	Gui, Add, Edit, %	"Limit1 Uppercase -Wantreturn x" x_ofhotkeys " yp-3 w120 vpst_K ghotkey_paste", % paste_k
 	Gui, Add, Text, 	xs y+8,		% TXT.SET_actmd
@@ -87,7 +91,7 @@ gui_Settings()
 	Gui, Add, Hotkey, 	x%x_ofhotkeys% yp-3 vplugM_K 	ghotkey_plugM, % pluginManager_K
 
 	;---- Channels
-	Gui, Add, GroupBox, % "xs-9 y296 w" right_size " h74", % PROGNAME " " TXT.SET_channels
+	Gui, Add, GroupBox, % "xs-9 y" height_group+16 " w" right_size " h" height_downgroup, % PROGNAME " " TXT.SET_channels
 	Gui, Add, Text, 	xs yp+22,	% TXT._pitswp " Hotkey"
 	Gui, Add, Hotkey,	x%x_ofhotkeys% yp-3 vpitswp_K  ghotkey_pitswp, % pitswap_K
 
@@ -95,7 +99,7 @@ gui_Settings()
 	size_advanced := getControlInfo("text", TXT.SET_advanced, "w", "Underline")
 	Gui, Settings:Default
 	Gui, Font, Underline
-	Gui, Add, Text, 	% "y376 x" left_size+right_size+5-size_advanced " cBlue gsettings_open_advanced", % TXT.SET_advanced 	;+5 for gap betn group boxes
+	Gui, Add, Text, 	% "y" height_group+height_downgroup+30 " x" left_size+right_size+5-size_advanced " cBlue gsettings_open_advanced", % TXT.SET_advanced 	;+5 for gap betn group boxes
 	Gui, Add, Text, 	x9 yp cBlue gClassTool, % TXT.SET_manageignore
 	Gui, font, norm
 	Gui, Add, Button,	% "x" ((left_size+right_size)/2)-60 " yp+23 Default gsettingsButtonOK", 	&OK 	;57 in vertical
@@ -259,6 +263,7 @@ load_Settings(all=false){
 	ini_startSearch := ini_read("Main", "startSearch")
 	ini_revFormat2def := ini_read("Main", "revFormat2def")
 	history_k := ini_read("Shortcuts", "history_k")
+	ini_winClipjump := ini_read("Main", "winClipjump")
 
 	; // below are INI only settings , not loaded by settings editor
 
@@ -333,6 +338,8 @@ save_Settings()
 	ini_write("Main", "startSearch", new_startSearch, 0)
 	ini_write("Main", "revFormat2def", new_revFormat2def, 0)
 	ini_write("Shortcuts", "history_k", hst_k, 0)
+	; v12.3+
+	ini_write("Main", "winClipjump", new_winClipjump, 0)
 
 	;Disable old shortcuts
 	  hkZ(Copyfilepath_K, 	"CopyFile", 0)
@@ -434,6 +441,8 @@ save_Default(full=1){
 	ini_write("System", "RAM_Flush", 0)
 	; V12+
 	ini_write("Advanced", "WinForPasteMode", 0)
+	; v12.3+
+	ini_write("Main", "winClipjump", 0)
 
 	; DELETE KEYS removed v10.7.2.6
 	Ini_delete("Advanced", "Start_with_formatting")
@@ -444,7 +453,7 @@ save_Default(full=1){
 }
 
 Ini_write(section, key, value="", ifblank=true){
-	;ifblank means if the key doesn't exist
+	;ifblank==true means write only if key doesn't exist
 
 	Iniread, v,% CONFIGURATION_FILE,% section,% key
 
@@ -497,6 +506,7 @@ validate_Settings()
 	ini_PreserveClipPos := ini_PreserveClipPos ? 1 : 0
 	ini_startSearch := ini_startSearch ? 1 : 0
 	ini_revFormat2def := ini_revFormat2def ? 1 : 0
+	ini_winClipjump := (ini_winClipjump==1) ? 1 : 0
 
 	if !ini_DaysToStore
 	{
