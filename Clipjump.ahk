@@ -120,7 +120,7 @@ global CLIP_ACTION := "", ONCLIPBOARD := 1 , ISACTIVEEXCEL := 0 , HASCOPYFAILED 
 global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_isMessage, CopyMessage, ini_DaysToStore
 		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, onetime_K, paste_k, actionmode_k, ini_is_duplicate_copied, ini_formatting
 		, ini_CopyBeep , beepFrequency , ignoreWindows, ini_defEditor, ini_defImgEditor, ini_def_Pformat, pluginManager_k, holdClip_K, ini_PreserveClipPos
-		, chOrg_K, ini_startSearch, ini_revFormat2def, ini_pstMode_X, ini_pstMode_Y, ini_HisCloseOnInstaPaste, history_K, ini_ram_flush
+		, chOrg_K, ini_startSearch, ini_revFormat2def, ini_pstMode_X, ini_pstMode_Y, ini_HisCloseOnInstaPaste, history_K, ini_ram_flush, ini_winClipjump := 1
 
 ;Init General vars
 is_pstMode_active := 0
@@ -221,7 +221,7 @@ loop, parse, temp_keys,|
 
 ;Setting Up shortcuts
 hkZ( ( paste_k ? "$" pstIdentifier paste_k : emptyvar ) , "Paste")
-hkZ("$^c", "NativeCopy") , hkZ("$^x", "NativeCut")
+copyCutShortcuts()
 hkZ(Copyfilepath_K, "CopyFile") , hkZ(Copyfolderpath_K, "CopyFolder")
 hkZ(history_K, "History")
 hkZ(Copyfiledata_K, "CopyFileData") , hkZ(channel_K, "channelGUI")
@@ -625,7 +625,8 @@ nativeCopy:
 	Critical
 	if WinActive("ahk_class XLMAIN")
 	{
-		hkZ("$^c", "nativeCopy", 0) , hkZ("$^c", "keyblocker")
+		copyCutShortcuts(0)
+		hkZ("$^c", "keyblocker")
 		LASTCLIP := ""
 		setTimer, ctrlforCopy, 50
 	}
@@ -639,7 +640,8 @@ nativeCut:
 	Critical
 	if WinActive("ahk_class XLMAIN")
 	{
-		hkZ("$^x", "nativeCut", 0) , hkZ("$^x", "keyblocker")
+		copyCutShortcuts(0)
+		hkZ("$^x", "keyblocker")
 		LASTCLIP := ""
 		setTimer, ctrlforCopy, 50
 	}
@@ -653,7 +655,7 @@ ctrlForCopy:
 	if GetKeyState("Ctrl", "P") = 0		; if key is up
 	{
 		Critical 			;To make sure the hotkeys are changed
-		hkZ("$^c", "NativeCopy") , hkZ("$^x", "NativeCut")
+		copyCutShortcuts()	; keyblocker is removed bcoz ^x and ^c overwrites it
 		SetTimer, ctrlforCopy, Off
 	}
 	return
@@ -1038,7 +1040,7 @@ hkZ_pasteMode(mode=0, disableAll=1){
 		hkZ(pastemodekey.x, "DeleteAll", 0) , hkZ(pastemodekey.x, "Delete", 0)
 		hkZ(pastemodekey.x, "cutclip", 0) , hkZ(pastemodekey.x, "copyclip", 0)
 		hkZ("$^x", "keyblocker", 0) , hkZ("$^c", "keyblocker", 0) 			;taken as a preventive step
-		hkZ("$^c", "NativeCopy") , hkZ("$^x", "NativeCut")
+		copyCutShortcuts()
 	}
 }
 
@@ -1399,6 +1401,20 @@ addToWinClip(lastEntry, extraTip){
 	API.blockMonitoring(0)
 }
 
+/**
+ * makes the shortcut responsible for copy and cut to clipjump
+ * status - enabled/disabled
+ * @return {void}
+ */
+copyCutShortcuts(status = 1){
+	if (ini_winClipjump == 1){
+		hkZ("$^c", "windows_copy", status) , hkZ("$^x", "windows_cut", status)
+		hkZ("#c", "NativeCopy", status) , hkZ("#x", "NativeCut", status)
+	} else {
+		hkZ("$^c", "NativeCopy", status) , hkZ("$^x", "NativeCut", status)
+	}
+}
+
 changeIcon(){
 global
 
@@ -1553,7 +1569,7 @@ CopytoVar(clipwait_time=3, send_macro="^{vk43}"){
 disable_clipjump:
 	CLIPJUMP_STATUS := !CLIPJUMP_STATUS
 	CALLER := CALLER_STATUS := CLIPJUMP_STATUS
-	, hkZ("$^c", "NativeCopy", CLIPJUMP_STATUS) , hkZ("$^x", "NativeCut", CLIPJUMP_STATUS)
+	copyCutShortcuts(CLIPJUMP_STATUS)
 	changeIcon()
 
 	hkZ( ( paste_k ? "$" pstIdentifier paste_k : emptyvar ) , "Paste", CLIPJUMP_STATUS)

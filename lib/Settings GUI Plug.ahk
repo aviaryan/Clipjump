@@ -228,10 +228,9 @@ settings_open_advanced:
 
 }
 
-load_Settings(all=false)
+load_Settings(all=false){
 ; Preconditions: None
 ; Postconditions: Reads settings from the configuration file and saves them in corresponding variables beginning with "ini_".
-{
 	global
 	IniRead, ini_limitMaxClips,	%CONFIGURATION_FILE%, Main, limit_MaxClips
 	IniRead, ini_MaxClips,		%CONFIGURATION_FILE%, Main, Minimum_No_Of_Clips_to_be_Active
