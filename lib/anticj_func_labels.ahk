@@ -664,6 +664,13 @@ fillwithSpaces(text="", limit=35){
 	return text r
 }
 
+/**
+ * TickCount in 64 bit precision
+ */
+TickCount64(){
+	return DllCall("GetTickCount64", "Cdecl UInt64")
+}
+
 /*
 SuperInstr()
 	Returns min/max position for a | separated values of Needle(s)

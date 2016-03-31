@@ -405,8 +405,8 @@ onClipboardChange:
 	if !startUpComplete 	;if not started, not allow - after onclipboard=1 as the purpose of onc is served
 		return
 	; check for machine-done clipboard manipulations
-	timeDiff := A_TickCount - lastClipboardTime
-	lastClipboardTime := A_TickCount
+	timeDiff := TickCount64() - lastClipboardTime
+	lastClipboardTime := TickCount64()
 	if (timeDiff < 200){
 		return
 	}
