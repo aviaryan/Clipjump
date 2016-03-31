@@ -1027,8 +1027,8 @@ hkZ_pasteMode(mode=0, disableAll=1){
 	Critical
 
 	loop 9
-		hkZ("^" A_index, "AddjumpClip", mode) 	; above them to allow any modifications
-	hkZ("^-", "TogglejumpClip", mode)
+		hkZ(pstIdentifier A_index, "AddjumpClip", mode) 	; above them to allow any modifications
+	hkZ(pstIdentifier "-", "TogglejumpClip", mode)
 	hkZ(pastemodekey.c, "MoveBack", mode) , hkZ(pastemodekey.x, "Cancel", mode) , hkZ(pastemodekey.z, "Formatting", mode)
 	hkZ(pastemodekey.space, "Fixate", mode) , hkZ(pastemodekey.s, "Ssuspnd", mode) , hkZ(pastemodekey.e, "export", mode)
 	hkZ(pastemodekey.up, "channel_up", mode) , hkZ(pastemodekey.down, "channel_down", mode) , hkZ(pastemodekey.a, "navigate_to_first", mode)
