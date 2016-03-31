@@ -301,10 +301,7 @@ load_Settings(all=false){
 		ini_ram_flush := ini_read("Advanced", "RAM_Flush")
 		; v12+
 		tempVar := ini_read("Advanced", "WinForPasteMode")
-		if (tempVar){
-			pstIdentifier := "#"
-			pstKeyName := "LWin"
-		}
+		manageWinPasteMode(tempVar ? 1 : 0, 0)
 	}
 
 }

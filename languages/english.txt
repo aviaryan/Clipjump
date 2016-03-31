@@ -427,6 +427,8 @@ TIP_help =
 ; 12.3+
 ;=====
 
-SET_winClipjump = Use Win shortcuts for copy/cut to Clipjump
-SET_T_winClipjump = Use Win+C and Win+X to copy and cut to Windows clipboard. 
-                  = Ctrl-C and Ctrl-X will behave normally.
+SET_winClipjump = Use Win-based shortcuts for copy/cut to Clipjump
+SET_T_winClipjump = Use Win+C and Win+X to copy and cut to Clipjump 
+                  = Ctrl-C and Ctrl-X will not affect clipjump
+                  = Additionally, Win+V will become the paste mode shortcut.
+                  = Refer to help file for more info.
