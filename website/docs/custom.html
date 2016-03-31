@@ -99,17 +99,17 @@ Note that you can also use <code>noautorun=1</code> to prevent auto-execution of
 <h3><a name=change_mode_key><a name=2>Example 2 (changing paste-format key to Y)</a></a></h3>
 {% highlight ini %}
 [AutoRun]
-pastemodekey.z=^y
+pastemodekey.z=y
 {% endhighlight %}
-The above code changes the inbuilt variable <code>pastemodekey.z</code> to '^y'. <br>
+The above code changes the inbuilt variable <code>pastemodekey.z</code> to 'y'. <br>
 If you remember, <kbd>Z</kbd> is the default key for toggling <a href="basic_help.html#pformat">Paste formats</a> in <strong><a href="basic_help.html#pstmd">Paste Mode</a></strong>. The above code changes it to <kbd>Y</kbd>. It is mandatory to write <samp>pastemodekey</samp> in <code>pastemodekey.z</code> because pastemodekey is the object name which has 
 this setting.<br>
 The Pastemode group has all variables as pastemodekey.<var>key</var> where <var>key</var> is the original key. Same is for <a href="shortcuts.html#spm">[Search-Paste Mode]</a>. It has all variables as spmkey.<var>key</var>. So the following code will change <code>Channel up</code>, <code>Channel down</code> and <code>paste-format</code> shortcut in <a href="shortcuts.html#pastemd">[Paste-Mode]</a> and <code>cancel</code> shortcut in <a href="shortcuts.html#spm">[Search-Paste Mode]</a>.
 {% highlight ini %}
 [AutoRun]
-pastemodekey.z=^y
-pastemodekey.up=^q
-pastemodekey.down=^d
+pastemodekey.z=y
+pastemodekey.up=q
+pastemodekey.down=d
 spmkey.home=PgDn{% endhighlight %}
 The key names are according to the <a href="http://www.ahkscript.org/docs/KeyList.htm">AutoHotkey key list</a>. 
 

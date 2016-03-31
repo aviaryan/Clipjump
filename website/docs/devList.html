@@ -312,8 +312,8 @@ Then you can call API methods, set variables, get variables and so on using the 
 msgbox % cj.version
 <span class="green">; getting value of internal variable CN.NG</span>
 msgbox % cj["CN.NG"]
-<span class="green">; setting internal variable PASTEMODEKEY.Z to ^Y</span>
-cj["pastemodekey.z"] := "^y"
+<span class="green">; setting internal variable PASTEMODEKEY.Z to Y</span>
+cj["pastemodekey.z"] := "y"
 <span class="green">; running a <a href=#api>API</a> function GETCLIPLOC</span>
 msgbox % cj.getClipLoc(1, 5)
 <span class="green">; running a normal function SET_PFORMAT that is not part of API</span>
