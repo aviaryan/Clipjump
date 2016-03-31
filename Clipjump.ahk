@@ -217,7 +217,7 @@ MORE SETTINGS A/C USER SETTINGS
 
 temp_keys := "a|c|s|z|space|x|e|up|down|f|h|Enter|t|F1|q"
 loop, parse, temp_keys,|
-	pastemodekey[A_LoopField] := pstIdentifier A_LoopField
+	pastemodekey[A_LoopField] := A_LoopField
 
 ;Setting Up shortcuts
 hkZ( ( paste_k ? "$" pstIdentifier paste_k : emptyvar ) , "Paste")
@@ -343,7 +343,7 @@ paste:
 		}
 
 		try Clipboard := ""
-		hkZ(pastemodekey.up, "channel_up") , hkZ(pastemodekey.down, "channel_down") 		;activate the 2 keys to jump channels
+		hkZ(pstIdentifier pastemodekey.up, "channel_up") , hkZ(pstIdentifier pastemodekey.down, "channel_down") 		;activate the 2 keys to jump channels
 		PasteModeTooltip("{" CN.Name "} " MSG_CLIPJUMP_EMPTY, 1) 				;No Clip Exists
 		setTimer, ctrlCheck, 50
 	}
@@ -594,31 +594,31 @@ cancel:
 	ctrlref := "cancel"
 	if SPM.ACTIVE
 		gosub SPM_dispose 	; dispose it if There - Note that this step ends the label as ctrlCheck dies so ctrlRef is kept upwards to be updated
-	hkZ_pasteMode(0, 0) , hkZ(pastemodekey.x, "Delete", 1)
+	hkZ_pasteMode(0, 0) , hkZ_pi(pastemodekey.x, "Delete", 1)
 	return
 
 delete:
 	PasteModeTooltip(TXT.TIP_delm "`t`t(2)`n" TXT.TIP_modem, 1)
 	ctrlref := "delete"
-	hkZ(pastemodekey.x, "Delete", 0) , hkZ(pastemodekey.x, "cutclip", 1)
+	hkZ_pi(pastemodekey.x, "Delete", 0) , hkZ_pi(pastemodekey.x, "cutclip", 1)
 	return
 
 cutclip:
 	PasteModeTooltip(TXT.TIP_move "`t`t(3)`n" TXT.TIP_modem, 1)
 	ctrlref := "cut"
-	hkZ(pastemodekey.x, "cutclip", 0) , hkZ(pastemodekey.x, "copyclip", 1)
+	hkZ_pi(pastemodekey.x, "cutclip", 0) , hkZ_pi(pastemodekey.x, "copyclip", 1)
 	return
 
 copyclip:
 	PasteModeTooltip(TXT.TIP_copy "`t`t(4)`n" TXT.TIP_modem, 1)
 	ctrlref := "copy"
-	hkZ(pastemodekey.x, "copyclip", 0) , hkZ(pastemodekey.x, "DeleteAll", 1)
+	hkZ_pi(pastemodekey.x, "copyclip", 0) , hkZ_pi(pastemodekey.x, "DeleteAll", 1)
 	return
 
 deleteall:
 	PasteModeTooltip(TXT.TIP_delallm "`t`t(5)`n" TXT.TIP_modem, 1)
 	ctrlref := "deleteAll"
-	hkZ(pastemodekey.x, "DeleteAll", 0) , hkZ(pastemodekey.x, "Cancel", 1)
+	hkZ_pi(pastemodekey.x, "DeleteAll", 0) , hkZ_pi(pastemodekey.x, "Cancel", 1)
 	return
 
 nativeCopy:
@@ -1029,16 +1029,16 @@ hkZ_pasteMode(mode=0, disableAll=1){
 	loop 9
 		hkZ(pstIdentifier A_index, "AddjumpClip", mode) 	; above them to allow any modifications
 	hkZ(pstIdentifier "-", "TogglejumpClip", mode)
-	hkZ(pastemodekey.c, "MoveBack", mode) , hkZ(pastemodekey.x, "Cancel", mode) , hkZ(pastemodekey.z, "Formatting", mode)
-	hkZ(pastemodekey.space, "Fixate", mode) , hkZ(pastemodekey.s, "Ssuspnd", mode) , hkZ(pastemodekey.e, "export", mode)
-	hkZ(pastemodekey.up, "channel_up", mode) , hkZ(pastemodekey.down, "channel_down", mode) , hkZ(pastemodekey.a, "navigate_to_first", mode)
-	hkZ(pastemodekey.f, "searchpm", mode) , hkZ(pastemodekey.h, "editclip", mode) , hkZ(pastemodekey.enter, "multiPaste", mode)
-	hkZ(pastemodekey.t, "setClipTag", mode) , hkZ(pastemodekey.F1, "pstMode_Help", mode) , hkZ(pastemodekey.q, "move_to_first", mode)
+	hkZ_pi(pastemodekey.c, "MoveBack", mode) , hkZ_pi(pastemodekey.x, "Cancel", mode) , hkZ_pi(pastemodekey.z, "Formatting", mode)
+	hkZ_pi(pastemodekey.space, "Fixate", mode) , hkZ_pi(pastemodekey.s, "Ssuspnd", mode) , hkZ_pi(pastemodekey.e, "export", mode)
+	hkZ_pi(pastemodekey.up, "channel_up", mode) , hkZ_pi(pastemodekey.down, "channel_down", mode) , hkZ_pi(pastemodekey.a, "navigate_to_first", mode)
+	hkZ_pi(pastemodekey.f, "searchpm", mode) , hkZ_pi(pastemodekey.h, "editclip", mode) , hkZ_pi(pastemodekey.enter, "multiPaste", mode)
+	hkZ_pi(pastemodekey.t, "setClipTag", mode) , hkZ_pi(pastemodekey.F1, "pstMode_Help", mode) , hkZ_pi(pastemodekey.q, "move_to_first", mode)
 
 	if (!mode) && disableAll        ;init Cj
 	{
-		hkZ(pastemodekey.x, "DeleteAll", 0) , hkZ(pastemodekey.x, "Delete", 0)
-		hkZ(pastemodekey.x, "cutclip", 0) , hkZ(pastemodekey.x, "copyclip", 0)
+		hkZ_pi(pastemodekey.x, "DeleteAll", 0) , hkZ_pi(pastemodekey.x, "Delete", 0)
+		hkZ_pi(pastemodekey.x, "cutclip", 0) , hkZ_pi(pastemodekey.x, "copyclip", 0)
 		hkZ("$^x", "keyblocker", 0) , hkZ("$^c", "keyblocker", 0) 			;taken as a preventive step
 		copyCutShortcuts()
 	}

@@ -5,8 +5,8 @@ introduced in v10.6
 
 searchPasteMode(x, y, h){
 	static searchpm, searchpm_ct
-	hkZ("^" pastemodekey.f, "SPM_dispose")
-	; oopp CapsLock
+	hkZ(pstIdentifier pastemodekey.f, "SPM_dispose")
+	
 	Gui, searchpm:New
 	Gui, searchpm:+LastFound +AlwaysOnTop -Caption +ToolWindow
 	Gui, Add, Edit, x1 y1 w220 R1 vsearchpm gsearchpm_edit -VScroll,

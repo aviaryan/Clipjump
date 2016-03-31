@@ -74,7 +74,7 @@ class Clipjump
 	/*
 	Use -
 		cj := new Clipjump()
-		cj["pastemodekey.z"] := "^y"
+		cj["pastemodekey.z"] := "y"
 		cj.MYVAR := "value"
 	*/
 	__Set(var, value){

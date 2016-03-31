@@ -515,6 +515,13 @@ hkZ(HotKey, Label, Status=1) {
 	}
 }
 
+/**
+ * hkz that prepends pstIdentfier
+ */
+hkZ_pi(key, label, status=1){
+	return hkZ(pstIdentifier key, label, status)
+}
+
 ; Converts an Ini file to an object
 Ini2Obj(Ini){
 	out := {}
