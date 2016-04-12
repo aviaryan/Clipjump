@@ -14,9 +14,10 @@ gui_Settings()
 	; get max sizes possible of window
 	size_limitmaxclips := getControlInfo("checkbox", TXT.SET_limitmaxclips, "w")
 	size_keepsession := getControlInfo("checkbox", TXT.SET_keepsession, "w")
-	right_size := size_cfolderp := getControlInfo("text", TXT._cfolderp, "w") + 9 + 120 + 50 ;9=max margin ; 120=width of hotkey control, 50 = cstm gap betn controls
-	left_size := ( size_limitmaxclips >= size_keepsession ? size_limitmaxclips : size_keepsession ) + 16 + 50 
-	; 16= max margin of any control (maxlcips)  ,  50 = width of updown
+	width_hk_control := 150
+	right_size := size_cfolderp := getControlInfo("text", TXT._cfolderp, "w") + 9 + width_hk_control + 50 ;9=max margin ; 120=width of hotkey control, 50 = cstm gap betn controls
+	left_size := ( size_limitmaxclips >= size_keepsession ? size_limitmaxclips : size_keepsession ) + 16 + 50 + 40
+	; 16= max margin of any control (maxlcips)  ,  50 = width of updown , 40 = extra for compatibility in other languages
 
 	;enable tooltips
 	OnMessage(0x200, "WM_MOUSEMOVE")
@@ -68,32 +69,32 @@ gui_Settings()
 	Gui, Add, Checkbox,	xs y+8 Checked%ini_IsImageStored% vnew_IsImageStored gchkbox_IsImageStored, % TXT.SET_images
 
 	;---- Shortcuts
-	x_ofhotkeys := left_size+right_size+5-120
-	;5 is gap betn two adjacent group boxes , 120 is width of hotkey control
+	x_ofhotkeys := left_size+right_size+5 - width_hk_control
+	;5 is gap betn two adjacent group boxes , 150 is width of hotkey control
 	Gui, Add, GroupBox, % "ym w" right_size " h" height_group " vshortcutgroupbox",	% TXT.SET_shortcuts
 	Gui, Add, Text, 	xp+9 yp+22 section,	% TXT.SET_pst
-	Gui, Add, Edit, %	"Limit1 Uppercase -Wantreturn x" x_ofhotkeys " yp-3 w120 vpst_K ghotkey_paste", % paste_k
+	Gui, Add, Edit, %	"Limit1 Uppercase -Wantreturn x" x_ofhotkeys " yp-3 w" width_hk_control " vpst_K ghotkey_paste", % paste_k
 	Gui, Add, Text, 	xs y+8,		% TXT.SET_actmd
-	Gui, Add, Hotkey, 	x%x_ofhotkeys% yp-3 vactmd_K   ghotkey_actmd, % Actionmode_K
+	Gui, Add, Hotkey, 	x%x_ofhotkeys% yp-3 w%width_hk_control% vactmd_K   ghotkey_actmd, % Actionmode_K
 	Gui, Add, Text,		xs y+8,		% TXT.HST__name
-	Gui, Add, Hotkey, 	x%x_ofhotkeys% yp-3 vhst_K	gsettingsChanged, % history_k
+	Gui, Add, Hotkey, 	x%x_ofhotkeys% yp-3 w%width_hk_control% vhst_K	gsettingsChanged, % history_k
 	Gui, Add, Text, 	xs y+8, 	% TXT.SET_org
-	Gui, Add, Hotkey, 	x%x_ofhotkeys% yp-3 vorg_K 		gsettingsChanged, % chOrg_K
+	Gui, Add, Hotkey, 	x%x_ofhotkeys% yp-3 w%width_hk_control% vorg_K 		gsettingsChanged, % chOrg_K
 	Gui, Add, Text, 	xs y+8,		% TXT._cfilep
-	Gui, Add, Hotkey, 	x%x_ofhotkeys% yp-3 vcfilep_K   ghotkey_cfilep, % Copyfilepath_K
+	Gui, Add, Hotkey, 	x%x_ofhotkeys% yp-3 w%width_hk_control% vcfilep_K   ghotkey_cfilep, % Copyfilepath_K
 	Gui, Add, Text,		xs y+8,		% TXT._cfolderp
-	Gui, Add, Hotkey,	x%x_ofhotkeys% yp-3 vcfolderp_K ghotkey_cfolderp, % Copyfolderpath_K
+	Gui, Add, Hotkey,	x%x_ofhotkeys% yp-3 w%width_hk_control% vcfolderp_K ghotkey_cfolderp, % Copyfolderpath_K
 	Gui, Add, Text,		xs y+8,		% TXT._cfiled
-	Gui, Add, Hotkey,	x%x_ofhotkeys% yp-3 vcfiled_K   ghotkey_cfiled, % Copyfiledata_K
+	Gui, Add, Hotkey,	x%x_ofhotkeys% yp-3 w%width_hk_control% vcfiled_K   ghotkey_cfiled, % Copyfiledata_K
 	Gui, Add, Text,		xs y+8,		% TXT.SET_holdclip
-	Gui, Add, Hotkey,	x%x_ofhotkeys% yp-3 vhldClip_K		ghotkey_holdClip, % holdClip_K
+	Gui, Add, Hotkey,	x%x_ofhotkeys% yp-3 w%width_hk_control% vhldClip_K		ghotkey_holdClip, % holdClip_K
 	Gui, Add, Text, 	xs y+8, 	% TXT.PLG__name
-	Gui, Add, Hotkey, 	x%x_ofhotkeys% yp-3 vplugM_K 	ghotkey_plugM, % pluginManager_K
+	Gui, Add, Hotkey, 	x%x_ofhotkeys% yp-3 w%width_hk_control% vplugM_K 	ghotkey_plugM, % pluginManager_K
 
 	;---- Channels
 	Gui, Add, GroupBox, % "xs-9 y" height_group+16 " w" right_size " h" height_downgroup, % PROGNAME " " TXT.SET_channels
 	Gui, Add, Text, 	xs yp+22,	% TXT._pitswp " Hotkey"
-	Gui, Add, Hotkey,	x%x_ofhotkeys% yp-3 vpitswp_K  ghotkey_pitswp, % pitswap_K
+	Gui, Add, Hotkey,	x%x_ofhotkeys% yp-3 w%width_hk_control% vpitswp_K  ghotkey_pitswp, % pitswap_K
 
 	;---- Buttons
 	size_advanced := getControlInfo("text", TXT.SET_advanced, "w", "Underline")
