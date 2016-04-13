@@ -1293,6 +1293,8 @@ update_actionmode(){
 	. "`n"
 	ACTIONMODE.remove("text") , ACTIONMODE.remove("keys")
 
+	thetext .= "`n" fillWithSpaces(TXT.ACT_switchChannel, 25) " -  " "0..9"
+
 	for k,v in ACTIONMODE
 	if !Instr(k, "_") && (k != "Esc") && v{
 		thekeys .= k " "
