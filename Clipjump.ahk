@@ -115,12 +115,14 @@ global windows_copy_k, windows_cut_k, ini_OpenAllChbyDef := 0, pstIdentifier := 
 global CALLER_STATUS, CLIPJUMP_STATUS := 1		; global vars are not declared like the below , without initialising
 global CALLER := CALLER_STATUS := 1, IN_BACK := 0, MULTIPASTE, PASTEMODE_ACT
 global CLIP_ACTION := "", ONCLIPBOARD := 1 , ISACTIVEEXCEL := 0 , HASCOPYFAILED := 0 , ctrlRef		;specific purpose global vars
+global wasManualClipboard := false
 
 ;Global Ini declarations
 global ini_IsImageStored , ini_Quality , ini_MaxClips , ini_Threshold , ini_isMessage, CopyMessage, ini_DaysToStore
 		, Copyfolderpath_K, Copyfilepath_K, Copyfilepath_K, onetime_K, paste_k, actionmode_k, ini_is_duplicate_copied, ini_formatting
 		, ini_CopyBeep , beepFrequency , ignoreWindows, ini_defEditor, ini_defImgEditor, ini_def_Pformat, pluginManager_k, holdClip_K, ini_PreserveClipPos
 		, chOrg_K, ini_startSearch, ini_revFormat2def, ini_pstMode_X, ini_pstMode_Y, ini_HisCloseOnInstaPaste, history_K, ini_ram_flush, ini_winClipjump := 1
+		, ini_monitorClipboard := 0
 
 ;Init General vars
 is_pstMode_active := 0
@@ -410,6 +412,16 @@ onClipboardChange:
 	if (timeDiff < 200){
 		return
 	}
+	; check monitor clipboard setting
+	if (ini_monitorClipboard == 0) {
+		if (wasManualClipboard == false){
+			return
+		} else {
+			wasManualClipboard := false
+			setTimer, manualClipboardTimer, Off
+		}
+	}
+	; ignore windows
 	ifwinactive, ahk_group IgnoreGroup
 		return
 
@@ -633,6 +645,8 @@ nativeCopy:
 	if ini_is_duplicate_copied
 		LASTCLIP := ""
 	CLIP_ACTION := "COPY"
+	wasManualClipboard := true
+	setTimer, manualClipboardTimer, -1000
 	Send, ^{vk43}
 	return
 
@@ -648,6 +662,8 @@ nativeCut:
 	if ini_is_duplicate_copied
 		LASTCLIP := ""
 	CLIP_ACTION := "CUT"
+	wasManualClipboard := true
+	setTimer, manualClipboardTimer, -1000
 	Send, ^{vk58}
 	return
 
@@ -658,6 +674,10 @@ ctrlForCopy:
 		copyCutShortcuts()	; keyblocker is removed bcoz ^x and ^c overwrites it
 		SetTimer, ctrlforCopy, Off
 	}
+	return
+
+manualClipboardTimer:
+	wasManualClipboard := false
 	return
 
 Formatting:
