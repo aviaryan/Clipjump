@@ -303,6 +303,8 @@ load_Settings(all=false){
 		; v12+
 		tempVar := ini_read("Advanced", "WinForPasteMode")
 		manageWinPasteMode(tempVar ? 1 : 0, 0)
+		; v12.5
+		ini_monitorClipboard := ini_read("Main", "monitorClipboard")
 	}
 
 }
@@ -447,6 +449,7 @@ save_Default(full=1){
 	ini_write("Advanced", "WinForPasteMode", 0)
 	; v12.3+
 	ini_write("Main", "winClipjump", 0)
+	ini_write("Main", "monitorClipboard", 1)
 
 	; DELETE KEYS removed v10.7.2.6
 	Ini_delete("Advanced", "Start_with_formatting")
@@ -511,6 +514,7 @@ validate_Settings()
 	ini_startSearch := ini_startSearch ? 1 : 0
 	ini_revFormat2def := ini_revFormat2def ? 1 : 0
 	ini_winClipjump := (ini_winClipjump==1) ? 1 : 0
+	ini_monitorClipboard := (ini_monitorClipboard==0) ? 0 : 1
 
 	if !ini_DaysToStore
 	{
