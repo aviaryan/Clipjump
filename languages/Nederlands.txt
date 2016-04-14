@@ -468,3 +468,10 @@ TIP_help =
 = F1             - Help
 =
 = Druk op V om dit venster te verlaten
+
+
+;=====
+; 12.5
+;=====
+
+PLG_delfilefolder = Verwijder [Bestand/Map]
