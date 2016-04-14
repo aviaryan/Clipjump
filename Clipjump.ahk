@@ -133,14 +133,6 @@ GET THE PROGRAM WORKING
 ***********************
 */
 
-global DB := new SQLiteDB()
-if (!FileExist(DBPATH))
-	isnewdb := 1
-else
-	isnewdb := 0
-if (!DB.OpenDB(DBPATH))
-	msgbox some error occured
-
 ;Setting up Icons
 FileCreateDir, icons
 FileInstall, icons\no_history.Ico, icons\no_history.Ico, 0 			;Allow users to have their icons
@@ -172,6 +164,16 @@ else if (ini_Version != VERSION)
 	gosub Reload 		; Update plugin includes with what the user has incase he updates his Clipjump
 }
 
+; start history
+; migrate if needed
+global DB := new SQLiteDB()
+msgbox % "hi " FileExist(DBPATH)
+if (!FileExist(DBPATH))
+	isnewdb := 1
+else
+	isnewdb := 0
+if (!DB.OpenDB(DBPATH))
+	msgbox some error occured
 
 /*
 ***********************
@@ -259,7 +261,7 @@ if FileExist(GHICON_PATH)
 else
 	MsgBox, 16, % PROGNAME, % valueof(TXT.ABT_errorFontIcon)
 
-if (isnewdb){
+if (isnewdb == 1){
 	migrateHistory()
 }
 
@@ -1601,7 +1603,10 @@ disable_clipjump:
 
 routines_Exit() {
 	Ini_write("Clipboard_history_window", "partial", history_partial, 0)
-	DB.CloseDb()
+	if IsObject(DB){
+		DB.CloseDb()
+		DB := ""
+	}
 	Prefs2Ini()
 	updatePluginIncludes()
 	DllCall( "GDI32.DLL\RemoveFontResourceEx",Str, GHICON_PATH,UInt,(FR_PRIVATE:=0x10),Int,0)
