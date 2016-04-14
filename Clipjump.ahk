@@ -162,12 +162,12 @@ else if (ini_Version != VERSION)
 {
 	save_default(0) 			;0 corresponds to selective save
 	gosub Reload 		; Update plugin includes with what the user has incase he updates his Clipjump
+	sleep 10000 		; to counter race condition
 }
 
 ; start history
 ; migrate if needed
 global DB := new SQLiteDB()
-msgbox % "hi " FileExist(DBPATH)
 if (!FileExist(DBPATH))
 	isnewdb := 1
 else
