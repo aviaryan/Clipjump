@@ -207,6 +207,10 @@
 			<param name="Name" value="Using Win for Paste Mode">
 			<param name="Local" value="docs/ini.html#win_paste_mode">
 			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Using Win-C and X for Clipjump">
+			<param name="Local" value="docs/ini.html#win_copy_cut">
+			</OBJECT>
 	</UL>
 	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="Languages">
