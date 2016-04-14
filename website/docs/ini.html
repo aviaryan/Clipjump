@@ -9,8 +9,9 @@ The file settings.ini is used to store the settings of ClipJump. It's located in
 Clipjump provides <a href="settings.html">several methods</a> to manipulate the settings file
 <h2>Advanced Settings</h2>
 
-<h3><a name="syscopy">Setting shortcut to copy to system Clipboard (bypassing Clipjump)</a></h3> - You can also create a unique shortcut in Clipjump to copy/cut data only to System Clipboard 
-and not Clipjump. To create these shortcuts, open the [Advanced] section of Settings.ini and write down shortcut values for <var>windows_copy_shortcut</var> and 
+<h3><a name="syscopy">Setting shortcut to copy to system Clipboard (bypassing Clipjump)</a></h3>
+You can also create a unique shortcut in Clipjump to copy/cut data only to System Clipboard and not Clipjump. 
+To create these shortcuts, open the [Advanced] section of Settings.ini and write down shortcut values for <var>windows_copy_shortcut</var> and 
 <var>windows_cut_shortcut</var>. As you may have guessed, these shortcuts are disabled by default and by writing shortcut values for them in the ini you create them.
 <br>These shortcuts can be very useful when in need to copy sensitive or crap information of the Clipboard.
 <br><br>
@@ -44,15 +45,23 @@ You can make Clipjump show a <code>Pasting..</code> tip when you paste some data
 
 <br><br>
 
-<h3><a name="prior">Changing default Task Priority</a></h3> - You can change default Clipjump Task priority from the Priority key in the System section of the Ini.
+<h3><a name="prior">Changing default Task Priority</a></h3>
+You can change default Clipjump Task priority from the Priority key in the System section of the Ini.
 <br>Set Priority to H (high) to make Clipjump most responsive.<br> Priority Values can be-<br>
 <pre>L (or Low), B (or BelowNormal), N (or Normal), A (or AboveNormal), H (or High), R (or Realtime)</pre>
 
-<br>
+<br><br>
 
-<h3><a name="ram_flush"></a>Make Clipjump flush RAM contents to disk <span class="ver">[v12+]</span></h3> - The <var>RAM_flush</var> option when enabled instructs Clipjump to flush its RAM 
-memory data to hard disk at needed intervals. Thus Clipjump will take much less RAM (&lt;= 1.5 MB) but the overall performance may be affected. I recommend keeping this option disabled 
-(set to 0) which is what it is by default. You can find <var>RAM_flush</var> in [System] section of Settings.ini
+<h3><a name="only_manual_monitor"></a>Capture clipboard changes only through Ctrl-C and X <span class="ver">[v12.5+]</span></h3>
+Changing the setting <var>monitorClipboard</var> in the <em>Main</em> section of Settings.ini to <var>0</var> will make Clipjump ignore any clipboard change other than one done by Ctrl-C or Ctrl-X. (or Win-C and Win-X if you have enabled the <a href="#win_copy_cut">setting</a>)
+
+<br><br>
+
+<h3><a name="ram_flush"></a>Make Clipjump flush RAM contents to disk <span class="ver">[v12+]</span></h3>
+The <var>RAM_flush</var> option when enabled instructs Clipjump to flush its RAM memory data to hard disk at needed intervals. 
+Thus Clipjump will take much less RAM (&lt;= 1.5 MB) but the overall performance may be affected. I recommend keeping this option disabled (set to 0) which is what it is by default.
+You can find <var>RAM_flush</var> in [System] section of Settings.ini
+
 <br><br>
 
 <h3><a name="pst_custom_pos">Show paste mode at fixed position</a></h3>
