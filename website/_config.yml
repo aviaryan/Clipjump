@@ -18,4 +18,4 @@ author:
 
 googleverify: QF1dxap5pOK1UzZAuCzgvJDuDA5AvYrH9ch5aWr5h-8
 exclude: ['README.md', 'Gemfile.lock', 'Gemfile', 'Rakefile']
-version: 12.3
+version: 12.5
