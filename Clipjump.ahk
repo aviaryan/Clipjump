@@ -1344,6 +1344,7 @@ copyFolder:
 	copyMessage := MSG_FOLDER_PATH_COPIED
 	openedFolder := GetFolder()
 	if ( openedfolder != "" )
+		StringReplace, openedFolder, openedFolder, \, /, All
 		try Clipboard := openedFolder
 	copyMessage := MSG_TRANSFER_COMPLETE " {" CN.Name "}"
 	return
