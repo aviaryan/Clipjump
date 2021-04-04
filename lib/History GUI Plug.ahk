@@ -672,7 +672,9 @@ addHistoryImage(imgpath, timestamp){
 ; timestamp is in A_Now format
 	timestamp := convertTimeSql(timestamp)
 	fptr := FileOpen(imgpath, "r")
-	size := fptr.Length
+	if fptr.Length
+		size := fptr.Length
+	else size := 0
 	fptr.Close()
 	while (FileExist(rname := "cache\history\" getRandomStr(15) ".jpg")){
 		; loop till new file name
