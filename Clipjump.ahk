@@ -34,6 +34,10 @@ ListLines, Off
 #KeyHistory 0
 #HotkeyInterval 1000
 #MaxHotkeysPerInterval 1000
+#Persistent  ; Prevent the script from exiting automatically.
+DetectHiddenWindows, on
+
+OnExit("ExitFunc")
 
 global ini_LANG := "" , H_Compiled := RegexMatch(Substr(A_AhkPath, Instr(A_AhkPath, "\", 0, 0)+1), "iU)^(Clipjump).*(\.exe)$") && (!A_IsCompiled) ? 1 : 0
 global mainIconPath := H_Compiled || A_IsCompiled ? A_AhkPath : "icons/icon.ico"
@@ -1339,6 +1343,8 @@ copyFile:
 		try Clipboard := selectedfile
 	CopyMessage := MSG_TRANSFER_COMPLETE " {" CN.Name "}"
 	return
+	
+; convert file path \ to / to make it usable in R 
 
 copyFolder:
 	copyMessage := MSG_FOLDER_PATH_COPIED
@@ -1663,3 +1669,40 @@ Receive_WM_COPYDATA(wParam, lParam){
 #include *i %A_ScriptDir%\plugins\_registry.ahk
 
 ;------------------------------------------------------------------- X -------------------------------------------------------------------------------
+
+;Force close function to unload Clipjump on exit. Requires Nircmd
+
+ExitFunc()
+{
+
+	WinGet pid, PID, %A_ScriptFullPath%
+	cmd  =  killprocess /%pid%
+	NircmdRun(cmd)
+	; Do not call ExitApp -- that would prevent other OnExit functions from being called.
+}
+
+;;;;;;;;; ////// run using nircmd function
+NircmdRun(command) {
+
+;cmd:= "win min class VMUIFrame"
+;or
+;onOnTop = win settopmost process /%active_id% 1
+;run like
+;NircmdRun(cmd)
+
+	EnvGet, OutputVar, USERPROFILE
+	nirDir=%OutputVar%\AppData\Local\Microsoft\WindowsApps\nircmd.exe
+	nDir=%OutputVar%\AppData\Local\Microsoft\WindowsApps\
+	
+	;check Nircmd
+	
+	If !FileExist(nirDir)
+		{
+		Msgbox, Nircmd not found! Download Nircmd from, `nhttps://www.nirsoft.net/utils/nircmd.html `n`nExtract the zip file in %nDir%
+		Run, https://www.nirsoft.net/utils/nircmd-x64.zip
+		}
+	else
+		{
+		Runwait, %ComSpec% /c nircmd.exe %command%,,hide
+		}
+}
