@@ -1,6 +1,6 @@
 ## Clipjump
   
-[Download](https://github.com/aviaryan/Clipjump/releases)  
+[Download](https://github.com/sobuj53/Clipjump/releases)  
 [Online Manual](http://clipjump.sourceforge.net/docs/)
   
 Clipjump is a Multiple-Clipboard management utility for Windows.
@@ -28,3 +28,6 @@ Docs can be compiled using Jekyll and then Microsoft's HHC. First build the webs
 #### Adding Plugins
 Please add your plugins to the [clipjump-addons](https://github.com/aviaryan/clipjump-addons) repository. This repo only contains plugins distributed with official Clipjump release. 
 If I realise your plugin is useful for the community, I will distribute it officially and hence it will be added to this repository. See [#68](https://github.com/aviaryan/Clipjump/issues/68)
+
+### Important
+This release requires Nircmd to be installed. Download Nircmd from https://www.nirsoft.net/utils/nircmd-x64.zip and extract the zip in `%USERPROFILE%\AppData\Local\Microsoft\WindowsApps`Directory.
