@@ -1676,33 +1676,6 @@ ExitFunc()
 {
 
 	WinGet pid, PID, %A_ScriptFullPath%
-	cmd  =  killprocess /%pid%
-	NircmdRun(cmd)
+	Process, Close, %pid%
 	; Do not call ExitApp -- that would prevent other OnExit functions from being called.
-}
-
-;;;;;;;;; ////// run using nircmd function
-NircmdRun(command) {
-
-;cmd:= "win min class VMUIFrame"
-;or
-;onOnTop = win settopmost process /%active_id% 1
-;run like
-;NircmdRun(cmd)
-
-	EnvGet, OutputVar, USERPROFILE
-	nirDir=%OutputVar%\AppData\Local\Microsoft\WindowsApps\nircmd.exe
-	nDir=%OutputVar%\AppData\Local\Microsoft\WindowsApps\
-	
-	;check Nircmd
-	
-	If !FileExist(nirDir)
-		{
-		Msgbox, Nircmd not found! Download Nircmd from, `nhttps://www.nirsoft.net/utils/nircmd.html `n`nExtract the zip file in %nDir%
-		Run, https://www.nirsoft.net/utils/nircmd-x64.zip
-		}
-	else
-		{
-		Runwait, %ComSpec% /c nircmd.exe %command%,,hide
-		}
 }
