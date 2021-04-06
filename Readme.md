@@ -1,6 +1,6 @@
 ## Clipjump
   
-[Download](https://github.com/aviaryan/Clipjump/releases)  
+[Download](https://github.com/sobuj53/Clipjump/releases)  
 [Online Manual](http://clipjump.sourceforge.net/docs/)
   
 Clipjump is a Multiple-Clipboard management utility for Windows.

@@ -34,6 +34,10 @@ ListLines, Off
 #KeyHistory 0
 #HotkeyInterval 1000
 #MaxHotkeysPerInterval 1000
+#Persistent  ; Prevent the script from exiting automatically.
+DetectHiddenWindows, on
+
+OnExit("ExitFunc")
 
 global ini_LANG := "" , H_Compiled := RegexMatch(Substr(A_AhkPath, Instr(A_AhkPath, "\", 0, 0)+1), "iU)^(Clipjump).*(\.exe)$") && (!A_IsCompiled) ? 1 : 0
 global mainIconPath := H_Compiled || A_IsCompiled ? A_AhkPath : "icons/icon.ico"
@@ -1339,11 +1343,14 @@ copyFile:
 		try Clipboard := selectedfile
 	CopyMessage := MSG_TRANSFER_COMPLETE " {" CN.Name "}"
 	return
+	
+; convert file path \ to / to make it usable in R 
 
 copyFolder:
 	copyMessage := MSG_FOLDER_PATH_COPIED
 	openedFolder := GetFolder()
 	if ( openedfolder != "" )
+		StringReplace, openedFolder, openedFolder, \, /, All
 		try Clipboard := openedFolder
 	copyMessage := MSG_TRANSFER_COMPLETE " {" CN.Name "}"
 	return
@@ -1662,3 +1669,13 @@ Receive_WM_COPYDATA(wParam, lParam){
 #include *i %A_ScriptDir%\plugins\_registry.ahk
 
 ;------------------------------------------------------------------- X -------------------------------------------------------------------------------
+
+;Force close function to unload Clipjump on exit. Requires Nircmd
+
+ExitFunc()
+{
+
+	WinGet pid, PID, %A_ScriptFullPath%
+	Process, Close, %pid%
+	; Do not call ExitApp -- that would prevent other OnExit functions from being called.
+}
